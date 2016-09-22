@@ -1,0 +1,26 @@
+{
+  "name": "trossello",
+  "version": "0.0.1",
+  "description": "Open Source Trello Clone",
+  "main": "dist/server.js",
+  "scripts": {
+    "test": "mocha dist/spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuildCrafts/Trossello.git"
+  },
+  "keywords": [
+    "trello",
+    "OSS"
+  ],
+  "author": "Jared Grippe <jared@learnersguild.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GuildCrafts/Trossello/issues"
+  },
+  "homepage": "https://github.com/GuildCrafts/Trossello#readme",
+  "dependencies": {
+    "rethinkdb": "^2.3.3"
+  }
+}
