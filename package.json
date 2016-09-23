@@ -4,7 +4,12 @@
   "description": "Open Source Trello Clone",
   "main": "dist/server.js",
   "scripts": {
-    "test": "mocha dist/spec"
+    "build:clean": "rm -rf build",
+    "build": "npm run build:clean && webpack -p",
+    "build:watch": "npm run build -- --watch",
+    "start": "node build/server.js",
+    "start:dev": "nodemon build/server.js",
+    "test": "mocha build/spec"
   },
   "repository": {
     "type": "git",
@@ -21,6 +26,40 @@
   },
   "homepage": "https://github.com/GuildCrafts/Trossello#readme",
   "dependencies": {
-    "rethinkdb": "^2.3.3"
+    "autoprefixer": "^6.4.1",
+    "babel-core": "^6.14.0",
+    "babel-eslint": "^6.1.2",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-class-properties": "^6.11.5",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-plugin-transform-regenerator": "^6.14.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-latest": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-runtime": "^6.11.6",
+    "clean-webpack-plugin": "^0.1.10",
+    "css-loader": "^0.25.0",
+    "dotenv": "^2.0.0",
+    "eslint": "^3.5.0",
+    "eslint-loader": "^1.5.0",
+    "eslint-plugin-flowtype": "^2.19.0",
+    "eslint-plugin-import": "^1.15.0",
+    "eslint-plugin-jsx-a11y": "^2.2.2",
+    "eslint-plugin-react": "^6.3.0",
+    "express": "^4.14.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
+    "html-loader": "^0.4.4",
+    "html-webpack-plugin": "^2.22.0",
+    "json-loader": "^0.5.4",
+    "node-sass": "^3.10.0",
+    "promise": "^7.1.1",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "rethinkdb": "^2.3.3",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "whatwg-fetch": "^1.0.0"
   }
 }
