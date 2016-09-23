@@ -1,11 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react'
+import { Router, browserHistory } from 'react-router'
+import routes from './routes'
 
-class App extends Component {
-  render() {
-    return (
-      <h1>Hello World :D</h1>
-    );
-  }
+export default () => {
+  return <Router history={browserHistory} routes={routes} />
 }
-
-export default App;
