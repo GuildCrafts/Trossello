@@ -9,6 +9,9 @@ export default class Actions {
     this.dispatch({
       type: 'LOGIN_SUCCESS',
       creds: creds,
+      user: {
+        name: 'Laura Croft'
+      }
     })
   }
 

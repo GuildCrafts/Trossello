@@ -1,8 +1,33 @@
-html,body
+@import "~normalize.css/normalize.css"
+@import "./style.sass"
+
+// http://www.paulirish.com/2012/box-sizing-border-box-ftw/
+html
+  box-sizing: border-box
+
+*, *:before, *:after
+  box-sizing: inherit
+
+html, body, body > main
   height: 100%
+  width: 100%
+  overflow: hidden
 
 body
-  background-image: url("./images/frog.jpg")
-  background-size: contain
-  background-position: top left
+  background-color: orange
 
+  > main
+    background-color: purple
+
+.Page
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  height: 100%
+  width: 100%
+  margin: 0
+  padding: 20px
+  overflow: auto
+  background-color: green

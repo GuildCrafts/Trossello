@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
+import './LoginPage.sass'
 import { connect } from 'react-redux'
 import Layout from './Layout'
-import LoginForm from './LoginForm'
+import PresentationalComponent from './PresentationalComponent'
+import LoginOrSignupViaGithubButton from './LoginOrSignupViaGithubButton'
 
-const LoginPage = () => {
-  return <Layout className="LoginPage">
-    <h1>Login</h1>
-    <LoginForm />
-  </Layout>
+const LoginPage = (props) => {
+  console.log(props)
+  return <div className="Page LoginPage">
+    <h1>Trossello</h1>
+    <LoginOrSignupViaGithubButton />
+  </div>
 }
 
-export default (LoginPage)
+export default PresentationalComponent(LoginPage)

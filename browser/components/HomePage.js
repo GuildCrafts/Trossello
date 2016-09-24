@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import PresentationalComponent from './PresentationalComponent'
 import Layout from './Layout'
 
-const HomePage = ({auth}) => {
+const HomePage = (props) => {
+  const { auth } = props.state
+  const greeting = auth.isAuthenticated ?
+    <h3>Welcome back {auth.user.name}</h3> :
+    <h3>Greetings Human!</h3>
   return <Layout className="HomePage">
-    <h1>Homepage</h1>
-    <h3>We have no idea if you're logged in or not</h3>
-    <pre>{JSON.stringify(auth, null, 4)}</pre>
+    <h1>Trossello</h1>
+    {greeting}
   </Layout>
 }
 
-
-
-const mapStateToProps = (state) => ({
-  auth: state.auth
-})
-
-export default connect(mapStateToProps)(HomePage)
+export default PresentationalComponent(HomePage)

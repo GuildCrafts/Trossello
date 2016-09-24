@@ -53,6 +53,7 @@
     "html-webpack-plugin": "^2.22.0",
     "json-loader": "^0.5.4",
     "node-sass": "^3.10.0",
+    "normalize.css": "^4.2.0",
     "promise": "^7.1.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
