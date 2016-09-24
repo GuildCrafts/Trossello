@@ -150,6 +150,15 @@ var browserJs = {
     filename: "browser.js",
     publicPath: '/'
   },
+  resolve: {
+    alias: {
+      lib: root+'/lib',
+    },
+    root: [
+      root+'/server',
+      root+'/lib'
+    ]
+  },
   devtool: 'sourcemap',
   postcss: function() {
     return [
