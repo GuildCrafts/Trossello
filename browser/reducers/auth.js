@@ -21,7 +21,8 @@ const auth = (state = getInitialState(), action) => {
         ...state,
         isFetching: false,
         isAuthenticated: true,
-        errorMessage: undefined
+        errorMessage: undefined,
+        user: action.user
       }
     case 'LOGIN_FAILURE':
       return {
