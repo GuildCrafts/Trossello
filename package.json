@@ -4,12 +4,10 @@
   "description": "Open Source Trello Clone",
   "main": "dist/server.js",
   "scripts": {
-    "build:clean": "rm -rf build",
-    "build": "npm run build:clean && webpack -p",
-    "build:watch": "npm run build -- --watch",
-    "start": "node build/server.js",
-    "start:dev": "nodemon build/server.js",
-    "test": "mocha build/spec"
+    "build": "./bin/build",
+    "build:watch": "./bin/build -w",
+    "start": "./bin/start",
+    "test": "./bin/test"
   },
   "repository": {
     "type": "git",
@@ -75,6 +73,7 @@
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
     "redux-devtools": "^3.3.1"
   }
 }

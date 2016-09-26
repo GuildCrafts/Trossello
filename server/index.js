@@ -1,22 +1,40 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+import '../../config/environment'
 import express from 'express'
 import logger from 'morgan'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import favicon from 'serve-favicon'
 
+const appRoot = process.env.APP_ROOT
+const buildPath = process.env.BUILD_PATH
 
 const server = express()
+module.exports = server
 
+server.set('env', process.env.NODE_ENV)
+server.set('port', process.env.PORT || '3000')
 
 server.use(logger('dev'))
-server.use(favicon(__dirname+'/public/favicon.ico'))
-server.use(express.static(__dirname+'/public'))
+// server.use(favicon(buildPath+'/public/favicon.ico'))
+server.use(express.static(buildPath+'/public'))
 server.use(bodyParser.json())
 server.use(cookieParser())
 
+server.get('/api/users', (request, response) => {
+  response.json([
+    {
+      id: 1,
+      email: 'laura@example.org'
+    },
+    {
+      id: 2,
+      email: 'luther@example.org'
+    }
+  ])
+});
+
 server.get('/*', (request, response) => {
-  response.sendFile(__dirname+'/public/index.html')
+  response.sendFile(buildPath+'/public/index.html')
 });
 
 
@@ -55,4 +73,6 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-server.listen(3000)
+if (process.env.NODE_ENV !== 'test'){
+  server.listen(server.get('port'))
+}

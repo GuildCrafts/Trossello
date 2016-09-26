@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+require('../config/environment')
+
+const childProcess = require('child_process');
+
+const spawn = (cmd, args) => {
+  childProcess.spawn(cmd, args, {stdio: 'inherit'})
+}
+
+spawn('./node_modules/.bin/mocha', ['./build/test'])
