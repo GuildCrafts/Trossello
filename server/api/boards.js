@@ -8,4 +8,11 @@ router.get( '/', ( request, response ) => {
   } )
 } )
 
+router.get( '/:boardId', ( request, response ) => {
+  response.json( {
+    id: request.params.boardId,
+    name: 'lorem'
+  } )
+}
+
 export default router
