@@ -42,9 +42,7 @@ server.get('/api/current-user', (request, response) => {
 
 server.use('/api/users', apiUsersRouter)
 server.use('/api/cards', apiCardsRouter)
-
 server.use( '/api/boards', apiBoardsRouter )
-
 server.use( '/api/lists', apiListsRouter )
 
 server.get('/*', (request, response) => {

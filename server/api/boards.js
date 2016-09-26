@@ -1,5 +1,5 @@
 import express from 'express'
-const router = new express.Router
+const router = new express.Router()
 
 router.get( '/', ( request, response ) => {
   response.json( {
@@ -13,6 +13,6 @@ router.get( '/:boardId', ( request, response ) => {
     id: request.params.boardId,
     name: 'lorem'
   } )
-}
+})
 
 export default router
