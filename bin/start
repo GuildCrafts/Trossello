@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+require('../config/environment')
+
+const childProcess = require('child_process');
+
+const spawn = (cmd, args) => {
+  childProcess.spawn(cmd, args, {stdio: 'inherit'})
+}
+
+if (process.env.NODE_ENV === 'development'){
+  spawn('./bin/build', ['-w'])
+  setTimeout(()=>{
+    spawn('nodemon', ['./build/server', '--watch', './build/server'])
+  }, 1000)
+}else{
+  spawn('node', ['./build/server'])
+}

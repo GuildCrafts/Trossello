@@ -1,6 +1,5 @@
-const getUsers = () => {
-
-  this.db.any('SELECT * FROM users');
+function getUsers() {
+  return this.pg.table('users').select('*')
 }
 
 

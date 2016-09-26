@@ -4,12 +4,10 @@
   "description": "Open Source Trello Clone",
   "main": "dist/server.js",
   "scripts": {
-    "build:clean": "rm -rf build",
-    "build": "npm run build:clean && webpack -p",
-    "build:watch": "npm run build -- --watch",
-    "start": "node build/server.js",
-    "start:dev": "nodemon build/server.js",
-    "test": "mocha build/spec"
+    "build": "./bin/build",
+    "build:watch": "./bin/build -w",
+    "start": "./bin/start",
+    "test": "./bin/test"
   },
   "repository": {
     "type": "git",
@@ -37,7 +35,11 @@
     "babel-preset-latest": "^6.14.0",
     "babel-preset-react": "^6.11.1",
     "babel-runtime": "^6.11.6",
+    "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
     "clean-webpack-plugin": "^0.1.10",
+    "cookie-parser": "^1.4.3",
     "css-loader": "^0.25.0",
     "dotenv": "^2.0.0",
     "eslint": "^3.5.0",
@@ -53,6 +55,8 @@
     "html-webpack-plugin": "^2.22.0",
     "json-loader": "^0.5.4",
     "knex": "^0.12.1",
+    "mocha": "^3.0.2",
+    "morgan": "^1.7.0",
     "node-sass": "^3.10.0",
     "normalize.css": "^4.2.0",
     "pg-promise": "^5.3.3",
@@ -63,11 +67,13 @@
     "react-router": "^2.8.1",
     "rethinkdb": "^2.3.3",
     "sass-loader": "^4.0.2",
+    "serve-favicon": "^2.3.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
     "redux-devtools": "^3.3.1"
   }
 }
