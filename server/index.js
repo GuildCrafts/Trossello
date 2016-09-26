@@ -7,6 +7,7 @@ import favicon from 'serve-favicon'
 import apiUsersRouter from './api/users'
 import apiBoardsRouter from './api/boards'
 import apiListsRouter from './api/lists'
+import apiCardsRouter from './api/cards'
 
 const appRoot = process.env.APP_ROOT
 const buildPath = process.env.BUILD_PATH
@@ -46,6 +47,7 @@ server.get('/api/current-user', (request, response) => {
 })
 
 server.use('/api/users', apiUsersRouter)
+server.use('/api/cards', apiCardsRouter)
 
 server.use( '/api/boards', apiBoardsRouter )
 
