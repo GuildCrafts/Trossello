@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import favicon from 'serve-favicon'
 import apiUsersRouter from './api/users'
+import apiBoardsRouter from './api/boards'
 
 const appRoot = process.env.APP_ROOT
 const buildPath = process.env.BUILD_PATH
@@ -44,6 +45,8 @@ server.get('/api/current-user', (request, response) => {
 })
 
 server.use('/api/users', apiUsersRouter)
+
+server.use( '/api/boards', apiBoardsRouter )
 
 server.get('/*', (request, response) => {
   response.sendFile(buildPath+'/public/index.html')
