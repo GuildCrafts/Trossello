@@ -13,13 +13,15 @@ const defaultConfig = (database) => ({
     max: 10
   },
   migrations: {
+    directory: __dirname + '/db/migrations',
     tableName: 'migrations'
+  },
+  seeds: {
+    directory: __dirname + `/db/seeds/${database}`
   }
 })
 
 module.exports = {
-
   test: defaultConfig('trossello-test'),
   development: defaultConfig('trossello-development'),
-
 };

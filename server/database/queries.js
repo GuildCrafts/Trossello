@@ -1,6 +1,6 @@
 const getUsers = () => {
 
-  this.db.any('SELECT * FROM users');
+  this.pg.any('SELECT * FROM users');
 }
 
 
