@@ -9,4 +9,12 @@ router.get( '/', ( request, response ) => {
   } )
 } )
 
+router.get( '/:listId', ( request, response ) => {
+  response.json( {
+    id: request.params.listId,
+    board_id: 'lorem',
+    name: 'lorem'
+  } )
+} )
+
 export default router
