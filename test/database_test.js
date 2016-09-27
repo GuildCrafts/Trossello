@@ -45,4 +45,57 @@ describe('database', () => {
     })
 
   })
+
+  describe('getUserById', () => {
+    beforeEach( done => {
+      Promise.all([
+        commands.createUser({
+          id: 1455,
+          email: 'mark@zuckerburg.io',
+          password: 'password',
+        }),
+        commands.createUser({
+          id: 6672,
+          email: 'larry@harvey.to',
+          password: 'password',
+        })
+      ]).then(() => { done() }).catch(done)
+    })
+    it('should return json by user id', (done) => {
+      queries.getUserById(1455).then( user => {
+        expect(user).to.be.a('object')
+        expect(user).to.have.property('id')
+        expect(user.id).to.be.a('number')
+        expect(user.email).to.eql('mark@zuckerburg.io')
+        expect(user.password).to.eql('password')
+        done();
+      })
+    });
+  })
+
+  describe('deleteUser', () => {
+    beforeEach( done => {
+      Promise.all([
+        commands.createUser({
+          id: 1455,
+          email: 'mark@zuckerburg.io',
+          password: 'password',
+        }),
+        commands.createUser({
+          id: 6672,
+          email: 'larry@harvey.to',
+          password: 'password',
+        })
+      ]).then(() => { done() }).catch(done)
+    })
+    it('should delete a user by user id', (done) => {
+      commands.deleteUser(1455).then( () => {
+        queries.getUserById(1455).then( user => {
+          console.log('user', user)
+          expect(user).to.be.undefined
+          done();
+        })
+      })
+    })
+  })
 })

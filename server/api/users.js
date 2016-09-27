@@ -1,4 +1,6 @@
 import express from 'express'
+import {queries, commands} from '../database'
+
 const router = new express.Router()
 
 router.get('/', (request, response) => {
@@ -16,16 +18,21 @@ router.get('/', (request, response) => {
   })
 })
 
-router.post('/', (request, response) => {
-  response.send('Create User API path')
+router.post('/', (request, response, next) => {
+  commands.createUser(request.body)
+    .then(() => {
+      response.status(200).json({})
+    })
+    .catch(next)
 })
 
-router.get('/:userId', (request, response) => {
-  response.json({
-    id: request.params.userId,
-    email: "me@me.com",
-    password: "123"
-  })
+
+router.get('/:userId', (request, response, next) => {
+  queries.getUserById(request.params.userId)
+    .then(user => {
+      response.json(user)
+    })
+    .catch(next)
 })
 
 export default router
