@@ -7,7 +7,8 @@
     "build": "./bin/build",
     "build:watch": "./bin/build -w",
     "start": "./bin/start",
-    "test": "./bin/test"
+    "test": "./bin/test",
+    "heroku-postbuild": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   "homepage": "https://github.com/GuildCrafts/Trossello#readme",
   "dependencies": {
     "autoprefixer": "^6.4.1",
+    "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.5",
@@ -59,13 +61,12 @@
     "morgan": "^1.7.0",
     "node-sass": "^3.10.0",
     "normalize.css": "^4.2.0",
-    "pg-promise": "^5.3.3",
     "promise": "^7.1.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
-    "rethinkdb": "^2.3.3",
+    "redux": "^3.6.0",
     "sass-loader": "^4.0.2",
     "serve-favicon": "^2.3.0",
     "style-loader": "^0.13.1",
@@ -73,7 +74,6 @@
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.14.0",
     "redux-devtools": "^3.3.1"
   }
 }
