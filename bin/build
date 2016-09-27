@@ -4,14 +4,34 @@ const childProcess = require('child_process');
 
 const watch = process.argv[2] === '-w'
 
+const children = []
 const spawn = (cmd, args, watchArgs) => {
   if (watch) args = args.concat(watchArgs)
-  childProcess.spawn(cmd, args, {stdio: 'inherit'})
+  const proc = childProcess.spawn(cmd, args, {stdio: 'inherit'})
+  if (!watch){
+    children.push(proc)
+    proc.on('close', function(code) {
+      if (code !== 0){
+        children.forEach(child => child.kill())
+        process.exit(code)
+      }
+    });
+  }
+  return proc
 }
 
-spawn('./node_modules/.bin/webpack', [], ['--watch']);
-spawn('./node_modules/.bin/babel', ['./server', '--out-dir', './build/server'], ['--watch', './server']);
+const browser = spawn('./node_modules/.bin/webpack', ['--bail'], ['--watch']);
+const server = spawn('./node_modules/.bin/babel', ['./server', '--out-dir', './build/server'], ['--watch', './server']);
 
 if (process.env.NODE_ENV === 'development'){
   spawn('./node_modules/.bin/babel', ['./test', '--out-dir', './build/test'], ['--watch', './test']);
+}
+
+if (process.env.NODE_ENV === 'production'){
+  browser.on('close', function(code) {
+    spawn('rm', ['-rf', './browser'])
+  });
+  server.on('close', function(code) {
+    spawn('rm', ['-rf', './server'])
+  });
 }
