@@ -1,6 +1,4 @@
-const { chai, should, chaiHttp, server } = require('./setup')
-
-const { queries, commands } = require('../server/database')
+const { expect, queries, commands } = require('./setup')
 
 describe('database', () => {
 
@@ -8,8 +6,8 @@ describe('database', () => {
 
     it('should return an empty array', (done) => {
       queries.getUsers().then( users => {
-        users.should.be.a('array')
-        users.length.should.eql(0)
+        expect(users).to.be.a('array')
+        expect(users.length).to.eql(0)
         done();
       })
     });
@@ -30,16 +28,16 @@ describe('database', () => {
 
       it('should return an array of all users', (done) => {
         queries.getUsers().then( users => {
-          users.should.be.a('array')
-          users.length.should.eql(2)
-          users[0].should.have.property('id')
-          users[0].id.should.be.a('number')
-          users[0].email.should.eql('mark@zuckerburg.io')
-          users[0].password.should.eql('password')
-          users[1].should.have.property('id')
-          users[1].id.should.be.a('number')
-          users[1].email.should.eql('larry@harvey.to')
-          users[1].password.should.eql('password')
+          expect(users).to.be.a('array')
+          expect(users.length).to.eql(2)
+          expect(users[0]).to.have.property('id')
+          expect(users[0].id).to.be.a('number')
+          expect(users[0].email).to.eql('mark@zuckerburg.io')
+          expect(users[0].password).to.eql('password')
+          expect(users[1]).to.have.property('id')
+          expect(users[1].id).to.be.a('number')
+          expect(users[1].email).to.eql('larry@harvey.to')
+          expect(users[1].password).to.eql('password')
           done();
         })
       })

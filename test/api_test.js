@@ -1,4 +1,4 @@
-const { chai, should, chaiHttp, server } = require('./setup')
+const { chai, expect, server } = require('./setup')
 
 
 describe('API', () => {
@@ -7,12 +7,12 @@ describe('API', () => {
       chai.request(server)
         .get('/api/users')
         .end((err, res) => {
-          res.should.have.status(200);
-          res.should.be.json; // jshint ignore:line
-          res.body.should.be.a('array');
-          res.body.length.should.equal(2);
-          res.body[0].should.have.property('id');
-          res.body[0].should.have.property('email');
+          expect(res).to.have.status(200);
+          expect(res).to.be.json; // jshint ignore:line
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(2);
+          expect(res.body[0]).to.have.property('id');
+          expect(res.body[0]).to.have.property('email');
           done();
         });
 
