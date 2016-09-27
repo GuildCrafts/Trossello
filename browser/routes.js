@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import PresentationalComponent from './components/PresentationalComponent'
 import Link from './components/Link'
 import NotFound from './components/NotFound'
 import HomePage from './components/HomePage'
@@ -9,10 +10,16 @@ import BoardsIndexPage from './components/BoardsIndexPage'
 import BoardShowPage from './components/BoardShowPage'
 
 
+const Main = PresentationalComponent((props) => {
+  const { auth } = props.state
+  return  auth.isFetching ?
+    <div>Loading...</div> :
+    props.children
+})
 
 export default {
   path: '/',
-  component: (props) => props.children,
+  component: Main,
   indexRoute: {
     component: HomePage
   },

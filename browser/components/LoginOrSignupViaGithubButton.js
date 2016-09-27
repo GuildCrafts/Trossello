@@ -5,12 +5,7 @@ import { browserHistory } from 'react-router';
 // Triggered somewhere
 
 const LoginOrSignupViaGithubButton = (actions, props) => {
-  const onClick = (event) => {
-    event.preventDefault()
-    actions.login()
-    browserHistory.push('/');
-  }
-  return <a href="" {...props} onClick={onClick}>Login Or Signup Via GitHub</a>
+  return <a href="/login_via_github" {...props}>Login Or Signup Via GitHub</a>
 }
 
 
