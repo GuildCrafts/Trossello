@@ -8,6 +8,16 @@
   &-content
     min-width: 33.3vw
 
+  h1
+    display: block
+    word-wrap: break-word
+    font-size: 42px
+    font-weight: bold
+    color: #4d4d4d
+    line-height: 1.2em
+    margin-top: 1.6em
+    font-family: "Helvetica Neue",Arial,sans-serif
+
   label
     display: block
     margin-bottom: 1em
@@ -16,7 +26,7 @@
     margin-bottom: 0.5em
     font-size: 20px
   .form-input
-    background: #fbedeb
+    background: #edeff0
     border: 1px solid #cdd2d4
     margin: 0 0 1.2em
     box-sizing: border-box
@@ -25,58 +35,20 @@
     border-radius: 4px
 
   input[type="submit"]
-    background: #61bd4f
     background: linear-gradient(to bottom, #61bd4f 0, #5aac44 100%)
     box-shadow: 0 2px 0 #3f6f21
     color: #fff
     border-radius: .3em
     display: inline-block
-    font-weight: bold
+    font-weight: bolder
     margin-bottom: .8em
     padding: .6em 1.3em
     position: relative
     text-decoration: none
     border: 0
-
-
-.DISABLED
-  .email-login-form
-    margin-bottom: .4em
-
-  .layout-twothirds-center
-    display: block
-    max-width: 585px
-    margin: 0 auto
-    position: relative
-
-  .LoginPage h1
-    text-align: left
-    font-family: "jaf-facitweb","Helvetica Neue",Arial,sans-serif
-    font-size: 42px
-    line-height: 1.2em
-    margin-top: 1.6em
-    display: block
-
-  .login-form
-    display: flex
-    justify-content: left
-    align-items: center
-
-  .submit-button input
-    border-radius: 10px
-    color: white
-    background-color: #61bd4f
-    background-image: linear-gradient(rgb(97, 189, 79) 0px, rgb(90, 172, 68) 100%)
-    box-shadow: 0 2px 0 black
-
-    margin-top: 1em
-    margin-right: 0px
-    margin-bottom: 0px
-    margin-left: 0px
-
-
-  .LoginOrSignupViaGithubButton
-    text-align: center
-
-  .github-login-button
-    text-align: center
+    &:hover
+      box-shadow: 0 2px 0 black
+    &:not([disabled]):focus, &:not([disabled]):hover
+      background: linear-gradient(to bottom, #5aac44 0, #519839 100%)
+    &:not([disabled]):active
+      background: linear-gradient(to bottom, #519839 0, #49852e 100%)
