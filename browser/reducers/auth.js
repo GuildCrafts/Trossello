@@ -1,41 +1,27 @@
 const getInitialState = () => {
   return {
-    isFetching: false,
+    isFetching: true,
     isAuthenticated: false,
     errorMessage: undefined,
-    creds: undefined,
+    user: undefined,
   }
 }
 
 const auth = (state = getInitialState(), action) => {
   switch (action.type) {
-    case 'LOGIN_REQUEST':
+    case 'SESSION_LOADED':
       return {
-        ...state,
-        isFetching: true,
-        isAuthenticated: false,
-        creds: action.creds
-      }
-    case 'LOGIN_SUCCESS':
-      return {
-        ...state,
         isFetching: false,
-        isAuthenticated: true,
-        errorMessage: undefined,
-        user: action.user
-      }
-    case 'LOGIN_FAILURE':
-      return {
-        ...state,
-        isFetching: false,
-        isAuthenticated: false,
-        errorMessage: action.errorMessage
+        isAuthenticated: !!action.user,
+        errorMessage: action.error,
+        user: action.user,
       }
     case 'LOGOUT_SUCCESS':
       return {
-        ...state,
         isFetching: false,
         isAuthenticated: false,
+        errorMessage: undefined,
+        user: undefined,
       }
     default:
       return state
