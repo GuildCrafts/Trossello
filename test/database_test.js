@@ -10,7 +10,8 @@ describe('database', () => {
         expect(users.length).to.eql(0)
         done();
       })
-    });
+    })
+
 
     describe('when there are users in the database', () => {
       beforeEach( done => {

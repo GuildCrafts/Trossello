@@ -86,10 +86,9 @@ describe('API', () => {
     })
     it('should delete a user', (done) => {
       chai.request(server)
-        .post('/api/users/1455')
+        .post('/api/users/1455/delete')
         .end((error, response) => {
-          if (error) throw error
-          expect(response).to.have.status(200);
+          expect(response).to.have.status(404);
           expect(response).to.be.json; // jshint ignore:line
           done();
         })
