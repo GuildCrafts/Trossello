@@ -69,5 +69,31 @@ describe('API', () => {
     });
   });
 
+  describe('POST /api/users/:userId', () => {
+    beforeEach( done => {
+      Promise.all([
+        commands.createUser({
+          id: 1455,
+          email: 'mark@zuckerburg.io',
+          password: 'password',
+        }),
+        commands.createUser({
+          id: 6672,
+          email: 'larry@harvey.to',
+          password: 'password',
+        })
+      ]).then(() => { done() }).catch(done)
+    })
+    it('should delete a user', (done) => {
+      chai.request(server)
+        .post('/api/users/1455')
+        .end((error, response) => {
+          if (error) throw error
+          expect(response).to.have.status(200);
+          expect(response).to.be.json; // jshint ignore:line
+          done();
+        })
+    })
+  })
 
 });

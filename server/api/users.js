@@ -35,4 +35,14 @@ router.get('/:userId', (request, response, next) => {
     .catch(next)
 })
 
+router.post('/:userId', (request, response, next) => {
+  commands.deleteUser(request.params.userId)
+    .then(() => {
+      response.status(200).json({})
+    })
+    .catch(next)
+})
+
 export default router
+
+
