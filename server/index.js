@@ -5,10 +5,7 @@ import bodyParser from 'body-parser'
 import cookieSession from 'cookie-session'
 import errorHandlers from './error_handlers'
 import authRoutes from './auth_routes'
-import apiUsersRouter from './api/users'
-import apiBoardsRouter from './api/boards'
-import apiListsRouter from './api/lists'
-import apiCardsRouter from './api/cards'
+import apiRoutes from './api'
 
 const appRoot = process.env.APP_ROOT
 const buildPath = process.env.BUILD_PATH
@@ -26,11 +23,8 @@ server.use(cookieSession({
 server.use(express.static(buildPath+'/public'))
 server.use(bodyParser.json())
 
-server.use('/', authRoutes);
-server.use('/api/users',  apiUsersRouter)
-server.use('/api/cards',  apiCardsRouter)
-server.use('/api/boards', apiBoardsRouter)
-server.use('/api/lists',  apiListsRouter)
+server.use('/',    authRoutes);
+server.use('/api', apiRoutes)
 
 server.get('/*', (request, response) => {
   response.sendFile(buildPath+'/public/index.html')
