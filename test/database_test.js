@@ -98,4 +98,39 @@ describe('database', () => {
       })
     })
   })
+
+
+  describe('updateUser', () => {
+    beforeEach( done => {
+      Promise.all([
+        commands.createUser({
+          id: 1455,
+          email: 'mark@zuckerburg.io',
+          password: 'password',
+        }),
+        commands.createUser({
+          id: 6672,
+          email: 'larry@harvey.to',
+          password: 'password',
+        })
+      ]).then(() => { done() }).catch(done)
+    })
+    it('should update a user with given attributes', (done) => {
+      const attrs = {email: 'majid@gmail.com', password: '123'}
+      commands.updateUser(1455, attrs)
+        .then( user => {
+          queries.getUserById(1455).then( user => {
+            expect(user).to.be.a('object')
+            expect(user).to.have.property('id')
+            expect(user.id).to.be.a('number')
+            expect(user.email).to.eql('majid@gmail.com')
+            expect(user.password).to.eql("123")
+            done();
+          })
+      })
+    })
+
+  })
+
+
 })

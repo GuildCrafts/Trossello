@@ -10,6 +10,12 @@ function deleteUser(userId) {
   return this.pg.table('users').where('id', userId).del()
 }
 
+function updateUser(id, attrs) {
+  return this.pg.table('users')
+    .where('id', id).update(attrs)
+    .returning('id')
+}
+
 function findOrCreateUserFromGithubProfile(githubProfile){
   const github_id = githubProfile.id
 
@@ -41,5 +47,6 @@ function findOrCreateUserFromGithubProfile(githubProfile){
 export default {
   createUser,
   deleteUser,
+  updateUser
   findOrCreateUserFromGithubProfile
 }
