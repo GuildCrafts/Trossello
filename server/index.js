@@ -28,10 +28,6 @@ server.use(bodyParser.json())
 
 server.use('/', authRoutes);
 
-server.get('/session', (request, response) => {
-  response.json(request.session)
-});
-
 server.get('/api/current-user', (request, response) => {
   response.json({
     id: 42,

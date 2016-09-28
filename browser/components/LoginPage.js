@@ -7,9 +7,8 @@ const LoginPage = (props) => {
   console.log(props)
   return <div className="Page LoginPage">
     <div className="LoginPage-content">
-      <h1>Log in to Trossello</h1>
-      <LoginForm />
-  </div>
+      <LoginOrSignupViaGithubButton>Login or Signup Via Github</LoginOrSignupViaGithubButton>
+    </div>
   </div>
 }
 
