@@ -59,26 +59,24 @@ we can make make live update work by polling for the entire board data. that wou
 
 #### HTTP API
 
-| action                       | CRUD   | verb | path                             |
-| ---------------------------- | ------ | ---- | -------------------------------- |
-| getCurrentUser()             | index  | get  | /current-user                    |
-| getUsers()                   | index  | get  | /users                           |
-| createUser()                 | create | post | /users                           |
-| getUser(userId)              | show   | get  | /users/:userId                   |
-| updateUser(userId, attrs)    | update | post | /users/:userId                   |
-| deleteUser(userId)           | delete | post | /users/:userId/delete            |
-| getBoards()                  | index  | get  | /boards                          |
-| createBoard()                | create | post | /boards                          |
-| getBoard(boardId)            | show   | get  | /boards/:boardId                 |
-| updateBoard(boardId, attrs)  | update | post | /boards/:boardId                 |
-| deleteBoard(boardId)         | delete | post | /boards/:boardId/delete          |
-| getLists()                   | index  | get  | /lists                           |
-| createList()                 | create | post | /lists                           |
-| getList(listId)              | show   | get  | /lists/:listId                   |
-| updateList(listId, attrs)    | update | post | /lists/:listId                   |
-| deleteList(listId)           | delete | post | /lists/:listId/delete            |
-| getCards()                   | index  | get  | /cards                           |
-| createCard()                 | create | post | /cards                           |
-| getCard(cardId)              | show   | get  | /cards/:cardId                   |
-| updateCard(cardId, attrs)    | update | post | /cards/:cardId                   |
-| deleteCard(cardId)           | delete | post | /cards/:cardId/delete            |
+| action                       | CRUD   | verb | path                         |
+| ---------------------------- | ------ | ---- | ---------------------------- |
+| getUsers()                   | index  | get  | /api/users                   |
+| createUser()                 | create | post | /api/users                   |
+| getUser(userId)              | show   | get  | /api/users/:userId           |
+| updateUser(userId, attrs)    | update | post | /api/users/:userId           |
+| getBoards()                  | index  | get  | /api/boards                  |
+| createBoard()                | create | post | /api/boards                  |
+| getBoard(boardId)            | show   | get  | /api/boards/:boardId         |
+| updateBoard(boardId, attrs)  | update | post | /api/boards/:boardId         |
+| deleteBoard(boardId)         | delete | post | /api/boards/:boardId/delete  |
+| getLists(boardId)            | index  | get  | /api/lists                   |
+| createList()                 | create | post | /api/lists                   |
+| getList(listId)              | show   | get  | /api/lists/:listId           |
+| updateList(listId, attrs)    | update | post | /api/lists/:listId           |
+| deleteList(listId)           | delete | post | /api/lists/:listId/delete    |
+| getCards()                   | index  | get  | /api/cards                   |
+| createCard()                 | create | post | /api/cards                   |
+| getCard(cardId)              | show   | get  | /api/cards/:cardId           |
+| updateCard(cardId, attrs)    | update | post | /api/cards/:cardId           |
+| deleteCard(cardId)           | delete | post | /api/cards/:cardId/delete    |

@@ -27,26 +27,16 @@ server.use(express.static(buildPath+'/public'))
 server.use(bodyParser.json())
 
 server.use('/', authRoutes);
-
-server.get('/api/current-user', (request, response) => {
-  response.json({
-    id: 42,
-    email: "me@me.com",
-    password: "123"
-  })
-})
-
-server.use('/api/users', apiUsersRouter)
-server.use('/api/cards', apiCardsRouter)
-server.use( '/api/boards', apiBoardsRouter )
-server.use( '/api/lists', apiListsRouter )
+server.use('/api/users',  apiUsersRouter)
+server.use('/api/cards',  apiCardsRouter)
+server.use('/api/boards', apiBoardsRouter)
+server.use('/api/lists',  apiListsRouter)
 
 server.get('/*', (request, response) => {
   response.sendFile(buildPath+'/public/index.html')
 });
 
 server.use(errorHandlers)
-
 
 if (process.env.NODE_ENV !== 'test'){
   server.listen(server.get('port'))
