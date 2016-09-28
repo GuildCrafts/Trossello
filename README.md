@@ -53,6 +53,3 @@ we can make make live update work by polling for the entire board data. that wou
 | getCard(cardId)              | show   | get  | /cards/:cardId                   |
 | updateCard(cardId, attrs)    | update | post | /cards/:cardId                   |
 | deleteCard(cardId)           | delete | post | /cards/:cardId/delete            |
-
-
-
