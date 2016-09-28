@@ -1,12 +1,11 @@
 process.env.NODE_ENV = 'test';
 process.env.PORT = process.env.PORT || '3123';
 
-var chai = require('chai');
-var expect = chai.expect;
-var chaiHttp = require('chai-http');
-var server = require('../server');
-var database = require('../server/database');
-const { queries, commands } = database
+const chai = require('chai');
+const expect = chai.expect;
+const chaiHttp = require('chai-http');
+const server = require('../server');
+const { knex, queries, commands } = require('../server/database');
 
 chai.use(chaiHttp);
 
@@ -18,7 +17,7 @@ const request = (method, url, postBody) => {
     if (method === 'post' && postBody) req = req.send(postBody)
     req.end((error, response) => {
       if (error && error.status >= 500) {
-        reject(error) 
+        reject(error)
       }else{
         resolve(response)
       }
@@ -26,19 +25,16 @@ const request = (method, url, postBody) => {
   })
 }
 
-beforeEach(done => {
-  database.pg.migrate.latest()
-    .then(() => database.pg.truncateAllTables() )
-    .then(() => { done() })
-    .catch(done)
+beforeEach(() => {
+  return knex.migrate.latest().then(() => knex.truncateAllTables() )
 })
 
 module.exports = {
   chai,
   expect,
+  request,
   server,
-  database,
+  knex,
   queries,
   commands,
-  request,
 }

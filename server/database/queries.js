@@ -1,12 +1,11 @@
-function getUsers() {
-  return this.pg.table('users').select('*')
-}
+export default (knex) => ({
 
-function getUserById(id) {
-  return this.pg.table('users').first('*').where('id', id)
-}
+  getUsers() {
+    return knex.table('users').select('*')
+  },
 
-export default {
-  getUsers,
-  getUserById
-}
+  getUserById(id) {
+    return knex.table('users').where('id', id).first('*')
+  },
+
+})

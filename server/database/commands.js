@@ -1,52 +1,39 @@
-function createUser(attributes) {
-  return this.pg
-    .table('users')
-    .insert(attributes)
-    .returning('*')
-    .then(users => users[0])
-}
+export default (knex, queries) => ({
 
-function deleteUser(userId) {
-  return this.pg.table('users').where('id', userId).del()
-}
+  createUser(attributes) {
+    return knex
+      .table('users')
+      .insert(attributes)
+      .returning('*')
+      .then(firstRecord)
+  },
 
-function updateUser(id, attrs) {
-  return this.pg.table('users')
-    .where('id', id).update(attrs)
-    .returning('id')
-}
+  deleteUser(userId) {
+    return knex.table('users')
+      .where('id', userId)
+      .del()
+  },
 
-function findOrCreateUserFromGithubProfile(githubProfile){
-  const github_id = githubProfile.id
+  updateUser(id, attrs) {
+    return knex.table('users')
+      .where('id', id)
+      .update(attrs)
+      .returning('*')
+      .then(firstRecord)
+  },
 
-  const userAttributes = {
-    email: githubProfile.email,
-    github_id: github_id,
-    name: githubProfile.name,
-    avatar_url: githubProfile.avatar_url,
-  }
+  findOrCreateUserFromGithubProfile(githubProfile){
+    const github_id = githubProfile.id
+    const userAttributes = {
+      github_id: github_id,
+      name: githubProfile.name,
+      email: githubProfile.email,
+      avatar_url: githubProfile.avatar_url,
+    }
+    return knex.table('users').where('github_id', github_id).first('*')
+      .then(user => user ? user : this.createUser(userAttributes))
+  },
 
-  return this.pg.table('users').select('*').first('github_id', github_id)
-    .then(user => {
-      if (user){
-        console.log('user exists', user)
-        return user
-      }
-      return this.createUser(userAttributes)
-        .then(user => {
-          return this.pg.table('users').select('*').first('id', user.id)
-        })
-        .then(user => {
-          console.log('created user', user)
-          return user
-        })
-    })
+});
 
-}
-
-export default {
-  createUser,
-  deleteUser,
-  updateUser,
-  findOrCreateUserFromGithubProfile
-}
+const firstRecord = records => records[0];
