@@ -18,7 +18,7 @@ module.exports = server
 
 server.set('env', process.env.NODE_ENV)
 server.set('port', process.env.PORT || '3000')
-server.use(logger('dev'))
+if (process.env.NODE_ENV !== 'test') server.use(logger('dev'))
 server.use(cookieSession({
   name: 'session',
   keys: [process.env.SESSION_KEY]

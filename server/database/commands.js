@@ -2,8 +2,8 @@ function createUser(attributes) {
   return this.pg
     .table('users')
     .insert(attributes)
-    .returning('id')
-    .then(userIds => userIds[0])
+    .returning('*')
+    .then(users => users[0])
 }
 
 function deleteUser(userId) {
@@ -33,8 +33,8 @@ function findOrCreateUserFromGithubProfile(githubProfile){
         return user
       }
       return this.createUser(userAttributes)
-        .then(userId => {
-          return this.pg.table('users').select('*').first('id', userId)
+        .then(user => {
+          return this.pg.table('users').select('*').first('id', user.id)
         })
         .then(user => {
           console.log('created user', user)
