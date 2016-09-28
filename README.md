@@ -11,6 +11,34 @@ Open Source Trello Clone
 4. Finish the ticket
 5. Submit a pull request
 
+### Development Setup
+
+You'll need to
+[register this app](https://github.com/settings/applications/new)
+as an `Oauth application` on Github.
+
+```
+Application name
+Trossello (development)
+
+Homepage URL
+http://localhost:3000/
+
+Application description
+Open Source Trello Clone made by LearnersGuild (development)
+
+Authorization callback URL
+http://localhost:3000/oauth_callback
+```
+
+Copy the `client id` and `client secret` and use them below:
+
+Create a `.env` file in the root of the cloned repo that looks like this:
+```
+GITHUB_CLIENT_ID=GET_THIS_VALUE_FROM_GITHUB
+GITHUB_CLIENT_SECRET=GET_THIS_VALUE_FROM_GITHUB
+SESSION_KEY=MAKEUP_A_REALLY_LONG_STRING_HERE
+```
 
 ## Architecture
 
