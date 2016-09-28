@@ -48,6 +48,7 @@ SESSION_KEY=MAKEUP_A_REALLY_LONG_STRING_HERE
 - Babel es2016
 - React
 - Redux
+- SQL via Knex
 
 
 ### Persistence
