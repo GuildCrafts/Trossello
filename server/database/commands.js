@@ -47,6 +47,6 @@ function findOrCreateUserFromGithubProfile(githubProfile){
 export default {
   createUser,
   deleteUser,
-  updateUser
+  updateUser,
   findOrCreateUserFromGithubProfile
 }
