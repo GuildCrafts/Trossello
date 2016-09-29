@@ -22,6 +22,7 @@ const LoggedInNavbar = ({ auth }) => {
     </div>
   </div>
 }
+
   // const greeting = auth.isAuthenticated ?
   //   <h3>Welcome back {auth.user.name}</h3> :
   //   <h3>Greetings Human!</h3>
