@@ -67,7 +67,7 @@ const SectionTwo = (props) => {
     <div className="LoggedOutHomepage-sample"><img src={trelloBackgroundImg}></img></div>
   </div>
 }
- 
+
 const SignUpButton = (props) => {
   return <a href="/signup" className="SignUpButton">
     {props.children}

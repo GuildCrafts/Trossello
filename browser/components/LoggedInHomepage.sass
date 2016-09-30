@@ -2,27 +2,30 @@
 
 .LoggedInHomepage
 
-  li
-    list-style-type: none
-    display: inline-block
-    > div
-      margin-right: 30px
-      margin-bottom: 20px
-      background-color: #0094ae
-      color: white
-      font-weight: 700
-      height: 90px
-      width: 250px
-      border-radius: 4px
-      opacity: .8
-      > span
+  &-Boards
+    display: flex
+    flex-direction: row
+    padding-bottom: 20px
 
-      &:hover
-        opacity: 1
+  &-Board
+    display: inline-block
+    margin-right: 15px
+    margin-bottom: 15px
+    height: 90px
+    width: 250px
+    padding: 10px
+    background-color: #0094ae
+    color: white
+    font-weight: 700
+    border-radius: 4px
+    opacity: .8
+    > span
+
+    &:hover
+      opacity: 1
+
   &-BoardListHeading
     color: #4d4d4d
     font-weight: 700
-    margin-top: 3px
-  &-BoardListing
+    margin: 0 0 1em 0
 
-    padding-bottom: 20px
