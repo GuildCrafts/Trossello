@@ -2,7 +2,7 @@ const FakeBoards = [
   {
     id: 1,
     name: 'Peters Life',
-    background_color: 'blue',
+    background_color: 'rgb(0, 121, 191)',
     lists: [
       {
         id: 2321321,
@@ -43,7 +43,7 @@ const FakeBoards = [
   {
     id: 2,
     name: 'empty board example',
-    background_color: 'purple',
+    background_color: '#9200bf',
     lists: []
   }
 ]
