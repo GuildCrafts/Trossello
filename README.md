@@ -65,9 +65,9 @@ we can make make live update work by polling for the entire board data. that wou
 | createUser()                 | create | post | /api/users                   |
 | getUser(userId)              | show   | get  | /api/users/:userId           |
 | updateUser(userId, attrs)    | update | post | /api/users/:userId           |
-| getBoards()                  | index  | get  | /api/boards                  |
+| getBoardsByUserId()          | index  | get  | /api/boards                  |
 | createBoard()                | create | post | /api/boards                  |
-| getBoard(boardId)            | show   | get  | /api/boards/:boardId         |
+| getBoardById(boardId)        | show   | get  | /api/boards/:boardId         |
 | updateBoard(boardId, attrs)  | update | post | /api/boards/:boardId         |
 | deleteBoard(boardId)         | delete | post | /api/boards/:boardId/delete  |
 | getLists(boardId)            | index  | get  | /api/lists                   |
