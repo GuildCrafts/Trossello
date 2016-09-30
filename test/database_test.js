@@ -261,5 +261,100 @@ describe('database', () => {
     })
 
   })
+  
+  describe('when there are 0 boards in the database', () => {
 
+    describe('getBoardsByUserId', () => {
+      it('should return an empty array', () => {
+        const userId = 14
+        return queries.getBoardsByUserId(userId).then( boards => {
+          expect(boards.length).to.eql(0)
+        })
+      })
+    })
+
+    describe('getBoardById', () => {
+      it('should return an empty array', () => {
+        return queries.getBoardById(1).then( board => {
+          expect(board).to.be.undefined
+        })
+      })
+    })
+
+    describe('createBoard', () => {
+      it('should create a new board entry in db, and associate it with a user', () => {
+        return commands.createBoard(15, {name: "My Board"})
+        .then(board => {
+          expect(board.name).to.eql("My Board")
+          return queries.getBoardsByUserId(15)
+          .then(boards => {
+            expect(boards.length).to.eql(1)
+            expect(boards[0].name).to.eql("My Board")
+            expect(boards[0].id).to.eql(board.id)
+          })
+        })
+      })
+    })
+
+  })
+
+  describe('when there are 2 boards in the database', () => {
+    beforeEach( () => {
+      return Promise.all([
+        commands.createBoard(14, {
+          id: 1,
+          name: 'Board1'
+        }),
+        commands.createBoard(14, {
+          id: 2,
+          name: 'Board2'
+        })
+      ])
+    })
+
+    describe('getBoardsByUserId', () => {
+
+      it('should return an array of all boards', () => {
+        return queries.getBoardsByUserId(14).then( boards => {
+          expect(boards.length).to.eql(2)
+          expect(boards[0].name).to.eql('Board1')
+        })
+      })
+    })
+
+    describe('getBoardById', () => {
+
+      it('should return one board by user id', () => {
+        return queries.getBoardById(1).then( board => {
+          expect(board.id).to.eql(1)
+          expect(board.name).to.eql('Board1')
+        })
+      })
+    })
+
+    describe('updateBoard', () => {
+
+      it('should update a board with given attributes',() => {
+        const newAttributes = {
+          name: "NewBoardName"
+        }
+        return commands.updateBoard(1, newAttributes)
+        .then( board => {
+          expect(board.name).to.eql('NewBoardName')
+        })
+      })
+    })
+
+    describe('deleteBoard', () => {
+
+      it('should delete a board by board id', () => {
+        return commands.deleteBoard(1)
+        .then( () => {
+          return queries.getBoardById(1).then( board => {
+            expect(board).to.be.undefined
+          })
+        })
+      })
+    })
+  })
 })

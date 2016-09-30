@@ -56,6 +56,32 @@ export default (knex, queries) => ({
       .then(firstRecord)
   },
 
+  createBoard(userId, attributes) {
+    return knex.table('boards')
+    .insert(attributes)
+    .returning('*')
+    .then(firstRecord)
+    .then(board => {
+      return knex.table('user_boards')
+        .insert({user_id: userId, board_id: board.id})
+        .then(() => board)
+    })
+  },
+
+  updateBoard(boardId, attributes) {
+    return knex.table('boards')
+      .where('id', boardId)
+      .update(attributes)
+      .returning('*')
+      .then(firstRecord)
+  },
+
+  deleteBoard(boardId) {
+    return knex.table('boards')
+      .where('id', boardId)
+      .del()
+  },
+
 });
 
 const firstRecord = records => records[0];
