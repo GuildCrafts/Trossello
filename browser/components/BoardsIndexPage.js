@@ -6,7 +6,7 @@ import PresentationalComponent from './PresentationalComponent'
 
 const BoardsIndexPage = (props) => {
   return <Layout className="BoardsIndexPage">
-    <h1>Boards Index Page </h1>
+    <h1>All Boards</h1>
     <ol>
       <li>
         <Link to="/boards/12">Board 12</Link>

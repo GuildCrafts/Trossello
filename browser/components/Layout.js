@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import Navbar from './Navbar'
 import './Layout.sass'
 
-const Layout = (props) => {
-  return <div {...props} className="Page Layout">
+const Layout = ({className, children}) => {
+  className = `Page Layout ${className}`
+  return <div className={className}>
     <Navbar />
     <div className="Layout-content">
       {props.children}
