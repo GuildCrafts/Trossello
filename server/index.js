@@ -26,6 +26,14 @@ server.use(bodyParser.json())
 server.use('/',    authRoutes);
 server.use('/api', apiRoutes)
 
+if (process.env.NODE_ENV === 'test'){
+  // authentication back door
+  server.get('/__login/:userId', (request, response) => {
+    request.session.userId = Number(request.params.userId)
+    response.status(200).send('')
+  })
+}
+
 server.get('/*', (request, response) => {
   response.sendFile(buildPath+'/public/index.html')
 });
