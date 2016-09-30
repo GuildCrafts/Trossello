@@ -1,32 +1,38 @@
 import React, { Component } from 'react'
 import Layout from './Layout'
+// import BoardsIndexPage from './BoardsIndexPage'
+import Link from './Link'
+import './LoggedInHomepage.sass'
 
 const LoggedInHomepage = (props) => {
   const { auth } = props
   return <Layout className="LoggedInHomepage">
-    <h1>Welcome back {auth.user.name}</h1>
+    <BoardListHeading>Personal Boards</BoardListHeading>
+    {/* find a person icon to include in personal board heading */}
+    <BoardListing></BoardListing>
+
   </Layout>
 }
 
 export default LoggedInHomepage
 
-
-const LoggedInNavbar = ({ auth }) => {
-  return <div className="Navbar">
-    <div className="Navbar-links">
-      <Link to="/boards">Boards</Link>
-    </div>
-    <div className="Navbar-links">
-      <div>{auth.user.name}</div>
-      <LogoutButton>Logout</LogoutButton>
-    </div>
+const BoardListHeading = (props) => {
+  return <div className = "LoggedInHomepage-BoardListHeading">
+  {props.children}
   </div>
 }
 
-  // const greeting = auth.isAuthenticated ?
-  //   <h3>Welcome back {auth.user.name}</h3> :
-  //   <h3>Greetings Human!</h3>
-  // return <Layout className="HomePage">
-  //   <h1>Trossello</h1>
-  //   {greeting}
-  // </Layout>
+const BoardListing = (props) => {
+  return <div className = "LoggedInHomepage-BoardListing">
+    <ul>
+      <li><div><span>Functional Tortoises</span></div></li>
+      <li><div><span>LG Space Roles</span></div></li>
+      <li><div><span>LG Suggestion Box</span></div></li>
+      <li><div><span>Yellow</span></div></li>
+      <li><div><span>Board 5</span></div></li>
+      <li><div><span>Board 6</span></div></li>
+      <li><div><span>Board 7</span></div></li>
+      <li><div><span>Board 8</span></div></li>
+    </ul>
+  </div>
+}
