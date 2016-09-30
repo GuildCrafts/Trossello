@@ -112,4 +112,126 @@ describe('API', () => {
   
   })
 
+
+
+
+
+  describe('/api/cards', () => {
+
+    context('when there are cards in the database', () => {
+      beforeEach( () => {
+        return Promise.all([
+          commands.createCard({
+            id: 11,
+            board_id: 22,
+            list_id: 33,
+            content: 'getting done the project',
+          }),
+          commands.createCard({
+            id: 10,
+            board_id: 20,
+            list_id: 30,
+            content: 'Having fun in this evening',
+          })
+        ])
+      })
+
+      describe('GET /api/cards', () => {
+
+        it('should render a json array of all cards', () => {
+          return request('get', '/api/cards').then(response => {
+            console.log("+++Majid+++ ", response.body)
+            expect(response).to.have.status(200);
+            expect(response).to.be.json; // jshint ignore:line
+            expect(response.body).to.be.an('array');
+            expect(response.body.length).to.equal(2);
+
+            const cards = response.body
+            cards.forEach(card => {
+              if (card.id === 11){
+                expect(card).to.be.a('object')
+                expect(card.board_id).to.eql(22)
+                expect(card.list_id).to.eql(33)
+                expect(card.content).to.eql('getting done the project')
+              }else if (card.id === 10){
+                expect(card).to.be.a('object')
+                expect(card.board_id).to.eql(20)
+                expect(card.list_id).to.eql(30)
+                expect(card.content).to.eql('Having fun in this evening')
+              }else{
+                throw new Error('unexpected card record')
+              }
+            })
+          });
+        });
+
+      });
+
+      describe('POST /api/cards', () => {
+        it('should create a card', () => {
+          const cardAttributes = {
+            id: 445,
+            board_id: 131,
+            list_id: 334343,
+            content: 'eat a duck',
+          }
+          return request('post', '/api/cards', cardAttributes).then(response => {
+            expect(response).to.have.status(200);
+            expect(response).to.be.json; // jshint ignore:line
+            expect(response.body).to.be.a('object')
+            expect(response.body.id).to.eql(445)
+            expect(response.body.board_id).to.eql(131)
+            expect(response.body.list_id).to.eql(334343)
+            expect(response.body.content).to.eql('eat a duck')
+          });
+        });
+      });
+
+      describe('GET /api/cards/:id', () => {
+        context('when requesting a card that exists', () => {
+          it('should render that card as json', () => {
+            return request('get','/api/cards/11').then(response => {
+              expect(response).to.have.status(200);
+              expect(response).to.be.json; // jshint ignore:line
+              expect(response.body).to.be.an('object');
+              expect(response.body.content).to.equal('getting done the project');
+            });
+          });
+        })
+        context('when requesting a card that doesnt exist', () => {
+          it('should render nothing status 404', () => {
+            return request('get','/api/cards/55').then(response => {
+              expect(response).to.have.status(404);
+              expect(response).to.be.json; // jshint ignore:line
+              expect(response.body).to.eql(null)
+            });
+          });
+        })
+      });
+
+      describe('POST /api/cards/:cardId/delete', () => {
+        it('should delete a card', () => {
+          return request('post', '/api/cards/11/delete').then(response => {
+            expect(response).to.have.status(200)
+            expect(response).to.be.json; // jshint ignore:line
+            expect(response.body).to.eql(null)
+            return request('get', '/api/cards/11').then(response => {
+              expect(response).to.have.status(404)
+              expect(response).to.be.json; // jshint ignore:line
+              expect(response.body).to.eql(null)
+            })
+          })
+        })
+      })
+
+    })
+
+  })
+
+
+
+
+
+
+
 });

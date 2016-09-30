@@ -34,6 +34,28 @@ export default (knex, queries) => ({
       .then(user => user ? user : this.createUser(userAttributes))
   },
 
+  createCard(attributes) {
+      return knex
+    .table('cards')
+    .insert(attributes)
+    .returning('*')
+    .then(firstRecord)
+  },
+
+  deleteCard(cardId) {
+    return knex.table('cards')
+      .where('id', cardId)
+      .del()
+  },
+
+  updateCard(id, attrs) {
+    return knex.table('cards')
+      .where('id', id)
+      .update(attrs)
+      .returning('*')
+      .then(firstRecord)
+  },
+
 });
 
 const firstRecord = records => records[0];

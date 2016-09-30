@@ -8,4 +8,12 @@ export default (knex) => ({
     return knex.table('users').where('id', id).first('*')
   },
 
+  getCards() {
+    return knex.table('cards').select('*')
+  },
+
+  getCardById(id) {
+    return knex.table('cards').where('id', id).first('*')
+  },
+
 })

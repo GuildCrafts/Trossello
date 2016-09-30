@@ -1,31 +1,43 @@
 import express from 'express'
+import {queries, commands} from '../database'
+
 const router = new express.Router()
 
 
-router.get('/', (request, response) => {
-  response.json({
-    1: {
-      id: 1,
-      board_id: 1,
-      list_id: 1,
-      content: 'something to do #1'
-    },
-    2: {
-      id: 2,
-      board_id: 2,
-      list_id: 2,
-      content: 'something to do #2'
-    }
-  })
+router.get('/', (request, response, next) => {
+  queries.getCards()
+    .then(cards => {
+      response.json(cards)
+    })
+    .catch(next)
 })
 
-router.get('/:cardId', (request, response) => {
-  response.json({
-    id: request.params.cardId,
-    board_id: 1,
-    list_id: 1,
-    content: 'something to do #1'
-  })
+router.post('/', (request, response, next) => {
+  commands.createCard(request.body)
+    .then(card => {
+      response.json(card)
+    })
+    .catch(next)
+})
+
+router.get('/:cardId', (request, response, next) => {
+  queries.getCardById(request.params.cardId)
+    .then(card => {
+      if (card){
+        response.json(card)
+      }else{
+        response.status(404).json(null)
+      }
+    })
+    .catch(next)
+})
+
+router.post('/:cardId/delete', (request, response, next) => {
+  commands.deleteCard(request.params.cardId)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
 })
 
 export default router

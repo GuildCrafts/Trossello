@@ -155,8 +155,111 @@ describe('database', () => {
         })
       })
     })
-
   })
 
+  context('when there are cards in the database', () => {
+    beforeEach( () => {
+      return Promise.all([
+        commands.createCard({
+          id: 11,
+          board_id: 22,
+          list_id: 33,
+          content: 'getting done the project',
+        }),
+        commands.createCard({
+          id: 10,
+          board_id: 20,
+          list_id: 30,
+          content: 'Having fun in this evening',
+        })
+      ])
+    })
+
+    describe('getCards', () => {
+      it('should return an array of all cards', () => {
+        return queries.getCards().then( cards => {
+          expect(cards).to.be.a('array')
+          expect(cards.length).to.eql(2)
+
+          cards.forEach(card => {
+            if (card.id === 11){
+              expect(card).to.be.a('object')
+              expect(card.board_id).to.eql(22)
+              expect(card.list_id).to.eql(33)
+              expect(card.content).to.eql('getting done the project')
+            }else if (card.id === 10){
+              expect(card).to.be.a('object')
+              expect(card.board_id).to.eql(20)
+              expect(card.list_id).to.eql(30)
+              expect(card.content).to.eql('Having fun in this evening')
+            }else{
+              throw new Error('unexpected card record')
+            }
+          })
+        })
+      })
+    })
+
+    describe('getCardById', () => {
+      it('should return json by card id', () => {
+        return queries.getCardById(11).then( card => {
+          expect(card).to.be.a('object')
+          expect(card.id).to.eql(11)
+          expect(card.board_id).to.eql(22)
+          expect(card.list_id).to.eql(33)
+          expect(card.content).to.eql('getting done the project')
+
+        })
+      })
+    })
+
+    describe('deleteCard', () => {
+      it('should delete a card by card id', () => {
+        return queries.getCardById(11).then( card => {
+          expect(card).to.be.a('object')
+          expect(card.id).to.eql(11)
+          return commands.deleteCard(11).then( () => {
+            return queries.getCardById(11).then( card => {
+              expect(card).to.be.undefined
+            })
+          })
+        })
+      })
+    })
+
+    describe('updateCard', () => {
+
+      it('should update a card with given attributes', () => {
+        const cardAttributes = {
+          content: 'This content has been updated',
+        }
+        return commands.updateCard(11, cardAttributes).then( card => {
+          expect(card).to.be.a('object')
+          expect(card.id).to.eql(11)
+          expect(card.content).to.eql('This content has been updated')
+          return queries.getCards().then( cards => {
+            expect(cards.length).to.eql(2)
+            cards.forEach(card => {
+              if (card.id === 11){
+                expect(card).to.be.a('object')
+                expect(card.board_id).to.eql(22)
+                expect(card.list_id).to.eql(33)
+                expect(card.content).to.eql('This content has been updated')
+              }else if (card.id === 10){
+                expect(card).to.be.a('object')
+                expect(card.board_id).to.eql(20)
+                expect(card.list_id).to.eql(30)
+                expect(card.content).to.eql('Having fun in this evening')
+              }else{
+                throw new Error('unexpected card record')
+              }
+            })
+          })
+        })
+      })
+
+    })
+
+  })
 
 })
