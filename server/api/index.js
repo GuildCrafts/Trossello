@@ -6,6 +6,12 @@ import cardsRoutes from './cards'
 
 const router = new express.Router()
 
+router.use((request, response, next) => {
+  if (request.session.userId) return next()
+  response.status(400).json({
+    error: 'Not Authorized'
+  })
+})
 router.use('/users',  usersRoutes)
 router.use('/cards',  cardsRoutes)
 router.use('/boards', boardsRoutes)
