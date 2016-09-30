@@ -1,0 +1,53 @@
+@import "../style.sass"
+
+.BoardShowPage
+  font-family: "Helvetica Neue"
+  &-Header
+    justify-content: space-between
+    display: flex
+    flex-direction: row
+    z-index: 10
+    > h1
+      font-family: "Helvetica Neue"
+      font-weight: 500
+      margin-left: 25px
+      margin-top: 5px
+      color: #fff
+  &-lists
+    display: flex
+    flex-direction: row
+    flex-wrap: nowrap
+    background-color: transparent
+    margin-left: 25px
+  &-List
+    background-color: #e1e3ea
+    border-radius: 5px
+    margin-right: 25px
+    width: 330px
+    max-height: 100%
+    font-family: "Helvetica Neue"
+    font-size: 1.2em
+    font-weight: 500
+    color: #686a70
+  &-ListHeader
+    padding-left: 20px
+    padding-top:  18px
+    padding-bottom: 18px
+  &-cards
+    display: flex
+    overflow-y: scroll
+    overflow-y: auto, scroll
+    flex-direction: column
+    flex-wrap: nowrap
+    padding-left: 18px
+    padding-right: 18px
+    min-height: 30%
+  &-Card
+    height: 5em
+    font-family: "Helvetica Neue"
+    color: #686a70
+    font-weight: 300
+    padding: 0.8em
+    margin-bottom: 0.8em
+    border-radius: 5px
+    background-color: white

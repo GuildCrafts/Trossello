@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import Navbar from './Navbar'
 import './Layout.sass'
 
-const Layout = ({children}) => {
-  return <div className="Page Layout">
+const Layout = (props) => {
+  return <div {...props} className="Page Layout">
     <Navbar />
     <div className="Layout-content">
-      {children}
+      {props.children}
     </div>
   </div>
 }
