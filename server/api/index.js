@@ -7,8 +7,8 @@ import cardsRoutes from './cards'
 const router = new express.Router()
 
 router.use('/users',  usersRoutes)
-router.use('/cards',  boardsRoutes)
-router.use('/boards', listsRoutes)
-router.use('/lists',  cardsRoutes)
+router.use('/cards',  cardsRoutes)
+router.use('/boards', boardsRoutes)
+router.use('/lists',  listsRoutes)
 
 export default router
