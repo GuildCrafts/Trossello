@@ -267,7 +267,6 @@ describe('API', () => {
 
         it('should render a json array of all cards', () => {
           return request('get', '/api/cards').then(response => {
-            console.log("+++Majid+++ ", response.body)
             expect(response).to.have.status(200);
             expect(response).to.be.json; // jshint ignore:line
             expect(response.body).to.be.an('array');
