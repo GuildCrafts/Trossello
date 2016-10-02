@@ -1,28 +1,33 @@
-export default (knex, queries) => ({
+export default (knex, queries) => {
 
-  createUser(attributes) {
-    return knex
-      .table('users')
+  const firstRecord = records => records[0]
+
+  const createRecord = (table, attributes) =>
+    knex
+      .table(table)
       .insert(attributes)
       .returning('*')
       .then(firstRecord)
-  },
 
-  deleteUser(userId) {
-    return knex.table('users')
-      .where('id', userId)
-      .del()
-  },
 
-  updateUser(id, attrs) {
-    return knex.table('users')
+  const updateRecord = (table, id, attributes) =>
+    knex
+      .table(table)
       .where('id', id)
-      .update(attrs)
+      .update(attributes)
       .returning('*')
       .then(firstRecord)
-  },
 
-  findOrCreateUserFromGithubProfile(githubProfile){
+
+  const deleteRecord = (table, id) =>
+    knex
+      .table(table)
+      .where('id', id)
+      .del()
+
+  //
+
+  const findOrCreateUserFromGithubProfile = (githubProfile) => {
     const github_id = githubProfile.id
     const userAttributes = {
       github_id: github_id,
@@ -31,57 +36,68 @@ export default (knex, queries) => ({
       avatar_url: githubProfile.avatar_url,
     }
     return knex.table('users').where('github_id', github_id).first('*')
-      .then(user => user ? user : this.createUser(userAttributes))
-  },
+      .then(user => user ? user : createUser(userAttributes))
+  }
 
-  createCard(attributes) {
-      return knex
-    .table('cards')
-    .insert(attributes)
-    .returning('*')
-    .then(firstRecord)
-  },
+  const createUser = (attributes) =>
+    createRecord('users', attributes)
 
-  deleteCard(cardId) {
-    return knex.table('cards')
-      .where('id', cardId)
-      .del()
-  },
 
-  updateCard(id, attrs) {
-    return knex.table('cards')
-      .where('id', id)
-      .update(attrs)
-      .returning('*')
-      .then(firstRecord)
-  },
+  const updateUser = (id, attributes) =>
+    updateRecord('users', id, attributes)
 
-  createBoard(userId, attributes) {
-    return knex.table('boards')
-    .insert(attributes)
-    .returning('*')
-    .then(firstRecord)
-    .then(board => {
-      return knex.table('user_boards')
-        .insert({user_id: userId, board_id: board.id})
-        .then(() => board)
+
+  const deleteUser = (id) =>
+    deleteRecord('users', id)
+
+
+  //
+
+  const createCard = (attributes) =>
+    createRecord('cards', attributes)
+
+
+  const updateCard = (id, attributes) =>
+    updateRecord('cards', id, attributes)
+
+
+  const deleteCard = (id) =>
+    deleteRecord('cards', id)
+
+  //
+
+  const createBoard = (userId, attributes) =>
+    createRecord('boards', attributes).then(board => {
+      let attrs = {
+        user_id: userId,
+        board_id: board.id,
+      }
+      return createRecord('user_boards', attrs).then(() => board)
     })
-  },
 
-  updateBoard(boardId, attributes) {
-    return knex.table('boards')
-      .where('id', boardId)
-      .update(attributes)
-      .returning('*')
-      .then(firstRecord)
-  },
 
-  deleteBoard(boardId) {
-    return knex.table('boards')
-      .where('id', boardId)
-      .del()
-  },
+  const updateBoard = (id, attributes) =>
+    updateRecord('boards', id, attributes)
 
-});
 
-const firstRecord = records => records[0];
+  const deleteBoard = (boardId) =>
+    Promise.all([
+      deleteRecord('boards', boardId),
+      knex.table('user_boards').where('board_id', boardId).del(),
+    ]).then(results => results[0] + results[1])
+
+
+  return {
+    createUser,
+    updateUser,
+    deleteUser,
+    findOrCreateUserFromGithubProfile,
+    createCard,
+    updateCard,
+    deleteCard,
+    createBoard,
+    updateBoard,
+    deleteBoard,
+  }
+
+}

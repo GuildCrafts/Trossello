@@ -1,33 +1,39 @@
-export default (knex) => ({
+export default (knex) => {
 
-  getUsers() {
-    return knex.table('users').select('*')
-  },
+  const getRecords = (table) =>
+    knex.table(table).select('*')
 
-  getUserById(id) {
-    return knex.table('users').where('id', id).first('*')
-  },
+  const getRecordById = (table, id) =>
+    knex.table(table).where('id', id).first('*')
 
-  getCards() {
-    return knex.table('cards').select('*')
-  },
+  const getUsers = () =>
+    getRecords('users')
 
-  getCardById(id) {
-    return knex.table('cards').where('id', id).first('*')
-  },
+  const getUserById = (id) =>
+    knex.table('users').where('id', id).first('*')
 
-  getBoardsByUserId(userId) {
-    return knex.table('boards')
+  const getBoardsByUserId = (userId) =>
+    knex.table('boards')
       .select('boards.*')
       .join('user_boards', 'boards.id', '=', 'user_boards.board_id')
       .where('user_boards.user_id', userId)
-  },
 
-  getBoardById(boardId) {
-    return knex.table('boards')
-      .first('*')
-      .where('id', boardId)
-      .returning('*')
-  },
+  const getBoardById = (id) =>
+    getRecordById('boards', id)
 
-})
+  const getCards = () =>
+    getRecords('cards')
+
+  const getCardById = (id) =>
+    getRecordById('cards', id)
+
+  return {
+    getUsers,
+    getUserById,
+    getCards,
+    getCardById,
+    getBoardsByUserId,
+    getBoardById,
+  }
+
+}
