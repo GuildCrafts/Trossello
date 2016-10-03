@@ -40,6 +40,37 @@ GITHUB_CLIENT_SECRET=GET_THIS_VALUE_FROM_GITHUB
 SESSION_KEY=MAKEUP_A_REALLY_LONG_STRING_HERE
 ```
 
+#### Fork the Project and Add Remote Upstream
+
+Go to Github and fork the project to your repo, then clone the fork. Then run the following:
+
+```
+$ git remote add upstream https://github.com/GuildCrafts/Trossello.git
+```
+
+#### Install Postgres
+
+```
+$ brew install postgress
+$ brew tap homebrew/services
+$ brew services start postgresql
+```
+#### Add Knex and Nodemon to the Command Line
+
+You can do one of two things: install nodemon and knex globally, which will automatically add both tools to your path, or add ./node_modules/.bin to your path (recommended). Depending on your shell, you will either need to add the following line to .zshrc or .bashrc:
+
+> export PATH=$HOME/bin:/usr/local/bin:**./node_modules/.bin**:$PATH
+
+#### Create and Migrate the Database
+
+```
+$ createdb trossello-development
+$ knex migrate:latest
+```
+#### Run the Server!
+
+At this point, you should be able to run 'npm start' without errors. If you get an error, make sure that you can run nodemon, knex, and psql from the command line. If any of them fail, make sure to install them and try again.
+
 ## Architecture
 
 - Node
