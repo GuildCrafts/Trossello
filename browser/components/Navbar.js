@@ -40,6 +40,7 @@ const LoggedInNavbar = ({auth}) => {
       <img src={auth.user.avatar_url} />
       <span>{auth.user.name}</span>
     </button>
+    <LogoutButton className="Navbar-button">Logout</LogoutButton>
     <button className="Navbar-button AlertButton">
       <Icon type="bell" />
     </button>

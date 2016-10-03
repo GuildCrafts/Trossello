@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import ContainerComponent from './ContainerComponent'
 
-const LoginForm = (actions, props) => {
+const LoginForm = ({actions}) => {
   const onSubmit = (event) => {
     event.preventDefault()
-    actions.login({
-    })
+    actions.login({})
   }
   return <form onSubmit={onSubmit}>
     <label>

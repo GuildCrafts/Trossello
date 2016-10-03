@@ -3,9 +3,8 @@ import { Router, browserHistory } from 'react-router'
 import routes from './routes'
 import { Provider } from 'react-redux'
 import store from './store'
-import Actions from './actions'
+import actions from './actions'
 
-const actions = new Actions(store.dispatch)
 actions.loadSession()
 
 window.DEBUG = {}

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Actions from '../actions'
+import actions from '../actions'
 import getComponentName from 'getComponentName'
 
 // http://redux.js.org/docs/basics/UsageWithReact.html
@@ -15,7 +15,4 @@ const PresentationalComponent = (component) => {
 }
 export default PresentationalComponent
 const mapStateToProps = (state) => ({state})
-const mapDispatchToProps = (dispatch) => {
-  const actions = (new Actions(dispatch))
-  return {...actions}
-}
+const mapDispatchToProps = () => ({})

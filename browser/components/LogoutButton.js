@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import ContainerComponent from './ContainerComponent'
+import actions from '../actions'
 
-const LogoutButton = (actions, props) => {
+const LogoutButton = (props) => {
   const logout = (event) => {
     event.preventDefault();
     actions.logout()
@@ -10,4 +10,4 @@ const LogoutButton = (actions, props) => {
   return <button {...props} onClick={logout}>{props.children}</button>
 }
 
-export default ContainerComponent(LogoutButton)
+export default LogoutButton

@@ -1,51 +1,35 @@
-const request = (path, options={}) => {
-  if ('credentials' in options); else {
-    options.credentials = 'same-origin'
-  }
-  return fetch(path, options)
-    .then(response => response.json())
+import store from '../store'
+import types from './types'
+
+// import actions
+import loadSession from './loadSession'
+import logout from './logout'
+
+const actions = {
+  loadSession,
+  logout,
 }
 
-export default class Actions {
-
-  constructor(dispatch){
-    this.dispatch = dispatch
-  }
-
-  loadSession(){
-    console.log('Action:loadSession')
-    request('/session')
-      .then(session => {
-        console.log('SESSION LOADED', session)
-        this.dispatch({
-          type: 'SESSION_LOADED',
-          user: session.user,
-        })
-      })
-      .catch(error => {
-        console.log('SESSION LOAD ERROR', error)
-        this.dispatch({
-          type: 'SESSION_LOADED',
-          error: error,
-        })
-      })
-  }
-
-  logout() {
-    console.log('Action:logout')
-
-    request('/logout', {method:'POST'})
-      .then(() => {
-        this.dispatch({
-          type: 'LOGOUT_SUCCESS',
-        })
-      })
-      .catch( error => {
-        this.dispatch({
-          type: 'LOGOUT_FAIL',
-          error: error,
-        })
-      })
-  }
-
+// dispatch with event type checking
+const dispatch = (event) => {
+  if (
+    typeof event === 'object' &&
+    'type' in event &&
+    !types.includes(event.type)
+  ) throw new Error('unknown event type '+JSON.stringify(event.type))
+  return store.dispatch.call(store, event)
 }
+
+// bind actions to the store dispatch method and force logging
+const wrapAction = (actionName, actionFunction) => {
+  return function(){
+    console.log('Action: '+actionName, arguments)
+    return actionFunction.apply(this, [dispatch, ...arguments])
+  }
+}
+
+for (let key in actions) {
+  actions[key] = wrapAction(key, actions[key])
+}
+
+export default actions
