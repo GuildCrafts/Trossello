@@ -6,6 +6,10 @@ const childProcess = require('child_process');
 
 const spawn = (cmd, args) => {
   childProcess.spawn(cmd, args, {stdio: 'inherit'})
+    .on('close', function(code) {
+      console.log('CMD CLOSED:', cmd, args)
+      process.exit(1)
+    });
 }
 
 if (process.env.NODE_ENV === 'development'){
