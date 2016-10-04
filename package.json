@@ -82,6 +82,7 @@
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
+    "nodemon": "^1.10.2",
     "redux-devtools": "^3.3.1"
   }
 }
