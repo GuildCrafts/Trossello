@@ -11,10 +11,9 @@ const spawn = (cmd, args, watchArgs) => {
   if (!watch){
     children.push(proc)
     proc.on('close', function(code) {
-      if (code !== 0){
-        children.forEach(child => child.kill())
-        process.exit(code)
-      }
+      console.log('CMD exit:', code, cmd, args)
+      children.forEach(child => child.kill())
+      process.exit(1)
     });
   }
   return proc

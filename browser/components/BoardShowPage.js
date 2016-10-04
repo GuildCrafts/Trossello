@@ -2,30 +2,13 @@ import React, { Component } from 'react'
 import './BoardShowPage.sass'
 import Layout from './Layout'
 import Link from './Link'
-import PresentationalComponent from './PresentationalComponent'
+// import PresentationalComponent from './PresentationalComponent'
 
 const BoardShowPage = (props) => {
-  const { state } = props
-  const boardId = props.params.boardId
-  const board = state.boards.records
-    .find(record => record.id == boardId)
-
-  if (!board) return <div>Board Not Found</div>
-
-  const lists = board.lists.map(list => {
-    return <List key={list.id} list={list} />
-  })
-
-  const style = {
-    backgroundColor: board.background_color
-  }
-
   return <Layout className="BoardShowPage" style={style}>
     <div className="BoardShowPage-Header">
-      <h1>{board.name}</h1>
+      <h1>{props.board.name}</h1>
     </div>
-
-    <div className="BoardShowPage-lists">{lists}</div>
   </Layout>
 }
 
@@ -48,4 +31,6 @@ const Card = (props) => {
   </div>
 }
 
-export default PresentationalComponent(BoardShowPage)
+
+
+export default BoardShowPage

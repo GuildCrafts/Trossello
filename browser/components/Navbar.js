@@ -5,6 +5,7 @@ import Link from './Link'
 import Icon from './Icon'
 import LogoutButton from './LogoutButton'
 import LoginButton from './LoginButton'
+import BoardsDropDown from './BoardsDropDown'
 
 const Navbar = (props) => {
   const { auth } = props.state
@@ -28,7 +29,7 @@ const LoggedOutNavbar = (props) => {
 
 const LoggedInNavbar = ({auth}) => {
   return <div className="Navbar">
-    <Link to="/" className="Navbar-button BoardButton">Boards</Link>
+    <BoardsDropDown className="Navbar-button BoardButton" />
     <input type="text" className="Navbar-SearchInput" ></input>
     <div className="Navbar-BoardIndexButton">
       <a href="/">Trossello</a>
