@@ -1,0 +1,14 @@
+machine:
+  node:
+    version: 6.3.0
+  environment:
+    NODE_ENV: test
+    GITHUB_CLIENT_ID: TEST_GITHUB_CLIENT_ID
+    GITHUB_CLIENT_SECRET: TEST_GITHUB_CLIENT_SECRET
+    SESSION_KEY: TEST_SESSION_KEY
+    DATABASE_URL: postgres://ubuntu:@127.0.0.1:5432/circle_test
+
+
+dependencies:
+  cache_directories:
+    - "node_modules"

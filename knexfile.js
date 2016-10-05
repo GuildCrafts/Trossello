@@ -1,7 +1,8 @@
 const defaultConfig = (env) => {
-  const connectionString = env === 'production' ?
-    process.env.DATABASE_URL :
+  const connectionString = (
+    process.env.DATABASE_URL ||
     `postgres://${process.env.USER}@localhost:5432/trossello-${env}`
+  )
 
   return {
     client: 'postgresql',
