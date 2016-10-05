@@ -70,6 +70,7 @@
     "mocha": "^3.0.2",
     "morgan": "^1.7.0",
     "node-sass": "^3.10.0",
+    "nodemon": "^1.10.2",
     "normalize.css": "^4.2.0",
     "pg": "^6.1.0",
     "promise": "^7.1.1",

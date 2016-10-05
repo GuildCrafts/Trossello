@@ -7,6 +7,7 @@ import LogoutButton from './LogoutButton'
 import LoginButton from './LoginButton'
 import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
+import BoardsDropdown from './BoardsDropdown'
 
 const Navbar = (props) => {
   const { auth } = props.state
@@ -30,7 +31,7 @@ const LoggedOutNavbar = (props) => {
 
 const LoggedInNavbar = ({auth}) => {
   return <div className="Navbar">
-    <Link to="/" className="Navbar-button BoardButton">Boards</Link>
+    <BoardsDropdown className="Navbar-button BoardButton" />
     <input type="text" className="Navbar-SearchInput" ></input>
     <div className="Navbar-BoardIndexButton">
       <a href="/">Trossello</a>
