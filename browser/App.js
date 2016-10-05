@@ -2,17 +2,17 @@ import React from 'react'
 import { Router, browserHistory } from 'react-router'
 import routes from './routes'
 import { Provider } from 'react-redux'
-import store from './store'
-import actions from './actions'
+import state from './state'
 
-actions.loadSession()
+state.actions.loadSession()
 
 window.DEBUG = {}
-window.DEBUG.store = store
-window.DEBUG.actions = actions
+window.DEBUG.state = state
+window.DEBUG.store = state.store
+window.DEBUG.actions = state.actions
 
 export default () => {
-  return <Provider store={store}>
+  return <Provider store={state.store}>
     <Router history={browserHistory} routes={routes} />
   </Provider>
 }

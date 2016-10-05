@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import actions from '../actions'
+import { actions } from '../state'
 import getComponentName from 'getComponentName'
 
 // http://redux.js.org/docs/basics/UsageWithReact.html

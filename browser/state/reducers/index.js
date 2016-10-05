@@ -6,4 +6,3 @@ export default combineReducers({
   auth,
   boards,
 })
-

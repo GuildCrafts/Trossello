@@ -1,5 +1,5 @@
 import store from '../store'
-import types from './types'
+import eventTypes from '../eventTypes'
 
 // import actions
 import loadSession from './loadSession'
@@ -15,7 +15,7 @@ const dispatch = (event) => {
   if (
     typeof event === 'object' &&
     'type' in event &&
-    !types.includes(event.type)
+    !eventTypes.includes(event.type)
   ) throw new Error('unknown event type '+JSON.stringify(event.type))
   return store.dispatch.call(store, event)
 }

@@ -1,7 +1,5 @@
 import request from 'request'
 
-import { LOADING_SESSION, SESSION_LOADED } from './types'
-
 export default (dispatch) => {
   dispatch({
     type: 'LOADING_SESSION',
