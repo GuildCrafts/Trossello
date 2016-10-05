@@ -1,6 +1,10 @@
 {
   "name": "trossello",
   "version": "0.0.1",
+  "engines": {
+    "node": "6.3.0",
+    "npm": "3.10.3"
+  },
   "description": "Open Source Trello Clone",
   "main": "dist/server.js",
   "scripts": {
