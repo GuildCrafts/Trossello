@@ -1,50 +1,5 @@
 #!/usr/bin/env node
 
-require('../config/environment')
-const path = require('path');
-const childProcess = require('child_process');
-const rmdir = require('rmdir')
-
-process.chdir(path.resolve(__dirname, '..'));
-
-const bin = './node_modules/.bin'
-
-const watch = process.env.NODE_ENV === 'development' && process.argv[2] === '-w'
-const procs = []
-const spawn = (cmd, args, watchArgs) => {
-  if (watch) args = args.concat(watchArgs)
-  const proc = childProcess.spawn(cmd, args, {stdio: 'inherit'})
-  if (watch) {
-    procs.push(proc)
-    proc.on('close', function(code) {
-      procs.forEach(procs => procs.kill())
-      process.exit(1)
-    });
-  }
-  return proc
-}
-
-const clobberBuildDir = (callback) => {
-  rmdir('./build', (error, dirs, files) => {
-    callback()
-  })
-}
-
-clobberBuildDir(() => {
-  const server  = spawn(bin+'/babel', ['./server',  '--out-dir', './build/server'],  ['--watch', './server']);
-  const browser = spawn(bin+'/babel', ['./browser', '--out-dir', './build/browser'], ['--watch', './browser']);
-  const webpack = spawn(bin+'/webpack', [], ['--watch']);
-
-  if (process.env.NODE_ENV === 'development'){
-    spawn(bin+'/babel', ['./test', '--out-dir', './build/test'], ['--watch', './test']);
-  }
-
-  if (process.env.NODE_ENV === 'production'){
-    server.on('close', function(code) {
-      rmdir('./server')
-    });
-    webpack.on('close', function(code) {
-      rmdir('./browser')
-    });
-  }
-})
+require('../lib/scripts').buildAll(
+  process.env.NODE_ENV === 'development' && process.argv[2] === '-w'
+)
