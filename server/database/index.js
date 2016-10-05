@@ -11,11 +11,11 @@ const commands = commandsFactory(knex, queries)
 
 knex.truncateAllTables = function(){
   return Promise.all([
-    this.truncate('users'),
-    this.truncate('user_boards'),
-    this.truncate('boards'),
-    this.truncate('lists'),
-    this.truncate('cards')
+    knex.table('user_boards').del(),
+    knex.table('cards').del(),
+    knex.table('lists').del(),
+    knex.table('boards').del(),
+    knex.table('users').del(),
   ])
 }
 
