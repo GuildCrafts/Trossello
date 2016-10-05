@@ -7,9 +7,10 @@ var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-if (process.env.NODE_ENV === 'development'){
-  var WebpackErrorNotificationPlugin = require('webpack-error-notification');
-}
+var webpackErrorNotificationPlugin = process.env.NODE_ENV === 'development' ?
+  new (require('webpack-error-notification'))() :
+  new webpack.DefinePlugin({})
+;
 
 var root  = __dirname
 
@@ -121,7 +122,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new WebpackErrorNotificationPlugin(),
+    webpackErrorNotificationPlugin,
     new HtmlWebpackPlugin({
       inject: true,
       template: root+'/browser/index.html',
