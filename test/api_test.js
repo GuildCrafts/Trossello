@@ -149,6 +149,7 @@ describe('API', () => {
           return request('post', '/api/boards', boardAttributes).then( response => {
             expect(response).to.have.status(200)
             expect(response.body.name).to.eql('Fresh Board')
+            expect(response.body.background_color).to.eql('#0079bf')
           })
         })
       })
@@ -168,15 +169,17 @@ describe('API', () => {
         return Promise.all([
           commands.createBoard(1455, {
             id: 1,
-            name: 'Sf General Hospital'
+            name: 'Sf General Hospital',
           }),
           commands.createBoard(1455, {
             id: 2,
-            name: 'Facebook NSA Back Doors'
+            name: 'Facebook NSA Back Doors',
+            background_color: '#00bf99',
           }),
           commands.createBoard(99, {
             id: 3,
-            name: 'User 99 board'
+            name: 'User 99 board',
+            background_color: '#ee99f3',
           })
         ])
       })
@@ -185,16 +188,27 @@ describe('API', () => {
         it('should render my boards as a JSON array', () => {
           return request('get', '/api/boards').then(response => {
             expect(response).to.have.status(200)
-            const boards = response.body
+            let boards = response.body
             expect(boards).to.be.an('array')
             expect(boards.length).to.eql(2)
-            const boardIds = response.body.map(b => b.id).sort()
-            expect(boardIds).to.eql([1,2])
-            const boardNames = response.body.map(b => b.name).sort()
-            expect(boardNames).to.eql([
-              'Facebook NSA Back Doors',
-              'Sf General Hospital'
-            ])
+
+            boards = boards.reduce((hash, board) => {
+              hash[board.id] = board
+              return hash
+            }, {})
+
+            expect(boards).to.eql({
+              1: {
+                id: 1,
+                name: 'Sf General Hospital',
+                "background_color": "#0079bf",
+              },
+              2: {
+                id: 2,
+                name: 'Facebook NSA Back Doors',
+                background_color: '#00bf99',
+              },
+            })
           })
         })
       })
