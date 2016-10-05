@@ -2,6 +2,7 @@
 
 Open Source Trello Clone
 
+[![CircleCI](https://circleci.com/gh/GuildCrafts/Trossello/tree/master.svg?style=svg)](https://circleci.com/gh/GuildCrafts/Trossello/tree/master)
 
 ## Contributing
 
