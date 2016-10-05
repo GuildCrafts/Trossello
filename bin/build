@@ -6,6 +6,7 @@ const childProcess = require('child_process');
 const rmdir = require('rmdir')
 
 process.chdir(path.resolve(__dirname, '..'));
+
 const bin = './node_modules/.bin'
 
 const watch = process.env.NODE_ENV === 'development' && process.argv[2] === '-w'
@@ -25,7 +26,6 @@ const spawn = (cmd, args, watchArgs) => {
 
 const clobberBuildDir = (callback) => {
   rmdir('./build', (error, dirs, files) => {
-    if (error) throw error;
     callback()
   })
 }
@@ -33,7 +33,7 @@ const clobberBuildDir = (callback) => {
 clobberBuildDir(() => {
   const server  = spawn(bin+'/babel', ['./server',  '--out-dir', './build/server'],  ['--watch', './server']);
   const browser = spawn(bin+'/babel', ['./browser', '--out-dir', './build/browser'], ['--watch', './browser']);
-  const webpack = spawn(bin+'/webpack', ['--watch']);
+  const webpack = spawn(bin+'/webpack', [], ['--watch']);
 
   if (process.env.NODE_ENV === 'development'){
     spawn(bin+'/babel', ['./test', '--out-dir', './build/test'], ['--watch', './test']);
