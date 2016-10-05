@@ -5,9 +5,9 @@ import createLogger from 'redux-logger'
 import reducer from './reducers'
 
 const logger = createLogger();
-const store = createStore(
-  reducer,
-  applyMiddleware(thunk, promise, logger)
-);
+const store = process.env.NODE_ENV === 'development' ?
+  createStore(reducer, applyMiddleware(thunk, promise, logger)) :
+  createStore(reducer)
+;
 
 export default store
