@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 
 require('../config/environment')
-
+const path = require('path');
 const childProcess = require('child_process');
+
+process.chdir(path.resolve(__dirname, '..'));
 
 const spawn = (cmd, args) => {
   childProcess.spawn(cmd, args, {stdio: 'inherit'})
 }
 
 if (process.env.NODE_ENV === 'development'){
-  spawn('./bin/build', ['-w'])
-  setTimeout(()=>{
-    spawn('nodemon', ['./build/server', '--watch', './build/server'])
-  }, 1000)
+  spawn('nodemon', ['./build/server', '--watch', './build/server'])
 }else{
   spawn('node', ['./build/server'])
 }

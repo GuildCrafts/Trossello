@@ -2,10 +2,12 @@
 
 require('../config/environment')
 
+const path = require('path')
 const childProcess = require('child_process');
 
-const spawn = (cmd, args) => {
-  childProcess.spawn(cmd, args, {stdio: 'inherit'})
-}
+const root = path.resolve(__dirname, '..')
+const watch = process.argv[2] === '-w'
 
-spawn('./node_modules/.bin/mocha', ['./build/test'])
+const args = process.argv.slice(2).concat(['--recursive', './build/test'])
+
+childProcess.spawnSync(root+'/node_modules/.bin/mocha', args, {stdio: 'inherit'})
