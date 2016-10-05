@@ -4,18 +4,19 @@ import { queries, commands } from './database'
 const router = express.Router()
 
 router.get('/login_via_github', (request, response) => {
+  request.session.redirectToAfterLogin = request.header('Referer')
   response.redirect(github.authorizeURL(request))
 })
 
 router.get('/oauth_callback', (request, response, next) => {
   github.authorize(request)
     .then(githubProfile => {
-      console.log('githubProfile', JSON.stringify(githubProfile, null, 4))
       return commands.findOrCreateUserFromGithubProfile(githubProfile)
     })
     .then(currentUser => {
       request.session.userId = currentUser.id
-      response.redirect('/')
+      response.redirect(request.session.redirectToAfterLogin || '/')
+      delete request.session.redirectToAfterLogin
     })
     .catch(next)
 });
