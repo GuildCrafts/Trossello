@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Layout from './Layout'
+import Icon from './Icon'
+import LoginButton from './LoginButton'
 import './LoggedOutHomepage.sass'
 
 
@@ -37,6 +39,9 @@ class LoggedOutHomepage extends Component {
   }
 }
 
+const LoginViaGithubButton = () =>
+  <LoginButton className="LoginButton">Login Via Github <Icon type="github" /></LoginButton>
+
 
 const LoggedOutHomepageNavbar = (props) => {
   let className = "LoggedOutHomepage-Navbar"
@@ -44,8 +49,7 @@ const LoggedOutHomepageNavbar = (props) => {
   return <div className={className}>
     <div className="LoggedOutHomepage-Navbar-logo">Trossello</div>
     <div className="LoggedOutHomepage-Navbar-links">
-      <LoginButton>Login</LoginButton>
-      <SignUpButton>Sign Up</SignUpButton>
+      <LoginViaGithubButton />
     </div>
   </div>
 }
@@ -54,8 +58,9 @@ const SectionOne = (props) => {
   return <div className="LoggedOutHomepage-SectionOne">
     <div className="LoggedOutHomepage-header">Trossello lets you work more collaboratively and get more done.</div>
     <div className="LoggedOutHomepage-subheader">Trossello's boards, lists, and cards enable you to organize and prioritize your projects in a fun, flexible, and rewarding way.</div>
-    <div className="SignUpButtonContainer"><SignUpButton>Sign Up - It's Free</SignUpButton></div>
-    <div className="LoggedOutHomepage-login-link">Already use Tressello? <a href="/login">Log in.</a></div>
+    <div className="SignUpButtonContainer">
+      <LoginViaGithubButton />
+    </div>
   </div>
 }
 
@@ -66,18 +71,6 @@ const SectionTwo = (props) => {
     <h2>The Design Team shares updates on current projects so everyone in the company knows what's going on.</h2>
     <div className="LoggedOutHomepage-sample"><img src={trelloBackgroundImg}></img></div>
   </div>
-}
-
-const SignUpButton = (props) => {
-  return <a href="/signup" className="SignUpButton">
-    {props.children}
-  </a>
-}
-
-const LoginButton = (props) => {
-  return <a href="/login" className="LoginButton">
-    {props.children}
-  </a>
 }
 
 
