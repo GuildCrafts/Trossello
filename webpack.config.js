@@ -1,3 +1,5 @@
+require('./config/environment')
+
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
@@ -5,9 +7,12 @@ var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-require('./config/environment')
+if (process.env.NODE_ENV === 'development'){
+  var WebpackErrorNotificationPlugin = require('webpack-error-notification');
+}
 
 var root  = __dirname
+
 
 var processDotEnvPlugin = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
@@ -116,6 +121,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new WebpackErrorNotificationPlugin(),
     new HtmlWebpackPlugin({
       inject: true,
       template: root+'/browser/index.html',
