@@ -3,15 +3,15 @@ import Layout from './Layout'
 import PresentationalComponent from './PresentationalComponent'
 import Link from './Link'
 import './LoggedInHomepage.sass'
+import $ from 'jquery'
 
 const LoggedInHomepage = (props) => {
-  const { auth, state } = props
-  console.log('state', state)
+  
   return <Layout className="LoggedInHomepage">
     <div className = "LoggedInHomepage-BoardListHeading">
-      Personal Boards
+      All Boards
     </div>
-    <Boards boards={state.boards} />
+    <BoardsProvider />
   </Layout>
 }
 
@@ -21,8 +21,34 @@ const BoardListHeading = (props) => {
   return
 }
 
+class BoardsProvider extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      boards: null
+    }
+  }
+
+  componentWillMount(){
+    $.getJSON('/api/boards')
+      .then(boards => {
+        this.setState({boards})
+      })
+  }
+
+  render(){
+    const props = Object.assign({}, this.props)
+    props.boards = this.state.boards
+    return <Boards {...props} />
+  }
+
+}
+
 const Boards = ({boards}) => {
-  const elements = boards.records.map(board =>
+  if(boards === null){
+    return null
+  }
+  const elements = boards.map(board =>
     <Board key={board.id} board={board} />
   )
   return <div className="LoggedInHomepage-Boards">
@@ -31,7 +57,10 @@ const Boards = ({boards}) => {
 }
 
 const Board = ({board}) => {
-  return <Link to={`/boards/${board.id}`} className="LoggedInHomepage-Board">
+  const style = { 
+    backgroundColor: board.background_color
+  }
+  return <Link style={style} to={`/boards/${board.id}`} className="LoggedInHomepage-Board">
     <div>{board.name}</div>
   </Link>
 }
