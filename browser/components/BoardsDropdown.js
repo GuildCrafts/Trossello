@@ -40,7 +40,7 @@ const Dropdown = (props) => {
     )
   }
   return <div className="BoardsDropdown-dropdown">
-    {boards}
+    <div className="BoardsDropdown-content">{boards}</div>
   </div>
 }
 
