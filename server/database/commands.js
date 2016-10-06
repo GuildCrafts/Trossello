@@ -53,8 +53,7 @@ export default (knex, queries) => {
 
   //
 
-  const createList = (board_id, attributes) => {
-    attributes.board_id = board_id
+  const createList = (attributes) => {
     return createRecord('lists', attributes)
   }
 
@@ -67,8 +66,7 @@ export default (knex, queries) => {
 
   //
 
-  const createCard = (list_id, attributes) => {
-    attributes.list_id = list_id
+  const createCard = (attributes) => {
     return createRecord('cards', attributes)
   }
 

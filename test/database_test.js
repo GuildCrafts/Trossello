@@ -301,28 +301,34 @@ describe('database', () => {
 
       beforeEach( () => {
         return Promise.all([
-          commands.createList(1, {
+          commands.createList({
             id: 40,
+            board_id: 1,
             name: 'List1'
           }),
-          commands.createList(1, {
+          commands.createList({
             id: 41,
+            board_id: 1,
             name: 'List2'
           }),
-          commands.createCard(40, {
+          commands.createCard({
             id: 80,
+            list_id: 40,
             content: 'card1'
           }),
-          commands.createCard(40, {
+          commands.createCard({
             id: 81,
+            list_id: 40,
             content: 'Card2'
           }),
-          commands.createCard(41, {
+          commands.createCard({
             id: 82,
+            list_id: 41,
             content: 'card3'
           }),
-          commands.createCard(41, {
+          commands.createCard({
             id: 83,
+            list_id: 41,
             content: 'Card4'
           }),
         ])
