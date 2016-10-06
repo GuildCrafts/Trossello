@@ -4,7 +4,9 @@ import promise from 'redux-promise'
 import createLogger from 'redux-logger'
 import reducer from './reducers'
 
-const logger = createLogger();
+const logger = createLogger({
+  collapsed: true
+});
 const store = process.env.NODE_ENV === 'development' ?
   createStore(reducer, applyMiddleware(thunk, promise, logger)) :
   createStore(reducer)
