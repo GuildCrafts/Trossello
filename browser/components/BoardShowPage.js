@@ -3,6 +3,7 @@ import './BoardShowPage.sass'
 import Layout from './Layout'
 import Link from './Link'
 import $ from 'jquery'
+import boardsStore from '../stores/boardsStore'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -50,10 +51,39 @@ const BoardShowPage = ({board}) => {
   return <Layout className="BoardShowPage" style={style}>
     <div className="BoardShowPage-Header">
       <h1>{board.name}</h1>
+      <DeleteBoardButton boardId={board.id}/>
     </div>
-
     <div className="BoardShowPage-lists">{lists}</div>
   </Layout>
+}
+
+class DeleteBoardButton extends Component {
+  
+  static contextTypes = {
+    redirectTo: React.PropTypes.func,
+  }
+
+  constructor(props){
+    super(props)
+    this.onClick = this.onClick.bind(this)
+  }
+
+  onClick(event){
+    console.log("deleting board", this.props.boardId)
+    $.ajax({
+      method: "POST",
+      url: `/api/boards/${this.props.boardId}/delete`,
+    }).then( () => {
+      this.context.redirectTo('/')
+      boardsStore.reload()
+    })
+  }
+
+  render(){
+    return <button className="BoardShowPage-delete-button" onClick={this.onClick}>
+      Delete
+    </button>
+  }
 }
 
 const List = ({ list, cards }) => {
