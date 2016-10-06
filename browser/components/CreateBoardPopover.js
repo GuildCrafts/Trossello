@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
 import './CreateBoardPopover.sass'
+import Link from './Link'
+import Icon from './Icon'
 import Form from './Form'
 import boardsStore from '../stores/boardsStore'
 
@@ -34,13 +36,27 @@ class CreateBoardPopover extends Component {
     }).then((board) => {
       boardsStore.reload()
       this.context.redirectTo('/boards/'+board.id)
+      this.reset()
+      if (this.props.onClose) this.props.onClose()
     })
   }
 
+  reset(){
+    this.refs.name.value = ''
+    this.refs.color.value = ''
+  }
+
   render(props){
+    const closeLink = this.props.onClose ?
+      <Link onClick={this.props.onClose}>
+        <Icon type="times" />
+      </Link> :
+      null
+
     return <div className="CreateBoardPopover">
       <div className="CreateBoardPopover-header">
         Create A Board
+        {closeLink}
         <hr/>
       </div>
       <Form onSubmit={this.onSubmit}>
@@ -50,7 +66,7 @@ class CreateBoardPopover extends Component {
         </label>
         <label>
           <div>Color</div>
-          <input type="text" ref="color" defaultValue="#2E86AB" />
+          <input type="text" ref="color" placeholder="#2E86AB" />
         </label>
         <input type="submit" value="Create" />
       </Form>

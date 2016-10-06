@@ -12,12 +12,28 @@ class ToggleComponent extends Component {
       open: this.constructor.initialState
     }
     this.toggle = this.toggle.bind(this)
+    this.close = this.close.bind(this)
+    this.open = this.open.bind(this)
   }
 
   toggle(event){
     if (event) event.preventDefault()
     this.setState({
       open: !this.state.open
+    })
+  }
+
+  close(event){
+    if (event) event.preventDefault()
+    this.setState({
+      open: false
+    })
+  }
+
+  open(event){
+    if (event) event.preventDefault()
+    this.setState({
+      open: true
     })
   }
 

@@ -62,7 +62,10 @@ class Dropdown extends ToggleComponent {
         {boards}
         <Link onClick={this.toggle}>Create new board...</Link>
       </div>
-      {this.state.open ? <CreateBoardPopover /> : null}
+      {this.state.open ?
+        <CreateBoardPopover onClose={this.close} /> :
+        null
+      }
     </div>
   }
 }

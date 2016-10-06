@@ -59,7 +59,10 @@ class CreateBoardButton extends ToggleComponent {
       <button {...this.props} onClick={this.toggle}>
         {this.props.children}
       </button>
-      {this.state.open ? <CreateBoardPopover /> : null}
+      {this.state.open ?
+        <CreateBoardPopover onClose={this.close} /> :
+        null
+      }
     </div>
   }
 }
