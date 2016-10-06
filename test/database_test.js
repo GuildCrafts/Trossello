@@ -175,31 +175,6 @@ describe('database', () => {
       ])
     })
 
-    describe('getCards', () => {
-      it('should return an array of all cards', () => {
-        return queries.getCards().then( cards => {
-          expect(cards).to.be.a('array')
-          expect(cards.length).to.eql(2)
-
-          cards.forEach(card => {
-            if (card.id === 11){
-              expect(card).to.be.a('object')
-              expect(card.board_id).to.eql(22)
-              expect(card.list_id).to.eql(33)
-              expect(card.content).to.eql('getting done the project')
-            }else if (card.id === 10){
-              expect(card).to.be.a('object')
-              expect(card.board_id).to.eql(20)
-              expect(card.list_id).to.eql(30)
-              expect(card.content).to.eql('Having fun in this evening')
-            }else{
-              throw new Error('unexpected card record')
-            }
-          })
-        })
-      })
-    })
-
     describe('getCardById', () => {
       it('should return json by card id', () => {
         return queries.getCardById(11).then( card => {
@@ -324,10 +299,52 @@ describe('database', () => {
 
     describe('getBoardById', () => {
 
+      beforeEach( () => {
+        return Promise.all([
+          commands.createList(1, {
+            id: 40,
+            name: 'List1'
+          }),
+          commands.createList(1, {
+            id: 41,
+            name: 'List2'
+          }),
+          commands.createCard(40, {
+            id: 80,
+            content: 'card1'
+          }),
+          commands.createCard(40, {
+            id: 81,
+            content: 'Card2'
+          }),
+          commands.createCard(41, {
+            id: 82,
+            content: 'card3'
+          }),
+          commands.createCard(41, {
+            id: 83,
+            content: 'Card4'
+          }),
+        ])
+      })
+
       it('should return one board by user id', () => {
         return queries.getBoardById(1).then( board => {
-          expect(board.id).to.eql(1)
-          expect(board.name).to.eql('Board1')
+          expect(board).to.eql({
+            id: 1,
+            name: 'Board1',
+            background_color: '#0079bf',
+            lists:[
+              { id: 40, board_id: 1, name: 'List1' },
+              { id: 41, board_id: 1, name: 'List2' },
+            ],
+            cards: [
+              { id: 80, board_id: null, list_id: 40, content: 'card1' },
+              { id: 81, board_id: null, list_id: 40, content: 'Card2' },
+              { id: 82, board_id: null, list_id: 41, content: 'card3' },
+              { id: 83, board_id: null, list_id: 41, content: 'Card4' },
+            ],
+          })
         })
       })
     })

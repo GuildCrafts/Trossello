@@ -3,17 +3,37 @@ import './BoardShowPage.sass'
 import Layout from './Layout'
 import Link from './Link'
 import PresentationalComponent from './PresentationalComponent'
+import $ from 'jquery'
 
-const BoardShowPage = (props) => {
-  const { state } = props
-  const boardId = props.params.boardId
-  const board = state.boards.records
-    .find(record => record.id == boardId)
+class BoardProvider extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      board: null
+    }
+  }
 
-  if (!board) return <div>Board Not Found</div>
+  componentWillMount(){
+    $.getJSON('/api/boards/'+this.props.params.boardId)
+      .then(board => {
+        this.setState({board})
+      })
+  }
+
+  render(){
+    return <BoardShowPage board={this.state.board} />
+  }
+
+}
+
+export default BoardProvider
+
+const BoardShowPage = ({board}) => {
+  if (!board) return <Layout className="BoardShowPage" />
 
   const lists = board.lists.map(list => {
-    return <List key={list.id} list={list} />
+    const cards = board.cards.filter(card => card.list_id === list.id)
+    return <List key={list.id} list={list} cards={cards} />
   })
 
   const style = {
@@ -29,23 +49,19 @@ const BoardShowPage = (props) => {
   </Layout>
 }
 
-const List = (props) => {
-  const { list } = props
-  const cards = list.cards.map(card => {
+const List = ({ list, cards }) => {
+  const cardNodes = cards.map(card => {
     return <Card key={card.id} card={card} />
   })
   return <div className="BoardShowPage-List">
     <div className="BoardShowPage-ListHeader">{list.name}</div>
-    <div className="BoardShowPage-cards">{cards}</div>
+    <div className="BoardShowPage-cards">{cardNodes}</div>
     <div className="BoardShowPage-add-card">Add a card…</div>
   </div>
 }
 
-const Card = (props) => {
-  const { card } = props
+const Card = ({ card }) => {
   return <div className="BoardShowPage-Card">
-    <div>{card.description}</div>
+    <pre>{card.content}</pre>
   </div>
 }
-
-export default PresentationalComponent(BoardShowPage)

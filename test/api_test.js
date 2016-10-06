@@ -219,6 +219,8 @@ describe('API', () => {
             expect(response).to.have.status(200)
             expect(response).to.be.json // jshint ignore:line
             expect(response.body.name).to.eql('Sf General Hospital')
+            expect(response.body.lists).to.be.an('array')
+            expect(response.body.cards).to.be.an('array')
           })
         })
       })

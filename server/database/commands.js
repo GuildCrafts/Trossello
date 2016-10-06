@@ -53,8 +53,24 @@ export default (knex, queries) => {
 
   //
 
-  const createCard = (attributes) =>
-    createRecord('cards', attributes)
+  const createList = (board_id, attributes) => {
+    attributes.board_id = board_id
+    return createRecord('lists', attributes)
+  }
+
+  const updateList = (id, attributes) =>
+    updateRecord('lists', id, attributes)
+
+
+  const deleteList = (id) =>
+    deleteRecord('lists', id)
+
+  //
+
+  const createCard = (list_id, attributes) => {
+    attributes.list_id = list_id
+    return createRecord('cards', attributes)
+  }
 
 
   const updateCard = (id, attributes) =>
@@ -92,6 +108,9 @@ export default (knex, queries) => {
     updateUser,
     deleteUser,
     findOrCreateUserFromGithubProfile,
+    createList,
+    updateList,
+    deleteList,
     createCard,
     updateCard,
     deleteCard,

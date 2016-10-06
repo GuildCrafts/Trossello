@@ -19,10 +19,25 @@ export default (knex) => {
       .where('user_boards.user_id', userId)
 
   const getBoardById = (id) =>
-    getRecordById('boards', id)
+    getRecordById('boards', id).then(getListsAndCardsForBoard)
 
-  const getCards = () =>
-    getRecords('cards')
+  const getListsAndCardsForBoard = (board) => {
+    if (!board) return Promise.resolve(board)
+    return knex.table('lists')
+      .select('*')
+      .where('board_id', board.id)
+      .then(lists => {
+        board.lists = lists
+        const listIds = lists.map(list => list.id)
+        return knex.table('cards')
+          .select('*')
+          .whereIn('list_id', listIds)
+          .then(cards => {
+            board.cards = cards
+            return board
+          })
+      })
+  }
 
   const getCardById = (id) =>
     getRecordById('cards', id)
@@ -30,7 +45,6 @@ export default (knex) => {
   return {
     getUsers,
     getUserById,
-    getCards,
     getCardById,
     getBoardsByUserId,
     getBoardById,
