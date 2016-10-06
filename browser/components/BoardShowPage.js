@@ -2,34 +2,32 @@ import React, { Component } from 'react'
 import './BoardShowPage.sass'
 import Layout from './Layout'
 import Link from './Link'
+import Icon from './Icon'
 import $ from 'jquery'
 import boardsStore from '../stores/boardsStore'
+import boardStore from '../stores/boardStore'
 
 class BoardProvider extends Component {
   constructor(props){
     super(props)
-    this.state = {
-      board: null
-    }
-    this.loadBoard(props.params.boardId)
+    this.rerender = this.rerender.bind(this)
+    boardStore.setBoardId(props.params.boardId)
+    boardStore.subscribe(this.rerender)
   }
 
-
-  loadBoard(boardId){
-    $.getJSON('/api/boards/'+boardId)
-      .then(board => {
-        this.setState({board})
-      })
+  rerender(){
+    this.forceUpdate()
   }
 
   componentWillReceiveProps(nextProps){
     if (this.props.params.boardId !== nextProps.params.boardId){
-      this.loadBoard(nextProps.params.boardId)
+      boardStore.setBoardId(nextProps.params.boardId)
+      boardStore.reload()
     }
   }
 
   render(){
-    return <BoardShowPage board={this.state.board} />
+    return <BoardShowPage board={boardStore.value} />
   }
 
 }
@@ -58,7 +56,7 @@ const BoardShowPage = ({board}) => {
 }
 
 class DeleteBoardButton extends Component {
-  
+
   static contextTypes = {
     redirectTo: React.PropTypes.func,
   }
@@ -90,8 +88,12 @@ const List = ({ list, cards }) => {
   const cardNodes = cards.map(card => {
     return <Card key={card.id} card={card} />
   })
+
   return <div className="BoardShowPage-List">
-    <div className="BoardShowPage-ListHeader">{list.name}</div>
+    <div className="BoardShowPage-ListHeader">
+      {list.name}
+      <DeleteListButton list={list} />
+    </div>
     <div className="BoardShowPage-cards">{cardNodes}</div>
     <div className="BoardShowPage-add-card">Add a card…</div>
   </div>
@@ -101,4 +103,31 @@ const Card = ({ card }) => {
   return <div className="BoardShowPage-Card">
     <pre>{card.content}</pre>
   </div>
+}
+
+class DeleteListButton extends Component {
+  static contextTypes = {
+    redirectTo: React.PropTypes.func,
+  }
+
+  constructor(props){
+    super(props)
+    this.onClick = this.onClick.bind(this)
+  }
+
+  onClick(event) {
+    event.preventDefault()
+    $.ajax({
+      method: "POST",
+      url: `/api/lists/${this.props.list.id}/delete`
+    }).then(() => {
+      boardStore.reload()
+    })
+  }
+
+  render() {
+    return <Link onClick={this.onClick}>
+      <Icon type="times" />
+    </Link>
+  }
 }

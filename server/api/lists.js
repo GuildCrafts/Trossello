@@ -1,4 +1,5 @@
 import express from 'express'
+import {queries, commands} from '../database'
 const router = new express.Router()
 
 router.get( '/', ( request, response ) => {
@@ -16,5 +17,13 @@ router.get( '/:listId', ( request, response ) => {
     name: 'lorem'
   } )
 } )
+
+router.post( '/:listId/delete', (request, response, next) => {
+  commands.deleteList(request.params.listId)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
 
 export default router
