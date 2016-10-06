@@ -15,10 +15,52 @@
 
   &-board
     display: block
-    padding: 0.25em 0.5em
-    background-color: lightblue
-    border-radius: 5px
+    border-radius: 3px
     margin-bottom: 0.5em
     text-decoration: none
     color: inherit
+    height: 36px
     min-height: 1em
+    position: relative
+
+  &-background
+    background-size: cover
+    background-position: center center
+    position: absolute
+    width: 100%
+    height: 100%
+    border-radius: 3px
+    opacity: .15
+
+  &-link
+    border-radius: 3px
+    display: flex
+    font-weight: 700
+    height: 36px
+    padding: 0
+    position: relative
+    text-decoration: none
+    text-
+
+  &-thumbnail
+    flex: 0 0 auto
+    background-size: cover
+    border-radius: 3px 0 0 3px
+    display: inline-block
+    opacity: 0.7
+    height: 36px
+    width: 36px
+
+  &-text
+    flex: 1 1 auto
+    overflow: hidden
+    padding: 9px 0 9px 10px
+
+  &-title
+    display: block
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+
+.BoardsDropdown a:link
+  color: #222222
