@@ -16,7 +16,7 @@
       margin: 0
       color: #fff
 
-  &-delete-button
+  &-button
     flex-shrink: 0
     display: inline-block
     margin: 0 $button-margin
@@ -25,19 +25,29 @@
     line-height: $button-height
     min-width: $button-height
     border-radius: 5px
-    background: linear-gradient(to bottom,rgba(255,255,255,.3) 0,rgba(255,255,255,.2) 100%)
     font-weight: bolder
     position: relative
     text-decoration: none
     border: 0
-    color: white
     white-space: nowrap
     outline: none
+
+  &-delete-button
+    color: white
+    background: linear-gradient(to bottom,rgba(255,255,255,.3) 0,rgba(255,255,255,.2) 100%)
     &:not([disabled])
       &:hover, &:focus
         background: linear-gradient(to bottom,rgba(255,255,255,.4) 0,rgba(255,255,255,.3) 100%)
       &:active
         background: linear-gradient(to bottom,rgba(255,255,255,.45) 0,rgba(255,255,255,.35) 100%)
+
+  &-add-card-button
+    background: linear-gradient(to bottom,#61BD4F 0,#5AAC44 100%)
+    &:not([disabled])
+      &:hover, &:focus
+        background: linear-gradient(to bottom,#5AAC44 0,#519839 100%)
+      &:active
+        background: linear-gradient(to bottom,#519839 0,#49852E 100%)
 
   &-lists
     position: absolute
@@ -105,12 +115,15 @@
     margin-bottom: 6px
     flex-grow: 0
     flex-shrink: 0
+    border-top: none
+    border-left: none
     border-bottom: 2px solid #ccc
     border-right: 1px solid #ccc
     border-radius: 3px
     cursor: pointer
     background-color: white
     font-weight: 400
+    font-size: 14px
     > pre
       margin: 0
       white-space: pre-wrap
@@ -123,12 +136,29 @@
     top: 8px
     right: 10px
 
-  &-add-card
+  &-create-card-link
     padding: 8px 10px
     border-bottom-left-radius: 5px
     border-bottom-right-radius: 5px
     color: #8c8c8c
+    text-decoration: none
     &:hover
       cursor: pointer
       background-color: rgba(0,0,0,0.2)
       text-decoration: underline
+  &-CreateCardForm
+    padding-bottom: 8px
+    > textarea
+      -webkit-touch-callout: inherit
+      -webkit-user-select: inherit
+      -khtml-user-select: inherit
+      -moz-user-select: inherit
+      -ms-user-select: inherit
+      user-select: inherit
+      display: block
+      width: 100%
+      resize: none
+      &:focus
+        outline: none
+    &-controls a
+      color: inherit

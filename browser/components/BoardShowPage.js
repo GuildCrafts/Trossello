@@ -39,7 +39,7 @@ const BoardShowPage = ({board}) => {
 
   const lists = board.lists.map(list => {
     const cards = board.cards.filter(card => card.list_id === list.id)
-    return <List key={list.id} list={list} cards={cards} />
+    return <List key={list.id} board={board} list={list} cards={cards} />
   })
 
   const style = {
@@ -78,20 +78,78 @@ class DeleteBoardButton extends Component {
   }
 
   render(){
-    return <button className="BoardShowPage-delete-button" onClick={this.onClick}>
+    return <button className="BoardShowPage-button BoardShowPage-delete-button" onClick={this.onClick}>
       Delete
     </button>
   }
 }
 
-const List = ({ list, cards }) => {
-  const cardNodes = cards.map(card => {
-    return <Card key={card.id} card={card} />
-  })
+class List extends Component {
 
-  const onDrop = event => {
+  constructor(props) {
+    super(props)
+    this.state = {
+      creatingCard: false
+    }
+    this.creatingCard = this.creatingCard.bind(this)
+    this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
+    this.onDrop = this.onDrop.bind(this)
+    this.onDragOver = this.onDragOver.bind(this)
+    this.createCard = this.createCard.bind(this)
+    this.cancelCreatingCardIfUserClickedOutside = this.cancelCreatingCardIfUserClickedOutside.bind(this)
+    document.body.addEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
+  }
+
+  componentWillReceiveProps(){
+    if (this.state.creatingCard) this.scrollToTheBottom()
+  }
+
+  componentWillUnmount(){
+    document.body.removeEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
+  }
+
+  cancelCreatingCardIfUserClickedOutside(){
+    const targetNode = event.target
+    let rootNode = this.refs.root
+    if (rootNode && targetNode && !rootNode.contains(targetNode))
+      this.cancelCreatingCard()
+  }
+
+  scrollToTheBottom(){
+    setTimeout(() => {
+      const { cards } = this.refs
+      if (cards) cards.scrollTop = cards.scrollHeight
+    })
+  }
+
+  creatingCard() {
+    this.setState({creatingCard: true})
+    this.scrollToTheBottom()
+  }
+
+  cancelCreatingCard() {
+    this.setState({creatingCard: false})
+  }
+
+  createCard(content){
+    const { board, list } = this.props
+    $.ajax({
+      method: 'post',
+      url: `/api/boards/${board.id}/lists/${list.id}/cards`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({content}),
+    }).then(() => {
+      boardStore.reload()
+      this.scrollToTheBottom()
+    })
+  }
+
+  onDrop(event){
     event.preventDefault()
-    let cardId = event.dataTransfer.getData("text")
+    const cardId = event.dataTransfer.getData("text")
+    const { list } = this.props
+    // move card
     $.ajax({
       method: "POST",
       url: `/api/cards/${cardId}`,
@@ -103,18 +161,75 @@ const List = ({ list, cards }) => {
     })
   }
 
-  const onDragOver = event => {
+  onDragOver(event){
     event.preventDefault()
   }
 
-  return <div className="BoardShowPage-List" onDrop={onDrop} onDragOver={onDragOver}>
-    <div className="BoardShowPage-ListHeader">
-      {list.name}
-      <DeleteListButton list={list} />
+  render(){
+    const { board, list, cards } = this.props
+    const cardNodes = cards.map(card => {
+      return <Card key={card.id} card={card} />
+    })
+
+    let createCardForm, createCardLink
+    if (this.state.creatingCard) {
+      createCardForm = <CreateCardForm
+        createCard={this.createCard}
+        onCancel={this.cancelCreatingCard}
+      />
+    } else {
+      createCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
+    }
+
+    return <div ref="root" className="BoardShowPage-List" onDrop={this.onDrop} onDragOver={this.onDragOver}>
+      <div className="BoardShowPage-ListHeader">{list.name}</div>
+      <div ref="cards" className="BoardShowPage-cards">
+        {cardNodes}
+        {createCardForm}
+      </div>
+      {createCardLink}
     </div>
-    <div className="BoardShowPage-cards">{cardNodes}</div>
-    <div className="BoardShowPage-add-card">Add a card…</div>
-  </div>
+  }
+}
+
+class CreateCardForm extends Component {
+
+  constructor(props) {
+    super(props)
+    this.onKeyUp = this.onKeyUp.bind(this)
+    this.createCard = this.createCard.bind(this)
+  }
+
+  componentDidMount() {
+    this.refs.content.focus()
+  }
+
+  onKeyUp(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault()
+      this.createCard()
+    }
+  }
+
+  createCard() {
+    const content = this.refs.content.value
+    this.refs.content.value = ""
+    this.props.createCard(content)
+  }
+
+  render() {
+    return <div className="BoardShowPage-CreateCardForm">
+      <textarea className="BoardShowPage-Card" onKeyUp={this.onKeyUp} ref="content"/>
+      <div className="BoardShowPage-CreateCardForm-controls">
+        <button onClick={this.createCard} className="BoardShowPage-button BoardShowPage-add-card-button">
+          Add
+        </button>
+        <Link onClick={this.props.onCancel}>
+          <Icon type="times" />
+        </Link>
+      </div>
+    </div>
+  }
 }
 
 const Card = ({ card }) => {

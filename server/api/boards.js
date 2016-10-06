@@ -43,4 +43,18 @@ router.post( '/:boardId/delete', ( request, response, next ) => {
   }).catch(next)
 })
 
+
+// CREATE CARD
+router.post('/:boardId/lists/:listId/cards', (request, response, next) => {
+  const card = request.body
+  const { boardId, listId } = request.params
+  card.board_id = boardId
+  card.list_id = listId
+  commands.createCard(card)
+    .then( card => {
+      response.json(card)
+    })
+    .catch(next)
+})
+
 export default router
