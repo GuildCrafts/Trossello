@@ -1,7 +1,7 @@
-import $ from 'jquery'
 import './BoardsDropdown.sass'
 import React, { Component } from 'react'
 import Link from './Link'
+import boardsStore from '../stores/boardsStore'
 
 class BoardsDropdown extends Component {
 
@@ -78,13 +78,16 @@ class BoardsProvider extends Component {
     this.state = {
       boards: null,
     }
+    this.updateBoards = this.updateBoards.bind(this)
+    boardsStore.subscribe(this.updateBoards)
   }
 
-  componentWillMount(){
-    $.getJSON('/api/boards')
-      .then(boards => {
-        this.setState({boards})
-      })
+  componentWillUnmount(){
+    boardsStore.unsubscribe(this.updateBoards)
+  }
+
+  updateBoards(boards){
+    this.setState({boards})
   }
 
   render(){

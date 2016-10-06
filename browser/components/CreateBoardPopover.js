@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import './CreateBoardPopover.sass'
 import Form from './Form'
+import boardsStore from '../stores/boardsStore'
 
 class CreateBoardPopover extends Component {
 
@@ -31,6 +32,7 @@ class CreateBoardPopover extends Component {
       dataType: "json",
       data: JSON.stringify(board),
     }).then((board) => {
+      boardsStore.reload()
       this.context.redirectTo('/boards/'+board.id)
     })
   }
