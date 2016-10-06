@@ -11,6 +11,21 @@ class BoardsDropdown extends Component {
       open: false
     }
     this.toggle = this.toggle.bind(this)
+    this.onClick = this.onClick.bind(this)
+    document.body.addEventListener('click', this.onClick)
+  }
+
+  componentWillUnmount(){
+    document.body.removeEventListener('click', this.onClick)
+  }
+
+  onClick(event){
+    const dropdownNode = this.refs.root
+    const targetNode = event.target
+    if (dropdownNode.contains(targetNode)) return
+    this.setState({
+      open: false
+    })
   }
 
   toggle(){
@@ -23,8 +38,8 @@ class BoardsDropdown extends Component {
     const dropdown = this.state.open ?
       <Dropdown boards={this.props.boards} /> :
       null
-    return <div className="BoardsDropdown" onClick={this.toggle}>
-      <button className={this.props.className}>Boards</button>
+    return <div ref="root" className="BoardsDropdown" >
+      <button className={this.props.className} onClick={this.toggle}>Boards</button>
       {dropdown}
     </div>
   }
