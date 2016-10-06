@@ -162,13 +162,11 @@ describe('database', () => {
       return Promise.all([
         commands.createCard({
           id: 11,
-          board_id: 22,
           list_id: 33,
           content: 'getting done the project',
         }),
         commands.createCard({
           id: 10,
-          board_id: 20,
           list_id: 30,
           content: 'Having fun in this evening',
         })
@@ -180,7 +178,6 @@ describe('database', () => {
         return queries.getCardById(11).then( card => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(11)
-          expect(card.board_id).to.eql(22)
           expect(card.list_id).to.eql(33)
           expect(card.content).to.eql('getting done the project')
 
@@ -217,12 +214,10 @@ describe('database', () => {
             cards.forEach(card => {
               if (card.id === 11){
                 expect(card).to.be.a('object')
-                expect(card.board_id).to.eql(22)
                 expect(card.list_id).to.eql(33)
                 expect(card.content).to.eql('This content has been updated')
               }else if (card.id === 10){
                 expect(card).to.be.a('object')
-                expect(card.board_id).to.eql(20)
                 expect(card.list_id).to.eql(30)
                 expect(card.content).to.eql('Having fun in this evening')
               }else{
