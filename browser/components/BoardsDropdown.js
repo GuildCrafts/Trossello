@@ -1,6 +1,8 @@
 import './BoardsDropdown.sass'
 import React, { Component } from 'react'
 import Link from './Link'
+import CreateBoardPopover from './CreateBoardPopover'
+import ToggleComponent from './ToggleComponent'
 import boardsStore from '../stores/boardsStore'
 
 class BoardsDropdown extends Component {
@@ -45,18 +47,24 @@ class BoardsDropdown extends Component {
   }
 }
 
-const Dropdown = (props) => {
-  let boards
-  if (props.boards === null){
-    boards = <div>Loading. . .</div>
-  }else{
-    boards = props.boards.map(board =>
-      <Board key={board.id} board={board} />
-    )
+class Dropdown extends ToggleComponent {
+  render(){
+    let boards
+    if (this.props.boards === null){
+      boards = <div>Loading. . .</div>
+    }else{
+      boards = this.props.boards.map(board =>
+        <Board key={board.id} board={board} />
+      )
+    }
+    return <div className="BoardsDropdown-dropdown">
+      <div className="BoardsDropdown-content">
+        {boards}
+        <Link onClick={this.toggle}>Create new board...</Link>
+      </div>
+      {this.state.open ? <CreateBoardPopover /> : null}
+    </div>
   }
-  return <div className="BoardsDropdown-dropdown">
-    <div className="BoardsDropdown-content">{boards}</div>
-  </div>
 }
 
 const Board = ({board}) => {
