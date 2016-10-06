@@ -11,13 +11,21 @@ class BoardProvider extends Component {
     this.state = {
       board: null
     }
+    this.loadBoard(props.params.boardId)
   }
 
-  componentWillMount(){
-    $.getJSON('/api/boards/'+this.props.params.boardId)
+
+  loadBoard(boardId){
+    $.getJSON('/api/boards/'+boardId)
       .then(board => {
         this.setState({board})
       })
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.props.params.boardId !== nextProps.params.boardId){
+      this.loadBoard(nextProps.params.boardId)
+    }
   }
 
   render(){
