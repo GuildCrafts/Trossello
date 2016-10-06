@@ -45,10 +45,15 @@ const Dropdown = (props) => {
 }
 
 const Board = ({board}) => {
-  return <Link to={`/boards/${board.id}`} className="BoardsDropdown-board">
-    {board.name}
-    <span className="BoardsDropdown-thumbnail" style={{backgroundColor: board.background_color}}></span>
-  </Link>
+  return <div className="BoardsDropdown-board">
+    <span className="BoardsDropdown-background" style={{backgroundColor: board.background_color}}></span>
+    <Link to={`/boards/${board.id}`} className="BoardsDropdown-link">
+      <span className="BoardsDropdown-thumbnail" style={{backgroundColor: board.background_color}}></span>
+      <span className="BoardsDropdown-text">
+        <span className="BoardsDropdown-title">{board.name}</span>
+      </span>
+    </Link>
+  </div>
 }
 
 class BoardsProvider extends Component {
