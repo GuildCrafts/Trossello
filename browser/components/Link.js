@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+import React, { Component } from 'react'
+import { Link } from 'simple-react-router'
 
-// we'll wrap this eventually
 export default Link

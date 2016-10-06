@@ -43,6 +43,8 @@ module.exports = {
   resolve: {
     alias: {
       lib: root+'/lib',
+      react: require.resolve('react'),
+      "react-dom": path.resolve(require.resolve('react'), '../lib/ReactDOM'),
     },
     root: [
       root+'/server',
