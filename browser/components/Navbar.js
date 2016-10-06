@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { Component } from 'react'
 import './Navbar.sass'
 import PresentationalComponent from './PresentationalComponent'
 import Link from './Link'
 import Icon from './Icon'
 import LogoutButton from './LogoutButton'
 import LoginButton from './LoginButton'
+import CreateBoardPopover from './CreateBoardPopover'
+import ToggleComponent from './ToggleComponent'
 
 const Navbar = (props) => {
   const { auth } = props.state
@@ -33,9 +35,9 @@ const LoggedInNavbar = ({auth}) => {
     <div className="Navbar-BoardIndexButton">
       <a href="/">Trossello</a>
     </div>
-    <button className="Navbar-button CreateBoardButton">
+    <CreateBoardButton className="Navbar-button">
       <Icon type="plus" />
-    </button>
+    </CreateBoardButton>
     <button className="Navbar-button Navbar-AvatarButton">
       <img src={auth.user.avatar_url} />
       <span>{auth.user.name}</span>
@@ -48,3 +50,15 @@ const LoggedInNavbar = ({auth}) => {
 }
 
 export default PresentationalComponent(Navbar)
+
+
+class CreateBoardButton extends ToggleComponent {
+  render(){
+    return <div className="CreateBoardButton">
+      <button {...this.props} onClick={this.toggle}>
+        {this.props.children}
+      </button>
+      {this.state.open ? <CreateBoardPopover /> : null}
+    </div>
+  }
+}
