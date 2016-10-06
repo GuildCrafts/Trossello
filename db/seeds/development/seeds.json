@@ -16,12 +16,12 @@
   "boards": [
     {
       "name": "an empty board",
-      "background_color": "#ECCBD9",
+      "background_color": "#F24236",
       "lists": []
     },
     {
       "name": "Groceries",
-      "background_color": "#80FFE8",
+      "background_color": "#565554",
       "lists": [
         {
           "name": "Pantry",
@@ -43,7 +43,7 @@
     },
     {
       "name": "Build A Dragon",
-      "background_color": "#97D2FB",
+      "background_color": "#2E86AB",
       "lists": [
         {
           "name": "Backlog",
