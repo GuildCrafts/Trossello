@@ -23,7 +23,6 @@ const dispatch = (event) => {
 // bind actions to the store dispatch method and force logging
 const wrapAction = (actionName, actionFunction) => {
   return function(){
-    console.log('Action: '+actionName, arguments)
     return actionFunction.apply(this, [dispatch, ...arguments])
   }
 }
