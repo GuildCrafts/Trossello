@@ -279,36 +279,6 @@ describe('API', () => {
         ])
       })
 
-      describe('GET /api/cards', () => {
-
-        it('should render a json array of all cards', () => {
-          return request('get', '/api/cards').then(response => {
-            expect(response).to.have.status(200);
-            expect(response).to.be.json; // jshint ignore:line
-            expect(response.body).to.be.an('array');
-            expect(response.body.length).to.equal(2);
-
-            const cards = response.body
-            cards.forEach(card => {
-              if (card.id === 11){
-                expect(card).to.be.a('object')
-                expect(card.board_id).to.eql(22)
-                expect(card.list_id).to.eql(33)
-                expect(card.content).to.eql('getting done the project')
-              }else if (card.id === 10){
-                expect(card).to.be.a('object')
-                expect(card.board_id).to.eql(20)
-                expect(card.list_id).to.eql(30)
-                expect(card.content).to.eql('Having fun in this evening')
-              }else{
-                throw new Error('unexpected card record')
-              }
-            })
-          });
-        });
-
-      });
-
       describe('POST /api/cards', () => {
         it('should create a card', () => {
           const cardAttributes = {

@@ -3,15 +3,6 @@ import {queries, commands} from '../database'
 
 const router = new express.Router()
 
-
-router.get('/', (request, response, next) => {
-  queries.getCards()
-    .then(cards => {
-      response.json(cards)
-    })
-    .catch(next)
-})
-
 router.post('/', (request, response, next) => {
   commands.createCard(request.body)
     .then(card => {

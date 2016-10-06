@@ -1,4 +1,4 @@
-const { expect, queries, commands } = require('./setup')
+const { expect, knex, queries, commands } = require('./setup')
 
 describe('database', () => {
 
@@ -212,7 +212,7 @@ describe('database', () => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(11)
           expect(card.content).to.eql('This content has been updated')
-          return queries.getCards().then( cards => {
+          return knex.table('cards').then( cards => {
             expect(cards.length).to.eql(2)
             cards.forEach(card => {
               if (card.id === 11){
@@ -236,7 +236,7 @@ describe('database', () => {
     })
 
   })
-  
+
   describe('when there are 0 boards in the database', () => {
 
     describe('getBoardsByUserId', () => {
