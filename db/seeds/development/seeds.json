@@ -1,0 +1,75 @@
+{
+  "users": [
+    {
+      "github_id": 8385,
+      "name": "Jared Grippe",
+      "email": "jared@deadlyicon.com",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/8385?v=3&s=466"
+    },
+    {
+      "github_id": 1234,
+      "name": "Harman Singh",
+      "email": "harmanlearns@gmail.com",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/19172766?v=3&s=466"
+    }
+  ],
+  "boards": [
+    {
+      "name": "an empty board",
+      "background_color": "#ECCBD9",
+      "lists": []
+    },
+    {
+      "name": "Groceries",
+      "background_color": "#80FFE8",
+      "lists": [
+        {
+          "name": "Pantry",
+          "cards": [
+            {"content": "8.2 cups of flower"},
+            {"content": "11.6 cups of sugar"},
+            {"content": "1.9 cups of salt"}
+          ]
+        },
+        {
+          "name": "To Buy",
+          "cards": [
+            {"content": "9 apples"},
+            {"content": "1 squash"},
+            {"content": "6 cups of maple syrup"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Build A Dragon",
+      "background_color": "#97D2FB",
+      "lists": [
+        {
+          "name": "Backlog",
+          "cards": [
+            {"content": "Hire a painter"},
+            {"content": "Read the docs"},
+            {"content": "Throw fund raiser party"}
+          ]
+        },
+        {
+          "name": "In-Progress",
+          "cards": [
+            {"content": "mold the tail"},
+            {"content": "mold the head"},
+            {"content": "fire the eye balls"}
+          ]
+        },
+        {
+          "name": "Complete",
+          "cards": [
+            {"content": "buy some metal"},
+            {"content": "buy some string"},
+            {"content": "buy some gasonline"}
+          ]
+        }
+      ]
+    }
+  ]
+}
