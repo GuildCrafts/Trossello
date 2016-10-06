@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './Navbar.sass'
-import PresentationalComponent from './PresentationalComponent'
 import Link from './Link'
 import Icon from './Icon'
 import LogoutButton from './LogoutButton'
@@ -9,49 +8,34 @@ import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
 import BoardsDropdown from './BoardsDropdown'
 
-const Navbar = (props) => {
-  const { auth } = props.state
-  return auth.isAuthenticated ?
-    <LoggedInNavbar auth={auth} /> :
-    <LoggedOutNavbar />
-}
+export default class Navbar extends Component {
 
-const LoggedOutNavbar = (props) => {
-  return <div className="Navbar">
-    <div className="Navbar-links">
-      <Link to="/">HOME</Link>
-      <Link to="/">TOUR</Link>
-      <Link to="/">BLOG</Link>
+  static contextTypes = {
+    session: React.PropTypes.object.isRequired
+  }
+
+  render(){
+    const { session } = this.context
+    return <div className="Navbar">
+      <BoardsDropdown className="Navbar-button BoardButton" />
+      <input type="text" className="Navbar-SearchInput" ></input>
+      <div className="Navbar-BoardIndexButton">
+        <Link to="/">Trossello</Link>
+      </div>
+      <CreateBoardButton className="Navbar-button">
+        <Icon type="plus" />
+      </CreateBoardButton>
+      <button className="Navbar-button Navbar-AvatarButton">
+        <img src={session.user.avatar_url} />
+        <span>{session.user.name}</span>
+      </button>
+      <LogoutButton className="Navbar-button">Logout</LogoutButton>
+      <button className="Navbar-button AlertButton">
+        <Icon type="bell" />
+      </button>
     </div>
-    <div className="Navbar-links">
-      <LoginButton>Login</LoginButton>
-    </div>
-  </div>
+  }
 }
-
-const LoggedInNavbar = ({auth}) => {
-  return <div className="Navbar">
-    <BoardsDropdown className="Navbar-button BoardButton" />
-    <input type="text" className="Navbar-SearchInput" ></input>
-    <div className="Navbar-BoardIndexButton">
-      <a href="/">Trossello</a>
-    </div>
-    <CreateBoardButton className="Navbar-button">
-      <Icon type="plus" />
-    </CreateBoardButton>
-    <button className="Navbar-button Navbar-AvatarButton">
-      <img src={auth.user.avatar_url} />
-      <span>{auth.user.name}</span>
-    </button>
-    <LogoutButton className="Navbar-button">Logout</LogoutButton>
-    <button className="Navbar-button AlertButton">
-      <Icon type="bell" />
-    </button>
-  </div>
-}
-
-export default PresentationalComponent(Navbar)
-
 
 class CreateBoardButton extends ToggleComponent {
   render(){

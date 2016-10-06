@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { actions } from '../state'
 
 const logout = (event) => {
   event.preventDefault();
-  actions.logout()
+  // actions.logout()
+  // HACK FOR NOW
+  $.post('/logout', () => {
+    location.reload()
+  })
 }
 
 const LogoutButton = (props) => {

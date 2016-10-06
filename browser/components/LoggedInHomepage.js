@@ -1,53 +1,30 @@
-import React, { Component } from 'react'
-import Layout from './Layout'
-import PresentationalComponent from './PresentationalComponent'
-import Link from './Link'
 import './LoggedInHomepage.sass'
-import $ from 'jquery'
+import React, { Component } from 'react'
+import createStoreProvider from './createStoreProvider'
+import boardsStore from '../stores/boardsStore'
+import Layout from './Layout'
+import Link from './Link'
 
 const LoggedInHomepage = (props) => {
-  
+  const { boards } = props
   return <Layout className="LoggedInHomepage">
-    <div className = "LoggedInHomepage-BoardListHeading">
+    <div className="LoggedInHomepage-BoardListHeading">
       All Boards
     </div>
-    <BoardsProvider />
+    <Boards boards={boards} />
   </Layout>
 }
 
-export default PresentationalComponent(LoggedInHomepage)
 
-const BoardListHeading = (props) => {
-  return
-}
+export default createStoreProvider({
+  as: 'boards',
+  store: boardsStore,
+  render: LoggedInHomepage,
+})
 
-class BoardsProvider extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      boards: null
-    }
-  }
-
-  componentWillMount(){
-    $.getJSON('/api/boards')
-      .then(boards => {
-        this.setState({boards})
-      })
-  }
-
-  render(){
-    const props = Object.assign({}, this.props)
-    props.boards = this.state.boards
-    return <Boards {...props} />
-  }
-
-}
 
 const Boards = ({boards}) => {
-  if(boards === null){
-    return null
-  }
+  if (!boards) return null
   const elements = boards.map(board =>
     <Board key={board.id} board={board} />
   )
@@ -57,7 +34,7 @@ const Boards = ({boards}) => {
 }
 
 const Board = ({board}) => {
-  const style = { 
+  const style = {
     backgroundColor: board.background_color
   }
   return <Link style={style} to={`/boards/${board.id}`} className="LoggedInHomepage-Board">

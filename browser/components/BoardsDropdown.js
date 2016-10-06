@@ -1,9 +1,10 @@
 import './BoardsDropdown.sass'
 import React, { Component } from 'react'
+import createStoreProvider from './createStoreProvider'
+import boardsStore from '../stores/boardsStore'
 import Link from './Link'
 import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
-import boardsStore from '../stores/boardsStore'
 
 class BoardsDropdown extends Component {
 
@@ -82,30 +83,9 @@ const Board = ({board}) => {
   </div>
 }
 
-class BoardsProvider extends Component {
 
-  constructor(props){
-    super(props)
-    this.state = {
-      boards: null,
-    }
-    this.updateBoards = this.updateBoards.bind(this)
-    boardsStore.subscribe(this.updateBoards)
-  }
-
-  componentWillUnmount(){
-    boardsStore.unsubscribe(this.updateBoards)
-  }
-
-  updateBoards(boards){
-    this.setState({boards})
-  }
-
-  render(){
-    const props = Object.assign({}, this.props)
-    props.boards = this.state.boards
-    return <BoardsDropdown {...props} />
-  }
-}
-
-export default BoardsProvider
+export default createStoreProvider({
+  as: 'boards',
+  store: boardsStore,
+  render: BoardsDropdown,
+})

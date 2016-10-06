@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './BoardShowPage.sass'
 import Layout from './Layout'
 import Link from './Link'
-import PresentationalComponent from './PresentationalComponent'
 import $ from 'jquery'
 
 class BoardProvider extends Component {

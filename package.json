@@ -77,24 +77,18 @@
     "randomstring": "^1.1.5",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-redux": "^4.4.5",
-    "redux": "^3.6.0",
-    "redux-logger": "^2.6.1",
-    "redux-promise": "^0.5.3",
-    "redux-thunk": "^2.1.0",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
     "rmdir": "^1.2.0",
     "sass-loader": "^4.0.2",
     "serve-favicon": "^2.3.0",
-    "simple-react-router": "0.0.4",
+    "simple-react-router": "0.0.6",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.10.2",
-    "redux-devtools": "^3.3.1",
     "webpack-error-notification": "^0.1.6"
   }
 }

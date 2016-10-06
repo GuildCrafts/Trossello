@@ -1,9 +1,8 @@
-import $ from 'jquery'
 import Store from 'Store'
 
 const boardsStore = new Store({
-  fetch: () => {
-    return $.getJSON('/api/boards')
+  fetch(){
+    return this.getJSON('/api/boards')
   }
 })
 
