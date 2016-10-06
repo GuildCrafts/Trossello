@@ -80,14 +80,16 @@ export default (knex, queries) => {
 
   //
 
-  const createBoard = (userId, attributes) =>
-    createRecord('boards', attributes).then(board => {
+  const createBoard = (userId, attributes) =>{
+    if (!attributes.background_color) delete attributes.background_color
+    return createRecord('boards', attributes).then(board => {
       let attrs = {
         user_id: userId,
         board_id: board.id,
       }
       return createRecord('user_boards', attrs).then(() => board)
     })
+  }
 
 
   const updateBoard = (id, attributes) =>
