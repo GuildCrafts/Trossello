@@ -14,6 +14,7 @@ class BoardsDropdown extends Component {
       open: false
     }
     this.toggle = this.toggle.bind(this)
+    this.close = this.close.bind(this)
     this.onClick = this.onClick.bind(this)
     document.body.addEventListener('click', this.onClick)
   }
@@ -37,9 +38,15 @@ class BoardsDropdown extends Component {
     })
   }
 
+  close() {
+    this.setState({
+      open: false
+    })
+  }
+
   render() {
     const dropdown = this.state.open ?
-      <Dropdown boards={this.props.boards} /> :
+      <Dropdown boards={this.props.boards} close={this.close} /> :
       null
     return <div ref="root" className="BoardsDropdown" >
       <button className={this.props.className} onClick={this.toggle}>Boards</button>
@@ -55,7 +62,7 @@ class Dropdown extends ToggleComponent {
       boards = <div>Loading. . .</div>
     }else{
       boards = this.props.boards.map(board =>
-        <Board key={board.id} board={board} />
+        <Board key={board.id} board={board} close={this.props.close} />
       )
     }
     return <div className="BoardsDropdown-dropdown">
@@ -71,10 +78,10 @@ class Dropdown extends ToggleComponent {
   }
 }
 
-const Board = ({board}) => {
+const Board = ({board, close}) => {
   return <div className="BoardsDropdown-board">
     <span className="BoardsDropdown-background" style={{backgroundColor: board.background_color}}></span>
-    <Link to={`/boards/${board.id}`} className="BoardsDropdown-link">
+    <Link to={`/boards/${board.id}`} className="BoardsDropdown-link" onClick={close}>
       <span className="BoardsDropdown-thumbnail" style={{backgroundColor: board.background_color}}></span>
       <span className="BoardsDropdown-text">
         <span className="BoardsDropdown-title">{board.name}</span>
