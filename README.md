@@ -108,3 +108,27 @@ we can make make live update work by polling for the entire board data. that wou
 | deleteList()         | delete | post | /api/lists/:listId/delete                |
 | updateCard()         | update | post | /api/cards/:cardId                       |
 | deleteCard()         | delete | post | /api/cards/:cardId/delete                |
+
+### Contributors
+
+Ask Contributors any questions about this project!
+
+Week 1:
+- [deadlyicon](https://github.com/deadlyicon)
+- [EthanJStark](https://github.com/EthanJStark)
+- [Farhad33](https://github.com/Farhad33)
+- [tjfwalker](https://github.com/tjfwalker)
+- [AnaSauce](https://github.com/AnaSauce)
+- [Moniarchy](https://github.com/Moniarchy)
+- [GeneralMeow](https://github.com/GeneralMeow)
+- [harmanLearns](https://github.com/harmanLearns)
+
+Week 2:
+- [deadlyicon](https://github.com/deadlyicon)
+- [EthanJStark](https://github.com/EthanJStark)
+- [tjfwalker](https://github.com/tjfwalker)
+- [Arayi](https://github.com/Arayi)
+- [jason00111](https://github.com/jason00111)
+- [ASantos3026](https://github.com/ASantos3026)
+- [salmonax](https://github.com/salmonax)
+- [harmanLearns](https://github.com/harmanLearns)
