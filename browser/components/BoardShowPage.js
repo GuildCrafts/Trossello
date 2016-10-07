@@ -89,7 +89,25 @@ const List = ({ list, cards }) => {
     return <Card key={card.id} card={card} />
   })
 
-  return <div className="BoardShowPage-List">
+  const onDrop_handler = event => {
+    event.preventDefault()
+    let cardId = event.dataTransfer.getData("text")
+    $.ajax({
+      method: "POST",
+      url: `/api/cards/${cardId}`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({list_id: list.id}),
+    }).then( () => {
+      boardStore.reload()
+    })
+  }
+
+  const onDragOver_handler = event => {
+    event.preventDefault()
+  }
+
+  return <div className="BoardShowPage-List" onDrop={onDrop_handler} onDragOver={onDragOver_handler}>
     <div className="BoardShowPage-ListHeader">
       {list.name}
       <DeleteListButton list={list} />
@@ -100,7 +118,11 @@ const List = ({ list, cards }) => {
 }
 
 const Card = ({ card }) => {
-  return <div className="BoardShowPage-Card">
+  const dragStart_handler = event => {
+    event.dataTransfer.setData("text", card.id)
+  }
+
+  return <div className="BoardShowPage-Card" draggable="true" onDragStart={dragStart_handler} id={card.id}>
     <pre>{card.content}</pre>
     <DeleteCardButton card={card} />
   </div>
