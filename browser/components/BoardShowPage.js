@@ -102,15 +102,12 @@ const List = ({ list, cards }) => {
 const Card = ({ card }) => {
   return <div className="BoardShowPage-Card">
     <pre>{card.content}</pre>
+    <DeleteCardButton card={card} />
   </div>
 }
 
 class DeleteListButton extends Component {
-  static contextTypes = {
-    redirectTo: React.PropTypes.func,
-  }
-
-  constructor(props){
+  constructor(props) {
     super(props)
     this.onClick = this.onClick.bind(this)
   }
@@ -120,6 +117,29 @@ class DeleteListButton extends Component {
     $.ajax({
       method: "POST",
       url: `/api/lists/${this.props.list.id}/delete`
+    }).then(() => {
+      boardStore.reload()
+    })
+  }
+
+  render() {
+    return <Link onClick={this.onClick}>
+      <Icon type="times" />
+    </Link>
+  }
+}
+
+class DeleteCardButton extends Component {
+  constructor(props) {
+    super(props)
+    this.onClick = this.onClick.bind(this)
+  }
+
+  onClick(event) {
+    event.preventDefault()
+    $.ajax({
+      method: "POST",
+      url: `/api/cards/${this.props.card.id}/delete`
     }).then(() => {
       boardStore.reload()
     })
