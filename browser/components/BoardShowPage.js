@@ -183,12 +183,12 @@ class CreateCardForm extends Component {
   render() {
     return <div className="BoardShowPage-composer">
       <textarea onKeyUp={this.onKeyUp} ref="content"/>
-      <div className="clearfix"> {/* controls */}
+      <div>
         <div>
           <button onClick={this.createCard}>Add</button>
           <button onClick={this.props.onCancel}><Icon type="times" /></button>
         </div>
-        <button>&#8943;</button> {/* options-menu elipsis */}
+        <button>&#8943;</button>
       </div>
     </div>
   }
