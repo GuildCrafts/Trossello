@@ -53,7 +53,7 @@ class CreateBoardPopover extends Component {
       </Link> :
       null
 
-    return <div className="CreateBoardPopover">
+    return <div ref="root" className="CreateBoardPopover">
       <div className="CreateBoardPopover-header">
         Create A Board
         {closeLink}

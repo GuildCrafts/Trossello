@@ -6,37 +6,8 @@ import Link from './Link'
 import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
 
-class BoardsDropdown extends Component {
-
-  constructor(props){
-    super(props)
-    this.state = {
-      open: false
-    }
-    this.toggle = this.toggle.bind(this)
-    this.onClick = this.onClick.bind(this)
-    document.body.addEventListener('click', this.onClick)
-  }
-
-  componentWillUnmount(){
-    document.body.removeEventListener('click', this.onClick)
-  }
-
-  onClick(event){
-    const dropdownNode = this.refs.root
-    const targetNode = event.target
-    if (dropdownNode.contains(targetNode)) return
-    this.setState({
-      open: false
-    })
-  }
-
-  toggle(){
-    this.setState({
-      open: !this.state.open
-    })
-  }
-
+class BoardsDropdown extends ToggleComponent {
+  static closeIfUserClicksOutside = true
   render() {
     const dropdown = this.state.open ?
       <Dropdown boards={this.props.boards} /> :
@@ -49,6 +20,7 @@ class BoardsDropdown extends Component {
 }
 
 class Dropdown extends ToggleComponent {
+  static closeIfUserClicksOutside = true
   render(){
     let boards
     if (this.props.boards === null){
@@ -64,7 +36,7 @@ class Dropdown extends ToggleComponent {
         <Link onClick={this.toggle}>Create new board...</Link>
       </div>
       {this.state.open ?
-        <CreateBoardPopover onClose={this.close} /> :
+        <CreateBoardPopover ref="root" onClose={this.close} /> :
         null
       }
     </div>
