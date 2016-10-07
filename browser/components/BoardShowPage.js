@@ -106,48 +106,43 @@ const Card = ({ card }) => {
   </div>
 }
 
-class DeleteListButton extends Component {
-  constructor(props) {
-    super(props)
-    this.onClick = this.onClick.bind(this)
-  }
-
-  onClick(event) {
-    event.preventDefault()
-    $.ajax({
-      method: "POST",
-      url: `/api/lists/${this.props.list.id}/delete`
-    }).then(() => {
-      boardStore.reload()
-    })
-  }
-
-  render() {
-    return <Link onClick={this.onClick}>
-      <Icon type="times" />
-    </Link>
-  }
+const DeleteButton = (props) => {
+  const className = `BoardShowPage-DeleteButton ${props.className||''}`
+  return <Link className={className} onClick={props.onClick}>
+    <Icon type="trash" />
+  </Link>
 }
 
-class DeleteCardButton extends Component {
-  constructor(props) {
-    super(props)
-    this.onClick = this.onClick.bind(this)
-  }
+const deleteRecord = (event, resource, id) => {
+  event.preventDefault()
+  $.ajax({
+    method: "POST",
+    url: `/api/${resource}/${id}/delete`
+  }).then(() => {
+    boardStore.reload()
+  })
+}
 
-  onClick(event) {
-    event.preventDefault()
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${this.props.card.id}/delete`
-    }).then(() => {
-      boardStore.reload()
-    })
+const DeleteListButton = (props) => {
+  const className = `BoardShowPage-DeleteListButton ${props.className||''}`
+  const onClick = (event) => {
+    deleteRecord(event, 'lists', props.list.id)
   }
+  return <DeleteButton
+    onClick={onClick}
+    className={className}
+    {...props}
+  />
+}
 
-  render() {
-    return <Link onClick={this.onClick}>
-      <Icon type="times" />
-    </Link>
+const DeleteCardButton = (props) => {
+  const className = `BoardShowPage-DeleteCardButton ${props.className||''}`
+  const onClick = (event) => {
+    deleteRecord(event, 'cards', props.card.id)
   }
+  return <DeleteButton
+    onClick={onClick}
+    className={className}
+    {...props}
+  />
 }
