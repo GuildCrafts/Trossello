@@ -105,6 +105,69 @@
     font-size: 1.2em
     color: #686a70
 
+  &-composer
+    padding-bottom: 8px
+    > textarea
+      background-color: hsl(0, 0%, 100%)
+      border-bottom: 1px solid hsl(0, 0%, 80%)
+      padding: 6px 6px 4px 8px
+      // overflow: hidden
+      // overflow-wrap: break-word
+      // box-shadow: none
+      box-sizing: border-box
+      display: block
+      border-radius: 3px
+      resize: none
+      border: none
+      width: 100%
+      max-height: 162px
+      min-height: 54px
+      margin-bottom: 6px
+    > div // controls
+      display: flex
+      justify-content: space-between
+      button // All control buttons
+        cursor: pointer
+        border: none
+        display: inline-block
+        text-align: center
+      > div
+        > button
+          &:first-of-type // Add button
+            border-radius: 3px
+            background: linear-gradient(to bottom,HSL(110, 45%, 53%) 0,HSL(107, 43%, 47%) 100%)
+            box-shadow: 0 1px 0 HSL(97, 54%, 28%)
+            color: hsl(0, 0%, 100%)
+            min-height: 30px
+            padding: 4px 1pc
+            vertical-align: top
+            margin: 0 4px 0 0
+            font-weight: 700
+            line-height: 22px
+            &:hover
+              background: linear-gradient(to bottom,HSL(107, 43%, 47%) 0,HSL(105, 45%, 41%) 100%)
+          &:last-of-type // Cancel button
+            color: hsl(0, 0%, 60%)
+            background: transparent
+            width: 30px
+            height: 30px
+            font-size: 20px
+            line-height: 30px
+            font-weight: 400
+            &:hover
+              color: HSL(0, 0%, 30%)
+      > button // options-menu button
+        background: transparent
+        color: hsl(0, 0%, 60%)
+        width: 30px
+        height: 30px
+        font-size: 30px
+        line-height: 30px
+        font-weight: 400
+        &:hover
+          background-color: HSL(197, 8%, 82%)
+          color: hsl(0, 0%, 30%)
+
   &-add-card
     color: hsl(0, 0%, 55%)
     padding: 18px
