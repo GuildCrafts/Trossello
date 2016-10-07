@@ -178,10 +178,15 @@ class CreateCardForm extends Component {
   }
 
   render() {
-    return <div>
-      <textarea className="BoardShowPage-Card" onKeyUp={this.onKeyUp} ref="content"/>
-      <button onClick={this.createCard}>Add</button>
-      <button onClick={this.props.onCancel}><Icon type="times" /></button>
+    return <div className="BoardShowPage-composer">
+      <textarea onKeyUp={this.onKeyUp} ref="content"/>
+      <div className="clearfix"> {/* controls */}
+        <div>
+          <button onClick={this.createCard}>Add</button>
+          <button onClick={this.props.onCancel}><Icon type="times" /></button>
+        </div>
+        <button>&#8943;</button> {/* options-menu elipsis */}
+      </div>
     </div>
   }
 }
