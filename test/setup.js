@@ -24,6 +24,7 @@ const request = (method, url, postBody) => {
     if (method === 'post' && postBody) req = req.send(postBody)
     req.end((error, response) => {
       if (error && error.status >= 500) {
+        console.log(error)
         reject(error)
       }else{
         resolve(response)

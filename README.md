@@ -93,10 +93,6 @@ we can make make live update work by polling for the entire board data. that wou
 
 | action               | CRUD   | verb | path                                     |
 | -------------------- | ------ | ---- | ---------------------------------------- |
-| getUsers()           | index  | get  | /api/users                               |
-| createUser()         | create | post | /api/users                               |
-| getUser()            | show   | get  | /api/users/:userId                       |
-| updateUser()         | update | post | /api/users/:userId                       |
 | getBoardsByUserId()  | index  | get  | /api/boards                              |
 | createBoard()        | create | post | /api/boards                              |
 | getBoardById()       | show   | get  | /api/boards/:boardId                     |

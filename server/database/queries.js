@@ -26,18 +26,23 @@ export default (knex) => {
     return knex.table('lists')
       .select('*')
       .where('board_id', board.id)
+      .orderBy('id', 'asc')
       .then(lists => {
         board.lists = lists
         const listIds = lists.map(list => list.id)
         return knex.table('cards')
           .select('*')
           .whereIn('list_id', listIds)
+          .orderBy('id', 'asc')
           .then(cards => {
             board.cards = cards
             return board
           })
       })
   }
+
+  const getListById = (id) =>
+    getRecordById('lists', id)
 
   const getCardById = (id) =>
     getRecordById('cards', id)
@@ -48,6 +53,7 @@ export default (knex) => {
     getCardById,
     getBoardsByUserId,
     getBoardById,
+    getListById,
   }
 
 }

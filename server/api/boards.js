@@ -2,19 +2,22 @@ import express from 'express'
 import {queries, commands} from '../database'
 const router = new express.Router()
 
-router.get( '/', ( request, response, next) => {
+// INDEX
+router.get('/', (request, response, next) => {
   queries.getBoardsByUserId(request.session.userId).then(boards => {
     response.json(boards)
   }).catch(next)
 } )
 
-router.post( '/', (request, response, next) => {
+// CREATE
+router.post('/', (request, response, next) => {
   commands.createBoard(request.session.userId, request.body).then( board => {
     response.json(board)
   }).catch(next)
 })
 
-router.get( '/:boardId', ( request, response, next ) => {
+// SHOW
+router.get('/:boardId', (request, response, next ) => {
   queries.getBoardById(request.params.boardId).then( board => {
     if (board){
       response.json(board)
@@ -25,14 +28,16 @@ router.get( '/:boardId', ( request, response, next ) => {
   .catch(next)
 })
 
-router.post( '/:boardId', ( request, response, next ) => {
+// UPDATE
+router.post('/:boardId', (request, response, next) => {
   commands.updateBoard(request.params.boardId, request.body)
   .then(boardId => {
       response.json(boardId)
   }).catch(next)
 })
 
-router.post( '/:boardId/delete', ( request, response, next ) => {
+// DELETE
+router.post('/:boardId/delete', (request, response, next) => {
   const boardId = request.params.boardId
   commands.deleteBoard(boardId).then( numberOfDeletions => {
     if (numberOfDeletions > 0) {
@@ -43,6 +48,17 @@ router.post( '/:boardId/delete', ( request, response, next ) => {
   }).catch(next)
 })
 
+// CREATE LIST
+router.post('/:boardId/lists', (request, response, next) => {
+  const list = request.body
+  const { boardId } = request.params
+  list.board_id = boardId
+  commands.createList(list)
+    .then( list => {
+      response.json(list)
+    })
+    .catch(next)
+})
 
 // CREATE CARD
 router.post('/:boardId/lists/:listId/cards', (request, response, next) => {
