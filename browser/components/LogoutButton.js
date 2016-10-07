@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import $ from 'jquery'
 
 const logout = (event) => {
   event.preventDefault();
   // actions.logout()
-  // HACK FOR NOW
+  // still kind of hacky, but functional
   $.post('/logout', () => {
-    location.reload()
+    location.assign('/')
   })
 }
 
