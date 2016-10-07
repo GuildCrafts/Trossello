@@ -31,4 +31,11 @@ router.post('/:cardId/delete', (request, response, next) => {
     .catch(next)
 })
 
+router.post('/:cardId', (request, response, next) => {
+  commands.updateCard(request.params.cardId, request.body)
+    .then(cardId => {
+        response.json(cardId)
+    }).catch(next)
+})
+
 export default router
