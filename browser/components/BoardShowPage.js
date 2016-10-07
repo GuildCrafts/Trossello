@@ -7,6 +7,7 @@ import $ from 'jquery'
 import boardsStore from '../stores/boardsStore'
 import boardStore from '../stores/boardStore'
 import CreateCard from './CreateCard'
+import autosize from 'autosize'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -170,6 +171,8 @@ class CreateCardForm extends Component {
       event.preventDefault()
       this.createCard()
     }
+
+    autosize(this.refs.content)
   }
 
   createCard() {
