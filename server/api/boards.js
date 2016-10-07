@@ -43,4 +43,14 @@ router.post( '/:boardId/delete', ( request, response, next ) => {
   }).catch(next)
 })
 
+router.post( '/:boardId/lists/:listId/cards', (request, response, next) => {
+  const {boardId, listId} = request.params
+  const cardAttributes = request.body
+  cardAttributes.board_id = boardId
+  cardAttributes.list_id = listId
+  commands.createCard(cardAttributes).then( card => {
+    response.json(card)
+  }).catch(next)
+})
+
 export default router

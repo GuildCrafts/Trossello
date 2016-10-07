@@ -40,7 +40,12 @@ const BoardShowPage = ({board}) => {
 
   const lists = board.lists.map(list => {
     const cards = board.cards.filter(card => card.list_id === list.id)
-    return <List key={list.id} list={list} cards={cards} />
+    return <List
+      key={list.id}
+      board={board}
+      list={list}
+      cards={cards}
+    />
   })
 
   const style = {
@@ -106,7 +111,16 @@ class List extends Component {
   }
 
   saveCard(content) {
-    console.log("would save card", content);
+    const { board, list } = this.props
+    $.ajax({
+      method: 'POST',
+      url: `/api/boards/${board.id}/lists/${list.id}/cards`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({content})
+    }).then(() => {
+      boardStore.reload()
+    })
   }
 
   render(){
@@ -122,7 +136,7 @@ class List extends Component {
         onSave={this.saveCard}
       />
     } else {
-      createCardLink = <Link onClick={this.creatingCard} >Add a card...</Link>
+      createCardLink = <Link className="BoardShowPage-add-card" onClick={this.creatingCard} >Add a card...</Link>
     }
 
     return <div className="BoardShowPage-List">
@@ -144,6 +158,7 @@ class CreateCardForm extends Component {
   constructor(props) {
     super(props)
     this.onKeyUp = this.onKeyUp.bind(this)
+    this.createCard = this.createCard.bind(this)
   }
 
   componentDidMount() {
