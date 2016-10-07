@@ -43,10 +43,10 @@ class Dropdown extends ToggleComponent {
   }
 }
 
-const Board = ({board, onClose}) => {
+const Board = ({board, onClick}) => {
   return <div className="BoardsDropdown-board">
     <span className="BoardsDropdown-background" style={{backgroundColor: board.background_color}}></span>
-    <Link to={`/boards/${board.id}`} className="BoardsDropdown-link" onClick={onClose}>
+    <Link to={`/boards/${board.id}`} className="BoardsDropdown-link" onClick={onClick}>
       <span className="BoardsDropdown-thumbnail" style={{backgroundColor: board.background_color}}></span>
       <span className="BoardsDropdown-text">
         <span className="BoardsDropdown-title">{board.name}</span>
