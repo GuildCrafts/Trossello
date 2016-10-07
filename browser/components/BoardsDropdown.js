@@ -39,7 +39,7 @@ class BoardsDropdown extends Component {
 
   render() {
     const dropdown = this.state.open ?
-      <Dropdown boards={this.props.boards} /> :
+      <Dropdown boards={this.props.boards} toggle={this.toggle} /> :
       null
     return <div ref="root" className="BoardsDropdown" >
       <button className={this.props.className} onClick={this.toggle}>Boards</button>
@@ -55,7 +55,7 @@ class Dropdown extends ToggleComponent {
       boards = <div>Loading. . .</div>
     }else{
       boards = this.props.boards.map(board =>
-        <Board key={board.id} board={board} />
+        <Board key={board.id} board={board} toggle={this.props.toggle} />
       )
     }
     return <div className="BoardsDropdown-dropdown">
@@ -64,17 +64,17 @@ class Dropdown extends ToggleComponent {
         <Link onClick={this.toggle}>Create new board...</Link>
       </div>
       {this.state.open ?
-        <CreateBoardPopover onClose={this.close} /> :
+        <CreateBoardPopover onClose={this.close} closeBoardSelector={this.props.toggle} /> :
         null
       }
     </div>
   }
 }
 
-const Board = ({board}) => {
+const Board = ({board, toggle}) => {
   return <div className="BoardsDropdown-board">
     <span className="BoardsDropdown-background" style={{backgroundColor: board.background_color}}></span>
-    <Link to={`/boards/${board.id}`} className="BoardsDropdown-link">
+    <Link to={`/boards/${board.id}`} className="BoardsDropdown-link" onClick={toggle}>
       <span className="BoardsDropdown-thumbnail" style={{backgroundColor: board.background_color}}></span>
       <span className="BoardsDropdown-text">
         <span className="BoardsDropdown-title">{board.name}</span>

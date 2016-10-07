@@ -38,6 +38,7 @@ class CreateBoardPopover extends Component {
       boardsStore.reload()
       this.context.redirectTo('/boards/'+board.id)
       this.reset()
+      this.props.closeBoardSelector()
     })
   }
 
