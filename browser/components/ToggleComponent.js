@@ -29,29 +29,25 @@ class ToggleComponent extends Component {
      document.body.removeEventListener('click', this.closeIfUserClickedOutside)
   }
 
-  toggle(event){
-    if (event) event.preventDefault()
+  toggle(){
     this.setState({
       open: !this.state.open
     })
   }
 
-  close(event){
-    if (event) event.preventDefault()
+  close(){
     this.setState({
       open: false
     })
   }
 
-  open(event){
-    if (event) event.preventDefault()
+  open(){
     this.setState({
       open: true
     })
   }
 
   closeIfUserClickedOutside(event){
-    console.log('REFS', this.refs)
     const targetNode = event.target
     let rootNode = this.refs.root
     while(rootNode && ('refs' in rootNode)){ rootNode = rootNode.refs.root }
