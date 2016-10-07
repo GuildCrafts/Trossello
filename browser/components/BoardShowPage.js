@@ -183,7 +183,10 @@ class List extends Component {
     }
 
     return <div ref="root" className="BoardShowPage-List" onDrop={this.onDrop} onDragOver={this.onDragOver}>
-      <div className="BoardShowPage-ListHeader">{list.name}</div>
+      <div className="BoardShowPage-ListHeader">
+        {list.name}
+        <DeleteListButton list={list} />
+      </div>
       <div ref="cards" className="BoardShowPage-cards">
         {cardNodes}
         {createCardForm}
