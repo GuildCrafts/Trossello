@@ -62,7 +62,10 @@ export default (knex, queries) => {
 
 
   const deleteList = (id) =>
-    deleteRecord('lists', id)
+    Promise.all([
+      deleteRecord('lists', id),
+      knex.table('cards').where('list_id', id).del(),
+    ])
 
   //
 
