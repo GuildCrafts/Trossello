@@ -6,9 +6,9 @@ class ToggleComponent extends Component {
   // override this in your subclass to change the default
   static initialState = false
 
-  // set this to true to close the toggle when the user clicks outside the element.
-  // note: you must add `ref="root"` to the root node of your render
-  static closeIfUserClicksOutside = false
+  // set this to false to disable setting open=false when the user clicks outside the element.
+  // note: you must add `ref="root"` to the root node of your render for this feature to work
+  static closeIfUserClicksOutside = true
 
   constructor(props){
     super(props)
@@ -50,6 +50,7 @@ class ToggleComponent extends Component {
   closeIfUserClickedOutside(event){
     const targetNode = event.target
     let rootNode = this.refs.root
+    if (!rootNode) throw new Error('you must set ref="root" on a node. See '+this.constructor.name)
     while(rootNode && ('refs' in rootNode)){ rootNode = rootNode.refs.root }
     if (rootNode && targetNode && !rootNode.contains(targetNode)) this.close()
   }

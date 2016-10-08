@@ -38,7 +38,6 @@ export default class Navbar extends Component {
 }
 
 class CreateBoardButton extends ToggleComponent {
-  static closeIfUserClicksOutside = true
   render(){
     return <div ref="root" className="CreateBoardButton">
       <button {...this.props} onClick={this.toggle}>

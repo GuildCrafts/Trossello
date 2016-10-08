@@ -7,7 +7,6 @@ import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
 
 class BoardsDropdown extends ToggleComponent {
-  static closeIfUserClicksOutside = true
   render() {
     const dropdown = this.state.open ?
       <Dropdown boards={this.props.boards} close={this.close} /> :
@@ -20,7 +19,6 @@ class BoardsDropdown extends ToggleComponent {
 }
 
 class Dropdown extends ToggleComponent {
-  static closeIfUserClicksOutside = true
   render(){
     let boards
     if (this.props.boards === null){
