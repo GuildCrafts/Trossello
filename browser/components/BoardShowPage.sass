@@ -3,6 +3,7 @@
 .BoardShowPage
   $button-height: 30px
   $button-margin: 4px
+  $list-width: 270px
 
   font-family: "Helvetica Neue"
   &-Header
@@ -32,7 +33,7 @@
     white-space: nowrap
     outline: none
 
-  &-delete-button
+  &-DeleteBoardButton
     color: white
     background: linear-gradient(to bottom,rgba(255,255,255,.3) 0,rgba(255,255,255,.2) 100%)
     &:not([disabled])
@@ -50,6 +51,8 @@
         background: linear-gradient(to bottom,#519839 0,#49852E 100%)
 
   &-lists
+    display: flex
+    align-items: flex-start
     position: absolute
     top: 100px
     left: 10px
@@ -66,12 +69,16 @@
     flex-direction: column
     border-radius: 5px
     margin-right: 25px
-    width: 330px
+    width: $list-width
     max-height: 100%
-
     background-color: #e1e3ea
     font-family: "Helvetica Neue"
 
+  &-NewListForm
+    flex-grow: 0
+    flex-shrink: 0
+    display: inline-flex
+    width: $list-width
 
   &-ListHeader
     flex-grow: 0
@@ -126,9 +133,13 @@
     font-size: 14px
     > pre
       margin: 0
-      white-space: pre-wrap
       font-size: 14px
       font-family: inherit
+      white-space: pre-wrap
+      white-space: -moz-pre-wrap
+      white-space: -pre-wrap
+      white-space: -o-pre-wrap
+      word-wrap: break-word
 
   &-DeleteCardButton
     position: absolute
@@ -146,7 +157,8 @@
       cursor: pointer
       background-color: rgba(0,0,0,0.2)
       text-decoration: underline
-  &-CreateCardForm
+
+  &-NewCardForm
     padding-bottom: 8px
     > textarea
       -webkit-touch-callout: inherit
@@ -160,5 +172,8 @@
       resize: none
       &:focus
         outline: none
-    &-controls a
-      color: inherit
+    &-controls
+      input[type="submit"]
+        margin-right: 0.25em
+      a
+        color: inherit
