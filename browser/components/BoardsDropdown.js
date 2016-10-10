@@ -28,7 +28,7 @@ class Dropdown extends ToggleComponent {
         <Board key={board.id} board={board} onClick={this.props.close} />
       )
     }
-    return <div className="BoardsDropdown-dropdown">
+    return <div ref="root" className="BoardsDropdown-dropdown">
       <div className="BoardsDropdown-content">
         {boards}
         <Link onClick={this.toggle}>Create new board...</Link>

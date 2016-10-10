@@ -13,7 +13,7 @@ class BoardProvider extends Component {
   constructor(props){
     super(props)
     this.rerender = this.rerender.bind(this)
-    boardStore.setBoardId(props.params.boardId)
+    boardStore.setBoardId(props.location.params.boardId)
     boardStore.subscribe(this.rerender)
   }
 
@@ -26,8 +26,10 @@ class BoardProvider extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    if (this.props.params.boardId !== nextProps.params.boardId){
-      boardStore.setBoardId(nextProps.params.boardId)
+    const boardId = this.props.location.params.boardId
+    const nextBoardId = nextProps.location.params.boardId
+    if (boardId !== nextBoardId){
+      boardStore.setBoardId(nextBoardId)
       boardStore.reload()
     }
   }
