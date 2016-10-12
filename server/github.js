@@ -11,7 +11,7 @@ const github = {
 
   oauthRedirectURI(request){
     return URL.format({
-      protocol: request.protocol,
+      protocol: process.env.NODE_ENV === 'production' ? 'https' : 'http',
       host: request.get('host'),
       pathname: '/oauth_callback',
     })
