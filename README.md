@@ -51,26 +51,54 @@ $ git remote add upstream https://github.com/GuildCrafts/Trossello.git
 
 #### Install Postgres
 
+```sh
+brew install postgress
+brew tap homebrew/services
+brew services start postgresql
 ```
-$ brew install postgress
-$ brew tap homebrew/services
-$ brew services start postgresql
+
+#### Ensure `./node_modules/.bin` is in your path
+
+Test to see if you have this setup
+```sh
+echo $PATH | grep './node_modules/.bin'
 ```
-#### Add Knex and Nodemon to the Command Line
 
-You can do one of two things: install nodemon and knex globally, which will automatically add both tools to your path, or add ./node_modules/.bin to your path (recommended). Depending on your shell, you will either need to add the following line to .zshrc or .bashrc:
-
-> export PATH=$HOME/bin:/usr/local/bin:**./node_modules/.bin**:$PATH
+If you don't, do this:
+```sh
+# Add this line to your ~/.bash_profile
+export PATH="./node_modules/.bin:$PATH"
+```
 
 #### Create and Migrate the Database
 
-```
-$ createdb trossello-development
-$ knex migrate:latest
+```sh
+createdb trossello-test
+createdb trossello-development
+knex migrate:latest
 ```
 #### Run the Server!
 
-At this point, you should be able to run 'npm start' without errors. If you get an error, make sure that you can run nodemon, knex, and psql from the command line. If any of them fail, make sure to install them and try again.
+At this point, you should be able to run 'npm start' without errors.
+
+
+#### Running Tests
+
+Ensure `npm start` is running before you run `npm test` to run the mocha tests
+
+#### Submitting a pull request
+
+Rebase your branch off of the latest `upstream/master` before submitting your pull request
+
+```sh
+git commit ... // commit all your changes
+git fetch upstream
+git rebase upstream/master
+// resolve any conflicts
+npm install
+npm test
+git push -f origin HEAD
+```
 
 ## Architecture
 
@@ -78,16 +106,14 @@ At this point, you should be able to run 'npm start' without errors. If you get 
 - Express
 - Webpack
 - Babel es2016
-- React
-- Redux
 - SQL via Knex
+- React
+- SASS
 
 
 ### Persistence
 
-I think we should do this with `postgresql` and `pg-promise` because thats what they know.
-
-we can make make live update work by polling for the entire board data. that would never scale but its simple.
+We're using `knex` to generate our SQL
 
 #### HTTP API
 
@@ -107,9 +133,6 @@ we can make make live update work by polling for the entire board data. that wou
 
 ### Contributors
 
-Ask Contributors any questions about this project!
-
-Week 1:
 - [deadlyicon](https://github.com/deadlyicon)
 - [EthanJStark](https://github.com/EthanJStark)
 - [Farhad33](https://github.com/Farhad33)
@@ -118,13 +141,7 @@ Week 1:
 - [Moniarchy](https://github.com/Moniarchy)
 - [GeneralMeow](https://github.com/GeneralMeow)
 - [harmanLearns](https://github.com/harmanLearns)
-
-Week 2:
-- [deadlyicon](https://github.com/deadlyicon)
-- [EthanJStark](https://github.com/EthanJStark)
-- [tjfwalker](https://github.com/tjfwalker)
 - [Arayi](https://github.com/Arayi)
 - [jason00111](https://github.com/jason00111)
 - [ASantos3026](https://github.com/ASantos3026)
 - [salmonax](https://github.com/salmonax)
-- [harmanLearns](https://github.com/harmanLearns)
