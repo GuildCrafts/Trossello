@@ -26,6 +26,23 @@ const deleteRecord = (table, id) =>
     .where('id', id)
     .del()
 
+const archiveRecord = (table, id) =>
+  knex
+    .table(table)
+    .where('id', id)
+    .update({
+      archived: true,
+    })
+
+const unarchiveRecord = (table, id) =>
+  knex
+    .table(table)
+    .where('id', id)
+    .update({
+      archived: false,
+    })
+
+
 //
 
 const findOrCreateUserFromGithubProfile = (githubProfile) => {
@@ -82,6 +99,25 @@ const updateCard = (id, attributes) =>
 const deleteCard = (id) =>
   deleteRecord('cards', id)
 
+const archiveCard = (id) =>
+  archiveRecord('cards', id)
+
+const unarchiveCard = (id) =>
+  unarchiveRecord('cards', id)
+
+const archiveList = (id) =>
+  archiveRecord('lists', id)
+
+const unarchiveList = (id) =>
+  unarchiveRecord('lists', id)
+
+const archiveBoard = (id) =>
+  archiveRecord('boards', id)
+
+const unarchiveBoard = (id) =>
+  unarchiveRecord('boards', id)
+
+
 //
 
 const createBoard = (userId, attributes) =>{
@@ -90,6 +126,7 @@ const createBoard = (userId, attributes) =>{
     let attrs = {
       user_id: userId,
       board_id: board.id,
+      archived: false,
     }
     return createRecord('user_boards', attrs).then(() => board)
   })
@@ -121,4 +158,10 @@ export default {
   createBoard,
   updateBoard,
   deleteBoard,
+  archiveCard,
+  unarchiveCard,
+  archiveList,
+  unarchiveList,
+  archiveBoard,
+  unarchiveBoard
 }

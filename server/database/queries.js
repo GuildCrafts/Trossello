@@ -17,7 +17,9 @@ const getBoardsByUserId = (userId) =>
   knex.table('boards')
     .select('boards.*')
     .join('user_boards', 'boards.id', '=', 'user_boards.board_id')
-    .where('user_boards.user_id', userId)
+    .whereIn('user_boards.user_id', userId)
+    .where('archived', false)
+
 
 const getBoardById = (id) =>
   getRecordById('boards', id).then(getListsAndCardsForBoard)
@@ -26,7 +28,10 @@ const getListsAndCardsForBoard = (board) => {
   if (!board) return Promise.resolve(board)
   return knex.table('lists')
     .select('*')
-    .where('board_id', board.id)
+    .where({
+      board_id: board.id,
+      archived: false
+    })
     .orderBy('id', 'asc')
     .then(lists => {
       board.lists = lists
@@ -34,6 +39,7 @@ const getListsAndCardsForBoard = (board) => {
       return knex.table('cards')
         .select('*')
         .whereIn('list_id', listIds)
+        .where('archived', false)
         .orderBy('id', 'asc')
         .then(cards => {
           board.cards = cards

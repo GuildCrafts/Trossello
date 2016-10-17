@@ -13,7 +13,7 @@ router.post('/:listId', (request, response, next) => {
 
 // DELETE
 router.post('/:listId/delete', (request, response, next) => {
-  commands.deleteList(request.params.listId)
+  commands.archiveList(request.params.listId)
     .then(() => {
       response.json(null)
     })
