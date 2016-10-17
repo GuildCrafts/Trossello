@@ -126,6 +126,7 @@ const createBoard = (userId, attributes) =>{
     let attrs = {
       user_id: userId,
       board_id: board.id,
+      archived: false
     }
     return createRecord('user_boards', attrs).then(() => board)
   })
@@ -157,4 +158,10 @@ export default {
   createBoard,
   updateBoard,
   deleteBoard,
+  archiveCard,
+  unarchiveCard,
+  archiveList,
+  unarchiveList,
+  archiveBoard,
+  unarchiveBoard
 }
