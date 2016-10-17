@@ -12,6 +12,7 @@ router.get('/', (request, response, next) => {
 // CREATE
 router.post('/', (request, response, next) => {
   commands.createBoard(request.session.userId, request.body).then( board => {
+    // console.log('this is what we want ->', request.body)
     response.json(board)
   }).catch(next)
 })

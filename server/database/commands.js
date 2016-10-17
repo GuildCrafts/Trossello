@@ -42,8 +42,21 @@ const unarchiveRecord = (table, id) =>
       archived: false,
     })
 
+const archiveListItems = (id) =>
+  knex
+    .table('cards')
+    .where('list_id', id)
+    .update({
+      archived: true,
+    })
 
-//
+const unarchiveListItems = (id) =>
+  knex
+    .table('cards')
+    .where('list_id', id)
+    .update({
+      archived: false,
+    })
 
 const findOrCreateUserFromGithubProfile = (githubProfile) => {
   const github_id = githubProfile.id
@@ -106,10 +119,20 @@ const unarchiveCard = (id) =>
   unarchiveRecord('cards', id)
 
 const archiveList = (id) =>
-  archiveRecord('lists', id)
+  Promise.all([
+    archiveListItems(id),
+    archiveRecord('lists', id)
+  ])
+
+
+// const archiveListItems = (id) =>
+//   archiveListItems(id)
 
 const unarchiveList = (id) =>
-  unarchiveRecord('lists', id)
+  Promise.all([
+    unarchiveRecord('lists', id),
+    unarchiveListItems(id)
+  ])
 
 const archiveBoard = (id) =>
   archiveRecord('boards', id)
@@ -162,5 +185,5 @@ export default {
   archiveList,
   unarchiveList,
   archiveBoard,
-  unarchiveBoard
+  unarchiveBoard,
 }
