@@ -126,7 +126,7 @@ const createBoard = (userId, attributes) =>{
     let attrs = {
       user_id: userId,
       board_id: board.id,
-      archived: false
+      archived: false,
     }
     return createRecord('user_boards', attrs).then(() => board)
   })
