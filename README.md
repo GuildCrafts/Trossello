@@ -1,16 +1,15 @@
-# Trossello
+# Trossello #divergent-mockingbird
 
-Open Source Trello Clone
+## Specs
 
-[![CircleCI](https://circleci.com/gh/GuildCrafts/Trossello/tree/master.svg?style=svg)](https://circleci.com/gh/GuildCrafts/Trossello/tree/master)
+- [ ] As a logged in user I can edit a card
+- [ ] As a logged in user I can search all of my cards via the navbar search field
+- [ ] As a logged in user I can only archive lists and cards (instead of deleting) so they can be unarchived later if need be
+- [ ] Create board background color picker
 
-## Contributing
+## Quality Rubric
 
-1. Fork this repository
-2. Take a ticket from the [trello board](https://trello.com/b/QIKeSwK0/trossello-oss-trello)
-3. Cut a topic branch
-4. Finish the ticket
-5. Submit a pull request
+- [ ] Quality Rubric can be found in the master Trosello Repo under contribution guidelines. 
 
 ### Development Setup
 
