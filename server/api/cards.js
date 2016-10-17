@@ -19,7 +19,7 @@ router.post('/:cardId', (request, response, next) => {
 
 // DELETE
 router.post('/:cardId/delete', (request, response, next) => {
-  commands.deleteCard(request.params.cardId)
+  commands.archiveCard(request.params.cardId)
     .then(() => {
       response.json(null)
     })
