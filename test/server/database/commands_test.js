@@ -190,6 +190,22 @@ describe('database.commands', () => {
     })
   })
 
+  describe('archiveCard', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should archive a card by card id', () => {
+        return queries.getCardById(83).then( card => {
+          expect(card).to.be.a('object')
+          expect(card.id).to.eql(83)
+          return commands.archiveCard(83).then( () => {
+            return queries.getCardById(83).then( card => {
+              expect(card).to.be.undefined
+            })
+          })
+        })
+      })
+    })
+  })
+
   describe('createBoard', () => {
     it('should create a new board entry in db, and associate it with a user', () => {
       return commands.createBoard(15, {name: "My Board"})

@@ -26,7 +26,37 @@ const deleteRecord = (table, id) =>
     .where('id', id)
     .del()
 
-//
+const archiveRecord = (table, id) =>
+  knex
+    .table(table)
+    .where('id', id)
+    .update({
+      archived: true,
+    })
+
+const unarchiveRecord = (table, id) =>
+  knex
+    .table(table)
+    .where('id', id)
+    .update({
+      archived: false,
+    })
+
+const archiveListItems = (id) =>
+  knex
+    .table('cards')
+    .where('list_id', id)
+    .update({
+      archived: true,
+    })
+
+const unarchiveListItems = (id) =>
+  knex
+    .table('cards')
+    .where('list_id', id)
+    .update({
+      archived: false,
+    })
 
 const findOrCreateUserFromGithubProfile = (githubProfile) => {
   const github_id = githubProfile.id
@@ -82,7 +112,29 @@ const updateCard = (id, attributes) =>
 const deleteCard = (id) =>
   deleteRecord('cards', id)
 
-//
+const archiveCard = (id) =>
+  archiveRecord('cards', id)
+
+const unarchiveCard = (id) =>
+  unarchiveRecord('cards', id)
+
+const archiveList = (id) =>
+  Promise.all([
+    archiveListItems(id),
+    archiveRecord('lists', id)
+  ])
+
+const unarchiveList = (id) =>
+  Promise.all([
+    unarchiveRecord('lists', id),
+    unarchiveListItems(id)
+  ])
+
+const archiveBoard = (id) =>
+  archiveRecord('boards', id)
+
+const unarchiveBoard = (id) =>
+  unarchiveRecord('boards', id)
 
 const createBoard = (userId, attributes) =>{
   if (!attributes.background_color) delete attributes.background_color
@@ -121,4 +173,10 @@ export default {
   createBoard,
   updateBoard,
   deleteBoard,
+  archiveCard,
+  unarchiveCard,
+  archiveList,
+  unarchiveList,
+  archiveBoard,
+  unarchiveBoard,
 }
