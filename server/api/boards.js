@@ -18,8 +18,12 @@ router.post('/', (request, response, next) => {
 
 // SHOW
 router.get('/:boardId', (request, response, next ) => {
-  queries.getBoardById(request.params.boardId).then( board => {
+  const {boardId} = request.params
+  queries.getBoardById(boardId).then( board => {
     if (board){
+      if(request.query.download === '1'){
+        response.attachment(`board${boardId}.json`)
+      }
       response.json(board)
     }else{
       response.status(404).json(null)

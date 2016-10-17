@@ -127,6 +127,18 @@ describe('/api/boards', () => {
               expect(response.body.background_color).to.eql('orange')
             })
           })
+          context('when download=1', () => {
+            it('should set the xheader', () => {
+              return request('get', '/api/boards/1?download=1').then(response => {                expect(response).to.have.status(200)
+                expect(response).to.have.header('Content-Disposition', 'attachment; filename="board1.json"');
+                expect(response).to.have.header('Content-Type', 'application/json; charset=utf-8');
+                expect(response.body.id).to.eql(1)
+                expect(response.body.name).to.eql('Board1')
+                expect(response.body.background_color).to.eql('orange')
+              })
+            })
+          })
+
         })
 
         // SHOW
