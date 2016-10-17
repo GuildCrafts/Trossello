@@ -12,7 +12,6 @@ router.get('/', (request, response, next) => {
 // CREATE
 router.post('/', (request, response, next) => {
   commands.createBoard(request.session.userId, request.body).then( board => {
-    // console.log('this is what we want ->', request.body)
     response.json(board)
   }).catch(next)
 })
@@ -38,7 +37,7 @@ router.post('/:boardId', (request, response, next) => {
 })
 
 // DELETE
-router.post('/:boardId/delete', (request, response, next) => {
+router.post('/:boardId/archive', (request, response, next) => {
   const boardId = request.params.boardId
   commands.archiveBoard(boardId).then( numberOfDeletions => {
     if (numberOfDeletions > 0) {

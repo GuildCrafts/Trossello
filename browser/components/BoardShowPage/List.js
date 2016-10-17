@@ -192,7 +192,7 @@ const deleteRecord = (event, resource, id) => {
   event.preventDefault()
   $.ajax({
     method: "POST",
-    url: `/api/${resource}/${id}/delete`
+    url: `/api/${resource}/${id}/archive`
   }).then(() => {
     boardStore.reload()
   })

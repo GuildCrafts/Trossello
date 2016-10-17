@@ -124,10 +124,6 @@ const archiveList = (id) =>
     archiveRecord('lists', id)
   ])
 
-
-// const archiveListItems = (id) =>
-//   archiveListItems(id)
-
 const unarchiveList = (id) =>
   Promise.all([
     unarchiveRecord('lists', id),
@@ -139,9 +135,6 @@ const archiveBoard = (id) =>
 
 const unarchiveBoard = (id) =>
   unarchiveRecord('boards', id)
-
-
-//
 
 const createBoard = (userId, attributes) =>{
   if (!attributes.background_color) delete attributes.background_color
