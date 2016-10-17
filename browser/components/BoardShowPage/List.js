@@ -184,7 +184,7 @@ const Card = ({ card }) => {
 const DeleteButton = (props) => {
   const className = `BoardShowPage-DeleteButton ${props.className||''}`
   return <Link className={className} onClick={props.onClick}>
-    <Icon type="trash" />
+    <Icon type="archive" />
   </Link>
 }
 
