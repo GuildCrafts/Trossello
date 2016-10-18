@@ -154,10 +154,10 @@ describe('/api/boards', () => {
           })
         })
 
-        // DELETE
-        describe('POST /api/boards/<existing board id>/delete', () => {
-          it('should delete a board and render status 200', () => {
-            return request('post', '/api/boards/2/delete')
+        // ARCHIVE
+        describe('POST /api/boards/<existing board id>/archive', () => {
+          it('should archive a board and render status 200', () => {
+            return request('post', '/api/boards/2/archive')
               .then(response => {
                 expect(response).to.have.status(200)
               })
@@ -168,10 +168,10 @@ describe('/api/boards', () => {
           })
         })
 
-        // DELETE
-        describe('POST /api/boards/<non-existant board id>/delete', () => {
+        // ARCHIVE
+        describe('POST /api/boards/<non-existant board id>/archive', () => {
           it('should return a null JSON object and a 404 error', () => {
-            return request('post', '/api/boards/52/delete').then(response => {
+            return request('post', '/api/boards/52/archive').then(response => {
               expect(response).to.have.status(404)
             })
           })

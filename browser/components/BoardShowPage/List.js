@@ -144,7 +144,10 @@ class NewCardForm extends Component {
   createCard() {
     const content = {
       content: this.refs.content.value,
+<<<<<<< HEAD
+=======
       archived: false
+>>>>>>> master
     }
     if (content.content.replace(/\s+/g,'') === '') return
     this.refs.content.value = ""
