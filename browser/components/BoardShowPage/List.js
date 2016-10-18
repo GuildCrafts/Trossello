@@ -5,13 +5,14 @@ import Icon from '../Icon'
 import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
+import Card from './Card'
 
 export default class List extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      creatingCard: false
+      creatingCard: false,
     }
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
@@ -84,7 +85,7 @@ export default class List extends Component {
   render(){
     const { board, list, cards } = this.props
     const cardNodes = cards.map(card => {
-      return <Card key={card.id} card={card} />
+      return <Card key={card.id} card={card} onClick={Card.editingCard} />
     })
 
     let newCardForm, newCardLink
@@ -167,17 +168,6 @@ class NewCardForm extends Component {
       </div>
     </Form>
   }
-}
-
-const Card = ({ card }) => {
-  const dragStart = event => {
-    event.dataTransfer.setData("text", card.id)
-  }
-
-  return <div className="BoardShowPage-Card" draggable="true" onDragStart={dragStart} id={card.id}>
-    <pre>{card.content}</pre>
-    <DeleteCardButton card={card} />
-  </div>
 }
 
 const DeleteButton = (props) => {

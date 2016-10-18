@@ -8,6 +8,7 @@ import boardStore from '../stores/boardStore'
 import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
 import List from './BoardShowPage/List'
 import NewListForm from './BoardShowPage/NewListForm'
+import Card from './BoardShowPage/Card'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -88,4 +89,3 @@ class BoardShowPage extends React.Component {
     </Layout>
   }
 }
-
