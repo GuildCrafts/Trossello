@@ -46,15 +46,18 @@ class Open extends Component {
   createList(event){
     event.preventDefault()
     const { board, onCreateList } = this.props
-    const name = this.refs.name.value
-    if (name.replace(/\s+/g,'') === '') return
+    const newList = {
+      name: this.refs.name.value,
+      archived: false
+    }
+    if (newList.name.replace(/\s+/g,'') === '') return
     this.refs.name.value = ''
     $.ajax({
       method: "post",
       url: `/api/boards/${board.id}/lists`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      data: JSON.stringify({name}),
+      data: JSON.stringify(newList),
     }).then(() => {
       boardStore.reload()
       this.props.afterCreate()

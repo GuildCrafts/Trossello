@@ -37,9 +37,9 @@ router.post('/:boardId', (request, response, next) => {
 })
 
 // DELETE
-router.post('/:boardId/delete', (request, response, next) => {
+router.post('/:boardId/archive', (request, response, next) => {
   const boardId = request.params.boardId
-  commands.deleteBoard(boardId).then( numberOfDeletions => {
+  commands.archiveBoard(boardId).then( numberOfDeletions => {
     if (numberOfDeletions > 0) {
       response.status(200).json(null)
     }else{

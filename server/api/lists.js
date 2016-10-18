@@ -12,8 +12,8 @@ router.post('/:listId', (request, response, next) => {
 })
 
 // DELETE
-router.post('/:listId/delete', (request, response, next) => {
-  commands.deleteList(request.params.listId)
+router.post('/:listId/archive', (request, response, next) => {
+  commands.archiveList(request.params.listId)
     .then(() => {
       response.json(null)
     })

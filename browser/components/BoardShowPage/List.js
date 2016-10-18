@@ -55,7 +55,7 @@ export default class List extends Component {
       url: `/api/boards/${board.id}/lists/${list.id}/cards`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      data: JSON.stringify({content}),
+      data: JSON.stringify(content),
     }).then(() => {
       boardStore.reload()
     })
@@ -142,8 +142,14 @@ class NewCardForm extends Component {
   }
 
   createCard() {
-    const content = this.refs.content.value
-    if (content.replace(/\s+/g,'') === '') return
+    const content = {
+      content: this.refs.content.value,
+<<<<<<< HEAD
+=======
+      archived: false
+>>>>>>> master
+    }
+    if (content.content.replace(/\s+/g,'') === '') return
     this.refs.content.value = ""
     this.refs.content.style.height = 'auto'
     this.props.createCard(content)
@@ -181,7 +187,7 @@ const Card = ({ card }) => {
 const DeleteButton = (props) => {
   const className = `BoardShowPage-DeleteButton ${props.className||''}`
   return <Link className={className} onClick={props.onClick}>
-    <Icon type="trash" />
+    <Icon type="archive" />
   </Link>
 }
 
@@ -189,7 +195,7 @@ const deleteRecord = (event, resource, id) => {
   event.preventDefault()
   $.ajax({
     method: "POST",
-    url: `/api/${resource}/${id}/delete`
+    url: `/api/${resource}/${id}/archive`
   }).then(() => {
     boardStore.reload()
   })
