@@ -207,6 +207,7 @@ describe('database.commands', () => {
     })
   })
 
+<<<<<<< HEAD
   describe('createList', () => {
     beforeEach(() =>
       commands.createBoard(1455, {
@@ -263,6 +264,20 @@ describe('database.commands', () => {
           .then( list => {
             expect(list).to.be.undefined
           })
+=======
+  describe('archiveBoard', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should archive a board by board id', () => {
+        return queries.getBoardById(1).then( board => {
+          expect(board).to.be.a('object')
+          expect(board.id).to.eql(1)
+          return commands.archiveBoard(1).then( () => {
+            return queries.getBoardById(1).then( board => {
+              expect(board.archived).to.eql(true)
+            })
+          })
+        })
+>>>>>>> master
       })
     })
   })
