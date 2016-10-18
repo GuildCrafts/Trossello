@@ -20,14 +20,12 @@ exports.up = (knex, Promise) => {
     knex.schema.createTable('boards', (table) => {
       table.increments('id').primary()
       table.string('name')
-      table.boolean('archived')
     }),
 
     knex.schema.createTable('lists', (table) => {
       table.increments('id').primary()
       table.integer('board_id') //.references('id').inTable('boards')
       table.string('name')
-      table.boolean('archived')
     }),
 
     knex.schema.createTable('cards', (table) => {
@@ -35,8 +33,6 @@ exports.up = (knex, Promise) => {
       table.integer('board_id') //.references('id').inTable('boards')
       table.integer('list_id') //.references('id').inTable('lists')
       table.string('content')
-      table.boolean('archived')
-
     }),
 
   ])

@@ -104,10 +104,8 @@ const createCard = (attributes) => {
   return createRecord('cards', attributes)
 }
 
-
 const updateCard = (id, attributes) =>
   updateRecord('cards', id, attributes)
-
 
 const deleteCard = (id) =>
   deleteRecord('cards', id)
