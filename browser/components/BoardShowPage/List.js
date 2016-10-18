@@ -5,13 +5,15 @@ import Icon from '../Icon'
 import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
+import Card from './Card'
+import ArchiveButton from './ArchiveButton'
 
 export default class List extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      creatingCard: false
+      creatingCard: false,
     }
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
@@ -55,7 +57,7 @@ export default class List extends Component {
       url: `/api/boards/${board.id}/lists/${list.id}/cards`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      data: JSON.stringify({content}),
+      data: JSON.stringify(content),
     }).then(() => {
       boardStore.reload()
     })
@@ -100,7 +102,7 @@ export default class List extends Component {
     return <div ref="root" className="BoardShowPage-List" onDrop={this.onDrop} onDragOver={this.onDragOver}>
       <div className="BoardShowPage-ListHeader">
         {list.name}
-        <DeleteListButton list={list} />
+        <ArchiveListButton list={list} />
       </div>
       <div ref="cards" className="BoardShowPage-cards">
         {cardNodes}
@@ -141,9 +143,12 @@ class NewCardForm extends Component {
     autosize(this.refs.content)
   }
 
-  createCard() {
-    const content = this.refs.content.value
-    if (content.replace(/\s+/g,'') === '') return
+  createCard(event) {
+    event.preventDefault()
+    const content = {
+      content: this.refs.content.value,
+    }
+    if (content.content.replace(/\s+/g,'') === '') return
     this.refs.content.value = ""
     this.refs.content.style.height = 'auto'
     this.props.createCard(content)
@@ -167,52 +172,23 @@ class NewCardForm extends Component {
   }
 }
 
-const Card = ({ card }) => {
-  const dragStart = event => {
-    event.dataTransfer.setData("text", card.id)
-  }
-
-  return <div className="BoardShowPage-Card" draggable="true" onDragStart={dragStart} id={card.id}>
-    <pre>{card.content}</pre>
-    <DeleteCardButton card={card} />
-  </div>
-}
-
-const DeleteButton = (props) => {
-  const className = `BoardShowPage-DeleteButton ${props.className||''}`
-  return <Link className={className} onClick={props.onClick}>
-    <Icon type="trash" />
-  </Link>
-}
 
 const deleteRecord = (event, resource, id) => {
-  event.preventDefault()
-  $.ajax({
-    method: "POST",
-    url: `/api/${resource}/${id}/delete`
-  }).then(() => {
-    boardStore.reload()
-  })
+
 }
 
-const DeleteListButton = (props) => {
-  const className = `BoardShowPage-DeleteListButton ${props.className||''}`
+const ArchiveListButton = (props) => {
+  const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
   const onClick = (event) => {
-    deleteRecord(event, 'lists', props.list.id)
+    event.preventDefault()
+    $.ajax({
+      method: "POST",
+      url: `/api/lists/${props.list.id}/archive`
+    }).then(() => {
+      boardStore.reload()
+    })
   }
-  return <DeleteButton
-    onClick={onClick}
-    className={className}
-    {...props}
-  />
-}
-
-const DeleteCardButton = (props) => {
-  const className = `BoardShowPage-DeleteCardButton ${props.className||''}`
-  const onClick = (event) => {
-    deleteRecord(event, 'cards', props.card.id)
-  }
-  return <DeleteButton
+  return <ArchiveButton
     onClick={onClick}
     className={className}
     {...props}

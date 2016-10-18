@@ -135,6 +135,7 @@ describe('database.commands', () => {
           expect(card.id).to.be.a('number')
           expect(card.list_id).to.eql(88)
           expect(card.content).to.eql('wash your face')
+          expect(card.archived).to.eql(false)
         })
         .then(() => knex.table('cards').count())
         .then((results) => {
@@ -190,9 +191,101 @@ describe('database.commands', () => {
     })
   })
 
+  describe('archiveCard', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should archive a card by card id', () => {
+        return queries.getCardById(83).then( card => {
+          expect(card).to.be.a('object')
+          expect(card.id).to.eql(83)
+          return commands.archiveCard(83).then( () => {
+            return queries.getCardById(83).then( card => {
+              expect(card.archived).to.eql(true)
+            })
+          })
+        })
+      })
+    })
+  })
+
+  describe('createList', () => {
+    beforeEach(() =>
+      commands.createBoard(1455, {
+        id: 83,
+        name: 'Things To Eat',
+        background_color: 'orange',
+      })
+    )
+    it('should create a new list for the given board', () => {
+      const attributes = {
+        board_id: 83,
+        name: "Fried Foods"
+      }
+      return commands.createList(attributes)
+        .then(list => {
+          expect(list.name).to.eql("Fried Foods")
+          expect(list.board_id).to.eql(83)
+          expect(list.archived).to.eql(false)
+          return queries.getBoardById(83).then(board => {
+            expect(board.lists.length).to.eql(1)
+            expect(board.lists[0].name).to.eql("Fried Foods")
+            expect(board.lists[0].board_id).to.eql(83)
+            expect(board.lists[0].archived).to.eql(false)
+          })
+        })
+    })
+  })
+
+  describe('updateList', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should update a list with given attributes', () => {
+        const newAttributes = {
+          name: "NewListName"
+        }
+        return commands.updateList(40, newAttributes)
+          .then( list => {
+            expect(list.id).to.eql(40)
+            expect(list.name).to.eql('NewListName')
+          })
+      })
+    })
+  })
+
+  describe('deleteList', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should delete a board by board id', () => {
+        return queries.getListById(40)
+          .then(list => {
+            expect(list.id).to.eql(40)
+            expect(list.name).to.eql('List1')
+            return commands.deleteList(40)
+          })
+          .then( () => queries.getListById(40) )
+          .then( list => {
+            expect(list).to.be.undefined
+          })
+      })
+    })
+  })
+
+  describe('archiveList', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should archive a board by board id', () => {
+        return queries.getListById(40).then( list => {
+          expect(list).to.be.a('object')
+          expect(list.id).to.eql(40)
+          return commands.archiveList(40).then( () => {
+            return queries.getListById(40).then( list => {
+              expect(list.archived).to.eql(true)
+            })
+          })
+        })
+      })
+    })
+  })
+
   describe('createBoard', () => {
     it('should create a new board entry in db, and associate it with a user', () => {
-      return commands.createBoard(15, {name: "My Board"})
+      return commands.createBoard(15, {name: "My Board", archived: false,})
         .then(board => {
           expect(board.name).to.eql("My Board")
           expect(board.background_color).to.eql("#0079bf")
@@ -202,6 +295,7 @@ describe('database.commands', () => {
             expect(boards[0].id).to.eql(board.id)
             expect(boards[0].name).to.eql("My Board")
             expect(boards[0].background_color).to.eql("#0079bf")
+            expect(boards[0].archived).to.eql(false)
           })
         })
     })
@@ -229,6 +323,22 @@ describe('database.commands', () => {
         .then( () => {
           return queries.getBoardById(1).then( board => {
             expect(board).to.be.undefined
+          })
+        })
+      })
+    })
+  })
+
+  describe('archiveBoard', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should archive a board by board id', () => {
+        return queries.getBoardById(1).then( board => {
+          expect(board).to.be.a('object')
+          expect(board.id).to.eql(1)
+          return commands.archiveBoard(1).then( () => {
+            return queries.getBoardById(1).then( board => {
+              expect(board.archived).to.eql(true)
+            })
           })
         })
       })

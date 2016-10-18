@@ -26,6 +26,7 @@ class CreateBoardPopover extends Component {
     const board = {
       name: this.refs.name.value,
       background_color: this.refs.color.value,
+      archived: false
     }
     if (board.name.replace(/\s+/g,'') === '') return
     $.ajax({

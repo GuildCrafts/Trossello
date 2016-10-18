@@ -88,4 +88,3 @@ class BoardShowPage extends React.Component {
     </Layout>
   }
 }
-

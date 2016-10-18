@@ -37,9 +37,9 @@ router.post('/:boardId', (request, response, next) => {
 })
 
 // DELETE
-router.post('/:boardId/delete', (request, response, next) => {
+router.post('/:boardId/archive', (request, response, next) => {
   const boardId = request.params.boardId
-  commands.deleteBoard(boardId).then( numberOfDeletions => {
+  commands.archiveBoard(boardId).then( numberOfDeletions => {
     if (numberOfDeletions > 0) {
       response.status(200).json(null)
     }else{
@@ -67,6 +67,19 @@ router.post('/:boardId/lists/:listId/cards', (request, response, next) => {
   card.board_id = boardId
   card.list_id = listId
   commands.createCard(card)
+    .then( card => {
+      response.json(card)
+    })
+    .catch(next)
+})
+
+// EDIT CARD
+router.post('/:boardId/lists/:listId/cards/edit', (request, response, next) => {
+  const card = request.body
+  const { boardId, listId } = request.params
+  card.board_id = boardId
+  card.list_id = listId
+  commands.editCard(card)
     .then( card => {
       response.json(card)
     })
