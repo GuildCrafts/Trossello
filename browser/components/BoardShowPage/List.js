@@ -6,6 +6,7 @@ import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
 import Card from './Card'
+import ArchiveButton from './ArchiveButton'
 
 export default class List extends Component {
 
@@ -85,9 +86,9 @@ export default class List extends Component {
   render(){
     const { board, list, cards } = this.props
     const cardNodes = cards.map(card => {
-      return <Card key={card.id} card={card} onClick={Card.editingCard} />
+      return <Card key={card.id} card={card} />
     })
-    
+
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
       newCardForm = <NewCardForm
@@ -101,7 +102,7 @@ export default class List extends Component {
     return <div ref="root" className="BoardShowPage-List" onDrop={this.onDrop} onDragOver={this.onDragOver}>
       <div className="BoardShowPage-ListHeader">
         {list.name}
-        <DeleteListButton list={list} />
+        <ArchiveListButton list={list} />
       </div>
       <div ref="cards" className="BoardShowPage-cards">
         {cardNodes}
@@ -142,7 +143,8 @@ class NewCardForm extends Component {
     autosize(this.refs.content)
   }
 
-  createCard() {
+  createCard(event) {
+    event.preventDefault()
     const content = {
       content: this.refs.content.value,
     }
@@ -170,41 +172,23 @@ class NewCardForm extends Component {
   }
 }
 
-const DeleteButton = (props) => {
-  const className = `BoardShowPage-DeleteButton ${props.className||''}`
-  return <Link className={className} onClick={props.onClick}>
-    <Icon type="archive" />
-  </Link>
-}
 
 const deleteRecord = (event, resource, id) => {
-  event.preventDefault()
-  $.ajax({
-    method: "POST",
-    url: `/api/${resource}/${id}/archive`
-  }).then(() => {
-    boardStore.reload()
-  })
+
 }
 
-const DeleteListButton = (props) => {
-  const className = `BoardShowPage-DeleteListButton ${props.className||''}`
+const ArchiveListButton = (props) => {
+  const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
   const onClick = (event) => {
-    deleteRecord(event, 'lists', props.list.id)
+    event.preventDefault()
+    $.ajax({
+      method: "POST",
+      url: `/api/lists/${props.list.id}/archive`
+    }).then(() => {
+      boardStore.reload()
+    })
   }
-  return <DeleteButton
-    onClick={onClick}
-    className={className}
-    {...props}
-  />
-}
-
-const DeleteCardButton = (props) => {
-  const className = `BoardShowPage-DeleteCardButton ${props.className||''}`
-  const onClick = (event) => {
-    deleteRecord(event, 'cards', props.card.id)
-  }
-  return <DeleteButton
+  return <ArchiveButton
     onClick={onClick}
     className={className}
     {...props}
