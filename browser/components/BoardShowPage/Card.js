@@ -37,19 +37,20 @@ export default class Card extends Component {
   }
 
   render() {
-    const { board, list, card } = this.props
+    const { card } = this.props
     if (this.state.editingCard) {
       return <EditCardForm
-      editCard={this.editCard}
-      onCancel={this.cancelEditingCard}
+        editCard={this.editCard}
+        onCancel={this.cancelEditingCard}
       />
     } else {
       const dragStart = event => {
         event.dataTransfer.setData("text", card.id)
       }
+      console.log(typeof <DeleteCardButton />)
       return <div className="BoardShowPage-Card" draggable="true" onDragStart={dragStart} id={card.id}>
-      <pre>{card.content}</pre>
-      <DeleteCardButton card={card}></DeleteCardButton>
+        <pre>{card.content}</pre>
+        <DeleteCardButton card={card}></DeleteCardButton>
       </div>
     }
   }

@@ -87,7 +87,7 @@ export default class List extends Component {
     const cardNodes = cards.map(card => {
       return <Card key={card.id} card={card} onClick={Card.editingCard} />
     })
-
+    
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
       newCardForm = <NewCardForm
