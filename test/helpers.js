@@ -30,49 +30,41 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
           id: 1,
           name: 'Board1',
           background_color: 'orange',
-          archived: false,
         }),
         commands.createBoard(1455, {
           id: 2,
           name: 'Board2',
           background_color: 'purple',
-          archived: false,
         }),
         commands.createList({
           id: 40,
           board_id: 1,
           name: 'List1',
-          archived: false,
         }),
         commands.createList({
           id: 41,
           board_id: 1,
           name: 'List2',
-          archived: false,
         }),
         commands.createCard({
           id: 80,
           list_id: 40,
           content: 'card1',
-          archived: false,
         }),
         commands.createCard({
           id: 81,
           list_id: 40,
           content: 'Card2',
-          archived: false,
         }),
         commands.createCard({
           id: 82,
           list_id: 41,
           content: 'card3',
-          archived: false,
         }),
         commands.createCard({
           id: 83,
           list_id: 41,
           content: 'Card4',
-          archived: false,
         }),
       ])
     })
