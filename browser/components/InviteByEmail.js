@@ -12,16 +12,14 @@ class InviteByEmail extends Component {
   }
 
   onSubmit(){
-    alert('this worked')
+    alert('this works!!!')
   }
 
-
   render() {
-    return <div class="InviteByEmailForm">
+    return <div>
       <input type="email" placeholder="john.doe@example.com" />
-      <input type="submit" value="Invite" />
-    </div>  
-
+      <input type="submit" onClick={this.onSubmit} value="Invite"/>
+    </div>
   }
 }
 

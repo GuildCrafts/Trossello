@@ -8,7 +8,7 @@ import boardStore from '../stores/boardStore'
 import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
 import List from './BoardShowPage/List'
 import NewListForm from './BoardShowPage/NewListForm'
-import InviteByEmailButton from './InviteForm'
+import InviteByEmailButton from './InviteByEmailButton'
 
 class BoardProvider extends Component {
   constructor(props){
