@@ -16,7 +16,7 @@ export default class DeleteBoardButton extends Component {
   onClick(event){
     $.ajax({
       method: "POST",
-      url: `/api/boards/${this.props.boardId}/delete`,
+      url: `/api/boards/${this.props.boardId}/archive`,
     }).then( () => {
       this.context.redirectTo('/')
       boardsStore.reload()
@@ -25,8 +25,7 @@ export default class DeleteBoardButton extends Component {
 
   render(){
     return <button className="BoardShowPage-button BoardShowPage-DeleteBoardButton" onClick={this.onClick}>
-      Delete
+      Archive
     </button>
   }
 }
-
