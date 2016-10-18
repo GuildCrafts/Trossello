@@ -79,16 +79,17 @@ describe('database.queries', () => {
           expect(board).to.eql({
             id: 1,
             name: 'Board1',
+            archived: false,
             background_color: 'orange',
             lists:[
-              { id: 40, board_id: 1, name: 'List1' },
-              { id: 41, board_id: 1, name: 'List2' },
+              { id: 40, board_id: 1, name: 'List1', archived: false, },
+              { id: 41, board_id: 1, name: 'List2', archived: false, },
             ],
             cards: [
-              { id: 80, board_id: null, list_id: 40, content: 'card1' },
-              { id: 81, board_id: null, list_id: 40, content: 'Card2' },
-              { id: 82, board_id: null, list_id: 41, content: 'card3' },
-              { id: 83, board_id: null, list_id: 41, content: 'Card4' },
+              { id: 80, board_id: null, list_id: 40, content: 'card1', archived: false, },
+              { id: 81, board_id: null, list_id: 40, content: 'Card2', archived: false, },
+              { id: 82, board_id: null, list_id: 41, content: 'card3', archived: false, },
+              { id: 83, board_id: null, list_id: 41, content: 'Card4', archived: false, },
             ],
           })
         })
@@ -103,7 +104,8 @@ describe('database.queries', () => {
           expect(board).to.eql({
             id: 40,
             board_id: 1,
-            name: 'List1'
+            name: 'List1',
+            archived: false,
           })
         })
       })
@@ -119,7 +121,8 @@ describe('database.queries', () => {
             id: 80,
             list_id: 40,
             board_id: null,
-            content: 'card1'
+            content: 'card1',
+            archived: false,
           })
         })
       })
