@@ -11,11 +11,11 @@ import ToggleComponent from './ToggleComponent'
 class InviteByEmailButton extends ToggleComponent {
   render(){
     return <div ref="root" className="InviteByEmail">
-      <button {...this.props} onClick={this.toggle}>
+      <button onClick={this.toggle}>
         {this.props.children}
       </button>
       {this.state.open ?
-        <InviteByEmail onClose={this.close} /> :
+        <InviteByEmail onClose={this.close} boardId={this.props.boardId} /> :
         null
       }
     </div>

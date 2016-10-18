@@ -64,18 +64,6 @@ router.post('/:boardId/lists', (request, response, next) => {
     .catch(next)
 })
 
-// SEND EMAIL INVITE
-router.post('/:boardId/invite', (request, response, next) => {
-  const email = request.body
-  const { boardId } = request.params
-  list.board_id = boardId
-  commands.createList(list)
-    .then( list => {
-      response.json(list)
-    })
-    .catch(next)
-})
-
 // CREATE CARD
 router.post('/:boardId/lists/:listId/cards', (request, response, next) => {
   const card = request.body
