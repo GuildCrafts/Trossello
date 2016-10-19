@@ -80,9 +80,11 @@ class BoardShowPage extends React.Component {
     return <Layout className="BoardShowPage" style={style}>
       <div className="BoardShowPage-Header">
         <h1>{board.name}</h1>
-        <DeleteBoardButton boardId={board.id}/>
-        <DownloadBoardButton boardId={board.id}/>
-        <InviteByEmailButton boardId={board.id}/>
+        <div>
+          <DeleteBoardButton boardId={board.id}/>
+          <DownloadBoardButton boardId={board.id}/>
+          <InviteByEmailButton boardId={board.id}/>
+        </div>
       </div>
       <div className="BoardShowPage-lists" ref="lists">
         {lists}

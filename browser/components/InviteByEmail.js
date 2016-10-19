@@ -15,6 +15,14 @@ class InviteByEmail extends Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
+  componentDidMount(){
+    this.refs.email.focus()
+  }
+
+  reset(){
+    if (this.refs.email) this.refs.email.value = ''
+  }
+
   onSubmit(event){
     event.preventDefault()
     const email = this.refs.email.value
@@ -25,20 +33,25 @@ class InviteByEmail extends Component {
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       data: JSON.stringify({email}),
-    }).then(() => {
-      console.log('the post was successful');
     })
   }
 
   render() {
+    const closeLink = this.props.onClose ?
+      <Link onClick={this.props.onClose}>
+        <Icon type="times" />
+      </Link> :
+      null
+
     return <div className="InviteByEmail">
       <div className="InviteByEmail-header">
         Invite to Board With Email
+        {closeLink}
       </div>
       <Form onSubmit={this.onSubmit}>
         <label>
           <div className="label">Email</div>
-          <input type="email" ref="email" name='email' placeholder="john.doe@example.com" />
+          <input className='emailInput' type="email" ref="email" name='email' placeholder="john.doe@example.com" />
         </label>
         <input type="submit" value="Invite"/>
       </Form >

@@ -8,9 +8,10 @@ const router = new express.Router()
 
 router.use((request, response, next) => {
   if (request.session.userId) return next()
-  response.status(400).json({
-    error: 'Not Authorized'
-  })
+  response.redirect('/')
+  // response.status(400).json({
+  //   error: 'Not Authorized'
+  // })
 })
 router.use('/cards',  cardsRoutes)
 router.use('/boards', boardsRoutes)

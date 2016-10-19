@@ -10,16 +10,22 @@ import InviteByEmail from './InviteByEmail'
 import ToggleComponent from './ToggleComponent'
 
 class InviteByEmailButton extends ToggleComponent {
+
+  constructor(props){
+    super(props)
+  }
+
   render(){
-    return <div ref="root" >
-      <button className="InviteByEmail-button InviteByEmail-DeleteButton" onClick={this.toggle}>
+    const inviteByEmail = this.state.open ?
+      <InviteByEmail onClose={this.close} boardId={this.props.boardId} /> :
+      null
+
+    return <span ref="root" className="InviteByEmailButton">
+      <button className="InviteByEmailButton-button" onClick={this.toggle}>
         Invite By Email
       </button>
-      {this.state.open ?
-        <InviteByEmail onClose={this.close} boardId={this.props.boardId} /> :
-        null
-      }
-    </div>
+      {inviteByEmail}
+    </span>
   }
 }
 
