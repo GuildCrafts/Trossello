@@ -3,13 +3,17 @@ import sgTransport from 'nodemailer-sendgrid-transport'
 
 const transporter = nodemailer.createTransport( 'smtps://mailer.learnersguild@gmail.com:tensionresolved@smtp.gmail.com' );
 
-const sendEmail = user => {
-  return transporter.sendMail( options( user.email, user.token ))
+const sendInviteEmail = user => {
+  return transporter.sendMail( inviteOptions( user.email, user.token ))
+}
+
+const sendWelcomeEmail = user => {
+  return transporter.sendMail( welcomeOptions( user ) )
 }
 
 const fromAddress = 'mailer.learnersguild@gmail.com'
 
-const options = ( toAddress, token ) => {
+const inviteOptions = ( toAddress, token ) => {
   const url = `/api/invites/verify/${token}`
 
   return {
@@ -20,6 +24,16 @@ const options = ( toAddress, token ) => {
     html: (
       `<p> You received this email because someone invited you to a Trossello board. Click this link to accept the invitation <strong><a href=${url}>Invite Link</a></strong></p>`
     ),
+  }
+}
+
+const welcomeOptions = userEmail => {
+  return {
+    from: `"Trossello" ${fromAddress}`,
+    to: userEmail,
+    subject: `Welcome to Trossello`,
+    text: 'Welcome to Trossello.',
+    html: ( '<p>Welcome</p>' ),
   }
 }
 
@@ -47,4 +61,4 @@ const options = ( toAddress, token ) => {
 //     from: fromAddress
 //   })
 // }
-export default sendEmail
+export default { sendInviteEmail, sendWelcomeEmail }

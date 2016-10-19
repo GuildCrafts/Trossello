@@ -2,7 +2,7 @@ import express from 'express'
 import {queries, commands} from '../database'
 const router = new express.Router()
 import uuid from 'uuid'
-import sendEmail from '../mail/mailer'
+import sendInviteEmail from '../mail/mailer'
 
 
 
@@ -14,7 +14,7 @@ router.post('/:boardId', (request, response, next) => {
   console.log('email', email);
   commands.createInvite(attributes)
     .then( result => {
-      sendEmail( result )
+      sendInviteEmail( result )
     })
     .catch(next)
 })
