@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Form from './Form'
 import Layout from './Layout'
+import './InviteByEmail.sass'
 import Link from './Link'
 import Icon from './Icon'
 import $ from 'jquery'
@@ -14,7 +15,8 @@ class InviteByEmail extends Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  onSubmit(){
+  onSubmit(event){
+    event.preventDefault()
     const email = this.refs.email.value
     console.log('hi',email);
     $.ajax({
@@ -29,9 +31,17 @@ class InviteByEmail extends Component {
   }
 
   render() {
-    return <div>
-        <input type="email" ref="email" name='email' placeholder="john.doe@example.com" />
-        <input type="submit" onClick={this.onSubmit} value="Invite"/>
+    return <div className="InviteByEmail">
+      <div className="InviteByEmail-header">
+        Invite to Board With Email
+      </div>
+      <Form onSubmit={this.onSubmit}>
+        <label>
+          <div className="label">Email</div>
+          <input type="email" ref="email" name='email' placeholder="john.doe@example.com" />
+        </label>
+        <input type="submit" value="Invite"/>
+      </Form >
     </div>
   }
 }

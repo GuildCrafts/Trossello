@@ -164,6 +164,8 @@ const createUserBoardEntry = (attributes) =>
   createRecord('user_boards', attributes)
 
 
+
+
 export default {
   createUser,
   updateUser,

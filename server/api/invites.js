@@ -24,17 +24,26 @@ router.get('/verify/:token', (request, response, next) => {
   queries.verifyToken(token)
   .then(result => {
     console.log(request.session);
-    let userId = request.session.userId
+    console.log('session email: ', request.session.email);
+    let  {userId} = request.session
+    let boardId = result[0].boardId
     if (result[0] === undefined) {
       response.redirect('/')
     } else if (result[0].token === token) {
       if(userId){
-        let attributes = {board_id: result[0].boardId, user_id: userId}
-        commands.createUserBoardEntry(attributes)
-        .then(record =>
-          response.redirect(`/boards/${record.board_id}`)
-        )
-      }else{
+        queries.checkUserBoardAssociation(boardId, userId)
+        .then( data => {
+          if(data === undefined){
+            let attributes = {board_id: boardId, user_id: userId}
+            commands.createUserBoardEntry(attributes)
+            .then(record =>
+              response.redirect(`/boards/${record.board_id}`)
+            )
+          } else {
+            response.redirect(`/boards/${boardId}`)
+          }
+        })
+      } else {
         request.session.inviteCookie = token
         request.session.redirectToAfterLogin = `/boards/${record.board_id}`
         console.log(request.session);
