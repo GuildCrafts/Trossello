@@ -21,9 +21,9 @@ describe('/api/cards', () => {
         })
 
         // DELETE
-        describe('POST /api/cards/:cardId/delete', () => {
+        describe('POST /api/cards/:cardId/archive', () => {
           it('should render 400 Not Authorized', () => {
-            return request('post', '/api/cards/12/delete')
+            return request('post', '/api/cards/12/archive')
               .then(response => {
                 expect(response).to.have.status(400)
               })
@@ -54,14 +54,19 @@ describe('/api/cards', () => {
         })
 
         // DELETE
-        describe('POST /api/cards/:cardId/delete', () => {
-          it('should render 400 Not Authorized', () => {
-            return request('post', '/api/cards/83/delete')
+        describe('POST /api/cards/:cardId/archive', () => {
+          it('should archive the card and render null', () => {
+            return queries.getCardById(83)
+              .then(card => {
+                expect(card.archived).to.eql(false)
+              })
+              .then(() => request('post', '/api/cards/83/archive'))
               .then(response => {
                 expect(response).to.have.status(200)
-                return queries.getCardById(83).then(list => {
-                  expect(list).to.be.undefined
-                })
+              })
+              .then(() => queries.getCardById(83))
+              .then(card => {
+                expect(card.archived).to.eql(true)
               })
           })
         })

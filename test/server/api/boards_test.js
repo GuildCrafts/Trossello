@@ -175,7 +175,8 @@ describe('/api/boards', () => {
               })
               .then( () => request('get', '/api/boards/2'))
               .then(response => {
-                expect(response).to.have.status(404)
+                expect(response).to.have.status(200)
+                expect(response.body.archived).to.eql(true)
               })
           })
         })

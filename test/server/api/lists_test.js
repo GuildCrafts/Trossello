@@ -53,14 +53,19 @@ describe('/api/lists', () => {
         })
 
         // DELETE
-        describe('POST /api/lists/:listId/delete', () => {
-          it('should delete the list and render null', () => {
-            return request('post', '/api/lists/41/delete')
+        describe('POST /api/lists/:listId/archive', () => {
+          it('should archive the list and render null', () => {
+            return queries.getListById(41)
+              .then(list => {
+                expect(list.archived).to.eql(false)
+              })
+              .then(() => request('post', '/api/lists/41/archive'))
               .then(response => {
                 expect(response).to.have.status(200)
-                return queries.getListById(41).then(list => {
-                  expect(list).to.be.undefined
-                })
+              })
+              .then(() => queries.getListById(41))
+              .then(list => {
+                expect(list.archived).to.eql(true)
               })
           })
         })
