@@ -6,10 +6,10 @@ const transporter = nodemailer.createTransport( 'smtps://mailer.learnersguild@gm
 const sendInviteEmail = user => {
   return transporter.sendMail( inviteOptions( user.email, user.token ))
 }
-
 const sendWelcomeEmail = user => {
-  return transporter.sendMail( welcomeOptions( user ) )
+  return transporter.sendMail( welcomeOptions( user ))
 }
+
 
 const fromAddress = 'mailer.learnersguild@gmail.com'
 
@@ -61,4 +61,4 @@ const welcomeOptions = userEmail => {
 //     from: fromAddress
 //   })
 // }
-export default { sendInviteEmail, sendWelcomeEmail }
+export { sendInviteEmail, sendWelcomeEmail }

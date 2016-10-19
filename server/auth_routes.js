@@ -2,7 +2,7 @@ import express from 'express'
 import github from './github'
 import { queries, commands } from './database'
 const router = express.Router()
-import sendWelcomeEmail from './mail/mailer'
+import {sendWelcomeEmail} from './mail/mailer'
 
 router.get('/login_via_github', (request, response) => {
   request.session.redirectToAfterLogin = request.header('Referer')

@@ -2,7 +2,7 @@ import express from 'express'
 import {queries, commands} from '../database'
 const router = new express.Router()
 import uuid from 'uuid'
-import sendInviteEmail from '../mail/mailer'
+import { sendInviteEmail } from '../mail/mailer'
 
 
 
