@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'test';
 process.env.PORT = process.env.PORT || '3123';
+process.env.SESSION_KEY = 'test-session-key'
 
 const chai = require('chai');
 const expect = chai.expect;
