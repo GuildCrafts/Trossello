@@ -149,15 +149,19 @@ const createBoard = (userId, attributes) => {
 const updateBoard = (id, attributes) =>
   updateRecord('boards', id, attributes)
 
-const createInvite = (attributes) =>
-  createRecord('invites', attributes)
-
 
 const deleteBoard = (boardId) =>
   Promise.all([
     deleteRecord('boards', boardId),
     knex.table('user_boards').where('board_id', boardId).del(),
   ]).then(results => results[0] + results[1])
+
+// INVITES
+const createInvite = (attributes) =>
+  createRecord('invites', attributes)
+
+const createUserBoardEntry = (attributes) =>
+  createRecord('user_boards', attributes)
 
 
 export default {
@@ -181,4 +185,5 @@ export default {
   archiveBoard,
   unarchiveBoard,
   createInvite,
+  createUserBoardEntry,
 }

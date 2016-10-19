@@ -54,6 +54,14 @@ const getListById = (id) =>
 const getCardById = (id) =>
   getRecordById('cards', id)
 
+// INVITES
+
+const verifyToken = (token) => {
+  return knex.table('invites')
+    .select('*')
+    .where('token', token)
+}
+
 export default {
   getUsers,
   getUserById,
@@ -61,4 +69,5 @@ export default {
   getBoardsByUserId,
   getBoardById,
   getListById,
+  verifyToken,
 }

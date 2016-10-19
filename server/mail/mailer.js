@@ -1,0 +1,50 @@
+import nodemailer from 'nodemailer'
+import sgTransport from 'nodemailer-sendgrid-transport'
+
+const transporter = nodemailer.createTransport( 'smtps://mailer.learnersguild@gmail.com:tensionresolved@smtp.gmail.com' );
+
+const sendEmail = user => {
+  return transporter.sendMail( options( user.email, user.token ))
+}
+
+const fromAddress = 'mailer.learnersguild@gmail.com'
+
+const options = ( toAddress, token ) => {
+  const url = `/api/invites/verify/${token}`
+
+  return {
+    from: `"Trossello" ${fromAddress}`,
+    to: toAddress,
+    subject: `You've been invited to a Trossello board`,
+    text: 'Welcome to your new board. Click the link below to join this board',
+    html: (
+      `<p> You received this email because someone invited you to a Trossello board. Click this link to accept the invitation <strong><a href=${url}>Invite Link</a></strong></p>`
+    ),
+  }
+}
+
+// const mailer = (email, token) => {
+//   if (process.env.NODE_ENV === 'production') {
+//     const options = {
+//     auth: {
+//       api_user: process.env.SG_USER,
+//       api_key: process.env.SG_PASS
+//     }
+//   }
+//   const transport = nodemailer.createTransport( sgTransport( options ))
+//   } else {
+//   const transporter = nodemailer.createTransport('smtps://mailer.learnersguild@gmail.com:tensionresolved@smtp.gmail.com');
+//   }
+//
+//   const fromAddress = 'mailer.learnersguild@gmail.com'
+//   const invitesEmail = transporter.templateSender({
+//     subject: `You've been invited to a Trossello board`,
+//     text: 'Welcome to your new board. Click the link below to join this board'
+//     html: (
+//       '<p> You received this email because someone invited you to a Trossello board. Click this link to accept the invitation <strong><a href="{{inviteLink}}">Invite Link</a></strong></p>'
+//     ),
+//   }, {
+//     from: fromAddress
+//   })
+// }
+export default sendEmail
