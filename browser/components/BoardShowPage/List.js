@@ -97,7 +97,7 @@ export default class List extends Component {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
     }
 
-    return <div ref="root" className="BoardShowPage-List" onDrop={this.onDrop} onDragOver={this.onDragOver}>
+    return <div className="BoardShowPage-List" onDrop={this.onDrop} onDragOver={this.onDragOver}>
       <div className="BoardShowPage-ListHeader">
         {list.name}
         <DeleteListButton list={list} />

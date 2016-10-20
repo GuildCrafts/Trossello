@@ -39,12 +39,12 @@ export default class Navbar extends Component {
 
 class CreateBoardButton extends ToggleComponent {
   render(){
-    return <div ref="root" className="CreateBoardButton">
+    return <div className="CreateBoardButton">
       <button {...this.props} onClick={this.toggle}>
         {this.props.children}
       </button>
       {this.state.open ?
-        <CreateBoardPopover onClose={this.close} /> :
+        <CreateBoardPopover ref="toggle" onClose={this.close} /> :
         null
       }
     </div>

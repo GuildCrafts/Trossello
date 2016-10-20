@@ -9,9 +9,9 @@ import ToggleComponent from './ToggleComponent'
 class BoardsDropdown extends ToggleComponent {
   render() {
     const dropdown = this.state.open ?
-      <Dropdown boards={this.props.boards} close={this.close} /> :
+      <Dropdown ref="toggle" boards={this.props.boards} close={this.close} /> :
       null
-    return <div ref="root" className="BoardsDropdown" >
+    return <div className="BoardsDropdown" >
       <button className={this.props.className} onClick={this.toggle}>Boards</button>
       {dropdown}
     </div>
@@ -28,13 +28,13 @@ class Dropdown extends ToggleComponent {
         <Board key={board.id} board={board} onClick={this.props.close} />
       )
     }
-    return <div ref="root" className="BoardsDropdown-dropdown">
+    return <div className="BoardsDropdown-dropdown">
       <div className="BoardsDropdown-content">
         {boards}
         <Link onClick={this.toggle}>Create new board...</Link>
       </div>
       {this.state.open ?
-        <CreateBoardPopover ref="root" onClose={this.close} /> :
+        <CreateBoardPopover ref="toggle" onClose={this.close} /> :
         null
       }
     </div>

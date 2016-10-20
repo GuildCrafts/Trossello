@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 
 // subclass this component to give it the toggle functionality
 class ToggleComponent extends Component {
@@ -7,7 +8,6 @@ class ToggleComponent extends Component {
   static initialState = false
 
   // set this to false to disable setting open=false when the user clicks outside the element.
-  // note: you must add `ref="root"` to the root node of your render for this feature to work
   static closeIfUserClicksOutside = true
 
   constructor(props){
@@ -48,10 +48,9 @@ class ToggleComponent extends Component {
   }
 
   closeIfUserClickedOutside(event){
+    if (!this.state.open) return
     const targetNode = event.target
-    let rootNode = this.refs.root
-    if (!rootNode) throw new Error('you must set ref="root" on a node. See '+this.constructor.name)
-    while(rootNode && ('refs' in rootNode)){ rootNode = rootNode.refs.root }
+    const rootNode = ReactDOM.findDOMNode(this.refs.toggle || this)
     if (rootNode && targetNode && !rootNode.contains(targetNode)) this.close()
   }
 

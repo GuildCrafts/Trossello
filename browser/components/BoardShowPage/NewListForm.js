@@ -18,7 +18,7 @@ export default class NewListForm extends ToggleComponent {
       /> :
       <Closed open={this.open} />
 
-    return <div ref="root" className="BoardShowPage-NewListForm">
+    return <div className="BoardShowPage-NewListForm">
       {content}
     </div>
   }
