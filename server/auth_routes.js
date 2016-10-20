@@ -17,9 +17,10 @@ router.get('/oauth_callback', (request, response, next) => {
     .then(currentUser => {
       request.session.userId = currentUser.id
       let email = currentUser.email
+      console.log(currentUser)
       console.log('logging name', currentUser.name);
       console.log( 'email', email );
-      sendWelcomeEmail( email )
+      sendWelcomeEmail( currentUser )
       response.redirect(request.session.redirectToAfterLogin || '/')
       delete request.session.redirectToAfterLogin
     })

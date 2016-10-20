@@ -7,7 +7,7 @@ const sendInviteEmail = user => {
   return transporter.sendMail( inviteOptions( user.email, user.token ))
 }
 const sendWelcomeEmail = user => {
-  return transporter.sendMail( welcomeOptions( user ))
+  return transporter.sendMail( welcomeOptions( user.email, user.name ))
 }
 
 
@@ -27,13 +27,13 @@ const inviteOptions = ( toAddress, token ) => {
   }
 }
 
-const welcomeOptions = userEmail => {
+const welcomeOptions = ( userEmail, userName) => {
   return {
     from: `"Trossello" ${fromAddress}`,
     to: userEmail,
     subject: `Welcome to Trossello`,
     text: 'Welcome to Trossello.',
-    html: ( '<p>Welcome</p>' ),
+    html: ( `<p>Welcome ${userName}</p>` ),
   }
 }
 
