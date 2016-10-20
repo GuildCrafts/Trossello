@@ -33,7 +33,7 @@
     white-space: nowrap
     outline: none
 
-  &-DeleteBoardButton
+  &-ArchiveBoardButton
     color: white
     background: linear-gradient(to bottom,rgba(255,255,255,.3) 0,rgba(255,255,255,.2) 100%)
     &:not([disabled])
@@ -88,14 +88,23 @@
     font-weight: 500
     position: relative
 
-  &-DeleteButton
+  &-ArchiveButton
     text-decoration: none
     opacity: 0.5
     color: inherit
+    margin: 0 2px
     &:hover
       opacity: 1
 
-  &-DeleteListButton
+  &-EditButton
+    text-decoration: none
+    opacity: 0.5
+    color: inherit
+    margin: 0 2px
+    &:hover
+      opacity: 1
+
+  &-ArchiveListButton
     position: absolute
     right: 20px
     text-decoration: none
@@ -111,41 +120,58 @@
     min-height: 30%
 
   &-Card
-    -webkit-touch-callout: none
-    -webkit-user-select: none
-    -khtml-user-select: none
-    -moz-user-select: none
-    -ms-user-select: none
-    user-select: none
-    position: relative
-    padding: 6px 8px
     margin-bottom: 6px
     flex-grow: 0
     flex-shrink: 0
-    border-top: none
-    border-left: none
-    border-bottom: 2px solid #ccc
-    border-right: 1px solid #ccc
-    border-radius: 3px
-    cursor: pointer
-    background-color: white
-    font-weight: 400
-    font-size: 14px
-    > pre
-      margin: 0
+    &-box
+      -webkit-touch-callout: none
+      -webkit-user-select: none
+      -khtml-user-select: none
+      -moz-user-select: none
+      -ms-user-select: none
+      user-select: none
+      position: relative
+      padding: 6px 8px
+      border-top: none
+      border-left: none
+      border-bottom: 2px solid #ccc
+      border-right: 1px solid #ccc
+      border-radius: 3px
+      cursor: pointer
+      background-color: white
+      font-weight: 400
       font-size: 14px
-      font-family: inherit
-      white-space: pre-wrap
-      white-space: -moz-pre-wrap
-      white-space: -pre-wrap
-      white-space: -o-pre-wrap
-      word-wrap: break-word
+      > pre
+        margin: 0
+        font-size: 14px
+        font-family: inherit
+        white-space: pre-wrap
+        white-space: -moz-pre-wrap
+        white-space: -pre-wrap
+        white-space: -o-pre-wrap
+        word-wrap: break-word
+    &-controls
+      position: absolute
+      font-size: .8em
+      top: 8px
+      right: 10px
 
-  &-DeleteCardButton
-    position: absolute
-    font-size: .8em
-    top: 8px
-    right: 10px
+    &-EditCardModal
+      &-shroud
+        z-index: 100
+        position: fixed
+        top: 0
+        left: 0
+        bottom: 0
+        right: 0
+        background-color: rgba(0, 0, 0, 0.5)
+      &-window
+        z-index: 101
+        position: fixed
+        min-height: 100px
+        min-width: 232px
+        border-radius: 3px
+        background-color: #e1e3ea
 
   &-create-card-link
     padding: 8px 10px
@@ -170,10 +196,39 @@
       display: block
       width: 100%
       resize: none
+      border-radius: 3px
       &:focus
         outline: none
     &-controls
       input[type="submit"]
         margin-right: 0.25em
+      a
+        color: inherit
+
+  &-EditCardForm
+    padding-bottom: 8px
+    margin: 1.5% 2%
+    border-radius: 3px
+    > textarea
+      -webkit-touch-callout: inherit
+      -webkit-user-select: inherit
+      -khtml-user-select: inherit
+      -moz-user-select: inherit
+      -ms-user-select: inherit
+      user-select: inherit
+      display: block
+      width: 96%
+      resize: none
+      border-radius: 3px
+      border-bottom: solid 1px
+      margin: 2%
+      padding-bottom: 5px
+      &:focus
+        outline: none
+    &-controls
+      input[type="submit"]
+        margin-right: 0.25em
+        margin-left: 0.25em
+        margin-top: 0.175em
       a
         color: inherit
