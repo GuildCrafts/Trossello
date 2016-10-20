@@ -134,7 +134,7 @@ const archiveBoard = (id) =>
 const unarchiveBoard = (id) =>
   unarchiveRecord('boards', id)
 
-const createBoard = (userId, attributes) =>{
+const createBoard = (userId, attributes) => {
   if (!attributes.background_color) delete attributes.background_color
   return createRecord('boards', attributes).then(board => {
     let attrs = {

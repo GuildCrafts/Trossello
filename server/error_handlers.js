@@ -1,5 +1,4 @@
 import express from 'express'
-import github from './github'
 const router = express.Router()
 
 // error handlers
