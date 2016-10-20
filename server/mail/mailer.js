@@ -37,6 +37,7 @@ const welcomeOptions = ( userEmail, userName) => {
   }
 }
 
+// *** PRODUCTION ENV ***
 // const mailer = (email, token) => {
 //   if (process.env.NODE_ENV === 'production') {
 //     const options = {

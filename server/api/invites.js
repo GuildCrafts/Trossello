@@ -11,7 +11,6 @@ router.post('/:boardId', (request, response, next) => {
   const { boardId } = request.params
   const token = uuid.v1()
   const attributes = {boardId: boardId, email: email, token: token}
-  console.log('email', email);
   commands.createInvite(attributes)
     .then( result => {
       sendInviteEmail( result )
@@ -23,8 +22,6 @@ router.get('/verify/:token', (request, response, next) => {
   let {token} = request.params
   queries.verifyToken(token)
   .then(result => {
-    console.log(request.session);
-    console.log('session email: ', request.session.email);
     let  {userId} = request.session
     let boardId = result[0].boardId
     if (result[0] === undefined) {
@@ -46,7 +43,6 @@ router.get('/verify/:token', (request, response, next) => {
       } else {
         request.session.inviteCookie = token
         request.session.redirectToAfterLogin = `/boards/${record.board_id}`
-        console.log(request.session);
         response.redirect('/')
       }
     }

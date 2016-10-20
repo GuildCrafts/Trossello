@@ -26,7 +26,6 @@ class InviteByEmail extends Component {
   onSubmit(event){
     event.preventDefault()
     const email = this.refs.email.value
-    console.log('hi',email);
     $.ajax({
       method: "POST",
       url: `/api/invites/${this.props.boardId}`,
