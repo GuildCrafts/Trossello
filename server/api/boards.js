@@ -9,6 +9,16 @@ router.get('/', (request, response, next) => {
   }).catch(next)
 } )
 
+//SEARCH
+router.post('/search', ( request, response, next ) => {
+  const userId  = request.session.userId
+  commands.searchQuery(userId, request.body.content)
+  .then( result => {
+    response.json(result)
+  })
+  .catch(next)
+})
+
 // CREATE
 router.post('/', (request, response, next) => {
   commands.createBoard(request.session.userId, request.body).then( board => {
@@ -89,5 +99,6 @@ router.post('/:boardId/lists/:listId/cards/edit', (request, response, next) => {
     })
     .catch(next)
 })
+
 
 export default router
