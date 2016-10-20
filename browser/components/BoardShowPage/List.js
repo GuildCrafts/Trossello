@@ -26,7 +26,7 @@ export default class List extends Component {
     document.body.removeEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
   }
 
-  cancelCreatingCardIfUserClickedOutside(){
+  cancelCreatingCardIfUserClickedOutside(event){
     const targetNode = event.target
     let rootNode = this.refs.root
     if (rootNode && targetNode && !rootNode.contains(targetNode))
@@ -130,7 +130,7 @@ class NewCardForm extends Component {
   onKeyUp(event) {
     if (!event.shiftKey && event.keyCode === 13) {
       event.preventDefault()
-      this.createCard()
+      this.createCard(event)
     }
     if (event.keyCode === 27) {
       event.preventDefault()

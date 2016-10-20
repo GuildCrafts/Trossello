@@ -141,9 +141,10 @@ class EditCardForm extends Component {
     }
   }
 
-  cancel(){
+  cancel(event){
+    event.preventDefault()
     EditCardForm.lastValue = this.refs.content.value
-    this.props.onCancel()
+    this.props.onClose()
   }
 
   saveCard(event) {

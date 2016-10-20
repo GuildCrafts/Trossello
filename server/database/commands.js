@@ -183,6 +183,12 @@ const deleteBoard = (boardId) =>
 const createInvite = (attributes) =>
   createRecord('invites', attributes)
 
+const searchQuery = ( userId, searchTerm ) => {
+  return queries.getSearchResult(userId, searchTerm)
+  .then(result => {
+    return result
+  })
+}
 
 export default {
   createUser,
@@ -206,4 +212,5 @@ export default {
   unarchiveBoard,
   createInvite,
   addUserToBoard,
+  searchQuery,
 }

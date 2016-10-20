@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import './Navbar.sass'
+import Form from './Form'
 import Link from './Link'
 import Icon from './Icon'
+import $ from 'jquery'
 import LogoutButton from './LogoutButton'
 import LoginButton from './LoginButton'
 import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
 import BoardsDropdown from './BoardsDropdown'
+import CardSearchForm from './CardSearchForm'
 
 export default class Navbar extends Component {
 
@@ -14,11 +17,13 @@ export default class Navbar extends Component {
     session: React.PropTypes.object.isRequired
   }
 
+
+
   render(){
     const { session } = this.context
     return <div className="Navbar">
       <BoardsDropdown className="Navbar-button BoardButton" />
-      <input type="text" className="Navbar-SearchInput" ></input>
+      <CardSearchForm className="Navbar-Search" />
       <div className="Navbar-BoardIndexButton">
         <Link to="/">Trossello</Link>
       </div>
@@ -33,9 +38,12 @@ export default class Navbar extends Component {
       <button className="Navbar-button AlertButton">
         <Icon type="bell" />
       </button>
+
     </div>
   }
 }
+
+
 
 class CreateBoardButton extends ToggleComponent {
   render(){

@@ -267,6 +267,53 @@ describe('database.commands', () => {
     })
   })
 
+  describe('archiveBoard', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should archive a board by board id', () => {
+        return queries.getBoardById(1).then( board => {
+          expect(board).to.be.a('object')
+          expect(board.id).to.eql(1)
+          return commands.archiveBoard(1).then( () => {
+            return queries.getBoardById(1).then( board => {
+              expect(board.archived).to.eql(true)
+            })
+          })
+        })
+    })
+  })
+
+  describe('updateList', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should update a list with given attributes', () => {
+        const newAttributes = {
+          name: "NewListName"
+        }
+        return commands.updateList(40, newAttributes)
+          .then( list => {
+            expect(list.id).to.eql(40)
+            expect(list.name).to.eql('NewListName')
+          })
+      })
+    })
+  })
+
+  describe('deleteList', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should delete a board by board id', () => {
+        return queries.getListById(40)
+          .then(list => {
+            expect(list.id).to.eql(40)
+            expect(list.name).to.eql('List1')
+            return commands.deleteList(40)
+          })
+          .then( () => queries.getListById(40) )
+          .then( list => {
+            expect(list).to.be.undefined
+          })
+      })
+    })
+  })
+
   describe('archiveList', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should archive a board by board id', () => {
@@ -344,5 +391,5 @@ describe('database.commands', () => {
       })
     })
   })
-
+})
 })

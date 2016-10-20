@@ -24,6 +24,19 @@ const getBoardsByUserId = (userId) =>
 const getBoardById = (id) =>
   getRecordById('boards', id).then(getListsAndCardsForBoard)
 
+const getSearchResult = (userId, searchTerm) => {
+  searchTerm = '%'+searchTerm+'%'
+  if (!searchTerm){
+     return null
+   }
+  return knex.table('cards')
+  .select('*')
+  .join('user_boards', 'cards.board_id', '=', 'user_boards.board_id')
+  .whereIn('user_boards.user_id', userId)
+  .where(knex.raw('archived = false AND lower(content) LIKE ?',[searchTerm]))
+  .orderBy('id', 'asc')
+}
+
 const getListsAndCardsForBoard = (board) => {
   if (!board) return Promise.resolve(board)
   return knex.table('lists')
@@ -67,6 +80,7 @@ export default {
   getUsers,
   getUserById,
   getCardById,
+  getSearchResult,
   getBoardsByUserId,
   getBoardById,
   getListById,
