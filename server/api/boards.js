@@ -83,7 +83,7 @@ router.post('/:boardId/lists/:listId/cards/edit', (request, response, next) => {
   const { boardId, listId } = request.params
   card.board_id = boardId
   card.list_id = listId
-  commands.editCard(card)
+  commands.updateCard(card)
     .then( card => {
       response.json(card)
     })
