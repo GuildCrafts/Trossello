@@ -9,6 +9,7 @@ class ToggleComponent extends Component {
 
   // set this to false to disable setting open=false when the user clicks outside the element.
   static closeIfUserClicksOutside = true
+  static closeOnEscape = true
 
   constructor(props){
     super(props)
@@ -18,15 +19,21 @@ class ToggleComponent extends Component {
     this.toggle = this.toggle.bind(this)
     this.close = this.close.bind(this)
     this.open = this.open.bind(this)
+    if (this.constructor.closeOnEscape){
+      this.closeIfUserHitsEscape = this.closeIfUserHitsEscape.bind(this)
+      document.body.addEventListener('keydown', this.closeIfUserHitsEscape, false)
+    }
     if (this.constructor.closeIfUserClicksOutside){
       this.closeIfUserClickedOutside = this.closeIfUserClickedOutside.bind(this)
-      document.body.addEventListener('click', this.closeIfUserClickedOutside)
+      document.body.addEventListener('click', this.closeIfUserClickedOutside, false)
     }
   }
 
   componentWillUnmount(){
     if (this.constructor.closeIfUserClicksOutside)
-     document.body.removeEventListener('click', this.closeIfUserClickedOutside)
+      document.body.removeEventListener('click', this.closeIfUserClickedOutside)
+    if (this.constructor.closeOnEscape)
+      document.body.removeEventListener('keydown', this.closeIfUserHitsEscape)
   }
 
   toggle(){
@@ -45,6 +52,13 @@ class ToggleComponent extends Component {
     this.setState({
       open: true
     })
+  }
+
+  closeIfUserHitsEscape(event){
+    if (this.state.open && event.code === "Escape") {
+      this.close()
+      event.preventDefault()
+    }
   }
 
   closeIfUserClickedOutside(event){
