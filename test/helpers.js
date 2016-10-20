@@ -27,23 +27,23 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
     beforeEach( () => {
       return Promise.all([
         commands.createBoard(1455, {
-          id: 1,
+          id: 101,
           name: 'Board1',
           background_color: 'orange',
         }),
         commands.createBoard(1455, {
-          id: 2,
+          id: 102,
           name: 'Board2',
           background_color: 'purple',
         }),
         commands.createList({
           id: 40,
-          board_id: 1,
+          board_id: 101,
           name: 'List1',
         }),
         commands.createList({
           id: 41,
-          board_id: 1,
+          board_id: 101,
           name: 'List2',
         }),
         commands.createCard({

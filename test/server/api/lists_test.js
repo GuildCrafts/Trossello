@@ -46,7 +46,7 @@ describe('/api/lists', () => {
               .then(response => {
                 expect(response).to.have.status(200)
                 expect(response.body.id).to.eql(41)
-                expect(response.body.board_id).to.eql(1)
+                expect(response.body.board_id).to.eql(101)
                 expect(response.body.name).to.eql('Shopping List')
               })
           })

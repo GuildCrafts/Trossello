@@ -75,15 +75,15 @@ describe('database.queries', () => {
   describe('getBoardById', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
-        return queries.getBoardById(1).then( board => {
+        return queries.getBoardById(101).then( board => {
           expect(board).to.eql({
-            id: 1,
+            id: 101,
             name: 'Board1',
             archived: false,
             background_color: 'orange',
             lists:[
-              { id: 40, board_id: 1, name: 'List1', archived: false, },
-              { id: 41, board_id: 1, name: 'List2', archived: false, },
+              { id: 40, board_id: 101, name: 'List1', archived: false, },
+              { id: 41, board_id: 101, name: 'List2', archived: false, },
             ],
             cards: [
               { id: 80, board_id: null, list_id: 40, content: 'card1', archived: false, },
@@ -103,7 +103,7 @@ describe('database.queries', () => {
         return queries.getListById(40).then( board => {
           expect(board).to.eql({
             id: 40,
-            board_id: 1,
+            board_id: 101,
             name: 'List1',
             archived: false,
           })

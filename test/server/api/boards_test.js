@@ -1,4 +1,4 @@
-const { expect, request, queries, commands } = require('../../setup')
+const { expect, request, knex, queries, commands } = require('../../setup')
 const{
   withTwoUsersInTheDatabase,
   withBoardsListsAndCardsInTheDatabase,
@@ -55,7 +55,7 @@ describe('/api/boards', () => {
         // DELETE
         describe('POST /api/boards/:boardId/delete', () => {
           it('should render 400 Not Authorized', () => {
-            return request('post', '/api/boards/1/delete')
+            return request('post', '/api/boards/101/delete')
               .then(response => {
                 expect(response).to.have.status(400)
               })
@@ -65,7 +65,7 @@ describe('/api/boards', () => {
         // CREATE LIST
         describe('POST /api/boards/:boardId/lists', () => {
           it('should render 400 Not Authorized', () => {
-            return request('post', '/api/boards/1/lists', {})
+            return request('post', '/api/boards/101/lists', {})
               .then(response => {
                 expect(response).to.have.status(400)
               })
@@ -75,7 +75,7 @@ describe('/api/boards', () => {
         // CREATE BOARD
         describe('POST /api/boards/:boardId/lists/:listId/cards', () => {
           it('should render 400 Not Authorized', () => {
-            return request('post', '/api/boards/1/lists/1/cards', {})
+            return request('post', '/api/boards/101/lists/1/cards', {})
               .then(response => {
                 expect(response).to.have.status(400)
               })
@@ -104,7 +104,6 @@ describe('/api/boards', () => {
 
         // CREATE
         describe('POST /api/boards', () => {
-
           it('should create a new board and return its json', () => {
             const boardAttributes = {
               name: 'Fresh Board'
@@ -120,19 +119,19 @@ describe('/api/boards', () => {
         // SHOW
         describe('GET /api/boards/<existing board id>', () => {
           it('should return a null body and a 404 status', () => {
-            return request('get', '/api/boards/1').then(response => {
+            return request('get', '/api/boards/101').then(response => {
               expect(response).to.have.status(200)
-              expect(response.body.id).to.eql(1)
+              expect(response.body.id).to.eql(101)
               expect(response.body.name).to.eql('Board1')
               expect(response.body.background_color).to.eql('orange')
             })
           })
           context('when download=1', () => {
             it('should set the xheader', () => {
-              return request('get', '/api/boards/1?download=1').then(response => {                expect(response).to.have.status(200)
-                expect(response).to.have.header('Content-Disposition', 'attachment; filename="board1.json"');
+              return request('get', '/api/boards/101?download=1').then(response => {                expect(response).to.have.status(200)
+                expect(response).to.have.header('Content-Disposition', 'attachment; filename="board101.json"');
                 expect(response).to.have.header('Content-Type', 'application/json; charset=utf-8');
-                expect(response.body.id).to.eql(1)
+                expect(response.body.id).to.eql(101)
                 expect(response.body.name).to.eql('Board1')
                 expect(response.body.background_color).to.eql('orange')
               })
@@ -157,9 +156,9 @@ describe('/api/boards', () => {
             const boardAttributes = {
               name: 'fresh board'
             }
-            return request('post', '/api/boards/2', boardAttributes).then(response => {
+            return request('post', '/api/boards/102', boardAttributes).then(response => {
               expect(response).to.have.status(200)
-              expect(response.body.id).to.eql(2)
+              expect(response.body.id).to.eql(102)
               expect(response.body.name).to.eql('fresh board')
               expect(response.body.background_color).to.eql('purple')
             })
@@ -169,11 +168,11 @@ describe('/api/boards', () => {
         // ARCHIVE
         describe('POST /api/boards/<existing board id>/archive', () => {
           it('should archive a board and render status 200', () => {
-            return request('post', '/api/boards/2/archive')
+            return request('post', '/api/boards/102/archive')
               .then(response => {
                 expect(response).to.have.status(200)
               })
-              .then( () => request('get', '/api/boards/2'))
+              .then( () => request('get', '/api/boards/102'))
               .then(response => {
                 expect(response).to.have.status(200)
                 expect(response.body.archived).to.eql(true)
@@ -197,11 +196,11 @@ describe('/api/boards', () => {
             const listAttributes = {
               name: 'Things to burn'
             }
-            return request('post', '/api/boards/1/lists', listAttributes)
+            return request('post', '/api/boards/101/lists', listAttributes)
               .then(response => {
                 expect(response).to.have.status(200)
                 expect(response.body.id).to.be.a('number')
-                expect(response.body.board_id).to.eql(1)
+                expect(response.body.board_id).to.eql(101)
                 expect(response.body.name).to.eql('Things to burn')
               })
           })
@@ -213,11 +212,11 @@ describe('/api/boards', () => {
             const cardAttributes = {
               content: 'Old Passport'
             }
-            return request('post', '/api/boards/1/lists/40/cards', cardAttributes)
+            return request('post', '/api/boards/101/lists/40/cards', cardAttributes)
               .then(response => {
                 expect(response).to.have.status(200)
                 expect(response.body.id).to.be.a('number')
-                expect(response.body.board_id).to.eql(1)
+                expect(response.body.board_id).to.eql(101)
                 expect(response.body.list_id).to.eql(40)
                 expect(response.body.content).to.eql('Old Passport')
               })
