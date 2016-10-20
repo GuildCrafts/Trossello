@@ -15,4 +15,14 @@ router.use('/cards',  cardsRoutes)
 router.use('/boards', boardsRoutes)
 router.use('/lists',  listsRoutes)
 
+router.use((error, request, response, next) => {
+  response.status(error.status || 500);
+  response.json({
+    error: {
+      message: error.message,
+      stack: error.stack,
+    }
+  });
+});
+
 export default router

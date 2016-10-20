@@ -2,6 +2,7 @@ process.env.NODE_ENV = 'test';
 process.env.PORT = process.env.PORT || '3123';
 process.env.SESSION_KEY = 'test-session-key'
 
+const chalk = require('chalk');
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
@@ -25,7 +26,8 @@ const request = (method, url, postBody) => {
     if (method === 'post' && postBody) req = req.send(postBody)
     req.end((error, response) => {
       if (error && error.status >= 500) {
-        console.log(error)
+        console.warn(chalk.red('Server Error: '+response.body.error.message))
+        console.warn(chalk.red(response.body.error.stack))
         reject(error)
       }else{
         resolve(response)
