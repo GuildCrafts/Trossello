@@ -24,6 +24,17 @@ const getBoardsByUserId = (userId) =>
 const getBoardById = (id) =>
   getRecordById('boards', id).then(getListsAndCardsForBoard)
 
+const checkUserBoardAssociation = (boardId, userId) =>{
+  return knex.table('user_boards')
+    .select('*')
+    .where({'board_id' : boardId, 'user_id' : userId})
+    .then( data => {
+      const userIdEmail = data.user_id
+      return knex.table('users')
+        .select('*')
+    })
+}
+
 const getListsAndCardsForBoard = (board) => {
   if (!board) return Promise.resolve(board)
   return knex.table('lists')
@@ -54,6 +65,14 @@ const getListById = (id) =>
 const getCardById = (id) =>
   getRecordById('cards', id)
 
+// INVITES
+
+const verifyToken = (token) => {
+  return knex.table('invites')
+    .select('*')
+    .where('token', token)
+}
+
 export default {
   getUsers,
   getUserById,
@@ -61,4 +80,6 @@ export default {
   getBoardsByUserId,
   getBoardById,
   getListById,
+  verifyToken,
+  checkUserBoardAssociation,
 }

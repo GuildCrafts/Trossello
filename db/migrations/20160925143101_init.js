@@ -22,6 +22,12 @@ exports.up = (knex, Promise) => {
       table.string('name')
     }),
 
+    knex.schema.createTable('invites', (table) => {
+      table.integer('boardId')
+      table.string('email')
+      table.string('token')
+    }),
+
     knex.schema.createTable('lists', (table) => {
       table.increments('id').primary()
       table.integer('board_id') //.references('id').inTable('boards')

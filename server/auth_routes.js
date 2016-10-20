@@ -2,6 +2,7 @@ import express from 'express'
 import github from './github'
 import { queries, commands } from './database'
 const router = express.Router()
+import {sendWelcomeEmail} from './mail/mailer'
 
 router.get('/login_via_github', (request, response) => {
   request.session.redirectToAfterLogin = request.header('Referer')
@@ -15,6 +16,7 @@ router.get('/oauth_callback', (request, response, next) => {
     })
     .then(currentUser => {
       request.session.userId = currentUser.id
+      sendWelcomeEmail( currentUser )
       response.redirect(request.session.redirectToAfterLogin || '/')
       delete request.session.redirectToAfterLogin
     })

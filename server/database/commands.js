@@ -156,6 +156,15 @@ const deleteBoard = (boardId) =>
     knex.table('user_boards').where('board_id', boardId).del(),
   ]).then(results => results[0] + results[1])
 
+// INVITES
+const createInvite = (attributes) =>
+  createRecord('invites', attributes)
+
+const createUserBoardEntry = (attributes) =>
+  createRecord('user_boards', attributes)
+
+
+
 
 export default {
   createUser,
@@ -177,4 +186,6 @@ export default {
   unarchiveList,
   archiveBoard,
   unarchiveBoard,
+  createInvite,
+  createUserBoardEntry,
 }
