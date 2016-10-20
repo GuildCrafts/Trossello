@@ -14,11 +14,28 @@ class CreateBoardPopover extends Component {
 
   constructor(props){
     super(props)
+    this.state = {
+      color: '',
+    }
+    this.updateColor = this.updateColor.bind(this)
+    this.onClick = this.onClick.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentDidMount(){
     this.refs.name.focus()
+  }
+
+  updateColor(event, color){
+    console.log('updateColor', color, event.target)
+    if (event.target === this.refs.color)
+      color = event.target.value
+    console.log('setState', color)
+    this.setState({color})
+  }
+
+  onClick(event){
+    event.preventDefault()
   }
 
   onSubmit(event){
@@ -36,7 +53,7 @@ class CreateBoardPopover extends Component {
       dataType: "json",
       data: JSON.stringify(board),
     }).then((board) => {
-      if (this.props.onSave) this.props.onSave()
+      if (this.props.onClose) this.props.onClose()
       boardsStore.reload()
       this.context.redirectTo('/boards/'+board.id)
       this.reset()
@@ -49,13 +66,18 @@ class CreateBoardPopover extends Component {
   }
 
   render(props){
+    console.log('RERENDER!!!!', this.state.color)
     const closeLink = this.props.onClose ?
       <Link onClick={this.props.onClose}>
         <Icon type="times" />
       </Link> :
       null
 
-    return <div className="CreateBoardPopover">
+    const colorBoxes = colors.map(color =>
+      <ColorBox key={color} color={color} onClick={this.updateColor} />
+    )
+
+    return <div ref="root" className="CreateBoardPopover">
       <div className="CreateBoardPopover-header">
         Create A Board
         {closeLink}
@@ -66,14 +88,43 @@ class CreateBoardPopover extends Component {
           <div>Name</div>
           <input type="text" ref="name"/>
         </label>
+        <div className="CreateBoardPopover-createBackgroundColor">
+          {colorBoxes}
+        </div>
         <label>
-          <div>Color</div>
-          <input type="text" ref="color" placeholder="#2E86AB" />
+          <input
+            type="text"
+            ref="color"
+            placeholder="#2E86AB"
+            value={this.state.color || ''}
+            onChange={this.updateColor}
+          />
         </label>
         <input type="submit" value="Create" />
       </Form>
     </div>
   }
 }
+
+const ColorBox = (props) => {
+  const {onClick, color} = props
+  return <div
+    onClick={(event)=>{ onClick(event, color) }}
+    style={{backgroundColor: color}}
+    className="CreateBoardPopover-createBackgroundColor-box"
+  />
+}
+
+const colors = [
+  "#A3333D",
+  "#2E86AB",
+  "#AA4465",
+  "#330036",
+  "#8D6B94",
+  "#D741A7",
+  "#8DE4FF",
+  "#96C0B7",
+  "#2B9720"
+]
 
 export default CreateBoardPopover
