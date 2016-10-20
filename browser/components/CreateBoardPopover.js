@@ -36,7 +36,7 @@ class CreateBoardPopover extends Component {
       dataType: "json",
       data: JSON.stringify(board),
     }).then((board) => {
-      if (this.props.onClose) this.props.onClose()
+      if (this.props.onSave) this.props.onSave()
       boardsStore.reload()
       this.context.redirectTo('/boards/'+board.id)
       this.reset()
