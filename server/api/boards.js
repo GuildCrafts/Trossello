@@ -100,5 +100,13 @@ router.post('/:boardId/lists/:listId/cards/edit', (request, response, next) => {
     .catch(next)
 })
 
+// LEAVE BOARD
+router.post('/:boardId/leave', (request, response, next) => {
+  const {userId} = request.session
+  const {boardId} = request.params
+  commands.removeUserFromBoard(userId, boardId)
+    .then( () =>response.redirect('/'))
+
+})
 
 export default router
