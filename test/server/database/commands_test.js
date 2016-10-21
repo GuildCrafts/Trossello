@@ -270,11 +270,11 @@ describe('database.commands', () => {
   describe('archiveBoard', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should archive a board by board id', () => {
-        return queries.getBoardById(1).then( board => {
+        return queries.getBoardById(101).then( board => {
           expect(board).to.be.a('object')
-          expect(board.id).to.eql(1)
-          return commands.archiveBoard(1).then( () => {
-            return queries.getBoardById(1).then( board => {
+          expect(board.id).to.eql(101)
+          return commands.archiveBoard(101).then( () => {
+            return queries.getBoardById(101).then( board => {
               expect(board.archived).to.eql(true)
             })
           })

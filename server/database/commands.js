@@ -77,12 +77,13 @@ const findOrCreateUserFromGithubProfile = (githubProfile) => {
     .then(user => user ? user : createUser(userAttributes))
 }
 
-const createUser = (attributes) => {
+const createUser = (attributes) =>
   createRecord('users', attributes)
     .then(user => {
       sendWelcomeEmail(user)
+      return user
     })
-}
+
 
 
 
