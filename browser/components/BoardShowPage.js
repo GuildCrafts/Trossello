@@ -95,5 +95,5 @@ class BoardShowPage extends React.Component {
 }
 
 const DownloadBoardButton = (props) => {
-  return <a href={`/api/boards/${props.boardId}?download=1`}>Export Board</a>
+  return <a className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</a>
 }
