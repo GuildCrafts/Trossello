@@ -1,5 +1,6 @@
 import knex from './knex'
 import queries from './queries'
+import { sendWelcomeEmail } from '../mail/mailer'
 
 const firstRecord = records => records[0]
 
@@ -70,8 +71,13 @@ const findOrCreateUserFromGithubProfile = (githubProfile) => {
     .then(user => user ? user : createUser(userAttributes))
 }
 
-const createUser = (attributes) =>
+const createUser = (attributes) => {
   createRecord('users', attributes)
+    .then(user => {
+      sendWelcomeEmail(user)
+    })
+}
+
 
 
 const updateUser = (id, attributes) =>
@@ -145,6 +151,23 @@ const createBoard = (userId, attributes) => {
   })
 }
 
+const addUserToBoard = (userId, boardId) => {
+  let attrs = {
+    user_id: userId,
+    board_id: boardId,
+  }
+  return knex.table('user_boards')
+    .select('*')
+    .where({
+      user_id: userId,
+      board_id: boardId
+    })
+    .whereNotExists( function() {
+      this.select('*')
+      .from('user_boards')
+      return createRecord('user_boards', attrs)
+    })
+}
 
 const updateBoard = (id, attributes) =>
   updateRecord('boards', id, attributes)
@@ -155,6 +178,10 @@ const deleteBoard = (boardId) =>
     deleteRecord('boards', boardId),
     knex.table('user_boards').where('board_id', boardId).del(),
   ]).then(results => results[0] + results[1])
+
+// INVITES
+const createInvite = (attributes) =>
+  createRecord('invites', attributes)
 
 
 export default {
@@ -177,4 +204,6 @@ export default {
   unarchiveList,
   archiveBoard,
   unarchiveBoard,
+  createInvite,
+  addUserToBoard,
 }
