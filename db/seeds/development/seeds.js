@@ -47,6 +47,7 @@ exports.seed = (knex) => {
       listRecords.forEach((listRecord, index) => {
         cardRecordsForList[index].forEach(cardRecord => {
           cardRecord.list_id = listRecord.id
+          cardRecord.board_id = listRecord.board_id
           cardRecords.push(cardRecord)
         })
       })

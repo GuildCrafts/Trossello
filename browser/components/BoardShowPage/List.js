@@ -148,7 +148,8 @@ class NewCardForm extends Component {
     autosize(this.refs.content)
   }
 
-  createCard() {
+  createCard(event) {
+    event.preventDefault()
     const content = {
       content: this.refs.content.value,
     }

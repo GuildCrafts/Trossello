@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
 import './CardSearchForm.sass'
+import React, { Component } from 'react'
 import Form from './Form'
 import Link from './Link'
 import Icon from './Icon'
@@ -14,81 +14,80 @@ export default class CardSearchForm extends Component {
   constructor(props){
     super(props)
     this.state = {
-        searching: false,
-        searchTerm: null,
-        result: null
+      searchTerm: '',
+      result: null
     }
-    this.onKeyDown=this.onKeyDown.bind(this)
-    this.sendSearch=this.sendSearch.bind(this)
-    this.saveSearch=this.saveSearch.bind(this)
-    this.closeSearchModal = this.closeSearchModal.bind(this)
+    this.setSearchTerm = this.setSearchTerm.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
+    this.search = this.search.bind(this)
+    this.close = this.close.bind(this)
   }
 
 
+  setSearchTerm(event){
+    const searchTerm = event.target.value
+    this.setState({searchTerm})
+  }
 
-  closeSearchModal(){
-      this.setState({
-        searching:false,
-        searchTerm: null,
-        result:null
-      })
-      this.refs.content.value=''
-    }
+
+  close(){
+    this.setState({
+      searchTerm: '',
+      result: null,
+    })
+  }
 
 
   onKeyDown(event) {
     if (!event.shiftKey && event.keyCode === 13) {
       event.preventDefault()
-      this.sendSearch(event)
+      this.search(event)
     }
     if (event.keyCode === 27) {
       event.preventDefault()
-      this.cancel()
+      this.close()
     }
   }
 
-  sendSearch(event) {
+  search(event) {
     event.preventDefault()
-    const content='%'+this.refs.content.value.replace(/\n/,'').toLowerCase()+'%'
     $.ajax({
-      method:"POST",
-      url: `/api/boards/search`,
-      contentType:"application/json; charset=utf-8",
-      dataType:"json",
-      data:JSON.stringify({content: content}),
+      method: "POST",
+      url: "/api/boards/search",
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({searchTerm: this.state.searchTerm}),
     })
     .then(result => {
-      this.saveSearch(result)
-      this.setState({
-        searching: true,
-        searchTerm: this.refs.content.value.replace(/\n/,'')
-      })
-    })
-    .then(() => {
+      this.setState({result})
       boardStore.reload()
     })
     .catch(error => {
       console.error(error)
     })
   }
-  saveSearch(result) {
-    this.setState({
-      result: result
-    })
-  }
+
 
   render(){
-    const searchResultModal = this.state.searching ?
-    <SearchResultModal className="CardSearchForm-Result" onClose={this.closeSearchModal} searchTerm={this.state.searchTerm} result={this.state.result} /> : null
+    const searchResultModal = this.state.result ?
+      <SearchResultModal
+        className="CardSearchForm-Result"
+        onClose={this.close}
+        searchTerm={this.state.searchTerm}
+        result={this.state.result}
+      /> :
+      null
 
-    return <Form className="CardSearchForm-Form" onSubmit={this.sendSearch} >
-    <input
-      type="text"
-      onKeyDown={this.onKeyDown}
-      className="CardSearchForm-Input"
-      ref="content"
-    />
-    {searchResultModal}
+    return <Form className="CardSearchForm" onSubmit={this.search} >
+      <input
+        type="text"
+        onKeyDown={this.onKeyDown}
+        className="CardSearchForm-Input"
+        ref="content"
+        value={this.state.searchTerm}
+        onChange={this.setSearchTerm}
+      />
+      {searchResultModal}
     </Form>
   }
 
@@ -98,27 +97,20 @@ export default class CardSearchForm extends Component {
 class SearchResultModal extends Component {
   render() {
     const { result, searchTerm, onClose } = this.props
-    const cardNodes = result.map(card => {
-      return <Card
-        archivable={false}
-        editable={false}
-        key={card.id}
-        card={card}
-      />
-    })
-  return <div className="CardSearchForm-Modal">
-    <div ref="shroud" className="CardSearchForm-Modal-shroud">
-        <div ref="window" className="CardSearchForm-Modal-window">
-          <h5 className="CardSearchForm-Result-Title">Card Search Results For: &quot;{this.props.searchTerm}&quot;</h5>
-          <Link className="CardSearchForm-Modal-window-close" onClick={this.props.onClose}>
-            <Icon type="times" />
-          </Link>
-          <div className="CardSearchForm-Modal-window-results">
-            {cardNodes}
-          </div>
+    const cardNodes = result.map(card =>
+      <Card key={card.id} card={card} archivable={false} editable={false} />
+    )
+    return <div className="CardSearchForm-Modal">
+      <div ref="shroud" className="CardSearchForm-Modal-shroud" onClick={this.props.onClose} />
+      <div ref="window" className="CardSearchForm-Modal-window">
+        <h5 className="CardSearchForm-Result-Title">Card Search Results For: &quot;{this.props.searchTerm}&quot;</h5>
+        <Link className="CardSearchForm-Modal-window-close" onClick={this.props.onClose}>
+          <Icon type="times" />
+        </Link>
+        <div className="CardSearchForm-Modal-window-results">
+          {cardNodes}
         </div>
+      </div>
     </div>
-  </div>
-
   }
 }

@@ -12,11 +12,11 @@ router.get('/', (request, response, next) => {
 //SEARCH
 router.post('/search', ( request, response, next ) => {
   const userId  = request.session.userId
-  commands.searchQuery(userId, request.body.content)
-  .then( result => {
-    response.json(result)
-  })
-  .catch(next)
+  commands.searchQuery(userId, request.body.searchTerm)
+    .then( result => {
+      response.json(result)
+    })
+    .catch(next)
 })
 
 // CREATE
