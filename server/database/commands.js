@@ -20,11 +20,17 @@ const updateRecord = (table, id, attributes) =>
     .returning('*')
     .then(firstRecord)
 
-
 const deleteRecord = (table, id) =>
   knex
     .table(table)
     .where('id', id)
+    .del()
+
+
+const removeUserFromBoard = (userId, boardId) =>
+  knex
+    .table('user_boards')
+    .where({'user_id': userId , 'board_id': boardId})
     .del()
 
 const archiveRecord = (table, id) =>
@@ -169,6 +175,7 @@ const addUserToBoard = (userId, boardId) => {
     })
 }
 
+
 const updateBoard = (id, attributes) =>
   updateRecord('boards', id, attributes)
 
@@ -213,4 +220,5 @@ export default {
   createInvite,
   addUserToBoard,
   searchQuery,
+  removeUserFromBoard,
 }

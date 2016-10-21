@@ -9,6 +9,7 @@ import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
 import List from './BoardShowPage/List'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
+import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -84,6 +85,7 @@ class BoardShowPage extends React.Component {
           <DeleteBoardButton boardId={board.id}/>
           <DownloadBoardButton boardId={board.id}/>l
           <InviteByEmailButton boardId={board.id}/>
+          <LeaveBoardButton boardId={board.id}/>
         </div>
       </div>
       <div className="BoardShowPage-lists" ref="lists">
