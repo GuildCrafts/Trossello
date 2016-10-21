@@ -44,7 +44,14 @@ export default class Card extends Component {
   }
 
   render() {
-    const { card } = this.props
+    const { card, editable, archivable } = this.props
+
+    const editCardButton = this.props.editable ?
+      <EditCardButton onClick={this.editCard} /> : null
+
+    const archiveCardButton = this.props.archivable ?
+      <ArchiveCardButton card={this.props.card}/> : null
+
     const editCardModal = this.state.editingCard ?
       <EditCardModal
         onClose={this.cancelEditingCard}
@@ -61,8 +68,8 @@ export default class Card extends Component {
       <div className="BoardShowPage-Card-box" draggable="true" onDragStart={dragStart}>
         <pre>{card.content}</pre>
         <div className="BoardShowPage-Card-controls">
-          <EditCardButton onClick={this.editCard} />
-          <ArchiveCardButton card={card}/>
+          {editCardButton}
+          {archiveCardButton}
         </div>
       </div>
     </div>

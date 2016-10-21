@@ -83,7 +83,14 @@ export default class List extends Component {
 
   render(){
     const { board, list, cards } = this.props
-    const cardNodes = cards.map(card => { return <Card key={card.id} card={card} />})
+    const cardNodes = cards.map(card => {
+      return <Card
+        editable={true}
+        archivable={true}
+        key={card.id}
+        card={card}
+      />
+    })
 
     let newCardForm, newCardLink
     if (this.state.creatingCard) {

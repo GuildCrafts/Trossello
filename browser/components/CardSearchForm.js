@@ -99,19 +99,21 @@ class SearchResultModal extends Component {
     const { result, searchTerm, onClose } = this.props
     const cardNodes = result.map(card => {
       return <Card
+        archivable={false}
+        editable={false}
         key={card.id}
         card={card}
       />
     })
   return <div className="CardSearchForm-Modal">
     <div ref="shroud" className="CardSearchForm-Modal-shroud">
-      <div ref="window" className="CardSearchForm-Modal-window">
-        <h5 className="CardSearchForm-Result-Title">Card Search Results For: &quot;{this.props.searchTerm}&quot;</h5>
-        <Link className="CardSearchForm-Result-Close" onClick={this.props.onClose}>
-          <Icon type="times" />
-        </Link>
-        {cardNodes}
-      </div>
+        <div ref="window" className="CardSearchForm-Modal-window">
+          <h5 className="CardSearchForm-Result-Title">Card Search Results For: &quot;{this.props.searchTerm}&quot;</h5>
+          <Link className="CardSearchForm-Result-Close" onClick={this.props.onClose}>
+            <Icon type="times" />
+          </Link>
+          {cardNodes}
+        </div>
     </div>
   </div>
 
