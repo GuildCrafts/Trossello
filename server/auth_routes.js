@@ -4,7 +4,9 @@ import { queries, commands } from './database'
 const router = express.Router()
 
 router.get('/login_via_github', (request, response) => {
-  request.session.redirectToAfterLogin = request.header('Referer')
+  if (!request.session.redirectToAfterLogin) {
+    request.session.redirectToAfterLogin= request.header('Referer')
+  }
   response.redirect(github.authorizeURL(request))
 })
 

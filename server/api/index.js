@@ -2,8 +2,11 @@ import express from 'express'
 import boardsRoutes from './boards'
 import listsRoutes from './lists'
 import cardsRoutes from './cards'
+import inviteRoutes from './invites'
 
 const router = new express.Router()
+
+router.use('/invites', inviteRoutes)
 
 router.use((request, response, next) => {
   if (request.session.userId) return next()
