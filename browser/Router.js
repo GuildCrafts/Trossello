@@ -9,7 +9,6 @@ import BoardShowPage from './components/BoardShowPage'
 
 export default class Router extends SimpleReactRouter {
   getRoutes(map, props){
-    console.log('router', props)
     if (!props) debugger
     const { session } = props
 
