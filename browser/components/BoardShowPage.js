@@ -83,7 +83,7 @@ class BoardShowPage extends React.Component {
         <h1>{board.name}</h1>
         <div>
           <DeleteBoardButton boardId={board.id}/>
-          <DownloadBoardButton boardId={board.id}/>l
+          <DownloadBoardButton boardId={board.id}/>
           <InviteByEmailButton boardId={board.id}/>
           <LeaveBoardButton boardId={board.id}/>
         </div>
