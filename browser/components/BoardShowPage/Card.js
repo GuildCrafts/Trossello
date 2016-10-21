@@ -132,15 +132,15 @@ class EditCardForm extends Component {
   }
   constructor(props){
     super(props)
-    this.onKeyUp = this.onKeyUp.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
     this.saveCard = this.saveCard.bind(this)
     this.cancel = this.cancel.bind(this)
   }
 
-  onKeyUp(event) {
+  onKeyDown(event) {
     if (!event.shiftKey && event.keyCode === 13) {
       event.preventDefault()
-      this.saveCard()
+      this.saveCard(event)
     }
     if (event.keyCode === 27) {
       event.preventDefault()
@@ -169,7 +169,7 @@ class EditCardForm extends Component {
     return <Form className="BoardShowPage-EditCardForm" onSubmit={this.saveCard}>
       <textarea
         className="BoardShowPage-EditCard"
-        onKeyUp={this.onKeyUp}
+        onKeyDown={this.onKeyDown}
         ref="content"
         defaultValue={this.props.card.content}
       />

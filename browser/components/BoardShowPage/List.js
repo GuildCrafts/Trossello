@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
+import Card from './Card'
+import ArchiveButton from './ArchiveButton'
 import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
@@ -105,7 +107,7 @@ export default class List extends Component {
     return <div className="BoardShowPage-List" onDrop={this.onDrop} onDragOver={this.onDragOver}>
       <div className="BoardShowPage-ListHeader">
         {list.name}
-        <DeleteListButton list={list} />
+        <ArchiveListButton list={list} />
       </div>
       <div ref="cards" className="BoardShowPage-cards">
         {cardNodes}
@@ -174,25 +176,7 @@ class NewCardForm extends Component {
   }
 }
 
-const Card = ({ card }) => {
-  const dragStart = event => {
-    event.dataTransfer.setData("text", card.id)
-  }
-
-  return <div className="BoardShowPage-Card" draggable="true" onDragStart={dragStart} id={card.id}>
-    <pre>{card.content}</pre>
-    <DeleteCardButton card={card} />
-  </div>
-}
-
-const DeleteButton = (props) => {
-  const className = `BoardShowPage-DeleteButton ${props.className||''}`
-  return <Link className={className} onClick={props.onClick}>
-    <Icon type="archive" />
-  </Link>
-}
-
-const deleteRecord = (event, resource, id) => {
+const archiveRecord = (event, resource, id) => {
   event.preventDefault()
   $.ajax({
     method: "POST",
@@ -202,24 +186,12 @@ const deleteRecord = (event, resource, id) => {
   })
 }
 
-const DeleteListButton = (props) => {
-  const className = `BoardShowPage-DeleteListButton ${props.className||''}`
+const ArchiveListButton = (props) => {
+  const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
   const onClick = (event) => {
-    deleteRecord(event, 'lists', props.list.id)
+    archiveRecord(event, 'lists', props.list.id)
   }
-  return <DeleteButton
-    onClick={onClick}
-    className={className}
-    {...props}
-  />
-}
-
-const DeleteCardButton = (props) => {
-  const className = `BoardShowPage-DeleteCardButton ${props.className||''}`
-  const onClick = (event) => {
-    deleteRecord(event, 'cards', props.card.id)
-  }
-  return <DeleteButton
+  return <ArchiveButton
     onClick={onClick}
     className={className}
     {...props}
