@@ -105,7 +105,10 @@ router.post('/:boardId/leave', (request, response, next) => {
   const {userId} = request.session
   const {boardId} = request.params
   commands.removeUserFromBoard(userId, boardId)
-    .then( () =>response.redirect('/'))
+    .then( () => {
+      response.json(null)
+    })
+    .catch(next)
 
 })
 
