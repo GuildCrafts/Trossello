@@ -18,7 +18,7 @@ export default class CardSearchForm extends Component {
         searchTerm: null,
         result: null
     }
-    this.onKeyUp=this.onKeyUp.bind(this)
+    this.onKeyDown=this.onKeyDown.bind(this)
     this.sendSearch=this.sendSearch.bind(this)
     this.saveSearch=this.saveSearch.bind(this)
     this.closeSearchModal = this.closeSearchModal.bind(this)
@@ -36,7 +36,7 @@ export default class CardSearchForm extends Component {
     }
 
 
-  onKeyUp(event) {
+  onKeyDown(event) {
     if (!event.shiftKey && event.keyCode === 13) {
       event.preventDefault()
       this.sendSearch(event)
@@ -82,8 +82,9 @@ export default class CardSearchForm extends Component {
     <SearchResultModal className="CardSearchForm-Result" onClose={this.closeSearchModal} searchTerm={this.state.searchTerm} result={this.state.result} /> : null
 
     return <Form className="CardSearchForm-Form" onSubmit={this.sendSearch} >
-    <textarea
-      onKeyUp={this.onKeyUp}
+    <input
+      type="text"
+      onKeyDown={this.onKeyDown}
       className="CardSearchForm-Input"
       ref="content"
     />
@@ -109,10 +110,12 @@ class SearchResultModal extends Component {
     <div ref="shroud" className="CardSearchForm-Modal-shroud">
         <div ref="window" className="CardSearchForm-Modal-window">
           <h5 className="CardSearchForm-Result-Title">Card Search Results For: &quot;{this.props.searchTerm}&quot;</h5>
-          <Link className="CardSearchForm-Result-Close" onClick={this.props.onClose}>
+          <Link className="CardSearchForm-Modal-window-close" onClick={this.props.onClose}>
             <Icon type="times" />
           </Link>
-          {cardNodes}
+          <div className="CardSearchForm-Modal-window-results">
+            {cardNodes}
+          </div>
         </div>
     </div>
   </div>
