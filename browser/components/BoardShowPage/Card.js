@@ -95,6 +95,7 @@ const ArchiveCardButton = (props) => {
     })
   }
   return <ArchiveButton
+    onArchive={onClick}
     onClick={onClick}
     className={className}
     {...props}
