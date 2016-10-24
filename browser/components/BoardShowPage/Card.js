@@ -95,7 +95,7 @@ const ArchiveCardButton = (props) => {
   }
   return <ArchiveButton
     size='0'
-    name="Archive"
+    buttonName="Archive"
     confirmationTitle='Archive Card?'
     confirmationMessage='Are you sure you want to archive this card?'
     onClick={onClick}

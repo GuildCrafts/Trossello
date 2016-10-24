@@ -7,7 +7,7 @@ const ArchiveButton = (props) => {
   const className = `BoardShowPage-ArchiveButton ${props.className||''}`
   return <ConfirmationLink
     onConfirm={props.onClick}
-    name={props.name}
+    buttonName={props.buttonName}
     title={props.confirmationTitle}
     message={props.confirmationMessage}
     className={className}
