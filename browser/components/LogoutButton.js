@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
+import ConfirmationLink from './ConfirmationLink'
 
-const logout = (event) => {
-  event.preventDefault();
+const logout = () => {
   // actions.logout()
   // still kind of hacky, but functional
   $.post('/logout', () => {
@@ -11,7 +11,12 @@ const logout = (event) => {
 }
 
 const LogoutButton = (props) => {
-  return <button {...props} onClick={logout}>{props.children}</button>
+  return <ConfirmationLink
+    {...props}
+    message="Log out?"
+    onConfirm={logout}>
+    {props.children}
+  </ConfirmationLink>
 }
 
 export default LogoutButton
