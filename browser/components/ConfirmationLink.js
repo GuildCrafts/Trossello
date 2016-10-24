@@ -7,7 +7,7 @@ import ConfirmationDialog from './ConfirmationDialog'
 
 export default class ConfirmationLink extends Component {
   static propTypes = {
-    name: React.PropTypes.string.isRequired,
+    buttonName: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
     message:  React.PropTypes.string.isRequired,
     onConfirm:  React.PropTypes.func.isRequired,
@@ -43,7 +43,7 @@ export default class ConfirmationLink extends Component {
   render(){
     const confirmationDialog = this.state.confirming ?
       <ConfirmationDialog
-        name={this.props.name}
+        buttonName={this.props.buttonName}
         title={this.props.title}
         message={this.props.message}
         onConfirm={this.onConfirm}

@@ -13,7 +13,7 @@ const logout = () => {
 const LogoutButton = (props) => {
   return <ConfirmationLink
     {...props}
-    name="Log Out"
+    buttonName="Log Out"
     title="Log Out?"
     message="Are you sure you want to log out?"
     onConfirm={logout}>

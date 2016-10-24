@@ -5,7 +5,7 @@ import './ConfirmationDialog.sass'
 
 export default class ConfirmationDialog extends Component {
   static propTypes = {
-    name: React.PropTypes.string.isRequired,
+    buttonName: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
     message:  React.PropTypes.string.isRequired,
     onConfirm:  React.PropTypes.func.isRequired,
@@ -36,7 +36,7 @@ export default class ConfirmationDialog extends Component {
               Cancel
             </Link>
             <Link className="ConfirmationDialog-controls-button ConfirmationDialog-controls-ok" onClick={this.props.onConfirm}>
-              {this.props.name}
+              {this.props.buttonName}
             </Link>
           </div>
         </div>
