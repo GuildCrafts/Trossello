@@ -10,16 +10,18 @@ export default class ConfirmationDialog extends Component {
     onAbort:  React.PropTypes.func,
   }
   render(){
-    const className = `ConfirmationDialog ${this.props.className||''}`
-    return <div className={className}>
-      <h4>{this.props.message}</h4>
-      <div className="ConfirmationDialog-controls">
-        <Link className="ConfirmationDialog-controls-button" onClick={this.props.onAbort}>
-          Cancel
-        </Link>
-        <Link className="ConfirmationDialog-controls-button ConfirmationDialog-controls-ok" onClick={this.props.onConfirm}>OK</Link>
-      </div>
+    const className = `ConfirmationDialog-window ${this.props.className||''}`
+    return <div className="ConfirmationDialog-shroud">
+        <div className={className}>
+          <h4>{this.props.message}</h4>
+          <div className="ConfirmationDialog-controls">
+            <Link className="ConfirmationDialog-controls-button" onClick={this.props.onAbort}>
+              Cancel
+            </Link>
+            <Link className="ConfirmationDialog-controls-button ConfirmationDialog-controls-ok" onClick={this.props.onConfirm}>OK</Link>
+          </div>
 
+      </div>
     </div>
   }
 }

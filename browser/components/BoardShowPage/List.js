@@ -177,8 +177,7 @@ class NewCardForm extends Component {
   }
 }
 
-const archiveRecord = (event, resource, id) => {
-  event.preventDefault()
+const archiveRecord = (resource, id) => {
   $.ajax({
     method: "POST",
     url: `/api/${resource}/${id}/archive`
@@ -189,10 +188,11 @@ const archiveRecord = (event, resource, id) => {
 
 const ArchiveListButton = (props) => {
   const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
-  const onClick = (event) => {
-    archiveRecord(event, 'lists', props.list.id)
+  const onClick = () => {
+    archiveRecord('lists', props.list.id)
   }
   return <ArchiveButton
+    confirmationMessage='Are you sure you want to archive this list?'
     onClick={onClick}
     className={className}
     {...props}
