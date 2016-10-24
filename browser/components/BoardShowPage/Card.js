@@ -6,6 +6,7 @@ import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
 import ArchiveButton from './ArchiveButton'
+import ConfirmationLink from '../ConfirmationLink'
 
 export default class Card extends Component {
   static propTypes = {
@@ -84,9 +85,7 @@ const EditCardButton = (props) => {
 }
 
 const ArchiveCardButton = (props) => {
-  const className = `BoardShowPage-ArchiveButton ${props.className||''}`
-  const onClick = (event) => {
-    event.preventDefault()
+  const onClick = () => {
     $.ajax({
       method: "POST",
       url: `/api/cards/${props.card.id}/archive`
@@ -95,10 +94,9 @@ const ArchiveCardButton = (props) => {
     })
   }
   return <ArchiveButton
-    onArchive={onClick}
+    confirmationMessage='Are you sure you want to archive this card?'
     onClick={onClick}
-    className={className}
-    {...props}
+    className={props.className}
   />
 }
 

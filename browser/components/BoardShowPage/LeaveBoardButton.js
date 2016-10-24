@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
 import boardsStore from '../../stores/boardsStore'
+import ConfirmationLink from '../ConfirmationLink'
 
 export default class LeaveBoardButton extends Component {
 
@@ -10,10 +11,10 @@ export default class LeaveBoardButton extends Component {
 
   constructor(props){
     super(props)
-    this.onClick = this.onClick.bind(this)
+    this.leaveBoard = this.leaveBoard.bind(this)
   }
 
-  onClick(event){
+  leaveBoard(event){
     $.ajax({
       method: "POST",
       url: `/api/boards/${this.props.boardId}/leave`,
@@ -24,8 +25,12 @@ export default class LeaveBoardButton extends Component {
   }
 
   render(){
-    return <button className="BoardShowPage-button BoardShowPage-DeleteBoardButton" onClick={this.onClick}>
+    return <ConfirmationLink
+      className="BoardShowPage-button BoardShowPage-DeleteBoardButton"
+      onConfirm={this.leaveBoard}
+      message='Are you sure you want to leave this board?'
+    >
       Leave Board
-    </button>
+    </ConfirmationLink>
   }
 }
