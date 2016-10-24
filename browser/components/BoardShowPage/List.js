@@ -192,6 +192,8 @@ const ArchiveListButton = (props) => {
     archiveRecord('lists', props.list.id)
   }
   return <ArchiveButton
+    name="Archive"
+    confirmationTitle='Archive List?'
     confirmationMessage='Are you sure you want to archive this list?'
     onClick={onClick}
     className={className}

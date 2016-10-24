@@ -80,7 +80,7 @@ export default class Card extends Component {
 
 const EditCardButton = (props) => {
   return <Link className="BoardShowPage-EditButton" onClick={props.onClick}>
-    <Icon type="pencil" />
+    <Icon size='0' type="pencil" />
   </Link>
 }
 
@@ -94,6 +94,9 @@ const ArchiveCardButton = (props) => {
     })
   }
   return <ArchiveButton
+    size='0'
+    name="Archive"
+    confirmationTitle='Archive Card?'
     confirmationMessage='Are you sure you want to archive this card?'
     onClick={onClick}
     className={props.className}

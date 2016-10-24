@@ -28,6 +28,8 @@ export default class LeaveBoardButton extends Component {
     return <ConfirmationLink
       className="BoardShowPage-button BoardShowPage-DeleteBoardButton"
       onConfirm={this.leaveBoard}
+      name="Leave Board"
+      title='Leave Board?'
       message='Are you sure you want to leave this board?'
     >
       Leave Board
