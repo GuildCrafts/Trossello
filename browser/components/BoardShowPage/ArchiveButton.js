@@ -7,10 +7,12 @@ const ArchiveButton = (props) => {
   const className = `BoardShowPage-ArchiveButton ${props.className||''}`
   return <ConfirmationLink
     onConfirm={props.onClick}
+    name={props.name}
+    title={props.confirmationTitle}
     message={props.confirmationMessage}
     className={className}
   >
-    <Icon type='archive'/>
+    <Icon size={props.size} type='archive'/>
   </ConfirmationLink>
 }
 
