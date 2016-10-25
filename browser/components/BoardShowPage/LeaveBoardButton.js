@@ -24,7 +24,7 @@ export default class LeaveBoardButton extends Component {
   }
 
   render(){
-    return <button className="BoardShowPage-button BoardShowPage-DeleteBoardButton" onClick={this.onClick}>
+    return <button className="MenuSideBar-button MenuSideBar-LeaveBoardButton" onClick={this.onClick}>
       Leave Board
     </button>
   }

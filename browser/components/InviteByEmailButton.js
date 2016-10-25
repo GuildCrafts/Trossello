@@ -21,7 +21,7 @@ class InviteByEmailButton extends ToggleComponent {
       null
 
     return <span ref="root" className="InviteByEmailButton">
-      <button className="InviteByEmailButton-button" onClick={this.toggle}>
+      <button className="MenuSideBar-button" onClick={this.toggle}>
         Invite By Email
       </button>
       {inviteByEmail}

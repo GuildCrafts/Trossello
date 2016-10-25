@@ -24,7 +24,7 @@ export default class DeleteBoardButton extends Component {
   }
 
   render(){
-    return <button className="BoardShowPage-button BoardShowPage-DeleteBoardButton" onClick={this.onClick}>
+    return <button className="MenuSideBar-button MenuSideBar-DeleteBoardButton" onClick={this.onClick}>
       Archive
     </button>
   }
