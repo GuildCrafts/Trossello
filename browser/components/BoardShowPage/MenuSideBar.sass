@@ -1,0 +1,69 @@
+@import "../../style.sass"
+
+.MenuSideBar
+  $button-height: 30px
+  $button-margin: 4px
+  $top: $header-height
+
+  height: 100vh
+  display: flex
+  background-color: lightgrey
+  flex-direction: column
+  top: $top
+  right: 0
+  z-index: 100
+  position: fixed
+  padding: 5px
+  min-width: 260px
+  &-button
+    display: block
+    margin: 0 $button-margin
+    height: $button-height
+    padding: 0 10px
+    line-height: $button-height
+    min-width: $button-height
+    border-radius: 5px
+    font-weight: bolder
+    position: relative
+    text-decoration: none
+    border: 0
+    white-space: nowrap
+    outline: none
+    color: inherit
+    cursor: pointer
+    margin-bottom: 5px
+  &-icons
+    font-size: 0.6em
+    padding-right: 7px
+  &-options
+    font-weight: bold
+    display: block
+    padding: 4px 5px
+    opacity: 0.6
+    text-decoration: none
+    color: black
+    border: none
+    background-color: inherit
+    width: 100%
+    text-align: left
+    &:hover
+      background-color: rgb(192, 192, 192)
+      opacity: 1
+  &-header
+    font-weight: bold
+    font-size: 1.2em
+    padding: 10px
+    text-align: center
+  &-Toggle
+    max-height: calc(100vh  - #{$top + 5px})
+    color: white
+  &-cancel
+    position: absolute
+    top: 2px
+    right: 3px
+    color: black
+  &-backArrow
+    position: absolute
+    top: 2px
+    left: 3px
+    color: black

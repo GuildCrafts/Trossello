@@ -2,8 +2,12 @@ import React, { Component } from 'react'
 import Button from '../Button'
 import $ from 'jquery'
 import boardsStore from '../../stores/boardsStore'
+<<<<<<< HEAD
 import ConfirmationButton from '../ConfirmationButton'
 
+=======
+import ConfirmationLink from '../ConfirmationLink'
+>>>>>>> db24186... MenuSideBar styling
 export default class LeaveBoardButton extends Component {
 
   static contextTypes = {
