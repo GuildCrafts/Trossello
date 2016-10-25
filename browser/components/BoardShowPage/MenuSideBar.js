@@ -7,7 +7,6 @@ import LeaveBoardButton from './LeaveBoardButton'
 import InviteByEmailButton from '../InviteByEmailButton'
 import './MenuSideBar.sass'
 import Icon from '../Icon'
-import MoreMenuOptionsButton from './MoreMenuOptionsButton'
 
 export default class MenuSideBar extends ToggleComponent {
 
