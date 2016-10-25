@@ -1,0 +1,54 @@
+@import "../style.sass"
+
+.CardViewModal
+  &-shroud, &-stage
+    position: fixed
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+  &-shroud
+    z-index: 100
+    background-color: rgba(0, 0, 0, 0.5)
+  &-stage
+    pointer-events: none
+    z-index: 101
+    display: flex
+    justify-content: center
+    align-items: center
+  &-window
+    pointer-events: auto
+    // min-height: 500px
+    min-width: 500px
+    padding: 10px
+    border-radius: 5px
+    background-color: #e1e3ea
+  &-header
+    padding-top: 10px
+    text-align: center
+    font-weight: bold
+    font-size: 1.1em
+  &-details
+    // align-items: center
+    // justify-content: center
+    // text-align: center
+    width: 79%
+    display: inline
+    float: left
+    &-list
+      margin-left: 40px
+      margin-right: 40px
+    &-board
+      margin-left: 20px
+  &-controls
+    width: 19%
+    top: 0
+    right: 0
+    display: inline
+    float: right
+  &-description
+    align-items: center
+    padding: 10px 20px
+    min-width: 200px
+    min-height: 200px
+  &-comments

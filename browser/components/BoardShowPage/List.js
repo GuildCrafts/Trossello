@@ -73,6 +73,8 @@ export default class List extends Component {
         card={card}
         index={index}
         ghosted={dragging && card.id === dragging.cardId}
+        board={board}
+        list={list}
       />
     )
 

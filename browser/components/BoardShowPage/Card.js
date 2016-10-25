@@ -8,6 +8,7 @@ import autosize from 'autosize'
 import ArchiveButton from './ArchiveButton'
 import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
+import CardViewModal from '../CardViewModal'
 
 export default class Card extends Component {
   static propTypes = {
@@ -21,10 +22,13 @@ export default class Card extends Component {
       cardLeft: null,
       cardHeight: null,
       cardWidth: null,
+      viewingCard: false,
     }
     this.editCard = this.editCard.bind(this)
     this.cancelEditingCard = this.cancelEditingCard.bind(this)
     this.updateCard = this.updateCard.bind(this)
+    this.viewCard = this.viewCard.bind(this)
+    this.stopViewingCard = this.stopViewingCard.bind(this)
   }
 
   editCard() {
@@ -40,6 +44,15 @@ export default class Card extends Component {
 
   cancelEditingCard(){
     this.setState({editingCard:false})
+  }
+
+  viewCard() {
+    this.setState({viewingCard:true})
+  }
+
+  stopViewingCard() {
+    console.log('click!')
+    this.setState({viewingCard:false})
   }
 
   updateCard(updates){
@@ -90,6 +103,14 @@ export default class Card extends Component {
       /> :
       null
 
+    const cardViewModal = this.state.viewingCard ?
+      <CardViewModal
+        card={this.props.card}
+        list={this.props.list}
+        board={this.props.board}
+        onClose={this.stopViewingCard}
+      /> :
+      null
 
     let className = 'BoardShowPage-Card'
     if (ghosted) className += ' BoardShowPage-Card-ghosted'
