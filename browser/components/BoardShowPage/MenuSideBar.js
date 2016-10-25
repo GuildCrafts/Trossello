@@ -7,28 +7,31 @@ import LeaveBoardButton from './LeaveBoardButton'
 import InviteByEmailButton from '../InviteByEmailButton'
 import './MenuSideBar.sass'
 import Icon from '../Icon'
+import MoreMenuOptionsButton from './MoreMenuOptionsButton'
 
-export default class MenuSideBar extends Component {
+export default class MenuSideBar extends ToggleComponent {
 
   static PropTypes = {
-    board: React.PropTypes.object.required,
+    board: React.PropTypes.object.required
   }
 
+
   render(){
+    const content = this.state.open ?
+      <MenuSideBarMore
+        board={this.props.board}
+        closeMore={this.close}
+        closeMenu={this.props.onClose}
+      /> :
+      <MenuSideBarMain
+        board={this.props.board}
+        showMore={this.open}
+        closeMenu={this.props.onClose}
+      />
+
+
     return <div className="MenuSideBar">
-      <div className="MenuSideBar-header" >
-        Menu
-        <Link className="MenuSideBar-cancel" onClick={this.props.onClose}>
-          <Icon type="times" />
-        </Link>
-        <hr/>
-      </div>
-      <div className="MenuSideBar-buttons">
-        <DeleteBoardButton boardId={this.props.board.id}/>
-        <DownloadBoardButton boardId={this.props.board.id}/>
-        <InviteByEmailButton boardId={this.props.board.id}/>
-        <LeaveBoardButton boardId={this.props.board.id}/>
-      </div>
+      {content}
     </div>
 
   }
@@ -36,4 +39,50 @@ export default class MenuSideBar extends Component {
 
 const DownloadBoardButton = (props) => {
   return <a className="MenuSideBar-button MenuSideBar-DownloadBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</a>
+}
+
+const MenuSideBarMain = (props) => {
+  return <div>
+    <div className="MenuSideBar-header" >
+      Menu
+      <Link className="MenuSideBar-cancel" onClick={props.closeMenu}>
+        <Icon type="times" />
+      </Link>
+      <hr/>
+    </div>
+    <div className="MenuSideBar-members">
+      <InviteByEmailButton boardId={props.board.id}/>
+      <hr/>
+    </div>
+    <div className="MenuSideBar-buttons">
+      <Link onClick={props.showMore}>
+        More options
+      </Link>
+      <hr/>
+    </div>
+    <div className="MenuSideBar-activity">
+      <h5>Activity</h5>
+    </div>
+  </div>
+}
+
+const MenuSideBarMore = (props) => {
+  return <div>
+    <div className="MenuSideBar-header" >
+      More
+      <Link className="MenuSideBar-backArrow" onClick={props.closeMore}>
+        <Icon type="arrow-left" />
+      </Link>
+      <Link className="MenuSideBar-cancel" onClick={props.closeMenu}>
+        <Icon type="times" />
+      </Link>
+      <hr/>
+    </div>
+    <div className="MenuSideBar-buttons">
+      <DeleteBoardButton boardId={props.board.id}/>
+      <DownloadBoardButton boardId={props.board.id}/>
+      <hr/>
+      <LeaveBoardButton boardId={props.board.id}/>
+    </div>
+  </div>
 }
