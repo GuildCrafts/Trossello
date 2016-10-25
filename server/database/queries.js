@@ -64,7 +64,7 @@ const getListsAndCardsForBoard = (board) => {
         .select('*')
         .whereIn('list_id', listIds)
         .where('archived', false)
-        .orderBy('id', 'asc')
+        .orderBy('order')
         .then(cards => {
           board.cards = cards
           return board

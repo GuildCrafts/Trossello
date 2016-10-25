@@ -10,6 +10,11 @@ import autosize from 'autosize'
 
 export default class List extends Component {
 
+  static propTypes = {
+    board: React.PropTypes.object.isRequired,
+    list:  React.PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -17,8 +22,9 @@ export default class List extends Component {
     }
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
-    this.onDrop = this.onDrop.bind(this)
-    this.onDragOver = this.onDragOver.bind(this)
+    // this.onDragStart = this.onDragStart.bind(this)
+    // this.onDragOver = this.onDragOver.bind(this)
+    // this.onDrop = this.onDrop.bind(this)
     this.createCard = this.createCard.bind(this)
     this.cancelCreatingCardIfUserClickedOutside = this.cancelCreatingCardIfUserClickedOutside.bind(this)
     document.body.addEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
@@ -63,36 +69,32 @@ export default class List extends Component {
     })
   }
 
-  onDrop(event){
-    event.preventDefault()
-    const cardId = event.dataTransfer.getData("text")
-    const { list } = this.props
-    // move card
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${cardId}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({list_id: list.id}),
-    }).then( () => {
-      boardStore.reload()
-    })
-  }
-
-  onDragOver(event){
-    event.preventDefault()
-  }
-
   render(){
-    const { board, list, cards } = this.props
-    const cardNodes = cards.map(card => {
-      return <Card
-        editable={true}
-        archivable={true}
+    const {
+      board,
+      list,
+      dragging,
+    } = this.props
+
+    const cards = board.cards
+      .map(card =>
+        dragging && card.id === dragging.cardId ?
+          {...card, order: dragging.order, list_id: dragging.listId} :
+          card
+      )
+      .filter(card => card.list_id === list.id)
+      .sort((a, b) => a.order - b.order)
+
+    const cardNodes = cards.map((card, index) =>
+      <Card
+        editable
+        archivable
         key={card.id}
         card={card}
+        index={index}
+        ghosted={dragging && card.id === dragging.cardId}
       />
-    })
+    )
 
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
@@ -104,12 +106,20 @@ export default class List extends Component {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
     }
 
-    return <div className="BoardShowPage-List" onDrop={this.onDrop} onDragOver={this.onDragOver}>
+    return <div className="BoardShowPage-List"
+      >
       <div className="BoardShowPage-ListHeader">
         {list.name}
         <ArchiveListButton list={list} />
       </div>
-      <div ref="cards" className="BoardShowPage-cards">
+      <div
+        ref="cards"
+        className="BoardShowPage-cards"
+        onDragStart={this.props.onDragStart}
+        onDragOver={this.props.onDragOver}
+        onDragEnd={this.props.onDragEnd}
+        onDrop={this.props.onDrop}
+      >
         {cardNodes}
         {newCardForm}
       </div>
@@ -117,6 +127,7 @@ export default class List extends Component {
     </div>
   }
 }
+
 
 class NewCardForm extends Component {
 

@@ -31,6 +31,7 @@ export default class Card extends Component {
   }
 
   updateCard(content){
+    console.log('updateCard ???')
     const { card } = this.props
     $.ajax({
       method: 'post',
@@ -39,13 +40,22 @@ export default class Card extends Component {
       dataType: "json",
       data: JSON.stringify(content),
     }).then(() => {
+      debugger
       this.cancelEditingCard()
       boardStore.reload()
     })
   }
 
   render() {
-    const { card, editable, archivable } = this.props
+    const {
+      card,
+      index,
+      editable,
+      archivable,
+      ghosted,
+      beingDragged,
+      style
+    } = this.props
 
     const editCardButton = this.props.editable ?
       <EditCardButton onClick={this.editCard} /> : null
@@ -61,13 +71,22 @@ export default class Card extends Component {
       /> :
       null
 
-    const dragStart = event => {
-      event.dataTransfer.setData("text", card.id)
-    }
-    return <div className="BoardShowPage-Card">
+
+    let className = 'BoardShowPage-Card'
+    if (ghosted) className += ' BoardShowPage-Card-ghosted'
+    if (beingDragged) className += ' BoardShowPage-Card-beingDragged'
+
+    return <div
+        ref="card"
+        className={className}
+        data-card-id={card.id}
+        data-list-id={card.list_id}
+        data-order={card.order}
+        style={style}
+      >
       {editCardModal}
-      <div className="BoardShowPage-Card-box" draggable="true" onDragStart={dragStart}>
-        <pre>{card.content}</pre>
+      <div className="BoardShowPage-Card-box">
+        <pre>{card.order} :: {index} :: {card.content}</pre>
         <div className="BoardShowPage-Card-controls">
           {editCardButton}
           {archiveCardButton}
