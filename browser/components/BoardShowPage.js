@@ -11,6 +11,7 @@ import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
 import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
+import MenuSideBarToggle from './BoardShowPage/MenuSideBarToggle'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -225,9 +226,7 @@ class BoardShowPage extends React.Component {
       <div className="BoardShowPage-Header">
         <h1>{board.name}</h1>
         <div>
-          <DownloadBoardButton boardId={board.id}/>
-          <InviteByEmailButton boardId={board.id}/>
-          <LeaveBoardButton boardId={board.id}/>
+          <MenuSideBarToggle board={board} />
         </div>
       </div>
       <div
@@ -244,11 +243,6 @@ class BoardShowPage extends React.Component {
     </Layout>
   }
 }
-
-const DownloadBoardButton = (props) => {
-  return <a className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</a>
-}
-
 
 const clearTextSelection = () => {
   var sel = window.getSelection ?
