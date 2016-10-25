@@ -1,3 +1,4 @@
+import './Icon.sass'
 import React, { Component } from 'react'
 
 const Sizes = ['','fa-lg','fa-2x','fa-3x','fa-4x','fa-5x']

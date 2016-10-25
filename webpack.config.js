@@ -84,7 +84,7 @@ module.exports = {
         loader: 'json'
       },
       {
-        test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
+        test: /\.(ico|jpg|jpeg|png|gif|otf|webp)(\?.*)?$/,
         exclude: /\/favicon.ico$/,
         loader: 'file',
         query: {
@@ -100,18 +100,19 @@ module.exports = {
           name: 'favicon.ico?'
         }
       },
-      // "url" loader works just like "file" loader but it also embeds
-      // assets smaller than specified size as data URLs to avoid requests.
       {
-        test: /\.(mp4|webm|wav|mp3|m4a|aac|oga)(\?.*)?$/,
-        loader: 'url',
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file',
         query: {
-          limit: 10000,
-          name: 'static/[name].[ext]'
+          name: 'assets/[name].[ext]'
         }
       },
       {
-        test: /\.sass$/,
+        test: /\.(sass|scss)$/,
         loader: ExtractTextPlugin.extract("style", "css!sass?sourceMap")
       },
       {

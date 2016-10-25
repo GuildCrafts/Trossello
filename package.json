@@ -63,6 +63,7 @@
     "express": "^4.14.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
+    "font-awesome": "^4.7.0",
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.22.0",
     "jquery": "^3.1.1",
@@ -88,6 +89,7 @@
     "serve-favicon": "^2.3.0",
     "simple-react-router": "0.0.8",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "uuid": "^2.0.3",
     "webpack": "^1.13.2",
     "whatwg-fetch": "^1.0.0"
