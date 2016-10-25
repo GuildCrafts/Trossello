@@ -52,11 +52,8 @@ export default class CardViewModal extends Component {
       description = 'Enter notes or a description here.'
 
     }
-    return <div> {description}
-        <Link className="CardViewModal-description-Edit-button"
-          onClick={this.editDescription}>
-          <Icon type="pencil"/>
-        </Link>
+    return <div>
+        {description}
       </div>
   }
 
@@ -88,10 +85,7 @@ export default class CardViewModal extends Component {
         <Link className="CardViewModal-description-Edit-cancel" onClick={this.stopEditingDescription}>
           <Icon type="times" />
         </Link>
-        <Link className="CardViewModal-description-Edit-button" onClick={this.editDescription}>
-          <Icon type="pencil"/>
-        </Link>
-        </Form> : <div>{description}</div>
+        </Form> : <div className="CardViewModal-description-text">{description}</div>
 
     return <div className="CardViewModal">
       <div onClick={this.props.onClose} className="CardViewModal-shroud">
@@ -103,30 +97,39 @@ export default class CardViewModal extends Component {
             <hr />
           </div>
           <div className="CardViewModal-details">
-            <span className="CardViewModal-details-list">in List: {this.props.list.name}</span>
-            <span className="CardViewModal-details-board">in Board: {this.props.board.name}</span>
-            <div className="CardViewModal-description">
-              {editDescriptionForm}
-
-            </div>
-            <div className="CardViewModal-comments">
-              Comments:
-              <Form className="CardViewModal-comments-Form">
-                <textarea
-                  className="CardViewModal-comments-Form-input"
-                  ref="comment"
-                  defaultValue=''
-                />
-                <input type="submit" value="Add Comment"/>
-              </Form>
+            <div className="CardViewModal-details-margin">
+              <span className="CardViewModal-details-list">in List: {this.props.list.name}</span>
+              <span className="CardViewModal-details-board">in Board: {this.props.board.name}</span>
+              <div className="CardViewModal-description">
+                <div className="CardViewModal-description-title">
+                  Description
+                  <Link className="CardViewModal-description-Edit-button" onClick={this.editDescription}>
+                  <Icon type="pencil"/>
+                </Link></div>
+                {editDescriptionForm}
+              </div>
+              <div className="CardViewModal-comments">
+              Add Comment:
+                <Form className="CardViewModal-comments-Form">
+                  <textarea
+                    className="CardViewModal-comments-Form-input"
+                    ref="comment"
+                    defaultValue=''
+                  />
+                  <input type="submit" value="Send"/>
+                </Form>
+              </div>
             </div>
           </div>
         <div className="CardViewModal-controls">
           <div className="CardViewModal-controls-add">
-            Add
+            <span className="CardViewModal-controls-title">Add</span>
+            <div className="CardViewModal-controls-add-buttons">
+            </div>
           </div>
           <div className="CardViewModal-controls-actions">
-            Actions
+            <span className="CardViewModal-controls-title">Actions</span>
+
           </div>
         </div>
 

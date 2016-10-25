@@ -5,6 +5,7 @@ import Link from './Link'
 import Icon from './Icon'
 import $ from 'jquery'
 import Card from './BoardShowPage/Card'
+import CardViewModal from './CardViewModal'
 
 export default class CardSearchForm extends Component {
 
