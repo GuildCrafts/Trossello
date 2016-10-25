@@ -3,6 +3,7 @@ import Link from './Link'
 import Icon from './Icon'
 import Form from './Form'
 import Card from './BoardShowPage/Card'
+import boardStore from '../stores/boardStore'
 import './CardViewModal.sass'
 import $ from 'jquery'
 
@@ -16,19 +17,82 @@ export default class CardViewModal extends Component {
     this.state = {
       editingDescription: false,
     }
+    this.editDescription = this.editDescription.bind(this)
+    this.stopEditingDescription = this.stopEditingDescription.bind(this)
     this.displayDescription = this.displayDescription.bind(this)
+    this.updateCard = this.updateCard.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
+  }
+
+  onKeyDown(event) {
+    const { card } = this.props
+    const description = {
+      description: this.refs.description.value,
+    }
+    if (!event.shiftKey && event.keyCode === 13) {
+      event.preventDefault()
+      this.updateCard(description)
+    }
+    if (event.keyCode === 27) {
+      event.preventDefault()
+      this.updateCard(description)
+    }
+  }
+
+  editDescription(){
+    this.setState({editingDescription: true})
+  }
+
+  stopEditingDescription(){
+    this.setState({editingDescription: false})
   }
 
   displayDescription(description){
     if(description==''){
-      description="Enter notes or a description here."
+      description = 'Enter notes or a description here.'
+
     }
-    return description
+    return <div> {description}
+        <Link className="CardViewModal-description-Edit-button"
+          onClick={this.editDescription}>
+          <Icon type="pencil"/>
+        </Link>
+      </div>
+  }
+
+  updateCard(description){
+    const { card } = this.props
+    $.ajax({
+      method: 'post',
+      url: `/api/cards/${card.id}`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify(description),
+    }).then(() => {
+      this.stopEditingDescription()
+      boardStore.reload()
+    })
   }
 
 
   render(){
-    const description= this.displayDescription(this.props.card.description)
+    const description = this.displayDescription(this.props.card.description)
+    const editDescriptionForm = this.state.editingDescription ?
+      <Form className="CardViewModal-description-Edit" onSubmit={this.updateCard}>
+        <textarea
+          className="CardViewModal-description-Edit-input"
+          onKeyDown={this.onKeyDown}
+          ref="description"
+          defaultValue={this.props.card.description}
+        />
+        <Link className="CardViewModal-description-Edit-cancel" onClick={this.stopEditingDescription}>
+          <Icon type="times" />
+        </Link>
+        <Link className="CardViewModal-description-Edit-button" onClick={this.editDescription}>
+          <Icon type="pencil"/>
+        </Link>
+        </Form> : <div>{description}</div>
+
     return <div className="CardViewModal">
       <div onClick={this.props.onClose} className="CardViewModal-shroud">
       </div>
@@ -42,10 +106,8 @@ export default class CardViewModal extends Component {
             <span className="CardViewModal-details-list">in List: {this.props.list.name}</span>
             <span className="CardViewModal-details-board">in Board: {this.props.board.name}</span>
             <div className="CardViewModal-description">
-              {description}
-              <Link onClick={this.updateDescription}>
-                <Icon type="pencil"/>
-              </Link>
+              {editDescriptionForm}
+
             </div>
             <div className="CardViewModal-comments">
               Comments:

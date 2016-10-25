@@ -51,7 +51,6 @@ export default class Card extends Component {
   }
 
   stopViewingCard() {
-    console.log('click!')
     this.setState({viewingCard:false})
   }
 
@@ -124,6 +123,7 @@ export default class Card extends Component {
         data-order={card.order}
         style={style}
       >
+      {cardViewModal}
       {editCardModal}
       <div className="BoardShowPage-Card-box">
         <pre>{card.content}</pre>
