@@ -16,27 +16,55 @@ export default class CardViewModal extends Component {
     super(props)
     this.state = {
       editingDescription: false,
+      editingName: false,
     }
     this.editDescription = this.editDescription.bind(this)
     this.stopEditingDescription = this.stopEditingDescription.bind(this)
     this.displayDescription = this.displayDescription.bind(this)
-    this.updateCard = this.updateCard.bind(this)
-    this.onKeyDown = this.onKeyDown.bind(this)
+    this.updateDescription = this.updateDescription.bind(this)
+    this.submitDescription = this.submitDescription.bind(this)
+    this.updateName = this.updateName.bind(this)
+    this.submitName = this.submitName.bind(this)
+    this.editName = this.editName.bind(this)
+    this.stopEditingName = this.stopEditingName.bind(this)
   }
 
-  onKeyDown(event) {
+  submitName(event) {
+    const { card } = this.props
+    const content = {
+      content: this.refs.content.value
+    }
+    if (!event.shiftKey && event.keyCode === 13) {
+      event.preventDefault()
+      this.updateName(content)
+    }
+    if (event.keyCode === 27) {
+      event.preventDefault()
+      this.updateName(content)
+    }
+  }
+
+  submitDescription(event) {
     const { card } = this.props
     const description = {
       description: this.refs.description.value,
     }
     if (!event.shiftKey && event.keyCode === 13) {
       event.preventDefault()
-      this.updateCard(description)
+      this.updateDescription(description)
     }
     if (event.keyCode === 27) {
       event.preventDefault()
-      this.updateCard(description)
+      this.updateDescription(description)
     }
+  }
+
+  editName(){
+    this.setState({editingName: true})
+  }
+
+  stopEditingName(){
+    this.setState({editingName: false})
   }
 
   editDescription(){
@@ -57,7 +85,7 @@ export default class CardViewModal extends Component {
       </div>
   }
 
-  updateCard(description){
+  updateDescription(description){
     const { card } = this.props
     $.ajax({
       method: 'post',
@@ -70,15 +98,28 @@ export default class CardViewModal extends Component {
       boardStore.reload()
     })
   }
+  updateName(content){
+    const { card } = this.props
+    $.ajax({
+      method: 'post',
+      url: `/api/cards/${card.id}`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify(content),
+    }).then(() => {
+      this.stopEditingName()
+      boardStore.reload()
+    })
+  }
 
 
   render(){
     const description = this.displayDescription(this.props.card.description)
     const editDescriptionForm = this.state.editingDescription ?
-      <Form className="CardViewModal-description-Edit" onSubmit={this.updateCard}>
+      <Form className="CardViewModal-description-Edit" onSubmit={this.updateDescription}>
         <textarea
           className="CardViewModal-description-Edit-input"
-          onKeyDown={this.onKeyDown}
+          onKeyDown={this.submitDescription}
           ref="description"
           defaultValue={this.props.card.description}
         />
@@ -86,6 +127,18 @@ export default class CardViewModal extends Component {
           <Icon type="times" />
         </Link>
         </Form> : <div className="CardViewModal-description-text">{description}</div>
+    const editCardNameForm = this.state.editingName ?
+    <Form className="CardViewModal-header-Edit" onSubmit={this.updateName}>
+      <textarea
+        className="CardViewModal-header-Edit-input"
+        onKeyDown={this.submitName}
+        ref="content"
+        defaultValue={this.props.card.content}
+      />
+      <Link className="CardViewModal-header-Edit-cancel" onClick={this.stopEditingName}>
+        <Icon type="times" />
+      </Link>
+      </Form> : <div onClick={this.editName} className="CardViewModal-name">{this.props.card.content}</div>
 
     return <div className="CardViewModal">
       <div onClick={this.props.onClose} className="CardViewModal-shroud">
@@ -93,7 +146,7 @@ export default class CardViewModal extends Component {
       <div className="CardViewModal-stage">
         <div className="CardViewModal-window">
           <div className="CardViewModal-header">
-            {this.props.card.content}
+            {editCardNameForm}
             <hr />
           </div>
           <div className="CardViewModal-details">
