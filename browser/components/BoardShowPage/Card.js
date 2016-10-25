@@ -38,7 +38,6 @@ export default class Card extends Component {
   }
 
   stopViewingCard() {
-    console.log('click!')
     this.setState({viewingCard:false})
   }
 
@@ -79,17 +78,16 @@ export default class Card extends Component {
           list={this.props.list}
           board={this.props.board}
           onClose={this.stopViewingCard}
-        /> :
-        null
+        /> : null
 
     const dragStart = event => {
       event.dataTransfer.setData("text", card.id)
     }
-    return <div onClick={this.viewCard} className="BoardShowPage-Card">
+    return <div className="BoardShowPage-Card">
       {cardViewModal}
       {editCardModal}
       <div className="BoardShowPage-Card-box" draggable="true" onDragStart={dragStart}>
-        <pre>{card.content}</pre>
+        <pre onClick={this.viewCard}>{card.content}</pre>
         <div className="BoardShowPage-Card-controls">
           {editCardButton}
           {archiveCardButton}
