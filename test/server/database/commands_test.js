@@ -175,6 +175,224 @@ describe('database.commands', () => {
     })
   })
 
+  describe('moveCard', () => {
+    describe('when moving on the same list', () => {
+      withBoardsListsAndCardsInTheDatabase(() => {
+        it.only('should update card orders in list', () => {
+
+          const getOrderedCardsByListId = (board, listId) =>
+            board.cards
+              .filter(card => card.list_id === listId)
+              .sort( (a,b) => a.order - b.order)
+
+          return queries.getBoardById(101)
+            .then(board => {
+              let list40Cards = getOrderedCardsByListId(board, 40)
+
+              expect(list40Cards.length).to.eql(2)
+              expect(list40Cards[0].content).to.eql('card1')
+              expect(list40Cards[0].order  ).to.eql(0)
+              expect(list40Cards[1].content).to.eql('Card2')
+              expect(list40Cards[1].order  ).to.eql(1)
+            })
+            .then( () =>
+              commands.moveCard({
+                board_id: 101,
+                card_id: 81, // content: 'Card2'
+                list_id: 40,
+                order: 0,
+              })
+            )
+            .then( () => queries.getBoardById(101))
+            .then(board => {
+              let list40Cards = getOrderedCardsByListId(board, 40)
+              console.log(list40Cards);
+
+              expect(list40Cards.length).to.eql(2)
+              expect(list40Cards[0].content).to.eql('Card2')
+              expect(list40Cards[0].order  ).to.eql(0)
+              expect(list40Cards[1].content).to.eql('card1')
+              expect(list40Cards[1].order  ).to.eql(1)
+            })
+        })
+      })
+    })
+
+    describe('when moving between two lists', () => {
+      withBoardsListsAndCardsInTheDatabase(() => {
+        it.only('should update card orders', () => {
+          const getOrderedCardsByListId = (board, listId) =>
+            board.cards
+              .filter(card => card.list_id === listId)
+              .sort( (a,b) => a.order - b.order)
+
+          return queries.getBoardById(101)
+            .then(board => {
+              let list40Cards = getOrderedCardsByListId(board, 40)
+              let list41Cards = getOrderedCardsByListId(board, 41)
+
+              expect(list40Cards.length).to.eql(2)
+              expect(list40Cards[0].id).to.eql(80)
+              expect(list40Cards[0].list_id).to.eql(40)
+              expect(list40Cards[0].order  ).to.eql(0)
+              expect(list40Cards[1].id).to.eql(81)
+              expect(list40Cards[1].list_id).to.eql(40)
+              expect(list40Cards[1].order  ).to.eql(1)
+
+              expect(list41Cards.length).to.eql(2)
+              expect(list41Cards[0].id).to.eql(82)
+              expect(list41Cards[0].list_id).to.eql(41)
+              expect(list41Cards[0].order  ).to.eql(0)
+              expect(list41Cards[1].id).to.eql(83)
+              expect(list41Cards[1].list_id).to.eql(41)
+              expect(list41Cards[1].order  ).to.eql(1)
+            })
+            .then( () =>
+              commands.moveCard({
+                board_id: 101,
+                card_id: 81,
+                list_id: 41,
+                order: 0,
+              })
+            )
+            .then( () => queries.getBoardById(101))
+            .then(board => {
+              let list40Cards = getOrderedCardsByListId(board, 40)
+              let list41Cards = getOrderedCardsByListId(board, 41)
+
+              expect(list40Cards.length).to.eql(1)
+              expect(list40Cards[0].id).to.eql(80)
+              expect(list40Cards[0].list_id).to.eql(40)
+              expect(list40Cards[0].order  ).to.eql(0)
+
+              expect(list41Cards.length).to.eql(3)
+              expect(list41Cards[0].id).to.eql(81)
+              expect(list41Cards[0].list_id).to.eql(41)
+              expect(list41Cards[0].order  ).to.eql(0)
+              expect(list41Cards[1].id).to.eql(82)
+              expect(list41Cards[1].list_id).to.eql(41)
+              expect(list41Cards[1].order  ).to.eql(1)
+              expect(list41Cards[2].id).to.eql(83)
+              expect(list41Cards[2].list_id).to.eql(41)
+              expect(list41Cards[2].order  ).to.eql(2)
+            })
+        })
+      })
+    })
+
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should update card orders', () => {
+
+        const getOrderedCardsByListId = (board, listId) =>
+          board.cards
+            .filter(card => card.list_id === listId)
+            .sort( (a,b) => a.order - b.order)
+
+        return queries.getBoardById(101)
+          .then(board => {
+            let list40Cards = getOrderedCardsByListId(board, 40)
+            let list41Cards = getOrderedCardsByListId(board, 41)
+
+            expect(list40Cards.length).to.eql(2)
+            expect(list40Cards[0].content).to.eql('card1')
+            expect(list40Cards[0].order  ).to.eql(0)
+            expect(list40Cards[1].content).to.eql('Card2')
+            expect(list40Cards[1].order  ).to.eql(1)
+
+            expect(list41Cards.length).to.eql(2)
+            expect(list41Cards[0].content).to.eql('card3')
+            expect(list41Cards[0].order  ).to.eql(0)
+            expect(list41Cards[1].content).to.eql('Card4')
+            expect(list41Cards[1].order  ).to.eql(1)
+          })
+          .then( () =>
+            commands.moveCard({
+              board_id: 101,
+              card_id: 81, // content: 'Card2'
+              list_id: 40,
+              order: 0,
+            })
+          )
+          .then( () => queries.getBoardById(101))
+          .then(board => {
+            let list40Cards = getOrderedCardsByListId(board, 40)
+            let list41Cards = getOrderedCardsByListId(board, 41)
+
+            expect(list40Cards.length).to.eql(2)
+            expect(list40Cards[0].content).to.eql('Card2')
+            expect(list40Cards[0].order  ).to.eql(0)
+            expect(list40Cards[1].content).to.eql('card1')
+            expect(list40Cards[1].order  ).to.eql(1)
+
+            expect(list41Cards.length).to.eql(2)
+            expect(list41Cards[0].content).to.eql('card3')
+            expect(list41Cards[0].order  ).to.eql(0)
+            expect(list41Cards[1].content).to.eql('Card4')
+            expect(list41Cards[1].order  ).to.eql(1)
+          })
+          .then( () =>
+            commands.moveCard({
+              board_id: 101,
+              card_id: 81,
+              list_id: 41,
+              order: 0,
+            })
+          )
+          .then( () => queries.getBoardById(101))
+          .then(board => {
+            let list40Cards = getOrderedCardsByListId(board, 40)
+            let list41Cards = getOrderedCardsByListId(board, 41)
+
+            expect(list40Cards.length).to.eql(1)
+            expect(list40Cards[0].content).to.eql('card1')
+            expect(list40Cards[0].order  ).to.eql(0)
+
+            expect(list41Cards.length).to.eql(3)
+            expect(list41Cards[0].content).to.eql('Card2')
+            expect(list41Cards[0].order  ).to.eql(0)
+            expect(list41Cards[1].content).to.eql('card3')
+            expect(list41Cards[1].order  ).to.eql(1)
+            expect(list41Cards[2].content).to.eql('Card4')
+            expect(list41Cards[2].order  ).to.eql(2)
+          })
+          // .then( ()=>
+          //   commands.createCard({
+          //     id: 1089,
+          //     list_id: 40,
+          //     content: 'new Test Card'
+          //   })
+          // )
+          // .then( ()=> queries.getBoardById(101))
+          // .then(board => {
+          //   let cards = board.cards
+          //     .filter(card => card.list_id === 40)
+          //     .sort((a,b) => a.order - b.order)
+          //   expect(cards.length).to.eql(3)
+          //   expect(cards[0].content).to.eql('card1')
+          //   expect(cards[1].content).to.eql('Card2')
+          //   expect(cards[2].content).to.eql('new Test Card')
+          // })
+          // .then( ()=>
+          //   commands.moveCard({
+          //     card_id: 1089,
+          //     list_id: 40,
+          //     order: 1
+          //   })
+          // )
+          // .then( ()=> queries.getBoardById(101))
+          // .then(board => {
+          //   let cards = board.cards
+          //     .filter(card => card.list_id === 40)
+          //     .sort((a,b) => a.order - b.order)
+          //   expect(cards.length).to.eql(3)
+          //   expect(cards[1].content).to.eql('card1')
+          //   expect(cards[2].content).to.eql('Card2')
+          //   expect(cards[0].content).to.eql('new Test Card')
+          // })
+      })
+    })
+  })
+
   describe('deleteCard', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should delete a card by card id', () => {

@@ -45,9 +45,10 @@ exports.seed = (knex) => {
     const createCardsForLists = (listRecords) => {
       const cardRecords = []
       listRecords.forEach((listRecord, index) => {
-        cardRecordsForList[index].forEach(cardRecord => {
+        cardRecordsForList[index].forEach((cardRecord, index) => {
           cardRecord.list_id = listRecord.id
           cardRecord.board_id = listRecord.board_id
+          cardRecord.order = index
           cardRecords.push(cardRecord)
         })
       })

@@ -124,11 +124,33 @@
     padding: 0 10px
     min-height: 30%
 
+  &-CardPlaceholder
+    position: relative
+    margin-bottom: 6px
+    flex-grow: 0
+    flex-shrink: 0
+
   &-Card
     position: relative
     margin-bottom: 6px
     flex-grow: 0
     flex-shrink: 0
+    will-change: transform
+    &-beingDragged
+      z-index: 100
+      position: fixed
+      top: 0
+      left: 0
+      transform: rotate(7deg)
+      pointer-events: none
+    &-ghosted
+      background-color: darkgrey
+      border-radius: 3px
+      cursor: grabbing
+      cursor: -webkit-grabbing
+      > *
+        // visibility: hidden
+        opacity: 0.5
     &-box
       -webkit-touch-callout: none
       -webkit-user-select: none
@@ -143,7 +165,6 @@
       border-bottom: 2px solid #ccc
       border-right: 1px solid #ccc
       border-radius: 3px
-      cursor: pointer
       background-color: white
       font-weight: 400
       font-size: 14px
