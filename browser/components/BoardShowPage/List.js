@@ -91,6 +91,8 @@ export default class List extends Component {
         archivable={true}
         key={card.id}
         card={card}
+        board={board}
+        list={list}
       />
     })
 
