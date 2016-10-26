@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import boardsStore from '../../stores/boardsStore'
 import ConfirmationLink from '../ConfirmationLink'
-
 export default class LeaveBoardButton extends Component {
 
   static contextTypes = {
