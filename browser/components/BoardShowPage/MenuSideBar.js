@@ -6,6 +6,9 @@ import DeleteBoardButton from './DeleteBoardButton'
 import LeaveBoardButton from './LeaveBoardButton'
 import InviteByEmailButton from '../InviteByEmailButton'
 import './MenuSideBar.sass'
+import Card from './Card'
+import List from './List'
+import $ from 'jquery'
 
 export default class MenuSideBar extends ToggleComponent {
 
@@ -13,14 +16,42 @@ export default class MenuSideBar extends ToggleComponent {
     board: React.PropTypes.object.required
   }
 
+  constructor(props){
+    super(props)
+    this.state = {
+      showArchive: false,
+      archivedItems: null,
+    }
+    this.showArchivedItems = this.showArchivedItems.bind(this)
+    this.stopShowingArchivedItems = this.stopShowingArchivedItems.bind(this)
+  }
+
+  showArchivedItems(event) {
+    event.preventDefault()
+    this.setState({showArchive: true})
+  }
+
+  stopShowingArchivedItems(event) {
+    event.preventDefault()
+    this.setState({showArchive: false})
+  }
+
 
   render(){
+    const more = this.state.showArchive ?
+        <ArchivedItems
+          board={this.props.board}
+          archivedItems={this.state.archivedItems}
+          /> :
+          <MenuSideBarMore
+            board={this.props.board}
+            closeMore={this.close}
+            closeMenu={this.props.onClose}
+            showArchive={this.showArchivedItems}
+            />
+
     const content = this.state.open ?
-      <MenuSideBarMore
-        board={this.props.board}
-        closeMore={this.close}
-        closeMenu={this.props.onClose}
-      /> :
+      <div>{more}</div> :
       <MenuSideBarMain
         board={this.props.board}
         showMore={this.open}
@@ -51,7 +82,6 @@ const MenuSideBarMain = (props) => {
       <Link className="MenuSideBar-cancel" onClick={props.closeMenu}>
         <Icon type="times" />
       </Link>
-      <hr/>
     </div>
     <div className="MenuSideBar-members">
       <InviteByEmailButton boardId={props.board.id}/>
@@ -103,12 +133,104 @@ const MenuSideBarMore = (props) => {
       <Link className="MenuSideBar-cancel" onClick={props.closeMenu}>
         <Icon type="times" />
       </Link>
-      <hr/>
     </div>
     <div className="MenuSideBar-buttons">
       <DownloadBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
+      <Link onClick={props.showArchive} className='MenuSideBar-options'>
+        <ViewArchiveButton boardId={props.board.id}/>
+      </Link>
       <hr/>
       <LeaveBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
     </div>
   </div>
+}
+const ViewArchiveButton = (props) => {
+  return <div className='MenuSideBar-options' >
+    <span className='MenuSideBar-icons'>
+      <Icon type='archive' />
+    </span>
+    Archived Items
+  </div>
+}
+class ArchivedItems extends Component {
+
+  render() {
+    const { board } = this.props
+    const archivedListsAndCards = board.lists.map(list => {
+      const cards = board.cards.filter(card => card.list_id === list.id)
+      if(list.archived === true) {
+        return <div key={list.id} className="ArchivedItems-item ArchivedItems-list">
+          <List
+          archivable={false}
+          showOptions={false}
+          key={list.id}
+          board={board}
+          list={list}
+          cards={cards}
+          />
+          <UnarchiveListButton className="MenuSideBar-ArchivedItems-UnarchiveButton" list={list}/>
+        </div>
+      } else {
+        for(var i=0; i<cards.length; i++){
+          if(cards[i].archived===true){
+            return <div key={cards[i].id} className="MenuSideBar-ArchivedItems-item MenuSideBar-ArchivedItems-card">
+              <Card
+              editable={false}
+              archivable={false}
+              key={cards[i].id}
+              card={cards[i]}
+              />
+              <UnarchiveCardButton className="MenuSideBar-ArchivedItems-UnarchiveButton" card={cards[i]}/>
+            </div>
+          }
+        }
+      }
+    })
+    console.log(board)
+    return <div className="MenuSideBar">
+      <div className="MenuSideBar-header">
+        Archived Items
+      </div>
+      <div className="MenuSideBar-ArchivedItems">
+      {archivedListsAndCards}
+      </div>
+    </div>
+  }
+}
+
+const unarchiveRecord = (event, resource, id) => {
+  event.preventDefault()
+  console.log('unarchive Record has ->', resource, id)
+  $.ajax({
+    method: "POST",
+    url: `/api/${resource}/${id}/unarchive`
+  }).then(() => {
+    boardStore.reload()
+  })
+}
+
+const UnarchiveListButton = (props) => {
+  const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
+  const onClick = (event) => {
+    unarchiveRecord(event, 'lists', props.list.id)
+  }
+  console.log(props)
+  return <Link
+    onClick={onClick}
+    className={className}>
+    Unarchive Item
+  </Link>
+}
+
+const UnarchiveCardButton = (props) => {
+  const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
+  const onClick = (event) => {
+    unarchiveRecord(event, 'cards', props.card.id)
+  }
+  console.log(props)
+  return <Link
+    onClick={onClick}
+    className={className}>
+    Unarchive Item
+  </Link>
 }

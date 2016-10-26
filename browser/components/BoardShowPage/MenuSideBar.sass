@@ -15,6 +15,7 @@
   position: fixed
   padding: 5px
   min-width: 260px
+  color: black
   &-button
     display: block
     margin: 0 $button-margin
@@ -54,6 +55,8 @@
     font-size: 1.2em
     padding: 10px
     text-align: center
+    border-bottom: 1px solid black
+    margin-bottom: 8px
   &-Toggle
     max-height: calc(100vh  - #{$top + 5px})
     color: white
@@ -67,3 +70,27 @@
     top: 2px
     left: 3px
     color: black
+  &-ArchivedItems
+    flex-grow: 1
+    flex-shrink: 1
+    display: flex
+    overflow-y: scroll
+    overflow-x: hidden
+    flex-direction: column
+    flex-wrap: nowrap
+    padding: 0 10px
+    min-height: 30%
+    max-width: 260px
+    &-item
+      margin-top: 8px
+    &-list
+      margin-right: 200px
+
+
+    &-UnarchiveButton
+      left: 10px
+      top: 0px
+      font-size: 0.9em
+      color: #A3A3A
+      text-decoration: underline
+      position: relative

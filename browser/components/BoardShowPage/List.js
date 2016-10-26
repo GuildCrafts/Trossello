@@ -93,6 +93,7 @@ export default class List extends Component {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
     }
 
+<<<<<<< HEAD
     const listActionsMenu = <ListActionsMenu
       list={this.props.list}
       onCreateCard={this.creatingCard}
@@ -106,6 +107,11 @@ export default class List extends Component {
         </PopoverMenuButton>
       </div>
       <div
+=======
+    const optionsBlock= this.props.showOptions ?
+     <div ref="options">
+       <div
+>>>>>>> 071cb7c... ArchiveItems styling and fixes
         ref="cards"
         className="BoardShowPage-cards"
         onDragStart={this.props.onDragStart}
@@ -113,10 +119,21 @@ export default class List extends Component {
         onDragEnd={this.props.onDragEnd}
         onDrop={this.props.onDrop}
       >
-        {cardNodes}
-        {newCardForm}
+         {cardNodes}
+         {newCardForm}
+       </div>
+       {newCardLink}
+     </div> : null
+
+     const archiveListButton = this.props.archivable ?
+      <ArchiveListButton list={list} /> : null
+
+    return <div className="BoardShowPage-List" data-list-id={list.id} onDrop={this.onDrop} onDragOver={this.onDragOver}>
+      <div className="BoardShowPage-ListHeader">
+        {list.name}
+        {archiveListButton}
       </div>
-      {newCardLink}
+      {optionsBlock}
     </div>
   }
 }

@@ -209,15 +209,21 @@ class BoardShowPage extends React.Component {
     }
 
     const lists = board.lists.map(list => {
-      return <List
-        key={list.id}
-        board={board}
-        list={list}
-        onDragOver={this.onDragOver}
-        onDragEnd={this.onDragEnd}
-        onDrop={this.onDrop}
-        dragging={dragging}
-      />
+      const cards = board.cards.filter(card => card.list_id === list.id)
+      if(list.archived === false){
+        return <List
+          showOptions={true}
+          archivable={true}
+          key={list.id}
+          board={board}
+          list={list}
+          cards={cards}
+          onDragOver={this.onDragOver}
+          onDragEnd={this.onDragEnd}
+          onDrop={this.onDrop}
+          dragging={dragging}
+        />
+      }
     })
 
     const style = {

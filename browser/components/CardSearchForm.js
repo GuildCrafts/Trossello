@@ -138,6 +138,7 @@ class SearchResultModal extends Component {
         card={card}
         editable={false}
         onClick={this.props.onClose}
+        archivable={false}
       />
     )
 
