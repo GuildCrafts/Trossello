@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Link from './Link'
 import Icon from './Icon'
 import './ConfirmationDialog.sass'
+import ModalView from './ModalView'
+import DialogBox from './DialogBox'
 
 export default class ConfirmationDialog extends Component {
   static propTypes = {
@@ -18,29 +20,18 @@ export default class ConfirmationDialog extends Component {
 
   render(){
     const className = `ConfirmationDialog-window ${this.props.className||''}`
-    return <div className="ConfirmationDialog">
-      <div className="ConfirmationDialog-shroud" onClick={this.props.onAbort}></div>
-      <div className="ConfirmationDialog-stage">
-        <div className={className}>
-          <div className="ConfirmationDialog-header">
-            <h2 className="ConfirmationDialog-title">{this.props.title}</h2>
-            <Link className="ConfirmationDialog-cancel" onClick={this.props.onAbort}>
-              <Icon type="times"/>
-            </Link>
-            <hr/>
-          </div>
-          <h4>{this.props.message}</h4>
-
-          <div className="ConfirmationDialog-controls">
-            <Link ref="cancel" className="ConfirmationDialog-controls-button ConfirmationDialog-controls-cancel" onClick={this.props.onAbort}>
-              Cancel
-            </Link>
-            <Link className="ConfirmationDialog-controls-button ConfirmationDialog-controls-ok" onClick={this.props.onConfirm}>
-              {this.props.buttonName}
-            </Link>
-          </div>
+    return <ModalView onAbort={this.props.onAbort}>
+      <DialogBox onClose={this.props.onAbort} heading={this.props.title}>
+        <h4>{this.props.message}</h4>
+        <div className="ConfirmationDialog-controls">
+          <Link ref="cancel" className="ConfirmationDialog-controls-button ConfirmationDialog-controls-cancel" onClick={this.props.onAbort}>
+            Cancel
+          </Link>
+          <Link className="ConfirmationDialog-controls-button ConfirmationDialog-controls-ok" onClick={this.props.onConfirm}>
+            {this.props.buttonName}
+          </Link>
         </div>
-      </div>
-    </div>
+      </DialogBox>
+    </ModalView>
   }
 }

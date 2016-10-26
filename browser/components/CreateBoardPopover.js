@@ -5,6 +5,7 @@ import Link from './Link'
 import Icon from './Icon'
 import Form from './Form'
 import boardsStore from '../stores/boardsStore'
+import DialogBox from './DialogBox'
 
 class CreateBoardPopover extends Component {
 
@@ -77,31 +78,28 @@ class CreateBoardPopover extends Component {
       <ColorBox key={color} color={color} onClick={this.updateColor} />
     )
 
-    return <div ref="root" className="CreateBoardPopover">
-      <div className="CreateBoardPopover-header">
-        Create A Board
-        {closeLink}
-        <hr/>
-      </div>
-      <Form onSubmit={this.onSubmit}>
-        <label>
-          <div>Name</div>
-          <input type="text" ref="name"/>
-        </label>
-        <div className="CreateBoardPopover-createBackgroundColor">
-          {colorBoxes}
-        </div>
-        <label>
-          <input
-            type="text"
-            ref="color"
-            placeholder="#2E86AB"
-            value={this.state.color || ''}
-            onChange={this.updateColor}
-          />
-        </label>
-        <input type="submit" value="Create" />
-      </Form>
+    return <div className="CreateBoardPopover">
+        <DialogBox heading="Create A Board" onClose={this.props.onClose}>
+        <Form onSubmit={this.onSubmit}>
+          <label>
+            <div>Name</div>
+            <input type="text" ref="name"/>
+          </label>
+          <div className="CreateBoardPopover-createBackgroundColor">
+            {colorBoxes}
+          </div>
+          <label>
+            <input
+              type="text"
+              ref="color"
+              placeholder="#2E86AB"
+              value={this.state.color || ''}
+              onChange={this.updateColor}
+            />
+          </label>
+          <input type="submit" value="Create" />
+        </Form>
+      </DialogBox>
     </div>
   }
 }

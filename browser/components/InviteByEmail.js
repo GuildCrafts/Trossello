@@ -6,6 +6,7 @@ import Link from './Link'
 import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
+import DialogBox from './DialogBox'
 
 class InviteByEmail extends Component {
   constructor(props) {
@@ -40,11 +41,7 @@ class InviteByEmail extends Component {
       </Link> :
       null
 
-    return <div className="InviteByEmail">
-      <div className="InviteByEmail-header">
-        Invite to Board With Email
-        {closeLink}
-      </div>
+    return <DialogBox className="InviteByEmail" onClose={this.props.onClose} heading="Invite to Board With Email">
       <Form onSubmit={this.onSubmit}>
         <label>
           <div className="label">Email</div>
@@ -52,7 +49,7 @@ class InviteByEmail extends Component {
         </label>
         <input type="submit" value="Invite"/>
       </Form >
-    </div>
+    </DialogBox>
   }
 }
 
