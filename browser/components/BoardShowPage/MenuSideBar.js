@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
+import Icon from '../Icon'
 import Link from '../Link'
 import ToggleComponent from '../ToggleComponent'
 import DeleteBoardButton from './DeleteBoardButton'
 import LeaveBoardButton from './LeaveBoardButton'
 import InviteByEmailButton from '../InviteByEmailButton'
 import './MenuSideBar.sass'
-import Icon from '../Icon'
 
 export default class MenuSideBar extends ToggleComponent {
 
@@ -37,7 +37,12 @@ export default class MenuSideBar extends ToggleComponent {
 }
 
 const DownloadBoardButton = (props) => {
-  return <a className="MenuSideBar-button MenuSideBar-DownloadBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</a>
+  return <a className='MenuSideBar-options' href={`/api/boards/${props.boardId}?download=1`}>
+    <span className='MenuSideBar-icons'>
+      <Icon type='download' />
+    </span>
+    Export Board
+  </a>
 }
 
 const MenuSideBarMain = (props) => {
@@ -54,13 +59,37 @@ const MenuSideBarMain = (props) => {
       <hr/>
     </div>
     <div className="MenuSideBar-buttons">
-      <Link onClick={props.showMore}>
-        More options
+      <span className='MenuSideBar-options'>
+        <span className='MenuSideBar-icons'>
+          <Icon type='square' />
+        </span>
+        Change Background
+      </span>
+      <span className='MenuSideBar-options'>
+        <span className='MenuSideBar-icons'>
+          <Icon type='filter' />
+        </span>
+        Filter Cards
+      </span>
+      <span className='MenuSideBar-options'>
+        <span className='MenuSideBar-icons'>
+          <Icon type='rocket' />
+        </span>
+        Power Ups
+      </span>
+      <span className='MenuSideBar-options'>
+        <span className='MenuSideBar-icons'>
+          <Icon type='sticky-note-o' />
+        </span>
+        Stickers
+      </span>
+      <Link onClick={props.showMore} className='MenuSideBar-options'>
+        <span className='MenuSideBar-icons'>
+          <Icon type='ellipsis-h' />
+        </span>
+        More
       </Link>
       <hr/>
-    </div>
-    <div className="MenuSideBar-activity">
-      <h5>Activity</h5>
     </div>
   </div>
 }
@@ -78,10 +107,19 @@ const MenuSideBarMore = (props) => {
       <hr/>
     </div>
     <div className="MenuSideBar-buttons">
-      <DeleteBoardButton boardId={props.board.id}/>
-      <DownloadBoardButton boardId={props.board.id}/>
+      <span className='MenuSideBar-options'>
+      <span className='MenuSideBar-icons'>
+        <Icon type='archive' />
+      </span>
+        <DeleteBoardButton boardId={props.board.id}/>
+      </span>
+      <span className='MenuSideBar-options'>
+        <DownloadBoardButton boardId={props.board.id}/>
+      </span>
       <hr/>
-      <LeaveBoardButton boardId={props.board.id}/>
+      <span className='MenuSideBar-options'>
+        <LeaveBoardButton boardId={props.board.id}/>
+      </span>
     </div>
   </div>
 }
