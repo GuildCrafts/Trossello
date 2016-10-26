@@ -14,6 +14,7 @@
   z-index: 100
   position: fixed
   padding: 5px
+  min-width: 260px
   &-button
     display: block
     margin: 0 $button-margin
@@ -28,10 +29,26 @@
     border: 0
     white-space: nowrap
     outline: none
-    background-color: rgb(192, 192, 192)
     color: inherit
     cursor: pointer
     margin-bottom: 5px
+  &-icons
+    font-size: 0.6em
+    padding-right: 7px
+  &-options
+    font-weight: bold
+    display: block
+    padding: 4px 5px
+    opacity: 0.6
+    text-decoration: none
+    color: black
+    border: none
+    background-color: inherit
+    width: 100%
+    text-align: left
+    &:hover
+      background-color: rgb(192, 192, 192)
+      opacity: 1
   &-header
     font-weight: bold
     font-size: 1.2em
@@ -39,6 +56,7 @@
     text-align: center
   &-Toggle
     max-height: calc(100vh  - #{$top + 5px})
+    color: white
   &-cancel
     position: absolute
     top: 2px
