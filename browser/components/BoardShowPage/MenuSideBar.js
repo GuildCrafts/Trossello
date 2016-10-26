@@ -13,14 +13,42 @@ export default class MenuSideBar extends ToggleComponent {
     board: React.PropTypes.object.required
   }
 
+  constructor(props){
+    super(props)
+    this.state = {
+      showArchive: false,
+      archivedItems: null,
+    }
+    this.showArchivedItems = this.showArchivedItems.bind(this)
+    this.stopShowingArchivedItems = this.stopShowingArchivedItems.bind(this)
+  }
+
+  showArchivedItems(event) {
+    event.preventDefault()
+    this.setState({showArchive: true})
+  }
+
+  stopShowingArchivedItems(event) {
+    event.preventDefault()
+    this.setState({showArchive: false})
+  }
+
 
   render(){
+    const more = this.state.showArchive ?
+        <ArchivedItems
+          board={this.props.board}
+          archivedItems={this.state.archivedItems}
+          /> :
+          <MenuSideBarMore
+            board={this.props.board}
+            closeMore={this.close}
+            closeMenu={this.props.onClose}
+            showArchive={this.showArchivedItems}
+            />
+
     const content = this.state.open ?
-      <MenuSideBarMore
-        board={this.props.board}
-        closeMore={this.close}
-        closeMenu={this.props.onClose}
-      /> :
+      <div>{more}</div> :
       <MenuSideBarMain
         board={this.props.board}
         showMore={this.open}
@@ -107,8 +135,24 @@ const MenuSideBarMore = (props) => {
     </div>
     <div className="MenuSideBar-buttons">
       <DownloadBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
+      <Link onClick={props.showArchive} className='MenuSideBar-options'>
+        <ViewArchiveButton boardId={props.board.id}/>
+      </Link>
       <hr/>
       <LeaveBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
     </div>
   </div>
+}
+const ViewArchiveButton = (props) => {
+  return <a className='MenuSideBar-options' href={`/api/boards/${props.boardId}/viewArchive`}>
+    <span className='MenuSideBar-icons'>
+      <Icon type='download' />
+    </span>
+    Archived Cards and Lists
+  </a>
+}
+class ArchivedItems extends Component {
+  render() {
+    return <div>Yay!</div>
+  }
 }
