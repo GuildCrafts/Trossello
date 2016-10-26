@@ -12,6 +12,9 @@ export default class CardViewModal extends Component {
     card: React.PropTypes.object.isRequired,
     onClose: React.PropTypes.func.isRequired,
   }
+  static contextTypes = {
+    session: React.PropTypes.object.isRequired
+  }
   constructor(props){
     super(props)
     this.state = {
@@ -114,6 +117,7 @@ export default class CardViewModal extends Component {
 
 
   render(){
+    const { session } = this.context
     const description = this.displayDescription(this.props.card.description)
     const editDescriptionForm = this.state.editingDescription ?
       <Form className="CardViewModal-description-Edit" onSubmit={this.updateDescription}>
@@ -162,13 +166,17 @@ export default class CardViewModal extends Component {
                 {editDescriptionForm}
               </div>
               <div className="CardViewModal-comments">
-              Add Comment:
+                <div className="CardViewModal-comments-icon">
+                <Icon size="2" type="comment-o"/>
+                </div>
+                <div className="CardViewModal-comments-header">Add Comment:</div>
                 <Form className="CardViewModal-comments-Form">
                   <textarea
                     className="CardViewModal-comments-Form-input"
                     ref="comment"
                     defaultValue=''
                   />
+                  <img className="CardViewModal-comments-userimage" src={session.user.avatar_url}></img>
                   <input type="submit" value="Send"/>
                 </Form>
               </div>
