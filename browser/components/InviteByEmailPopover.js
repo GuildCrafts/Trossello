@@ -48,7 +48,7 @@ class InviteByEmailPopover extends Component {
           <input className='emailInput' type="email" ref="email" name='email' placeholder="john.doe@example.com" />
         </label>
         <input type="submit" value="Invite"/>
-      </Form >
+      </Form>
     </DialogBox>
   }
 }
