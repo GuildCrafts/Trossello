@@ -6,23 +6,25 @@ import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
 import ArchiveButton from './ArchiveButton'
-import CardViewModal from '../CardViewModal'
 
 export default class Card extends Component {
+  static contextTypes = {
+    redirectTo: React.PropTypes.func.isRequired,
+  };
+
   static propTypes = {
     card: React.PropTypes.object.isRequired,
-  }
+  };
+
   constructor(props){
     super(props)
     this.state = {
       editingCard: false,
-      viewingCard: props.active,
     }
     this.editCard = this.editCard.bind(this)
     this.cancelEditingCard = this.cancelEditingCard.bind(this)
     this.updateCard = this.updateCard.bind(this)
-    this.viewCard = this.viewCard.bind(this)
-    this.stopViewingCard = this.stopViewingCard.bind(this)
+    this.openShowCardModal = this.openShowCardModal.bind(this)
   }
 
   editCard() {
@@ -31,15 +33,6 @@ export default class Card extends Component {
 
   cancelEditingCard(){
     this.setState({editingCard:false})
-  }
-
-  viewCard() {
-    this.setState({viewingCard:true})
-  }
-
-  stopViewingCard() {
-    this.setState({viewingCard:false})
-    window.location = `/boards/${this.props.board.id}`
   }
 
   updateCard(content){
@@ -54,6 +47,11 @@ export default class Card extends Component {
       this.cancelEditingCard()
       boardStore.reload()
     })
+  }
+
+  openShowCardModal(){
+    const { card } = this.props
+    this.context.redirectTo(`/boards/${card.board_id}/cards/${card.id}`)
   }
 
   render() {
@@ -73,19 +71,10 @@ export default class Card extends Component {
       /> :
       null
 
-      const cardViewModal = this.state.viewingCard ?
-        <CardViewModal
-          card={this.props.card}
-          list={this.props.list}
-          board={this.props.board}
-          onClose={this.stopViewingCard}
-        /> : null
-
     const dragStart = event => {
       event.dataTransfer.setData("text", card.id)
     }
-    return <div className="BoardShowPage-Card">
-      {cardViewModal}
+    return <div className="BoardShowPage-Card" onClick={this.openShowCardModal}>
       {editCardModal}
       <div className="BoardShowPage-Card-box" draggable="true" onDragStart={dragStart}>
         <pre onClick={this.viewCard}>{card.content}</pre>

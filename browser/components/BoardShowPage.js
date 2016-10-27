@@ -6,6 +6,7 @@ import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
 import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
+import CardViewModal from './CardViewModal'
 import List from './BoardShowPage/List'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
@@ -14,11 +15,6 @@ import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
 class BoardProvider extends Component {
   constructor(props){
     super(props)
-    this.state = { activeCard: null }
-    if (props.location.params.cardId) {
-      this.state.activeCard = props.location.params.cardId
-    }
-    console.log(this.state)
     this.rerender = this.rerender.bind(this)
     boardStore.setBoardId(props.location.params.boardId)
     boardStore.subscribe(this.rerender)
@@ -42,7 +38,9 @@ class BoardProvider extends Component {
   }
 
   render(){
-    return <BoardShowPage board={boardStore.value} activeCard={this.state.activeCard} />
+    const viewingCardId = this.props.location.params.cardId
+    const viewingCard = viewingCardId ? Number(viewingCardId) : null
+    return <BoardShowPage board={boardStore.value} viewingCard={viewingCard} />
   }
 
 }
@@ -50,6 +48,10 @@ class BoardProvider extends Component {
 export default BoardProvider
 
 class BoardShowPage extends React.Component {
+  static contextTypes = {
+    redirectTo: React.PropTypes.func.isRequired,
+  };
+
   static propTypes = {
     name: React.PropTypes.string,
   };
@@ -57,6 +59,7 @@ class BoardShowPage extends React.Component {
   constructor(props) {
     super(props);
     this.scrollToTheRight = this.scrollToTheRight.bind(this)
+    this.closeCardViewModal = this.closeCardViewModal.bind(this)
   }
 
   componentDidUpdate(){
@@ -70,13 +73,29 @@ class BoardShowPage extends React.Component {
     this._scrollToTheRight = true
   }
 
+  closeCardViewModal(){
+    this.context.redirectTo(`/boards/${this.props.board.id}`)
+  }
+
   render() {
-    const { board, activeCard } = this.props
+    const { board, viewingCard } = this.props
     if (!board) return <Layout className="BoardShowPage" />
+
+    let cardModal
+    if (viewingCard) {
+      let card = board.cards.find(card => card.id === viewingCard)
+      let list = board.lists.find(list => list.id === card.list_id)
+      cardModal = <CardViewModal
+        card={card}
+        list={list}
+        board={board}
+        onClose={this.closeCardViewModal}
+      />
+    }
 
     const lists = board.lists.map(list => {
       const cards = board.cards.filter(card => card.list_id === list.id)
-      return <List key={list.id} board={board} list={list} cards={cards} activeCard={activeCard} />
+      return <List key={list.id} board={board} list={list} cards={cards} />
     })
 
     const style = {
@@ -84,6 +103,7 @@ class BoardShowPage extends React.Component {
     }
 
     return <Layout className="BoardShowPage" style={style}>
+      {cardModal}
       <div className="BoardShowPage-Header">
         <h1>{board.name}</h1>
         <div>

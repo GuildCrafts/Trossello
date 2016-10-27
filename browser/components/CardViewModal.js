@@ -10,6 +10,8 @@ import $ from 'jquery'
 export default class CardViewModal extends Component {
   static propTypes = {
     card: React.PropTypes.object.isRequired,
+    list: React.PropTypes.object.isRequired,
+    board: React.PropTypes.object.isRequired,
     onClose: React.PropTypes.func.isRequired,
   }
   static contextTypes = {
