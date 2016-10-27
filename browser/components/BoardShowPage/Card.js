@@ -33,8 +33,8 @@ export default class Card extends Component {
     this.onClick = this.onClick.bind(this)
   }
 
-  editCard() {
-
+  editCard(event) {
+    event.stopPropagation()
     const rect = this.refs.card.getBoundingClientRect()
     this.setState({
       editingCard: true,
@@ -64,7 +64,9 @@ export default class Card extends Component {
     })
   }
 
-  onClick(){
+  onClick(event){
+    if (event.isPropagationStopped()) return
+    event.stopPropagation()
     this.openShowCardModal()
     if (this.props.onClick) this.props.onClick()
   }
@@ -163,7 +165,7 @@ class EditCardModal extends Component {
     left:    React.PropTypes.number.isRequired,
     width:   React.PropTypes.number.isRequired,
   }
-  onMouseDown(event){
+  stopPropagation(event){
     event.preventDefault()
     event.stopPropagation()
   }
@@ -173,7 +175,11 @@ class EditCardModal extends Component {
       left: this.props.left,
       width: this.props.width+'px',
     }
-    return <div className="BoardShowPage-EditCardModal" onMouseDown={this.onMouseDown}>
+    return <div
+        className="BoardShowPage-EditCardModal"
+        onMouseDown={this.stopPropagation}
+        onClick={this.stopPropagation}
+      >
       <div
         className="BoardShowPage-EditCardModal-shroud"
         onMouseDown={this.onMouseDown}
