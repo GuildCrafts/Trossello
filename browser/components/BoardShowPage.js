@@ -6,7 +6,7 @@ import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
 import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
-import CardViewModal from './CardViewModal'
+import CardModal from './CardModal'
 import List from './BoardShowPage/List'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
@@ -85,7 +85,7 @@ class BoardShowPage extends React.Component {
     if (viewingCard) {
       let card = board.cards.find(card => card.id === viewingCard)
       let list = board.lists.find(list => list.id === card.list_id)
-      cardModal = <CardViewModal
+      cardModal = <CardModal
         card={card}
         list={list}
         board={board}
