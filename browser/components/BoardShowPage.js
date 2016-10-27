@@ -7,7 +7,7 @@ import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
 import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
-import CardViewModal from './CardViewModal'
+import CardModal from './BoardShowPage/CardModal'
 import List from './BoardShowPage/List'
 import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
@@ -68,7 +68,7 @@ class BoardShowPage extends React.Component {
     this.onMouseMove = this.onMouseMove.bind(this)
     this.onMouseUp = this.onMouseUp.bind(this)
     this.scrollToTheRight = this.scrollToTheRight.bind(this)
-    this.closeCardViewModal = this.closeCardViewModal.bind(this)
+    this.closeCardModal = this.closeCardModal.bind(this)
   }
 
   componentDidUpdate(){
@@ -186,7 +186,7 @@ class BoardShowPage extends React.Component {
     })
   }
 
-  closeCardViewModal(){
+  closeCardModal(){
     this.context.redirectTo(`/boards/${this.props.board.id}`)
   }
 
@@ -199,11 +199,11 @@ class BoardShowPage extends React.Component {
     if (viewingCard) {
       let card = board.cards.find(card => card.id === viewingCard)
       let list = board.lists.find(list => list.id === card.list_id)
-      cardModal = <CardViewModal
+      cardModal = <CardModal
         card={card}
         list={list}
         board={board}
-        onClose={this.closeCardViewModal}
+        onClose={this.closeCardModal}
       />
     }
 

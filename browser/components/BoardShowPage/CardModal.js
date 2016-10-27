@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import Link from './Link'
-import Icon from './Icon'
-import Form from './Form'
-import Card from './BoardShowPage/Card'
-import boardStore from '../stores/boardStore'
-import './CardViewModal.sass'
+import Link from '../Link'
+import Icon from '../Icon'
+import Form from '../Form'
+import Card from './Card'
+import boardStore from '../../stores/boardStore'
+import './CardModal.sass'
 import $ from 'jquery'
 
-export default class CardViewModal extends Component {
+export default class CardModal extends Component {
   static propTypes = {
     card: React.PropTypes.object.isRequired,
     list: React.PropTypes.object.isRequired,
@@ -122,76 +122,76 @@ export default class CardViewModal extends Component {
     const { session } = this.context
     const description = this.displayDescription(this.props.card.description)
     const editDescriptionForm = this.state.editingDescription ?
-      <Form className="CardViewModal-description-Edit" onSubmit={this.updateDescription}>
+      <Form className="CardModal-description-Edit" onSubmit={this.updateDescription}>
         <textarea
-          className="CardViewModal-description-Edit-input"
+          className="CardModal-description-Edit-input"
           onKeyDown={this.submitDescription}
           ref="description"
           defaultValue={this.props.card.description}
         />
-        <Link className="CardViewModal-description-Edit-cancel" onClick={this.stopEditingDescription}>
+        <Link className="CardModal-description-Edit-cancel" onClick={this.stopEditingDescription}>
           <Icon type="times" />
         </Link>
-        </Form> : <div className="CardViewModal-description-text">{description}</div>
+        </Form> : <div className="CardModal-description-text">{description}</div>
     const editCardNameForm = this.state.editingName ?
-    <Form className="CardViewModal-header-Edit" onSubmit={this.updateName}>
+    <Form className="CardModal-header-Edit" onSubmit={this.updateName}>
       <textarea
-        className="CardViewModal-header-Edit-input"
+        className="CardModal-header-Edit-input"
         onKeyDown={this.submitName}
         ref="content"
         defaultValue={this.props.card.content}
       />
-      <Link className="CardViewModal-header-Edit-cancel" onClick={this.stopEditingName}>
+      <Link className="CardModal-header-Edit-cancel" onClick={this.stopEditingName}>
         <Icon type="times" />
       </Link>
-      </Form> : <div onClick={this.editName} className="CardViewModal-name">{this.props.card.content}</div>
+      </Form> : <div onClick={this.editName} className="CardModal-name">{this.props.card.content}</div>
 
-    return <div className="CardViewModal">
-      <div onClick={this.props.onClose} className="CardViewModal-shroud">
+    return <div className="CardModal">
+      <div onClick={this.props.onClose} className="CardModal-shroud">
       </div>
-      <div className="CardViewModal-stage">
-        <div className="CardViewModal-window">
-          <div className="CardViewModal-header">
+      <div className="CardModal-stage">
+        <div className="CardModal-window">
+          <div className="CardModal-header">
             {editCardNameForm}
             <hr />
           </div>
-          <div className="CardViewModal-details">
-            <div className="CardViewModal-details-margin">
-              <span className="CardViewModal-details-list">in List: {this.props.list.name}</span>
-              <span className="CardViewModal-details-board">in Board: {this.props.board.name}</span>
-              <div className="CardViewModal-description">
-                <div className="CardViewModal-description-title">
+          <div className="CardModal-details">
+            <div className="CardModal-details-margin">
+              <span className="CardModal-details-list">in List: {this.props.list.name}</span>
+              <span className="CardModal-details-board">in Board: {this.props.board.name}</span>
+              <div className="CardModal-description">
+                <div className="CardModal-description-title">
                   Description
-                  <Link className="CardViewModal-description-Edit-button" onClick={this.editDescription}>
+                  <Link className="CardModal-description-Edit-button" onClick={this.editDescription}>
                   <Icon type="pencil"/>
                 </Link></div>
                 {editDescriptionForm}
               </div>
-              <div className="CardViewModal-comments">
-                <div className="CardViewModal-comments-icon">
+              <div className="CardModal-comments">
+                <div className="CardModal-comments-icon">
                 <Icon size="2" type="comment-o"/>
                 </div>
-                <div className="CardViewModal-comments-header">Add Comment:</div>
-                <Form className="CardViewModal-comments-Form">
+                <div className="CardModal-comments-header">Add Comment:</div>
+                <Form className="CardModal-comments-Form">
                   <textarea
-                    className="CardViewModal-comments-Form-input"
+                    className="CardModal-comments-Form-input"
                     ref="comment"
                     defaultValue=''
                   />
-                  <img className="CardViewModal-comments-userimage" src={session.user.avatar_url}></img>
+                  <img className="CardModal-comments-userimage" src={session.user.avatar_url}></img>
                   <input type="submit" value="Send"/>
                 </Form>
               </div>
             </div>
           </div>
-        <div className="CardViewModal-controls">
-          <div className="CardViewModal-controls-add">
-            <span className="CardViewModal-controls-title">Add</span>
-            <div className="CardViewModal-controls-add-buttons">
+        <div className="CardModal-controls">
+          <div className="CardModal-controls-add">
+            <span className="CardModal-controls-title">Add</span>
+            <div className="CardModal-controls-add-buttons">
             </div>
           </div>
-          <div className="CardViewModal-controls-actions">
-            <span className="CardViewModal-controls-title">Actions</span>
+          <div className="CardModal-controls-actions">
+            <span className="CardModal-controls-title">Actions</span>
 
           </div>
         </div>
