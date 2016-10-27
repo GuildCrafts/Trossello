@@ -127,19 +127,37 @@ describe('database.commands', () => {
         })
         .then(() =>
           commands.createCard({
+            board_id: 341,
             list_id: 88,
             content: 'wash your face'
           })
         )
         .then(card => {
           expect(card.id).to.be.a('number')
+          expect(card.board_id).to.eql(341)
           expect(card.list_id).to.eql(88)
           expect(card.content).to.eql('wash your face')
           expect(card.archived).to.eql(false)
+          expect(card.order).to.eql(0)
+        })
+        .then(() =>
+          commands.createCard({
+            board_id: 341,
+            list_id: 88,
+            content: 'wash your feet'
+          })
+        )
+        .then(card => {
+          expect(card.id).to.be.a('number')
+          expect(card.board_id).to.eql(341)
+          expect(card.list_id).to.eql(88)
+          expect(card.content).to.eql('wash your feet')
+          expect(card.archived).to.eql(false)
+          expect(card.order).to.eql(1)
         })
         .then(() => knex.table('cards').count())
         .then((results) => {
-          expect(results[0].count).to.eql('1')
+          expect(results[0].count).to.eql('2')
         })
 
     })
@@ -176,9 +194,10 @@ describe('database.commands', () => {
   })
 
   describe('moveCard', () => {
+
     describe('when moving on the same list', () => {
       withBoardsListsAndCardsInTheDatabase(() => {
-        it.only('should update card orders in list', () => {
+        it('should update card orders in list', () => {
 
           const getOrderedCardsByListId = (board, listId) =>
             board.cards
@@ -197,9 +216,9 @@ describe('database.commands', () => {
             })
             .then( () =>
               commands.moveCard({
-                board_id: 101,
-                card_id: 81, // content: 'Card2'
-                list_id: 40,
+                boardId: 101,
+                cardId: 81, // content: 'Card2'
+                listId: 40,
                 order: 0,
               })
             )
@@ -220,7 +239,7 @@ describe('database.commands', () => {
 
     describe('when moving between two lists', () => {
       withBoardsListsAndCardsInTheDatabase(() => {
-        it.only('should update card orders', () => {
+        it('should update card orders', () => {
           const getOrderedCardsByListId = (board, listId) =>
             board.cards
               .filter(card => card.list_id === listId)
@@ -249,9 +268,9 @@ describe('database.commands', () => {
             })
             .then( () =>
               commands.moveCard({
-                board_id: 101,
-                card_id: 81,
-                list_id: 41,
+                boardId: 101,
+                cardId: 81,
+                listId: 41,
                 order: 0,
               })
             )
@@ -307,9 +326,9 @@ describe('database.commands', () => {
           })
           .then( () =>
             commands.moveCard({
-              board_id: 101,
-              card_id: 81, // content: 'Card2'
-              list_id: 40,
+              boardId: 101,
+              cardId: 81,
+              listId: 40,
               order: 0,
             })
           )
@@ -332,9 +351,9 @@ describe('database.commands', () => {
           })
           .then( () =>
             commands.moveCard({
-              board_id: 101,
-              card_id: 81,
-              list_id: 41,
+              boardId: 101,
+              cardId: 81,
+              listId: 41,
               order: 0,
             })
           )
@@ -355,40 +374,6 @@ describe('database.commands', () => {
             expect(list41Cards[2].content).to.eql('Card4')
             expect(list41Cards[2].order  ).to.eql(2)
           })
-          // .then( ()=>
-          //   commands.createCard({
-          //     id: 1089,
-          //     list_id: 40,
-          //     content: 'new Test Card'
-          //   })
-          // )
-          // .then( ()=> queries.getBoardById(101))
-          // .then(board => {
-          //   let cards = board.cards
-          //     .filter(card => card.list_id === 40)
-          //     .sort((a,b) => a.order - b.order)
-          //   expect(cards.length).to.eql(3)
-          //   expect(cards[0].content).to.eql('card1')
-          //   expect(cards[1].content).to.eql('Card2')
-          //   expect(cards[2].content).to.eql('new Test Card')
-          // })
-          // .then( ()=>
-          //   commands.moveCard({
-          //     card_id: 1089,
-          //     list_id: 40,
-          //     order: 1
-          //   })
-          // )
-          // .then( ()=> queries.getBoardById(101))
-          // .then(board => {
-          //   let cards = board.cards
-          //     .filter(card => card.list_id === 40)
-          //     .sort((a,b) => a.order - b.order)
-          //   expect(cards.length).to.eql(3)
-          //   expect(cards[1].content).to.eql('card1')
-          //   expect(cards[2].content).to.eql('Card2')
-          //   expect(cards[0].content).to.eql('new Test Card')
-          // })
       })
     })
   })

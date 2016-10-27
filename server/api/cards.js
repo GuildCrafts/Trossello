@@ -35,17 +35,18 @@ router.post('/:cardId/archive', (request, response, next) => {
     .catch(next)
 })
 
-router.post('/:cardId/move', (request, response, next) =>{
-  const {board_id, list_id, order} = request.body
-  console.log("body", request.body);
-  const cardId = request.params.cardId
-  let card_id = cardId
-  commands.moveCard({board_id, list_id, card_id, order})
-  .then((card) => {
-    
-    response.json(card)
-  })
-  .catch( next)
+router.post('/:cardId/move', (request, response, next) => {
+  let { boardId, listId, order } = request.body
+  let { cardId } = request.params
+  boardId = Number(boardId)
+  cardId  = Number(cardId)
+  listId  = Number(listId)
+  order   = Number(order)
+  commands.moveCard({ boardId, cardId, listId, order })
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
 })
 
 export default router
