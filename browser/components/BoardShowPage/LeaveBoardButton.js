@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
 import boardsStore from '../../stores/boardsStore'
+import './MenuSideBar.sass'
 
 export default class LeaveBoardButton extends Component {
 
@@ -24,8 +25,8 @@ export default class LeaveBoardButton extends Component {
   }
 
   render(){
-    return <span onClick={this.onClick}>
+    return <button className='MenuSideBar-LeaveBoard' onClick={this.onClick}>
       Leave Board...
-    </span>
+    </button>
   }
 }

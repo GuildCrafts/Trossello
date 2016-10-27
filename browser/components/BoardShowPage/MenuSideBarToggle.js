@@ -17,10 +17,12 @@ export default class MenuSideBarToggle extends ToggleComponent {
       <MenuSideBar board={this.props.board} onClose={this.close} /> : null
 
     return <div className='MenuSideBar-Toggle'>
-      <span className='MenuSideBar-icons'>
-        <Icon type='ellipsis-h' />
-      </span>
-      <Link className="MenuSideBar-Toggle" onClick={this.toggle}>Menu</Link>
+      <Link onClick={this.toggle}>
+        <span className='MenuSideBar-icons'>
+          <Icon type='ellipsis-h' />
+        </span>
+        Menu
+      </Link>
       {showSideBar}
     </div>
 

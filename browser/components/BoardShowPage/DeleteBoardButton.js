@@ -24,8 +24,8 @@ export default class DeleteBoardButton extends Component {
   }
 
   render(){
-    return <span onClick={this.onClick}>
+    return <button onClick={this.onClick}>
       Archive
-    </span>
+    </button>
   }
 }

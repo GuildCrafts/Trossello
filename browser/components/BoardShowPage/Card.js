@@ -140,7 +140,7 @@ class EditCardForm extends Component {
   onKeyDown(event) {
     if (!event.shiftKey && event.keyCode === 13) {
       event.preventDefault()
-      this.saveCard(event)
+      this.saveCard()
     }
     if (event.keyCode === 27) {
       event.preventDefault()
@@ -149,13 +149,11 @@ class EditCardForm extends Component {
   }
 
   cancel(event){
-    event.preventDefault()
-    EditCardForm.lastValue = this.refs.content.value
-    this.props.onClose()
+    if (event) event.preventDefault()
   }
 
   saveCard(event) {
-    event.preventDefault()
+    if (event) event.preventDefault()
     const content = {
       content: this.refs.content.value,
     }

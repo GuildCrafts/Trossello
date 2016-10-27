@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
 import Icon from '../Icon'
 import Link from '../Link'
 import ToggleComponent from '../ToggleComponent'
@@ -46,7 +45,7 @@ const DownloadBoardButton = (props) => {
 }
 
 const MenuSideBarMain = (props) => {
-  return <div>
+  return <div className='MenuSideBar'>
     <div className="MenuSideBar-header" >
       Menu
       <Link className="MenuSideBar-cancel" onClick={props.closeMenu}>
@@ -59,30 +58,30 @@ const MenuSideBarMain = (props) => {
       <hr/>
     </div>
     <div className="MenuSideBar-buttons">
-      <span className='MenuSideBar-options'>
+      <button className='MenuSideBar-options'>
         <span className='MenuSideBar-icons'>
           <Icon type='square' />
         </span>
         Change Background
-      </span>
-      <span className='MenuSideBar-options'>
+      </button>
+      <button className='MenuSideBar-options'>
         <span className='MenuSideBar-icons'>
           <Icon type='filter' />
         </span>
         Filter Cards
-      </span>
-      <span className='MenuSideBar-options'>
+      </button>
+      <button className='MenuSideBar-options'>
         <span className='MenuSideBar-icons'>
           <Icon type='rocket' />
         </span>
         Power Ups
-      </span>
-      <span className='MenuSideBar-options'>
+      </button>
+      <button className='MenuSideBar-options'>
         <span className='MenuSideBar-icons'>
           <Icon type='sticky-note-o' />
         </span>
         Stickers
-      </span>
+      </button>
       <Link onClick={props.showMore} className='MenuSideBar-options'>
         <span className='MenuSideBar-icons'>
           <Icon type='ellipsis-h' />
@@ -95,7 +94,7 @@ const MenuSideBarMain = (props) => {
 }
 
 const MenuSideBarMore = (props) => {
-  return <div>
+  return <div className='MenuSideBar'>
     <div className="MenuSideBar-header" >
       More
       <Link className="MenuSideBar-backArrow" onClick={props.closeMore}>
@@ -107,19 +106,9 @@ const MenuSideBarMore = (props) => {
       <hr/>
     </div>
     <div className="MenuSideBar-buttons">
-      <span className='MenuSideBar-options'>
-      <span className='MenuSideBar-icons'>
-        <Icon type='archive' />
-      </span>
-        <DeleteBoardButton boardId={props.board.id}/>
-      </span>
-      <span className='MenuSideBar-options'>
-        <DownloadBoardButton boardId={props.board.id}/>
-      </span>
+      <DownloadBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
       <hr/>
-      <span className='MenuSideBar-options'>
-        <LeaveBoardButton boardId={props.board.id}/>
-      </span>
+      <LeaveBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
     </div>
   </div>
 }
