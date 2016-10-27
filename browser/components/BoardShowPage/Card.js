@@ -86,7 +86,7 @@ export default class Card extends Component {
       >
       {editCardModal}
       <div className="BoardShowPage-Card-box">
-        <pre>{card.order} :: {index} :: {card.content}</pre>
+        <pre>{card.content}</pre>
         <div className="BoardShowPage-Card-controls">
           {editCardButton}
           {archiveCardButton}

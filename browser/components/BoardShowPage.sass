@@ -135,7 +135,7 @@
     margin-bottom: 6px
     flex-grow: 0
     flex-shrink: 0
-    will-change: transform
+    cursor: move
     &-beingDragged
       z-index: 100
       position: fixed
@@ -143,14 +143,13 @@
       left: 0
       transform: rotate(7deg)
       pointer-events: none
+      cursor: grabbing
     &-ghosted
       background-color: darkgrey
       border-radius: 3px
-      cursor: grabbing
       cursor: -webkit-grabbing
       > *
-        // visibility: hidden
-        opacity: 0.5
+        visibility: hidden
     &-box
       -webkit-touch-callout: none
       -webkit-user-select: none

@@ -22,10 +22,6 @@ export default class List extends Component {
     }
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
-    // this.onDragStart = this.onDragStart.bind(this)
-    // this.onDragOver = this.onDragOver.bind(this)
-    // this.onDrop = this.onDrop.bind(this)
-    this.createCard = this.createCard.bind(this)
     this.cancelCreatingCardIfUserClickedOutside = this.cancelCreatingCardIfUserClickedOutside.bind(this)
     document.body.addEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
   }
@@ -56,25 +52,8 @@ export default class List extends Component {
     this.setState({creatingCard: false})
   }
 
-  createCard(content){
-    const { board, list } = this.props
-    $.ajax({
-      method: 'post',
-      url: `/api/boards/${board.id}/lists/${list.id}/cards`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify(content),
-    }).then(() => {
-      boardStore.reload()
-    })
-  }
-
   render(){
-    const {
-      board,
-      list,
-      dragging,
-    } = this.props
+    const { board, list, dragging } = this.props
 
     const cards = board.cards
       .map(card =>
@@ -106,7 +85,9 @@ export default class List extends Component {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
     }
 
-    return <div className="BoardShowPage-List"
+    return <div
+        className="BoardShowPage-List"
+        data-list-id={list.id}
       >
       <div className="BoardShowPage-ListHeader">
         {list.name}
