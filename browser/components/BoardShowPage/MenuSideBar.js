@@ -153,36 +153,31 @@ const ViewArchiveButton = (props) => {
 }
 class ArchivedItems extends Component {
   render() {
-    const { board, cards } = this.props
-    const archivedCards = board.cards.map(card => {
-      if(card.archived === true) {
-        return <Card
-          editable={false}
-          archivable={false}
-          key={card.id}
-          card={card}
-        />
-      }
-    })
-    const archivedLists = board.lists.map(list => {
+    const { board } = this.props
+    const archivedListsAndCards = board.lists.map(list => {
       const cards = board.cards.filter(card => card.list_id === list.id)
       if(list.archived === true) {
         return <List key={list.id} board={board} list={list} cards={cards}/>
+      } else {
+        for(var i=0; i<cards.length; i++){
+          if(cards[i].archived===true){
+            return <Card
+            editable={false}
+            archivable={false}
+            key={cards[i].id}
+            card={cards[i]}
+            />
+          }
+        }
       }
     })
     console.log(board)
     return <div className="MenuSideBar-ArchivedItems">
       <div className="MenuSideBar-header">
-        Archived Cards
+        Archived Items
       </div>
       <div className="MenuSideBar-ArchivedItems-cards">
-      {archivedCards}
-      </div>
-      <div className="MenuSideBar-header">
-        Archived Lists
-      </div>
-      <div className="MenuSideBar-ArchivedItems-lists">
-      {archivedLists}
+      {archivedListsAndCards}
       </div>
     </div>
   }
