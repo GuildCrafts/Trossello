@@ -10,9 +10,14 @@ import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
 
 export default class Card extends Component {
+  static contextTypes = {
+    redirectTo: React.PropTypes.func.isRequired,
+  };
+
   static propTypes = {
     card: React.PropTypes.object.isRequired,
-  }
+  };
+
   constructor(props){
     super(props)
     this.state = {
@@ -25,10 +30,11 @@ export default class Card extends Component {
     this.editCard = this.editCard.bind(this)
     this.cancelEditingCard = this.cancelEditingCard.bind(this)
     this.updateCard = this.updateCard.bind(this)
+    this.onClick = this.onClick.bind(this)
   }
 
-  editCard() {
-
+  editCard(event) {
+    event.stopPropagation()
     const rect = this.refs.card.getBoundingClientRect()
     this.setState({
       editingCard: true,
@@ -56,6 +62,18 @@ export default class Card extends Component {
       this.cancelEditingCard()
       boardStore.reload()
     })
+  }
+
+  onClick(event){
+    if (event.isPropagationStopped()) return
+    event.stopPropagation()
+    this.openShowCardModal()
+    if (this.props.onClick) this.props.onClick()
+  }
+
+  openShowCardModal(){
+    const { card } = this.props
+    this.context.redirectTo(`/boards/${card.board_id}/cards/${card.id}`)
   }
 
   render() {
@@ -86,7 +104,6 @@ export default class Card extends Component {
       /> :
       null
 
-
     let className = 'BoardShowPage-Card'
     if (ghosted) className += ' BoardShowPage-Card-ghosted'
     if (beingDragged) className += ' BoardShowPage-Card-beingDragged'
@@ -98,6 +115,7 @@ export default class Card extends Component {
         data-list-id={card.list_id}
         data-order={card.order}
         style={style}
+        onClick={this.onClick}
       >
       {editCardModal}
       <div className="BoardShowPage-Card-box">
@@ -147,7 +165,7 @@ class EditCardModal extends Component {
     left:    React.PropTypes.number.isRequired,
     width:   React.PropTypes.number.isRequired,
   }
-  onMouseDown(event){
+  stopPropagation(event){
     event.preventDefault()
     event.stopPropagation()
   }
@@ -157,7 +175,11 @@ class EditCardModal extends Component {
       left: this.props.left,
       width: this.props.width+'px',
     }
-    return <div className="BoardShowPage-EditCardModal" onMouseDown={this.onMouseDown}>
+    return <div
+        className="BoardShowPage-EditCardModal"
+        onMouseDown={this.stopPropagation}
+        onClick={this.stopPropagation}
+      >
       <div
         className="BoardShowPage-EditCardModal-shroud"
         onMouseDown={this.onMouseDown}

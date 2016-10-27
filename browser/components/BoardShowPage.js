@@ -6,6 +6,7 @@ import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
 import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
+import CardModal from './BoardShowPage/CardModal'
 import List from './BoardShowPage/List'
 import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
@@ -38,7 +39,9 @@ class BoardProvider extends Component {
   }
 
   render(){
-    return <BoardShowPage board={boardStore.value} />
+    const viewingCardId = this.props.location.params.cardId
+    const viewingCard = viewingCardId ? Number(viewingCardId) : null
+    return <BoardShowPage board={boardStore.value} viewingCard={viewingCard} />
   }
 
 }
@@ -46,6 +49,10 @@ class BoardProvider extends Component {
 export default BoardProvider
 
 class BoardShowPage extends React.Component {
+  static contextTypes = {
+    redirectTo: React.PropTypes.func.isRequired,
+  };
+
   static propTypes = {
     name: React.PropTypes.string,
   };
@@ -60,6 +67,7 @@ class BoardShowPage extends React.Component {
     this.onMouseMove = this.onMouseMove.bind(this)
     this.onMouseUp = this.onMouseUp.bind(this)
     this.scrollToTheRight = this.scrollToTheRight.bind(this)
+    this.closeCardModal = this.closeCardModal.bind(this)
   }
 
   componentDidUpdate(){
@@ -72,7 +80,6 @@ class BoardShowPage extends React.Component {
   scrollToTheRight(){
     this._scrollToTheRight = true
   }
-
 
   onMouseDown(event){
     if (event.isPropagationStopped()) return
@@ -178,11 +185,26 @@ class BoardShowPage extends React.Component {
     })
   }
 
-  render() {
-    const { board } = this.props
-    const { dragging } = this.state
+  closeCardModal(){
+    this.context.redirectTo(`/boards/${this.props.board.id}`)
+  }
 
+  render() {
+    const { board, viewingCard } = this.props
+    const { dragging } = this.state
     if (!board) return <Layout className="BoardShowPage" />
+
+    let cardModal
+    if (viewingCard) {
+      let card = board.cards.find(card => card.id === viewingCard)
+      let list = board.lists.find(list => list.id === card.list_id)
+      cardModal = <CardModal
+        card={card}
+        list={list}
+        board={board}
+        onClose={this.closeCardModal}
+      />
+    }
 
     const lists = board.lists.map(list => {
       return <List
@@ -222,6 +244,7 @@ class BoardShowPage extends React.Component {
     }
 
     return <Layout className="BoardShowPage" style={style}>
+      {cardModal}
       <div className="BoardShowPage-Header">
         <h1>{board.name}</h1>
         <div>

@@ -1,0 +1,112 @@
+@import "../../style.sass"
+
+.CardModal
+  &-shroud, &-stage
+    position: fixed
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+  &-shroud
+    z-index: 100
+    background-color: rgba(0, 0, 0, 0.5)
+  &-stage
+    pointer-events: none
+    z-index: 101
+    display: flex
+    justify-content: center
+    align-items: center
+  &-window
+    pointer-events: auto
+    min-width: 600px
+    min-height: 300px
+    padding: 10px
+    border-radius: 5px
+    background-color: #e1e3ea
+    position: relative
+  &-header
+    padding-top: 10px
+    text-align: left
+    font-weight: bold
+    font-size: 1.1em
+    position: relative
+    &-Edit
+      &-input
+        width: 90%
+        display: inline
+        float: left
+      &-cancel
+        width: 10%
+        padding-left: 20px
+        display: inline
+        color: black
+        float: right
+        position: absolute
+        top: 0
+        right: 0
+  &-details
+    width: 79%
+    display: inline
+    float: left
+    &-list
+    &-board
+      margin-left: 20px
+    &-margin
+      margin: 0 30px
+  &-controls
+    width: 19%
+    top: 0
+    right: 0
+    display: inline
+    float: right
+    &-title
+      font-weight: bold
+    &-add
+      min-height: 100px
+    &-actions
+      min-height: 50px
+  &-description
+    align-items: center
+    margin-top: 10px
+    min-height: 80px
+    min-width: 200px
+    position: absolute
+    bottom: 100px
+    left: 50px
+    min-width: 400px
+    &-title
+      margin-bottom: 5px
+    &-Edit
+      &-button, &-cancel
+        display: inline
+        color: black
+      &-button
+        float: left
+        margin-left: 5px
+        position: absolute
+        left: -35px
+        top: 0
+      &-cancel
+       position: absolute
+       left: -30px
+       top: 25px
+  &-comments
+    position: absolute
+    bottom: 5px
+    left: 50px
+    min-width: 400px
+    &-header
+      font-size: 1.1em
+      font-weight: bold
+      padding-bottom: 20px
+    &-icon
+      position: absolute
+      left: -40px
+      top: -5px
+    &-userimage
+      max-width: 60px
+      max-height: 60px
+      position: absolute
+      padding: 10px
+      left: -55px
+      top: 30px
