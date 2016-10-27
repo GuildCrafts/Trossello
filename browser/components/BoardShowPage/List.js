@@ -86,13 +86,26 @@ export default class List extends Component {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
     }
 
+    const optionsBlock= this.props.showOptions ?
+      <div ref="options">
+        <div ref="cards" className="BoardShowPage-cards">
+          {cardNodes}
+          {newCardForm}
+        </div>
+          {newCardLink}
+      </div> : null
+
+    const archiveListButton = this.props.archivable ?
+      <ArchiveListButton list={list} /> : null
+
+<<<<<<< fab036d630965e279d952e10ce1c00d1ca18aa5e
     return <div
         className="BoardShowPage-List"
         data-list-id={list.id}
       >
       <div className="BoardShowPage-ListHeader">
         {list.name}
-        <ArchiveListButton list={list} />
+        {archiveListButton}
       </div>
       <div
         ref="cards"
@@ -102,10 +115,8 @@ export default class List extends Component {
         onDragEnd={this.props.onDragEnd}
         onDrop={this.props.onDrop}
       >
-        {cardNodes}
-        {newCardForm}
       </div>
-      {newCardLink}
+      {optionsBlock}
     </div>
   }
 }
