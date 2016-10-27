@@ -6,6 +6,7 @@ import DeleteBoardButton from './DeleteBoardButton'
 import LeaveBoardButton from './LeaveBoardButton'
 import InviteByEmailButton from '../InviteByEmailButton'
 import './MenuSideBar.sass'
+import Card from './Card'
 
 export default class MenuSideBar extends ToggleComponent {
 
@@ -144,15 +145,27 @@ const MenuSideBarMore = (props) => {
   </div>
 }
 const ViewArchiveButton = (props) => {
-  return <a className='MenuSideBar-options' href={`/api/boards/${props.boardId}/viewArchive`}>
+  return <div className='MenuSideBar-options' >
     <span className='MenuSideBar-icons'>
       <Icon type='download' />
     </span>
     Archived Cards and Lists
-  </a>
+  </div>
 }
 class ArchivedItems extends Component {
   render() {
-    return <div>Yay!</div>
+    const { board, cards } = this.props
+    const archivedCards = board.cards.map(card => {
+      if(card.archived === true) {
+        return <Card
+          editable={false}
+          archivable={false}
+          key={card.id}
+          card={card}
+        />
+      }
+    })
+    console.log(board)
+    return <div className="MenuSideBar-ArchivedItems">{archivedCards}</div>
   }
 }

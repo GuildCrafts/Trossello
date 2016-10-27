@@ -75,7 +75,6 @@ export default class List extends Component {
         ghosted={dragging && card.id === dragging.cardId}
       />
     )
-
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
       newCardForm = <NewCardForm
