@@ -243,6 +243,7 @@ class BoardShowPage extends React.Component {
       />
     }
 
+
     return <Layout className="BoardShowPage" style={style}>
       {cardModal}
       <div className="BoardShowPage-Header">

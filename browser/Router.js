@@ -6,6 +6,7 @@ import NotFound from './components/NotFound'
 import LoggedInHomepage from './components/LoggedInHomepage'
 import LoggedOutHomepage from './components/LoggedOutHomepage'
 import BoardShowPage from './components/BoardShowPage'
+import StyleGuidePage from './components/StyleGuidePage'
 
 export default class Router extends SimpleReactRouter {
   getRoutes(map, props){
@@ -28,6 +29,7 @@ export default class Router extends SimpleReactRouter {
       map('/', LoggedOutHomepage)
     }
 
+    map('/styleguide', StyleGuidePage)
     // catchall route
     map('*path', NotFound)
   }
