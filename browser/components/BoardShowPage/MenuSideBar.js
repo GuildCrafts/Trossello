@@ -152,21 +152,33 @@ const ViewArchiveButton = (props) => {
   </div>
 }
 class ArchivedItems extends Component {
+
   render() {
     const { board } = this.props
     const archivedListsAndCards = board.lists.map(list => {
       const cards = board.cards.filter(card => card.list_id === list.id)
       if(list.archived === true) {
-        return <List key={list.id} board={board} list={list} cards={cards}/>
+        return <div key={list.id} className="ArchivedItems-item">
+          <List
+          key={list.id}
+          board={board}
+          list={list}
+          cards={cards}
+          />
+          <UnarchiveListButton list={list}/>
+        </div>
       } else {
         for(var i=0; i<cards.length; i++){
           if(cards[i].archived===true){
-            return <Card
-            editable={false}
-            archivable={false}
-            key={cards[i].id}
-            card={cards[i]}
-            />
+            return <div key={cards[i].id} className="MenuSideBar-ArchivedItems-item">
+              <Card
+              editable={false}
+              archivable={false}
+              key={cards[i].id}
+              card={cards[i]}
+              />
+              <UnarchiveCardButton card={cards[i]}/>
+            </div>
           }
         }
       }
@@ -181,4 +193,41 @@ class ArchivedItems extends Component {
       </div>
     </div>
   }
+}
+
+const unarchiveRecord = (event, resource, id) => {
+  event.preventDefault()
+  console.log('unarchive Record has ->', resource, id)
+  $.ajax({
+    method: "POST",
+    url: `/api/${resource}/${id}/unarchive`
+  }).then(() => {
+    boardStore.reload()
+  })
+}
+
+const UnarchiveListButton = (props) => {
+  const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
+  const onClick = (event) => {
+    unarchiveRecord(event, 'lists', props.list.id)
+  }
+  console.log(props)
+  return <Link
+    onClick={onClick}
+    className={className}>
+    Unarchive Item
+  </Link>
+}
+
+const UnarchiveCardButton = (props) => {
+  const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
+  const onClick = (event) => {
+    unarchiveRecord(event, 'cards', props.card.id)
+  }
+  console.log(props)
+  return <Link
+    onClick={onClick}
+    className={className}>
+    Unarchive Item
+  </Link>
 }
