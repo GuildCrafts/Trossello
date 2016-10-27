@@ -7,6 +7,7 @@ import LeaveBoardButton from './LeaveBoardButton'
 import InviteByEmailButton from '../InviteByEmailButton'
 import './MenuSideBar.sass'
 import Card from './Card'
+import List from './List'
 
 export default class MenuSideBar extends ToggleComponent {
 
@@ -80,7 +81,6 @@ const MenuSideBarMain = (props) => {
       <Link className="MenuSideBar-cancel" onClick={props.closeMenu}>
         <Icon type="times" />
       </Link>
-      <hr/>
     </div>
     <div className="MenuSideBar-members">
       <InviteByEmailButton boardId={props.board.id}/>
@@ -132,7 +132,6 @@ const MenuSideBarMore = (props) => {
       <Link className="MenuSideBar-cancel" onClick={props.closeMenu}>
         <Icon type="times" />
       </Link>
-      <hr/>
     </div>
     <div className="MenuSideBar-buttons">
       <DownloadBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
@@ -147,9 +146,9 @@ const MenuSideBarMore = (props) => {
 const ViewArchiveButton = (props) => {
   return <div className='MenuSideBar-options' >
     <span className='MenuSideBar-icons'>
-      <Icon type='download' />
+      <Icon type='archive' />
     </span>
-    Archived Cards and Lists
+    Archived Items
   </div>
 }
 class ArchivedItems extends Component {
@@ -165,7 +164,26 @@ class ArchivedItems extends Component {
         />
       }
     })
+    const archivedLists = board.lists.map(list => {
+      const cards = board.cards.filter(card => card.list_id === list.id)
+      if(list.archived === true) {
+        return <List key={list.id} board={board} list={list} cards={cards}/>
+      }
+    })
     console.log(board)
-    return <div className="MenuSideBar-ArchivedItems">{archivedCards}</div>
+    return <div className="MenuSideBar-ArchivedItems">
+      <div className="MenuSideBar-header">
+        Archived Cards
+      </div>
+      <div className="MenuSideBar-ArchivedItems-cards">
+      {archivedCards}
+      </div>
+      <div className="MenuSideBar-header">
+        Archived Lists
+      </div>
+      <div className="MenuSideBar-ArchivedItems-lists">
+      {archivedLists}
+      </div>
+    </div>
   }
 }
