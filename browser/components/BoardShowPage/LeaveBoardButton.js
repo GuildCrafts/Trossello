@@ -30,9 +30,14 @@ export default class LeaveBoardButton extends Component {
   }
 
   render(){
+<<<<<<< HEAD
     return <ConfirmationButton
       type="invisible"
       className="BoardShowPage-button BoardShowPage-DeleteBoardButton"
+=======
+    return <ConfirmationLink
+      className='MenuSideBar-options'
+>>>>>>> 8264ec4... styles for menu components and oggle between archived and more menu
       onConfirm={this.leaveBoard}
       buttonName="Leave Board"
       title='Leave Board?'

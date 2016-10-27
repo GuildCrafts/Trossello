@@ -42,13 +42,15 @@ export default class MenuSideBar extends ToggleComponent {
         <ArchivedItems
           board={this.props.board}
           archivedItems={this.state.archivedItems}
+          closeArchived={this.stopShowingArchivedItems}
+          closeMenu={this.props.onClose}
           /> :
           <MenuSideBarMore
             board={this.props.board}
             closeMore={this.close}
             closeMenu={this.props.onClose}
             showArchive={this.showArchivedItems}
-            />
+          />
 
     const content = this.state.open ?
       <div>{more}</div> :
@@ -75,7 +77,18 @@ const DownloadBoardButton = (props) => {
   </a>
 }
 
+const BoardMember = (props) => {
+  const { user } = props
+  return <div className='MenuSideBar-member'>
+    <img src={user.avatar_url} className='MenuSideBar-member-img' />
+  </div>
+}
+
 const MenuSideBarMain = (props) => {
+  const boardMembers = props.board.users.map( user => {
+    console.log('userlog', user );
+    return <BoardMember key={user.id} user={user} />
+  })
   return <div className='MenuSideBar'>
     <div className="MenuSideBar-header" >
       Menu
@@ -83,9 +96,11 @@ const MenuSideBarMain = (props) => {
         <Icon type="times" />
       </Link>
     </div>
-    <div className="MenuSideBar-members">
+    <div className='MenuSideBar-members'>
+      { boardMembers }
+    </div>
+    <div className="MenuSideBar-invite">
       <InviteByEmailButton boardId={props.board.id}/>
-      <hr/>
     </div>
     <div className="MenuSideBar-buttons">
       <button className='MenuSideBar-options'>
@@ -118,7 +133,6 @@ const MenuSideBarMain = (props) => {
         </span>
         More
       </Link>
-      <hr/>
     </div>
   </div>
 }
@@ -135,27 +149,26 @@ const MenuSideBarMore = (props) => {
       </Link>
     </div>
     <div className="MenuSideBar-buttons">
-      <DownloadBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
-      <Link onClick={props.showArchive} className='MenuSideBar-options'>
-        <ViewArchiveButton boardId={props.board.id}/>
-      </Link>
-      <hr/>
+      <div className="MenuSideBar-buttons-box">
+        <DownloadBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
+        <ViewArchiveButton onClick={props.showArchive} className='MenuSideBar-options' boardId={props.board.id}/>
+      </div>
       <LeaveBoardButton className='MenuSideBar-options' boardId={props.board.id}/>
     </div>
   </div>
 }
 const ViewArchiveButton = (props) => {
-  return <div className='MenuSideBar-options' >
+  return <button onClick={props.onClick} className='MenuSideBar-options' >
     <span className='MenuSideBar-icons'>
       <Icon type='archive' />
     </span>
     Archived Items
-  </div>
+  </button>
 }
 class ArchivedItems extends Component {
 
   render() {
-    const { board } = this.props
+    const { board, closeMenu } = this.props
     const archivedListsAndCards = board.lists.map(list => {
       const cards = board.cards.filter(card => card.list_id === list.id)
       if(list.archived === true) {
@@ -189,7 +202,13 @@ class ArchivedItems extends Component {
     console.log(board)
     return <div className="MenuSideBar">
       <div className="MenuSideBar-header">
+        <Link className="MenuSideBar-backArrow" onClick={this.props.closeArchived}>
+          <Icon type="arrow-left" />
+        </Link>
         Archived Items
+        <Link className="MenuSideBar-cancel" onClick={closeMenu}>
+          <Icon type="times" />
+        </Link>
       </div>
       <div className="MenuSideBar-ArchivedItems">
       {archivedListsAndCards}
