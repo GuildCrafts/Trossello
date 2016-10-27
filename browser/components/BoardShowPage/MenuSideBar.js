@@ -8,6 +8,7 @@ import InviteByEmailButton from '../InviteByEmailButton'
 import './MenuSideBar.sass'
 import Card from './Card'
 import List from './List'
+import $ from 'jquery'
 
 export default class MenuSideBar extends ToggleComponent {
 
@@ -158,37 +159,39 @@ class ArchivedItems extends Component {
     const archivedListsAndCards = board.lists.map(list => {
       const cards = board.cards.filter(card => card.list_id === list.id)
       if(list.archived === true) {
-        return <div key={list.id} className="ArchivedItems-item">
+        return <div key={list.id} className="ArchivedItems-item ArchivedItems-list">
           <List
+          archivable={false}
+          showOptions={false}
           key={list.id}
           board={board}
           list={list}
           cards={cards}
           />
-          <UnarchiveListButton list={list}/>
+          <UnarchiveListButton className="MenuSideBar-ArchivedItems-UnarchiveButton" list={list}/>
         </div>
       } else {
         for(var i=0; i<cards.length; i++){
           if(cards[i].archived===true){
-            return <div key={cards[i].id} className="MenuSideBar-ArchivedItems-item">
+            return <div key={cards[i].id} className="MenuSideBar-ArchivedItems-item MenuSideBar-ArchivedItems-card">
               <Card
               editable={false}
               archivable={false}
               key={cards[i].id}
               card={cards[i]}
               />
-              <UnarchiveCardButton card={cards[i]}/>
+              <UnarchiveCardButton className="MenuSideBar-ArchivedItems-UnarchiveButton" card={cards[i]}/>
             </div>
           }
         }
       }
     })
     console.log(board)
-    return <div className="MenuSideBar-ArchivedItems">
+    return <div className="MenuSideBar">
       <div className="MenuSideBar-header">
         Archived Items
       </div>
-      <div className="MenuSideBar-ArchivedItems-cards">
+      <div className="MenuSideBar-ArchivedItems">
       {archivedListsAndCards}
       </div>
     </div>

@@ -189,6 +189,8 @@ class BoardShowPage extends React.Component {
       const cards = board.cards.filter(card => card.list_id === list.id)
       if(list.archived === false){
         return <List
+          showOptions={true}
+          archivable={true}
           key={list.id}
           board={board}
           list={list}
