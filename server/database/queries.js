@@ -26,25 +26,11 @@ const getBoardById = (id) =>
 
 const getSearchResult = (userId, searchTerm) => {
   if (!searchTerm) return Promise.resolve([])
-  searchTerm = `%${searchTerm.toLowerCase()}%`
-
-
-
-  const query = knex.table('cards')
-    .select('*')
-    .join('user_boards', 'cards.board_id', '=', 'user_boards.board_id')
-    .whereIn('user_boards.user_id', userId)
-    .where(knex.raw('archived = false AND lower(content) LIKE ?',searchTerm))
-    .orderBy('id', 'asc')
-
-  console.log('QUERY'+query)
-
-
   return knex.table('cards')
     .select('*')
     .join('user_boards', 'cards.board_id', '=', 'user_boards.board_id')
     .whereIn('user_boards.user_id', userId)
-    .where(knex.raw('archived = false AND lower(content) LIKE ?',searchTerm))
+    .where(knex.raw('archived = false AND lower(content) LIKE ?', `%${searchTerm.toLowerCase()}%`))
     .orderBy('id', 'asc')
 }
 
