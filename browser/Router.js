@@ -21,6 +21,7 @@ export default class Router extends SimpleReactRouter {
     if (session.user){
       map('/',                LoggedInHomepage)
       map('/boards/:boardId', BoardShowPage)
+      map('/boards/:boardId/cards/:cardId', BoardShowPage)
 
     // logged out routes
     }else{
