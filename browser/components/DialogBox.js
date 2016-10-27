@@ -11,7 +11,8 @@ export default class DialogBox extends Component {
 
 
   render(){
-    return <div className="DialogBox">
+    const className = `DialogBox ${this.props.className || ''}`
+    return <div className={className}>
       <div className="DialogBox-header">
         {this.props.heading}
         <Link className="DialogBox-cancel" onClick={this.props.onClose}>
