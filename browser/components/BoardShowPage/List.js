@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import $ from 'jquery'
 import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
 import Card from './Card'
 import ArchiveButton from './ArchiveButton'
-import $ from 'jquery'
+import EditCardForm from './EditCardForm'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
 
@@ -78,7 +79,8 @@ export default class List extends Component {
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
       newCardForm = <NewCardForm
-        createCard={this.createCard}
+        board={board}
+        list={list}
         onCancel={this.cancelCreatingCard}
       />
     } else {
@@ -112,60 +114,38 @@ export default class List extends Component {
 
 class NewCardForm extends Component {
 
+  static propTypes = {
+    board: React.PropTypes.object.isRequired,
+    list: React.PropTypes.object.isRequired,
+    onCancel: React.PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props)
-    this.onKeyUp = this.onKeyUp.bind(this)
     this.createCard = this.createCard.bind(this)
-    this.cancel = this.cancel.bind(this)
   }
 
-  componentDidMount() {
-    this.refs.content.focus()
-  }
+  createCard(card) {
+    const { board, list } = this.props
+    if (card.content.replace(/\s+/g,'') === '') return
 
-  cancel(){
-    NewCardForm.lastValue = this.refs.content.value
-    this.props.onCancel()
-  }
-
-  onKeyUp(event) {
-    if (!event.shiftKey && event.keyCode === 13) {
-      event.preventDefault()
-      this.createCard(event)
-    }
-    if (event.keyCode === 27) {
-      event.preventDefault()
-      this.cancel()
-    }
-    autosize(this.refs.content)
-  }
-
-  createCard(event) {
-    event.preventDefault()
-    const content = {
-      content: this.refs.content.value,
-    }
-    if (content.content.replace(/\s+/g,'') === '') return
-    this.refs.content.value = ""
-    this.refs.content.style.height = 'auto'
-    this.props.createCard(content)
+    $.ajax({
+      method: 'post',
+      url: `/api/boards/${board.id}/lists/${list.id}/cards`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify(card),
+    }).then(() => {
+      boardStore.reload()
+    })
   }
 
   render() {
-    return <Form className="BoardShowPage-NewCardForm" onSubmit={this.createCard}>
-      <textarea
-        className="BoardShowPage-Card"
-        onKeyUp={this.onKeyUp}
-        ref="content"
-        defaultValue={NewCardForm.lastValue}
-      />
-      <div className="BoardShowPage-NewCardForm-controls">
-        <input type="submit" value="Add" />
-        <Link onClick={this.cancel}>
-          <Icon type="times" />
-        </Link>
-      </div>
-    </Form>
+    return <EditCardForm
+      onCancel={this.props.onCancel}
+      submitButtonName="Add"
+      onSave={this.createCard}
+    />
   }
 }
 

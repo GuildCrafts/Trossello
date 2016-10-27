@@ -185,23 +185,6 @@
       top: 8px
       right: 10px
 
-    &-EditCardModal
-      &-shroud
-        z-index: 100
-        position: fixed
-        top: 0
-        left: 0
-        bottom: 0
-        right: 0
-        background-color: rgba(0, 0, 0, 0.5)
-      &-window
-        z-index: 101
-        position: fixed
-        min-height: 100px
-        min-width: 232px
-        border-radius: 3px
-        background-color: #e1e3ea
-
   &-create-card-link
     padding: 8px 10px
     border-bottom-left-radius: 5px
@@ -213,8 +196,10 @@
       background-color: rgba(0,0,0,0.2)
       text-decoration: underline
 
-  &-NewCardForm
-    padding-bottom: 8px
+  &-EditCardForm
+    flex-grow: 0
+    flex-shrink: 0
+    padding-bottom: 10px
     > textarea
       -webkit-touch-callout: inherit
       -webkit-user-select: inherit
@@ -226,6 +211,10 @@
       width: 100%
       resize: none
       border-radius: 3px
+      border: 0
+      padding: 6px 8px
+      font-size: 14px
+      font-weight: normal
       &:focus
         outline: none
     &-controls
@@ -234,30 +223,19 @@
       a
         color: inherit
 
-  &-EditCardForm
-    padding-bottom: 8px
-    margin: 1.5% 2%
-    border-radius: 3px
-    > textarea
-      -webkit-touch-callout: inherit
-      -webkit-user-select: inherit
-      -khtml-user-select: inherit
-      -moz-user-select: inherit
-      -ms-user-select: inherit
-      user-select: inherit
-      display: block
-      width: 96%
-      resize: none
-      border-radius: 3px
-      border-bottom: solid 1px
-      margin: 2%
-      padding-bottom: 5px
-      &:focus
-        outline: none
-    &-controls
-      input[type="submit"]
-        margin-right: 0.25em
-        margin-left: 0.25em
-        margin-top: 0.175em
-      a
-        color: inherit
+  &-EditCardModal
+    &-shroud
+      z-index: 100
+      position: fixed
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+      background-color: rgba(0, 0, 0, 0.5)
+    &-window
+      z-index: 101
+      position: fixed
+      pointer-events: none
+    .BoardShowPage-EditCardForm
+      textarea, input[type="submit"]
+        pointer-events: auto
