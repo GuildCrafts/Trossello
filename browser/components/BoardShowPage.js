@@ -14,6 +14,11 @@ import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
 class BoardProvider extends Component {
   constructor(props){
     super(props)
+    this.state = { activeCard: null }
+    if (props.location.params.cardId) {
+      this.state.activeCard = props.location.params.cardId
+    }
+    console.log(this.state)
     this.rerender = this.rerender.bind(this)
     boardStore.setBoardId(props.location.params.boardId)
     boardStore.subscribe(this.rerender)
@@ -37,7 +42,7 @@ class BoardProvider extends Component {
   }
 
   render(){
-    return <BoardShowPage board={boardStore.value} />
+    return <BoardShowPage board={boardStore.value} activeCard={this.state.activeCard} />
   }
 
 }
@@ -66,12 +71,12 @@ class BoardShowPage extends React.Component {
   }
 
   render() {
-    const { board } = this.props
+    const { board, activeCard } = this.props
     if (!board) return <Layout className="BoardShowPage" />
 
     const lists = board.lists.map(list => {
       const cards = board.cards.filter(card => card.list_id === list.id)
-      return <List key={list.id} board={board} list={list} cards={cards} />
+      return <List key={list.id} board={board} list={list} cards={cards} activeCard={activeCard} />
     })
 
     const style = {

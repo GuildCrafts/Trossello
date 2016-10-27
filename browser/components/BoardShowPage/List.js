@@ -84,11 +84,12 @@ export default class List extends Component {
   }
 
   render(){
-    const { board, list, cards } = this.props
+    const { board, list, cards, activeCard } = this.props
     const cardNodes = cards.map(card => {
       return <Card
         editable={true}
         archivable={true}
+        active={card.id == activeCard}
         key={card.id}
         card={card}
         board={board}

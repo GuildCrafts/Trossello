@@ -27,8 +27,8 @@ router.post('/', (request, response, next) => {
 })
 
 // SHOW
-router.get('/:boardId', (request, response, next ) => {
-  const {boardId} = request.params
+router.get('/:boardId', ( request, response, next ) => {
+  const boardId = request.params.boardId
   queries.getBoardById(boardId).then( board => {
     if (board){
       if(request.query.download === '1'){

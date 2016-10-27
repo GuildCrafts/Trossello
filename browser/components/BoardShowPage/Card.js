@@ -16,7 +16,7 @@ export default class Card extends Component {
     super(props)
     this.state = {
       editingCard: false,
-      viewingCard: false,
+      viewingCard: props.active,
     }
     this.editCard = this.editCard.bind(this)
     this.cancelEditingCard = this.cancelEditingCard.bind(this)
@@ -39,6 +39,7 @@ export default class Card extends Component {
 
   stopViewingCard() {
     this.setState({viewingCard:false})
+    window.location = `/boards/${this.props.board.id}`
   }
 
   updateCard(content){
