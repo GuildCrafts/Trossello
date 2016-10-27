@@ -8,9 +8,6 @@ import Card from './BoardShowPage/Card'
 
 export default class CardSearchForm extends Component {
 
-  static contextTypes = {
-    session: React.PropTypes.object.isRequired
-  }
   constructor(props){
     super(props)
     this.state = {
@@ -23,12 +20,10 @@ export default class CardSearchForm extends Component {
     this.close = this.close.bind(this)
   }
 
-
   setSearchTerm(event){
     const searchTerm = event.target.value
     this.setState({searchTerm})
   }
-
 
   close(){
     this.setState({
@@ -36,7 +31,6 @@ export default class CardSearchForm extends Component {
       result: null,
     })
   }
-
 
   onKeyDown(event) {
     if (!event.shiftKey && event.keyCode === 13) {
@@ -67,7 +61,6 @@ export default class CardSearchForm extends Component {
     })
   }
 
-
   render(){
     const searchResultModal = this.state.result ?
       <SearchResultModal
@@ -95,10 +88,17 @@ export default class CardSearchForm extends Component {
 }
 
 class SearchResultModal extends Component {
+
   render() {
     const { result, searchTerm, onClose } = this.props
     const cardNodes = result.map(card =>
-      <Card key={card.id} card={card} archivable={false} editable={false} />
+      <Card
+        key={card.id}
+        card={card}
+        archivable={false}
+        editable={false}
+        onClick={this.props.onClose}
+      />
     )
     return <div className="CardSearchForm-Modal">
       <div ref="shroud" className="CardSearchForm-Modal-shroud" onClick={this.props.onClose} />

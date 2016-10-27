@@ -30,7 +30,7 @@ export default class Card extends Component {
     this.editCard = this.editCard.bind(this)
     this.cancelEditingCard = this.cancelEditingCard.bind(this)
     this.updateCard = this.updateCard.bind(this)
-    this.openShowCardModal = this.openShowCardModal.bind(this)
+    this.onClick = this.onClick.bind(this)
   }
 
   editCard() {
@@ -74,6 +74,11 @@ export default class Card extends Component {
       Object.assign(card, cardClone)
       throw error
     })
+  }
+
+  onClick(){
+    this.openShowCardModal()
+    if (this.props.onClick) this.props.onClick()
   }
 
   openShowCardModal(){
@@ -120,7 +125,7 @@ export default class Card extends Component {
         data-list-id={card.list_id}
         data-order={card.order}
         style={style}
-        onClick={this.openShowCardModal}
+        onClick={this.onClick}
       >
       {editCardModal}
       <div className="BoardShowPage-Card-box">
