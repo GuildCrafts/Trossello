@@ -97,9 +97,11 @@ export default class CardSearchForm extends Component {
 class SearchResultModal extends Component {
   render() {
     const { result, searchTerm, onClose } = this.props
-    const cardNodes = result.map(card =>
-      <Card key={card.id} card={card} archivable={false} editable={false} />
-    )
+    const cardNodes = result.map(card => {
+      if(card.archived===false){
+        return <Card key={card.id} card={card} archivable={false} editable={false} />
+      }
+    })
     return <div className="CardSearchForm-Modal">
       <div ref="shroud" className="CardSearchForm-Modal-shroud" onClick={this.props.onClose} />
       <div ref="window" className="CardSearchForm-Modal-window">
