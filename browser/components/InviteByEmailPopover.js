@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import Form from './Form'
 import Layout from './Layout'
-import './InviteByEmail.sass'
+import './InviteByEmailPopover.sass'
 import Link from './Link'
 import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
 import DialogBox from './DialogBox'
 
-class InviteByEmail extends Component {
+class InviteByEmailPopover extends Component {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this)
@@ -41,7 +41,7 @@ class InviteByEmail extends Component {
       </Link> :
       null
 
-    return <DialogBox className="InviteByEmail" onClose={this.props.onClose} heading="Invite to Board With Email">
+    return <DialogBox className="InviteByEmailPopover" onClose={this.props.onClose} heading="Invite to Board With Email">
       <Form onSubmit={this.onSubmit}>
         <label>
           <div className="label">Email</div>
@@ -53,4 +53,4 @@ class InviteByEmail extends Component {
   }
 }
 
-export default InviteByEmail
+export default InviteByEmailPopover

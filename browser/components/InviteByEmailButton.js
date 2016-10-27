@@ -6,7 +6,7 @@ import Icon from './Icon'
 import $ from 'jquery'
 import './InviteByEmailButton.sass'
 import boardStore from '../stores/boardStore'
-import InviteByEmail from './InviteByEmail'
+import InviteByEmailPopover from './InviteByEmailPopover'
 import ToggleComponent from './ToggleComponent'
 
 class InviteByEmailButton extends ToggleComponent {
@@ -17,7 +17,7 @@ class InviteByEmailButton extends ToggleComponent {
 
   render(){
     const inviteByEmail = this.state.open ?
-      <InviteByEmail onClose={this.close} boardId={this.props.boardId} /> :
+      <InviteByEmailPopover onClose={this.close} boardId={this.props.boardId} /> :
       null
 
     return <span ref="root" className="InviteByEmailButton">
