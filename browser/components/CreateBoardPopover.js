@@ -28,10 +28,8 @@ class CreateBoardPopover extends Component {
   }
 
   updateColor(event, color){
-    console.log('updateColor', color, event.target)
     if (event.target === this.refs.color)
       color = event.target.value
-    console.log('setState', color)
     this.setState({color})
   }
 
@@ -67,7 +65,6 @@ class CreateBoardPopover extends Component {
   }
 
   render(props){
-    console.log('RERENDER!!!!', this.state.color)
     const closeLink = this.props.onClose ?
       <Link onClick={this.props.onClose}>
         <Icon type="times" />

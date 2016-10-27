@@ -225,8 +225,6 @@ describe('database.commands', () => {
             .then( () => queries.getBoardById(101))
             .then(board => {
               let list40Cards = getOrderedCardsByListId(board, 40)
-              console.log(list40Cards);
-
               expect(list40Cards.length).to.eql(2)
               expect(list40Cards[0].content).to.eql('Card2')
               expect(list40Cards[0].order  ).to.eql(0)
