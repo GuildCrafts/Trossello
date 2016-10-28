@@ -3,6 +3,7 @@ import Form from './Form'
 import Layout from './Layout'
 import Link from './Link'
 import Icon from './Icon'
+import Button from './Button'
 import $ from 'jquery'
 import './InviteByEmailButton.sass'
 import boardStore from '../stores/boardStore'
@@ -21,9 +22,9 @@ class InviteByEmailButton extends ToggleComponent {
       null
 
     return <span ref="root" className="InviteByEmailButton">
-      <button className="InviteByEmailButton-button" onClick={this.toggle}>
+      <Button type="invisible" className="InviteByEmailButton-button" onClick={this.toggle}>
         Invite By Email
-      </button>
+      </Button>
       {inviteByEmail}
     </span>
   }

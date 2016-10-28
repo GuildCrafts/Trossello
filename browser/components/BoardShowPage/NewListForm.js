@@ -4,6 +4,7 @@ import ToggleComponent from '../ToggleComponent'
 import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
+import Button from '../Button'
 import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 
@@ -70,7 +71,7 @@ class Open extends Component {
       className="BoardShowPage-NewListForm-Form">
       <input type="text" ref="name" />
       <div>
-        <input type="submit" value="Save" className="button"/>
+        <Button type="primary" action="submit" className="button">Save</Button>
         <Link onClick={this.props.close}>
           <Icon type="times" />
         </Link>

@@ -4,6 +4,7 @@ import Layout from './Layout'
 import './InviteByEmailPopover.sass'
 import Link from './Link'
 import Icon from './Icon'
+import Button from './Button'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
 import DialogBox from './DialogBox'
@@ -47,7 +48,7 @@ class InviteByEmailPopover extends Component {
           <div className="label">Email</div>
           <input className='emailInput' type="email" ref="email" name='email' placeholder="john.doe@example.com" />
         </label>
-        <input type="submit" value="Invite"/>
+        <Button type="primary" action="submit">Invite</Button>
       </Form>
     </DialogBox>
   }

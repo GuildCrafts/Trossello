@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
+import Button from '../Button'
 import boardsStore from '../../stores/boardsStore'
 
 export default class DeleteBoardButton extends Component {
@@ -24,8 +25,6 @@ export default class DeleteBoardButton extends Component {
   }
 
   render(){
-    return <button className="BoardShowPage-button BoardShowPage-DeleteBoardButton" onClick={this.onClick}>
-      Archive
-    </button>
+    return <Button onClick={this.onClick}>Archive</Button>
   }
 }

@@ -1,0 +1,53 @@
+.Button
+  display: inline-block
+  padding: 0 10px
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  border: none
+  border-radius: 3px
+  line-height: 22px
+  padding: 4px 1pc
+  font-weight: 700
+  min-height: 30px
+  text-decoration: none
+  white-space: nowrap
+  outline: none
+  cursor: pointer
+  text-align: center
+  -webkit-appearance: none
+
+  &-default
+    background: -webkit-linear-gradient(top,#fff 0,#F8F9F9 100%)
+    background: linear-gradient(to bottom,#fff 0,#F8F9F9 100%)
+    border: 1px solid #E2E4E6
+    border-bottom-color: #CDD2D4
+    &:hover
+      background: #298FCA
+      border-color: #298FCA #298FCA #026AA7
+      color: #fff
+
+  &-primary
+    box-shadow: 0 1px 0 #3F6F21
+    background: -webkit-linear-gradient(top,#61BD4F 0,#5AAC44 100%)
+    background: linear-gradient(to bottom,#61BD4F 0,#5AAC44 100%)
+    color: #fff
+    &:hover
+      background: -webkit-linear-gradient(top,#5AAC44 0,#519839 100%)
+      background: linear-gradient(to bottom,#5AAC44 0,#519839 100%)
+
+  &-danger
+    box-shadow: 0 1px 0 #3F6F21
+    background: -webkit-linear-gradient(top,#D6DADC 0,#CDD2D4 100%)
+    background: linear-gradient(to bottom,#D6DADC 0,#CDD2D4 100%)
+    color: #B04632
+    &:hover
+      background: -webkit-linear-gradient(top,#CF513D 0,#B04632 100%)
+      background: linear-gradient(to bottom,#CF513D 0,#B04632 100%)
+      box-shadow: 0 1px 0 #4d4d4d
+      color: #fff
+
+  &-invisible
+    text-align: left
+    background-color: transparent
+    &:hover
+      background-color: #D6DADC
