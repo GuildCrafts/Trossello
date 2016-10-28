@@ -93,7 +93,6 @@ export default class Card extends Component {
       card,
       index,
       editable,
-      archivable,
       ghosted,
       beingDragged,
       style
@@ -101,9 +100,6 @@ export default class Card extends Component {
 
     const editCardButton = this.props.editable ?
       <EditCardButton onClick={this.editCard} /> : null
-
-    const archiveCardButton = this.props.archivable ?
-      <ArchiveCardButton card={this.props.card}/> : null
 
     const editCardModal = this.state.editingCard ?
       <EditCardModal
@@ -134,7 +130,6 @@ export default class Card extends Component {
         <pre>{card.content}</pre>
         <div className="BoardShowPage-Card-controls">
           {editCardButton}
-          {archiveCardButton}
         </div>
       </div>
     </div>
@@ -147,26 +142,6 @@ const EditCardButton = (props) => {
     <Icon size='0' type="pencil" />
   </Link>
 }
-
-const ArchiveCardButton = (props) => {
-  const onClick = () => {
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${props.card.id}/archive`
-    }).then(() => {
-      boardStore.reload()
-    })
-  }
-  return <ArchiveButton
-    size='0'
-    buttonName="Archive"
-    confirmationTitle='Archive Card?'
-    confirmationMessage='Are you sure you want to archive this card?'
-    onClick={onClick}
-    className={props.className}
-  />
-}
-
 
 class EditCardModal extends Component {
   static propTypes = {

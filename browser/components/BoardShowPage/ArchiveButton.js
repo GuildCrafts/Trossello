@@ -13,6 +13,7 @@ const ArchiveButton = (props) => {
     className={className}
   >
     <Icon size={props.size} type='archive'/>
+    <span className="BoardShowPage-ArchiveButton-text">Archive</span>
   </ConfirmationLink>
 }
 
