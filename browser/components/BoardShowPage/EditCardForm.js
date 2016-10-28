@@ -86,7 +86,7 @@ export default class EditCardForm extends Component {
         onChange={this.onContentChange}
       />
       <div className="BoardShowPage-EditCardForm-controls">
-        <Button type="primary" action="submit">{this.props.submitButtonName}</Button>
+        <Button type="primary" submit>{this.props.submitButtonName}</Button>
         {closeX}
       </div>
     </Form>
