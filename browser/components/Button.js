@@ -12,8 +12,8 @@ class Button extends Component {
     delete props.type
     props.className = `Button Button-${type} ${props.className||''}`
     return props.href ?
-      <a {...props}>{this.props.children}</a> :
-      <button {...props}>{this.props.children}</button>
+      <a ref="button" {...props}>{this.props.children}</a> :
+      <button ref="button" {...props}>{this.props.children}</button>
   }
 }
 
