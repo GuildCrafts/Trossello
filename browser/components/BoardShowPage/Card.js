@@ -24,7 +24,6 @@ export default class Card extends Component {
       editingCard: false,
       cardTop: null,
       cardLeft: null,
-      cardHeight: null,
       cardWidth: null,
     }
     this.editCard = this.editCard.bind(this)
@@ -44,16 +43,13 @@ export default class Card extends Component {
     })
   }
 
-  cancelEditingCard(){
-    this.setState({editingCard:false})
-  }
-
-  viewCard() {
-    this.setState({viewingCard:true})
-  }
-
-  stopViewingCard() {
-    this.setState({viewingCard:false})
+  cancelEditingCard(event){
+    this.setState({
+      editingCard: false,
+      cardTop: null,
+      cardLeft: null,
+      cardWidth: null,
+    })
   }
 
   updateCard(updates){
@@ -154,9 +150,17 @@ class EditCardModal extends Component {
     left:    React.PropTypes.number.isRequired,
     width:   React.PropTypes.number.isRequired,
   }
+  constructor(props){
+    super(props)
+    this.cancel = this.cancel.bind(this)
+  }
   stopPropagation(event){
     event.preventDefault()
     event.stopPropagation()
+  }
+  cancel(event){
+    event.stopPropagation()
+    this.props.onCancel(event)
   }
   render(){
     const style = {
@@ -166,18 +170,16 @@ class EditCardModal extends Component {
     }
     return <div
         className="BoardShowPage-EditCardModal"
-        onMouseDown={this.stopPropagation}
-        onClick={this.stopPropagation}
       >
       <div
         className="BoardShowPage-EditCardModal-shroud"
-        onMouseDown={this.onMouseDown}
-        onClick={this.props.onCancel}
+        onMouseDown={this.stopPropagation}
+        onClick={this.cancel}
       />
       <div style={style} className="BoardShowPage-EditCardModal-window">
         <EditCardForm
           card={this.props.card}
-          onCancel={this.props.onCancel}
+          onCancel={this.cancel}
           submitButtonName="Save"
           onSave={this.props.onSave}
           hideCloseX
