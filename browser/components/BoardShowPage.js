@@ -230,7 +230,6 @@ class BoardShowPage extends React.Component {
         .find(card => card.id === dragging.cardId)
       cardBeingDraggedNode = <Card
         editable
-        archivable
         key={cardBeingDragged.id}
         card={cardBeingDragged}
         beingDragged

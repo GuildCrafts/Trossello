@@ -6,6 +6,7 @@ import Card from './Card'
 import boardStore from '../../stores/boardStore'
 import './CardModal.sass'
 import $ from 'jquery'
+import ArchiveButton from './ArchiveButton'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -216,7 +217,7 @@ export default class CardModal extends Component {
           </div>
           <div className="CardModal-controls-actions">
             <span className="CardModal-controls-title">Actions</span>
-
+            <ArchiveCardButton className="CardModal-controls-archive"/>
           </div>
         </div>
 
@@ -224,4 +225,23 @@ export default class CardModal extends Component {
       </div>
     </div>
   }
+}
+
+const ArchiveCardButton = (props) => {
+  const onClick = () => {
+    $.ajax({
+      method: "POST",
+      url: `/api/cards/${props.card.id}/archive`
+    }).then(() => {
+      boardStore.reload()
+    })
+  }
+  return <ArchiveButton
+    size='0'
+    buttonName="Archive"
+    confirmationTitle='Archive Card?'
+    confirmationMessage='Are you sure you want to archive this card?'
+    onClick={onClick}
+    className={props.className}
+  />
 }
