@@ -42,19 +42,23 @@ export default class Card extends Component {
     this.setState({editingCard:false})
   }
 
-  updateCard(content){
+  updateCard(updates){
     console.log('updateCard ???')
     const { card } = this.props
+    const cardClone = Object.assign({}, card)
+    Object.assign(card, updates)
     $.ajax({
       method: 'post',
       url: `/api/cards/${card.id}`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      data: JSON.stringify(content),
+      data: JSON.stringify(updates),
     }).then(() => {
-      debugger
       this.cancelEditingCard()
       boardStore.reload()
+    }).catch(error => {
+      Object.assign(card, cardClone)
+      throw error
     })
   }
 
