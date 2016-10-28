@@ -3,6 +3,7 @@ import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
 import Card from './Card'
+import Button from '../Button'
 import ArchiveButton from './ArchiveButton'
 import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
@@ -85,7 +86,7 @@ export default class EditCardForm extends Component {
         onChange={this.onContentChange}
       />
       <div className="BoardShowPage-EditCardForm-controls">
-        <input type="submit" value={this.props.submitButtonName} />
+        <Button type="primary" action="submit">{this.props.submitButtonName}</Button>
         {closeX}
       </div>
     </Form>

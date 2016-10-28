@@ -4,6 +4,7 @@ import './CreateBoardPopover.sass'
 import Link from './Link'
 import Icon from './Icon'
 import Form from './Form'
+import Button from './Button'
 import boardsStore from '../stores/boardsStore'
 import DialogBox from './DialogBox'
 
@@ -94,7 +95,7 @@ class CreateBoardPopover extends Component {
               onChange={this.updateColor}
             />
           </label>
-          <input type="submit" value="Create" />
+          <Button type="primary" action="submit">Create</Button>
         </Form>
       </DialogBox>
     </div>

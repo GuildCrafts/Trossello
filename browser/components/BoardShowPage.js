@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './BoardShowPage.sass'
 import Layout from './Layout'
 import Link from './Link'
+import Button from './Button'
 import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
@@ -246,7 +247,7 @@ class BoardShowPage extends React.Component {
 }
 
 const DownloadBoardButton = (props) => {
-  return <a className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</a>
+  return <Button type="invisible" className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</Button>
 }
 
 
