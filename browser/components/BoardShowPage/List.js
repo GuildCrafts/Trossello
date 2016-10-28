@@ -65,16 +65,18 @@ export default class List extends Component {
       .filter(card => card.list_id === list.id)
       .sort((a, b) => a.order - b.order)
 
-    const cardNodes = cards.map((card, index) =>
-      <Card
-        editable
-        archivable
-        key={card.id}
-        card={card}
-        index={index}
-        ghosted={dragging && card.id === dragging.cardId}
-      />
-    )
+    const cardNodes = cards.map((card, index) => {
+      if(card.archived===false){
+        return <Card
+          editable
+          archivable
+          key={card.id}
+          card={card}
+          index={index}
+          ghosted={dragging && card.id === dragging.cardId}
+        />
+      }
+    })
 
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
@@ -87,15 +89,9 @@ export default class List extends Component {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
     }
 
-    return <div
-        className="BoardShowPage-List"
-        data-list-id={list.id}
-      >
-      <div className="BoardShowPage-ListHeader">
-        {list.name}
-        <ArchiveListButton list={list} />
-      </div>
-      <div
+    const optionsBlock= this.props.showOptions ?
+     <div ref="options">
+       <div
         ref="cards"
         className="BoardShowPage-cards"
         onDragStart={this.props.onDragStart}
@@ -103,10 +99,21 @@ export default class List extends Component {
         onDragEnd={this.props.onDragEnd}
         onDrop={this.props.onDrop}
       >
-        {cardNodes}
-        {newCardForm}
+         {cardNodes}
+         {newCardForm}
+       </div>
+       {newCardLink}
+     </div> : null
+
+     const archiveListButton = this.props.archivable ?
+      <ArchiveListButton list={list} /> : null
+
+    return <div className="BoardShowPage-List" data-list-id={list.id} onDrop={this.onDrop} onDragOver={this.onDragOver}>
+      <div className="BoardShowPage-ListHeader">
+        {list.name}
+        {archiveListButton}
       </div>
-      {newCardLink}
+      {optionsBlock}
     </div>
   }
 }

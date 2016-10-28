@@ -11,6 +11,7 @@ import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
 import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
+import MenuSideBarToggle from './BoardShowPage/MenuSideBarToggle'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -151,7 +152,7 @@ class BoardShowPage extends React.Component {
     let {cardId, listId, order} = dragging
     order += 0.5
     const card = this.props.board.cards.find(card => card.id === cardId)
-    if (card.list_id !== listId || card.order !== order){
+    if ((card.list_id !== listId || card.order !== order) && listId !== 0){
       this.moveCard({card, listId, order})
     }
     this.setState({ dragging: null }, clearTextSelection)
@@ -185,15 +186,21 @@ class BoardShowPage extends React.Component {
     if (!board) return <Layout className="BoardShowPage" />
 
     const lists = board.lists.map(list => {
-      return <List
-        key={list.id}
-        board={board}
-        list={list}
-        onDragOver={this.onDragOver}
-        onDragEnd={this.onDragEnd}
-        onDrop={this.onDrop}
-        dragging={dragging}
-      />
+      const cards = board.cards.filter(card => card.list_id === list.id)
+      if(list.archived === false){
+        return <List
+          showOptions={true}
+          archivable={true}
+          key={list.id}
+          board={board}
+          list={list}
+          cards={cards}
+          onDragOver={this.onDragOver}
+          onDragEnd={this.onDragEnd}
+          onDrop={this.onDrop}
+          dragging={dragging}
+        />
+      }
     })
 
     const style = {
@@ -225,9 +232,7 @@ class BoardShowPage extends React.Component {
       <div className="BoardShowPage-Header">
         <h1>{board.name}</h1>
         <div>
-          <DownloadBoardButton boardId={board.id}/>
-          <InviteByEmailButton boardId={board.id}/>
-          <LeaveBoardButton boardId={board.id}/>
+          <MenuSideBarToggle board={board} />
         </div>
       </div>
       <div
@@ -244,11 +249,6 @@ class BoardShowPage extends React.Component {
     </Layout>
   }
 }
-
-const DownloadBoardButton = (props) => {
-  return <a className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</a>
-}
-
 
 const clearTextSelection = () => {
   var sel = window.getSelection ?
