@@ -122,7 +122,6 @@
     margin-bottom: 6px
     flex-grow: 0
     flex-shrink: 0
-    cursor: move
     &-beingDragged
       z-index: 100
       position: fixed
@@ -154,6 +153,7 @@
       background-color: white
       font-weight: 400
       font-size: 14px
+      cursor: move
       > pre
         margin: 0
         font-size: 14px
@@ -188,12 +188,12 @@
     flex-shrink: 0
     padding-bottom: 10px
     > textarea
-      -webkit-touch-callout: inherit
-      -webkit-user-select: inherit
-      -khtml-user-select: inherit
-      -moz-user-select: inherit
-      -ms-user-select: inherit
-      user-select: inherit
+      // -webkit-touch-callout: auto
+      // -webkit-user-select: auto
+      // -khtml-user-select: auto
+      // -moz-user-select: auto
+      // -ms-user-select: auto
+      // user-select: auto
       display: block
       width: 100%
       resize: none
@@ -222,7 +222,6 @@
     &-window
       z-index: 101
       position: fixed
-      pointer-events: none
     .BoardShowPage-EditCardForm
       textarea, input[type="submit"]
-        pointer-events: auto
+        // pointer-events: auto
