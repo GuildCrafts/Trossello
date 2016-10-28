@@ -17,7 +17,7 @@ router.post('/:cardId', (request, response, next) => {
     .catch(next)
 })
 
-// DELETE
+// ARCHIVE
 router.post('/:cardId/archive', (request, response, next) => {
   commands.archiveCard(request.params.cardId)
     .then(() => {
@@ -43,6 +43,15 @@ router.post('/:cardId/move', (request, response, next) => {
   listId  = Number(listId)
   order   = Number(order)
   commands.moveCard({ boardId, cardId, listId, order })
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
+// UNARCHIVE
+router.post('/:cardId/unarchive', (request, response, next) => {
+  commands.unarchiveCard(request.params.cardId)
     .then(() => {
       response.json(null)
     })

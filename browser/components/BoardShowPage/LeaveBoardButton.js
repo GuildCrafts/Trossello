@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import boardsStore from '../../stores/boardsStore'
 import ConfirmationLink from '../ConfirmationLink'
-
 export default class LeaveBoardButton extends Component {
 
   static contextTypes = {
@@ -26,7 +25,7 @@ export default class LeaveBoardButton extends Component {
 
   render(){
     return <ConfirmationLink
-      className="BoardShowPage-button BoardShowPage-DeleteBoardButton"
+      className='MenuSideBar-options'
       onConfirm={this.leaveBoard}
       buttonName="Leave Board"
       title='Leave Board?'
