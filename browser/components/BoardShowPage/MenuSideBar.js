@@ -184,9 +184,10 @@ class ArchivedItems extends Component {
           <UnarchiveListButton className="MenuSideBar-ArchivedItems-UnarchiveButton" list={list}/>
         </div>
       } else {
+        const cardArray = []
         for(var i=0; i<cards.length; i++){
           if(cards[i].archived===true){
-            return <div key={cards[i].id} className="MenuSideBar-ArchivedItems-item MenuSideBar-ArchivedItems-card">
+            cardArray.push(<div key={cards[i].id} className="MenuSideBar-ArchivedItems-item MenuSideBar-ArchivedItems-card">
               <Card
               editable={false}
               archivable={false}
@@ -194,9 +195,10 @@ class ArchivedItems extends Component {
               card={cards[i]}
               />
               <UnarchiveCardButton className="MenuSideBar-ArchivedItems-UnarchiveButton" card={cards[i]}/>
-            </div>
+            </div>)
           }
         }
+        return cardArray
       }
     })
     console.log(board)

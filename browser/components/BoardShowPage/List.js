@@ -70,6 +70,7 @@ export default class List extends Component {
       .filter(card => card.list_id === list.id)
       .sort((a, b) => a.order - b.order)
 
+<<<<<<< HEAD
     const cardNodes = cards.map((card, index) =>
       <Card
         editable
@@ -81,6 +82,20 @@ export default class List extends Component {
         list={list}
       />
     )
+=======
+    const cardNodes = cards.map((card, index) => {
+      if(card.archived===false){
+        return <Card
+          editable
+          archivable
+          key={card.id}
+          card={card}
+          index={index}
+          ghosted={dragging && card.id === dragging.cardId}
+        />
+      }
+    })
+>>>>>>> e05618f... after rebase fixed some issues with unarchive functionality
 
     let newCardForm, newCardLink
     if (this.state.creatingCard) {

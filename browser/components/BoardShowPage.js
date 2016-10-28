@@ -160,7 +160,7 @@ class BoardShowPage extends React.Component {
     let {cardId, listId, order} = dragging
     order += 0.5
     const card = this.props.board.cards.find(card => card.id === cardId)
-    if (card.list_id !== listId || card.order !== order){
+    if ((card.list_id !== listId || card.order !== order) && listId !== 0){
       this.moveCard({card, listId, order})
     }
     this.setState({ dragging: null }, clearTextSelection)

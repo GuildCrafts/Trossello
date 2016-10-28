@@ -77,9 +77,11 @@ router.post('/:boardId/lists', (request, response, next) => {
 // CREATE CARD
 router.post('/:boardId/lists/:listId/cards', (request, response, next) => {
   const card = request.body
+  console.log('card-?',card)
   const { boardId, listId } = request.params
   card.board_id = boardId
   card.list_id = listId
+  console.log('card2-?',card)
   commands.createCard(card)
     .then( card => {
       response.json(card)
