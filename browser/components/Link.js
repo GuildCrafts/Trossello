@@ -8,16 +8,12 @@ class TypedLink extends Component {
     href: React.PropTypes.string,
   }
 
-  constructor(props) {
-    super(props);
-  }
-
   render(){
     const props = Object.assign({}, this.props)
-    props.type = this.props.type || 'default'
+    delete props.type
     props.href = props.href || props.to || ''
-    props.onClick = props.onClick || null
-    props.className = `Link Link-${props.type} ${props.className||''}`
+    delete props.to
+    props.className = `Link Link-${this.props.type || 'default'} ${props.className||''}`
     return <Link { ...props }>{ this.props.children }</Link>
   }
 }

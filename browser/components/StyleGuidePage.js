@@ -79,16 +79,16 @@ const IconsSection = (props) => {
 }
 
 const LinksSection = (props) => {
-  const sourceCode = `<Link to={"/"}>Homepage</Link>
-    <Link className="Link Hover" >Add a card...</Link>
-    <Link className="Link Secondary-Hover" >A Secondary Hover</Link>`
+  const sourceCode = `
+    <Link to={"/"}>A Regular (to homepage) Link</Link>
+    <Link>Add a card...</Link>
+  `
   return <div>
     <h3>Links</h3>
     <StyleExample sourceCode={sourceCode}>
       <ul className="StyleGuidePage-StyleExample-Elements">
-        <li><Link to={"/"} className="Link Link-default" type="default">A Regular (to homepage) Link</Link></li>
-        <li><Link className="Link Hover" >Add a card...</Link></li>
-        <li><Link className="Link Secondary-Hover" >A Secondary Hover</Link></li>
+        <li><Link to={"/"}>A Regular (to homepage) Link</Link></li>
+        <li><Link>Add a card...</Link></li>
       </ul>
     </StyleExample>
   </div>
