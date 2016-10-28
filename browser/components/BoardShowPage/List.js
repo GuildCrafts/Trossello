@@ -98,7 +98,6 @@ export default class List extends Component {
     const archiveListButton = this.props.archivable ?
       <ArchiveListButton list={list} /> : null
 
-<<<<<<< fab036d630965e279d952e10ce1c00d1ca18aa5e
     return <div
         className="BoardShowPage-List"
         data-list-id={list.id}
