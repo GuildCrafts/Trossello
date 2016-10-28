@@ -161,7 +161,7 @@ class BoardShowPage extends React.Component {
     const { board } = this.props
 
     card.list_id = listId
-    card.order = order
+    card.order = order - 0.5
 
     $.ajax({
       method: 'post',
