@@ -27,14 +27,16 @@ export default class CardModal extends Component {
     this.stopEditingDescription = this.stopEditingDescription.bind(this)
     this.displayDescription = this.displayDescription.bind(this)
     this.updateDescription = this.updateDescription.bind(this)
-    this.submitDescription = this.submitDescription.bind(this)
+    this.descriptionOnKeyDown = this.descriptionOnKeyDown.bind(this)
     this.updateName = this.updateName.bind(this)
-    this.submitName = this.submitName.bind(this)
+    this.nameOnKeyDown = this.nameOnKeyDown.bind(this)
     this.editName = this.editName.bind(this)
     this.stopEditingName = this.stopEditingName.bind(this)
+    this.descriptionOnBlur = this.descriptionOnBlur.bind(this)
+    this.nameOnBlur = this.nameOnBlur.bind(this)
   }
 
-  submitName(event) {
+  nameOnKeyDown(event) {
     const { card } = this.props
     const content = {
       content: this.refs.content.value
@@ -49,7 +51,7 @@ export default class CardModal extends Component {
     }
   }
 
-  submitDescription(event) {
+  descriptionOnKeyDown(event) {
     const { card } = this.props
     const description = {
       description: this.refs.description.value,
@@ -62,6 +64,24 @@ export default class CardModal extends Component {
       event.preventDefault()
       this.updateDescription(description)
     }
+  }
+
+  descriptionOnBlur(event) {
+    const { card } = this.props
+    const description = {
+      description: this.refs.description.value,
+    }
+    event.preventDefault()
+    this.updateDescription(description)
+  }
+
+  nameOnBlur(event) {
+    const { card } = this.props
+    const content = {
+      content: this.refs.content.value
+    }
+    event.preventDefault()
+    this.updateName(content)
   }
 
   editName(){
@@ -125,26 +145,28 @@ export default class CardModal extends Component {
       <Form className="CardModal-description-Edit" onSubmit={this.updateDescription}>
         <textarea
           className="CardModal-description-Edit-input"
-          onKeyDown={this.submitDescription}
+          onBlur={this.descriptionOnBlur}
+          onKeyDown={this.descriptonOnKeyDown}
           ref="description"
           defaultValue={this.props.card.description}
         />
         <Link className="CardModal-description-Edit-cancel" onClick={this.stopEditingDescription}>
           <Icon type="times" />
         </Link>
-        </Form> : <div className="CardModal-description-text">{description}</div>
+        </Form> : <div onClick={this.editDescription} className="CardModal-description-text">{description}</div>
     const editCardNameForm = this.state.editingName ?
     <Form className="CardModal-header-Edit" onSubmit={this.updateName}>
       <textarea
+        onBlur={this.nameOnBlur}
         className="CardModal-header-Edit-input"
-        onKeyDown={this.submitName}
+        onKeyDown={this.nameOnKeyDown}
         ref="content"
         defaultValue={this.props.card.content}
       />
       <Link className="CardModal-header-Edit-cancel" onClick={this.stopEditingName}>
         <Icon type="times" />
       </Link>
-      </Form> : <div onClick={this.editName} className="CardModal-name">{this.props.card.content}</div>
+      </Form> : <div onClick={this.editName} className="CardModal-header-name">{this.props.card.content}</div>
 
     return <div className="CardModal">
       <div onClick={this.props.onClose} className="CardModal-shroud">
@@ -152,8 +174,10 @@ export default class CardModal extends Component {
       <div className="CardModal-stage">
         <div className="CardModal-window">
           <div className="CardModal-header">
+            <div className="CardModal-header-icon">
+            <Icon type="credit-card" size='2'/>
+            </div>
             {editCardNameForm}
-            <hr />
           </div>
           <div className="CardModal-details">
             <div className="CardModal-details-margin">
@@ -163,7 +187,7 @@ export default class CardModal extends Component {
                 <div className="CardModal-description-title">
                   Description
                   <Link className="CardModal-description-Edit-button" onClick={this.editDescription}>
-                  <Icon type="pencil"/>
+                  Edit
                 </Link></div>
                 {editDescriptionForm}
               </div>
