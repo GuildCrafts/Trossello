@@ -119,14 +119,16 @@ export default class Card extends Component {
     return <div
         ref="card"
         className={className}
+        style={style}
+      >
+      {editCardModal}
+      <div
+        className="BoardShowPage-Card-box"
         data-card-id={card.id}
         data-list-id={card.list_id}
         data-order={card.order}
-        style={style}
         onClick={this.onClick}
       >
-      {editCardModal}
-      <div className="BoardShowPage-Card-box">
         <pre>{card.content}</pre>
         <div className="BoardShowPage-Card-controls">
           {editCardButton}

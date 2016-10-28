@@ -84,7 +84,7 @@ class BoardShowPage extends React.Component {
 
   onMouseDown(event){
     if (event.isPropagationStopped()) return
-    const cardNode = $(event.target).closest('.BoardShowPage-Card')
+    const cardNode = $(event.target).closest('.BoardShowPage-Card .BoardShowPage-Card-box')
     if (cardNode.length === 0) return
     const cardId = Number(cardNode.data('card-id'))
     const listId = Number(cardNode.data('list-id'))
@@ -122,7 +122,7 @@ class BoardShowPage extends React.Component {
     x = event.clientX
     y = event.clientY
 
-    const targetNode = $(event.target).closest('.BoardShowPage-List, .BoardShowPage-Card')
+    const targetNode = $(event.target).closest('.BoardShowPage-List, .BoardShowPage-Card .BoardShowPage-Card-box')
 
     if (targetNode.is('.BoardShowPage-List')){
       const targetListId = Number(targetNode.data('list-id'))
@@ -132,7 +132,7 @@ class BoardShowPage extends React.Component {
       }
     }
 
-    if (targetNode.is('.BoardShowPage-Card')){
+    if (targetNode.is('.BoardShowPage-Card .BoardShowPage-Card-box')){
       const targetCardId = Number(targetNode.data('card-id'))
       if (targetCardId !== cardId) {
         const rect = targetNode[0].getBoundingClientRect()
