@@ -70,11 +70,13 @@ const IconsSection = (props) => {
         <li><Icon type='ellipsis-h' /><p>More</p></li>
         <li><Icon type='arrow-left' /><p>Leave</p></li>
         <li><Icon type='user-plus' /><p>Add Member</p></li>
+        <li><Icon type='search' /><p>Search</p></li>
       </ul>
       <ul className="StyleGuidePage-StyleExample-Elements">
         <li><Link className="Link Secondary-Hover" ><Icon type='archive' /></Link><p>Icon with 'Secondary-Hover' class</p></li>
       </ul>
     </StyleExample>
+    <p>****Trosello is using Font Awesome icons and the Icon component is confgured so type attribute is name of any Font Awesome icon without the fa</p>
   </div>
 }
 

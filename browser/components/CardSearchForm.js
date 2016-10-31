@@ -11,6 +11,7 @@ export default class CardSearchForm extends Component {
   constructor(props){
     super(props)
     this.state = {
+      focused: false,
       searchTerm: '',
       result: null
     }
@@ -18,6 +19,42 @@ export default class CardSearchForm extends Component {
     this.onKeyDown = this.onKeyDown.bind(this)
     this.search = this.search.bind(this)
     this.close = this.close.bind(this)
+    this.focus = this.focus.bind(this)
+    this.blur = this.blur.bind(this)
+    this.focusOnSlash = this.focusOnSlash.bind(this)
+  }
+
+  componentDidMount(){
+    $('body').on('keydown', this.focusOnSlash)
+  }
+
+  componentWillUnmount(){
+    $('body').off('keydown', this.focusOnSlash)
+  }
+
+  focusOnSlash(event){
+    if (event.key === '/' && event.target !== this.refs.content){
+      event.preventDefault()
+      this.refs.content.focus()
+    }
+  }
+
+  focus(event){
+    this.setState({ focused: true })
+  }
+
+  blur(event){
+    if (!this.state.result){
+      this.setState({
+        focused: false,
+        searchTerm: '',
+        result: null,
+      })
+    }else{
+      this.setState({
+        focused: false,
+      })
+    }
   }
 
   setSearchTerm(event){
@@ -33,13 +70,10 @@ export default class CardSearchForm extends Component {
   }
 
   onKeyDown(event) {
-    if (!event.shiftKey && event.keyCode === 13) {
-      event.preventDefault()
-      this.search(event)
-    }
-    if (event.keyCode === 27) {
+    if (event.key === "Escape") {
       event.preventDefault()
       this.close()
+      this.refs.content.blur()
     }
   }
 
@@ -70,6 +104,9 @@ export default class CardSearchForm extends Component {
         result={this.state.result}
       /> :
       null
+    const icon = this.state.focused ?
+      <Icon type="times"  className="CardSearchForm-cancel-icon" /> :
+      <Icon type="search" className="CardSearchForm-search-icon" />
 
     return <Form className="CardSearchForm" onSubmit={this.search} >
       <input
@@ -79,7 +116,10 @@ export default class CardSearchForm extends Component {
         ref="content"
         value={this.state.searchTerm}
         onChange={this.setSearchTerm}
+        onFocus={this.focus}
+        onBlur={this.blur}
       />
+      {icon}
       {searchResultModal}
     </Form>
   }
