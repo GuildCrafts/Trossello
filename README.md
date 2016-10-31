@@ -86,6 +86,25 @@ At this point, you should be able to run 'npm start' without errors.
 
 Ensure `npm start` is running before you run `npm test` to run the mocha tests
 
+#### Cutting a new branch
+
+###### Setup
+
+```sh
+# clone Trossello
+# checkout your clone
+# add github.com/GuildCrafts/trossello as a remote called `upstream`
+git remote add upstream git@github.com:GuildCrafts/Trossello.git
+```
+
+###### Cutting a new branch
+
+```sh
+git fetch upstream
+git checkout -b my-topic-branch upstream/master
+git push -fu origin HEAD
+```
+
 #### Submitting a pull request
 
 Rebase your branch off of the latest `upstream/master` before submitting your pull request
