@@ -8,6 +8,7 @@ import Button from './Button'
 import boardsStore from '../stores/boardsStore'
 import DialogBox from './DialogBox'
 
+
 class CreateBoardPopover extends Component {
 
   static contextTypes = {
@@ -112,15 +113,14 @@ const ColorBox = (props) => {
 }
 
 const colors = [
-  "#A3333D",
-  "#2E86AB",
-  "#AA4465",
-  "#330036",
-  "#8D6B94",
-  "#D741A7",
-  "#8DE4FF",
-  "#96C0B7",
-  "#2B9720"
+  "#0079bf",
+  "#61bd4f",
+  "#f2d600",
+  "#ffab4a",
+  "#eb5a46",
+  "#c377e0",
+  "#ff80ce",
+  "#00c2e0"
 ]
 
 export default CreateBoardPopover
