@@ -64,9 +64,9 @@ Test to see if you have this setup
 echo $PATH | grep './node_modules/.bin'
 ```
 
-If you don't, do this:
+If the grep command above yields zero search results, do this:
 ```sh
-# Add this line to your ~/.bash_profile
+# Add this line to your ~/.zshrc (zsh) or ~/.bash_profile (bash)
 export PATH="./node_modules/.bin:$PATH"
 ```
 
