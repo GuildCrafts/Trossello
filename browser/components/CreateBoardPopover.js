@@ -67,12 +67,6 @@ class CreateBoardPopover extends Component {
   }
 
   render(props){
-    const closeLink = this.props.onClose ?
-      <Link onClick={this.props.onClose}>
-        <Icon type="times" />
-      </Link> :
-      null
-
     const colorBoxes = colors.map(color =>
       <ColorBox key={color} color={color} onClick={this.updateColor} />
     )
