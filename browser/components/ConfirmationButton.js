@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
-import Link from './Link'
+import Button from './Button'
 import ConfirmationClickable from './ConfirmationClickable'
 
-const ConfirmationLink = (props) => {
-  const clickable = <Link
+const ConfirmationButton = (props) => {
+  const clickable = <Button
+    type={props.type}
     className={props.className}
     href={props.href}
-    href={props.href}
+    submit={props.submit}
   >
     {props.children}
-  </Link>
+  </Button>
   return <ConfirmationClickable
     clickable={clickable}
     buttonName={props.buttonName}
@@ -20,4 +21,4 @@ const ConfirmationLink = (props) => {
   />
 }
 
-export default ConfirmationLink
+export default ConfirmationButton
