@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Button from '../Button'
 import $ from 'jquery'
 import boardsStore from '../../stores/boardsStore'
-import ConfirmationLink from '../ConfirmationLink'
+import ConfirmationButton from '../ConfirmationButton'
 
 export default class LeaveBoardButton extends Component {
 
@@ -26,16 +26,15 @@ export default class LeaveBoardButton extends Component {
   }
 
   render(){
-    return <Button type="invisible">
-      <ConfirmationLink
-        className="BoardShowPage-button BoardShowPage-DeleteBoardButton"
-        onConfirm={this.leaveBoard}
-        buttonName="Leave Board"
-        title='Leave Board?'
-        message='Are you sure you want to leave this board?'
-      >
-        Leave Board
-      </ConfirmationLink>
-    </Button>
+    return <ConfirmationButton
+      type="invisible"
+      className="BoardShowPage-button BoardShowPage-DeleteBoardButton"
+      onConfirm={this.leaveBoard}
+      buttonName="Leave Board"
+      title='Leave Board?'
+      message='Are you sure you want to leave this board?'
+    >
+      Leave Board
+    </ConfirmationButton>
   }
 }
