@@ -71,29 +71,31 @@ class CreateBoardPopover extends Component {
       <ColorBox key={color} color={color} onClick={this.updateColor} />
     )
 
-    return <div className="CreateBoardPopover">
-        <DialogBox heading="Create A Board" onClose={this.props.onClose}>
-        <Form onSubmit={this.onSubmit}>
-          <label>
-            <div>Name</div>
-            <input type="text" ref="name"/>
-          </label>
-          <div className="CreateBoardPopover-createBackgroundColor">
-            {colorBoxes}
-          </div>
-          <label>
-            <input
-              type="text"
-              ref="color"
-              placeholder="#2E86AB"
-              value={this.state.color || ''}
-              onChange={this.updateColor}
-            />
-          </label>
-          <Button type="primary" action="submit">Create</Button>
-        </Form>
-      </DialogBox>
-    </div>
+    return <DialogBox
+      heading="Create A Board"
+      onClose={this.props.onClose}
+      className="CreateBoardPopover"
+    >
+      <Form onSubmit={this.onSubmit}>
+        <label>
+          <div>Name</div>
+          <input type="text" ref="name"/>
+        </label>
+        <div className="CreateBoardPopover-createBackgroundColor">
+          {colorBoxes}
+        </div>
+        <label>
+          <input
+            type="text"
+            ref="color"
+            placeholder="#2E86AB"
+            value={this.state.color || ''}
+            onChange={this.updateColor}
+          />
+        </label>
+        <Button type="primary" action="submit">Create</Button>
+      </Form>
+    </DialogBox>
   }
 }
 

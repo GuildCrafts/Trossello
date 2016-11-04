@@ -10,6 +10,7 @@ import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
 import BoardsDropdown from './BoardsDropdown'
 import CardSearchForm from './CardSearchForm'
+import PopoverMenuButton from './PopoverMenuButton'
 
 export default class Navbar extends Component {
 
@@ -17,19 +18,23 @@ export default class Navbar extends Component {
     session: React.PropTypes.object.isRequired
   }
 
-
-
   render(){
     const { session } = this.context
+    const createBoardPopover = <CreateBoardPopover />
     return <div className="Navbar">
       <BoardsDropdown className="Navbar-button BoardButton" />
       <CardSearchForm className="Navbar-Search" />
       <div className="Navbar-BoardIndexButton">
         <Link to="/">Trossello</Link>
       </div>
-      <CreateBoardButton className="Navbar-button">
+      <PopoverMenuButton
+        className="Navbar-CreateBoardButton"
+        type={false}
+        buttonClassName="Navbar-button"
+        popover={createBoardPopover}
+      >
         <Icon type="plus" />
-      </CreateBoardButton>
+      </PopoverMenuButton>
       <button className="Navbar-button Navbar-AvatarButton">
         <img src={session.user.avatar_url} />
         <span>{session.user.name}</span>
@@ -38,23 +43,6 @@ export default class Navbar extends Component {
       <button className="Navbar-button AlertButton">
         <Icon type="bell" />
       </button>
-
-    </div>
-  }
-}
-
-
-
-class CreateBoardButton extends ToggleComponent {
-  render(){
-    return <div className="CreateBoardButton">
-      <button {...this.props} onClick={this.toggle}>
-        {this.props.children}
-      </button>
-      {this.state.open ?
-        <CreateBoardPopover ref="toggle" onClose={this.close} /> :
-        null
-      }
     </div>
   }
 }

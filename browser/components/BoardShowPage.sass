@@ -21,15 +21,6 @@
     color: #000
     text-decoration: none
 
-  &-ArchiveBoardButton
-    color: white
-    background: linear-gradient(to bottom,rgba(255,255,255,.3) 0,rgba(255,255,255,.2) 100%)
-    &:not([disabled])
-      &:hover, &:focus
-        background: linear-gradient(to bottom,rgba(255,255,255,.4) 0,rgba(255,255,255,.3) 100%)
-      &:active
-        background: linear-gradient(to bottom,rgba(255,255,255,.45) 0,rgba(255,255,255,.35) 100%)
-
   &-add-card-button
     background: linear-gradient(to bottom,#61BD4F 0,#5AAC44 100%)
     &:not([disabled])
@@ -60,15 +51,9 @@
     margin-right: 10px
     width: $list-width
     max-height: calc(100% - 10px)
-    background-color: #e1e3ea
+    background-color: #e2e4e6
     font-family: "Helvetica Neue"
 
-  &-NewListForm
-    flex-grow: 0
-    flex-shrink: 0
-    display: inline-flex
-    width: $list-width
-    padding-right: 10px
 
   &-ListHeader
     flex-grow: 0
@@ -78,16 +63,32 @@
     font-weight: 500
     position: relative
 
-  &-ArchiveButton
-    text-decoration: none
-    opacity: 0.5
-    color: inherit
-    margin: 0 2px
-    &:hover
-      opacity: 1
-    &-text
-      margin-left: 5px
 
+    &-ListOptions
+      position: absolute
+      right: 4px
+      top: 2px
+      > .Button
+        outline: none
+        text-decoration: none
+        color: #999
+        position: absolute
+        right: 0px
+        top: 2px
+        min-height: 2px
+        padding: 4px 8px 4px 8px
+        &:hover
+          background-color: #CDD2D4
+          color: #444
+        &-text
+          margin-left: 5px
+
+  &-NewListForm
+    flex-grow: 0
+    flex-shrink: 0
+    display: inline-flex
+    width: $list-width
+    padding-right: 10px
   &-EditButton
     text-decoration: none
     opacity: 0.5
@@ -96,10 +97,6 @@
     &:hover
       opacity: 1
 
-  &-ArchiveListButton
-    position: absolute
-    right: 20px
-    text-decoration: none
 
   &-cards
     flex-grow: 1
@@ -163,10 +160,6 @@
         white-space: -pre-wrap
         white-space: -o-pre-wrap
         word-wrap: break-word
-    &-ArchiveButton
-      position: absolute
-      top: 0
-      right: 0
     &-controls
       position: absolute
       top: 8px
