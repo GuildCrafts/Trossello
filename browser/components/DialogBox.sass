@@ -1,27 +1,30 @@
 @import "../style.sass"
 
 .DialogBox
+  z-index: 101
+  position: fixed
   margin-top: 5px
-  font-size: 14px
-  padding: 10px
+  padding: 10px 0
   min-width: 330px
   border-radius: 3px
   border: 1px solid #D6DADC
   border-bottom-color: #C4C9CC
   box-shadow: 0 1px 6px rgba(0,0,0,.15)
+  font-size: 14px
   background: #fff
-  position: fixed
-  z-index: 101
+  color: $default-text-color
   &-header
-    position: relative
     text-align: center
     opacity: 0.75
-    border-bottom: 1px solid #C4C9CC
-    padding-bottom: 10px
-    > a
-      position: absolute
-      right: 0
-      text-decoration: none
-      color: inherit
-      &:hover
-        color: #555
+  &-cancel
+    position: absolute
+    top: 0
+    right: 0
+    text-decoration: none
+    color: inherit
+    padding: 10px
+    &:hover
+      color: #555
+  &-dividier
+    margin: 10px
+    border-bottom: 1px solid #D6DADC

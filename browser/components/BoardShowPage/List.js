@@ -4,10 +4,14 @@ import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
 import Card from './Card'
-import ArchiveButton from './ArchiveButton'
 import EditCardForm from './EditCardForm'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
+import ToggleComponent from '../ToggleComponent'
+import Button from '../Button'
+import PopoverMenuButton from '../PopoverMenuButton'
+import ListActionsMenu from '../ListActionsMenu'
+
 
 export default class List extends Component {
 
@@ -88,13 +92,17 @@ export default class List extends Component {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
     }
 
-    return <div
-        className="BoardShowPage-List"
-        data-list-id={list.id}
-      >
+    const listActionsMenu = <ListActionsMenu
+      list={this.props.list}
+      onCreateCard={this.creatingCard}
+    />
+
+    return <div className="BoardShowPage-List" data-list-id={list.id}>
       <div className="BoardShowPage-ListHeader">
         {list.name}
-        <ArchiveListButton list={list} />
+        <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
+          <Icon type="ellipsis-h" />
+        </PopoverMenuButton>
       </div>
       <div
         ref="cards"
@@ -157,19 +165,4 @@ const archiveRecord = (resource, id) => {
   }).then(() => {
     boardStore.reload()
   })
-}
-
-const ArchiveListButton = (props) => {
-  const className = `BoardShowPage-ArchiveListButton ${props.className||''}`
-  const onClick = () => {
-    archiveRecord('lists', props.list.id)
-  }
-  return <ArchiveButton
-    buttonName="Archive"
-    confirmationTitle='Archive List?'
-    confirmationMessage='Are you sure you want to archive this list?'
-    onClick={onClick}
-    className={className}
-    {...props}
-  />
 }

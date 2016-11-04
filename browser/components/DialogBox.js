@@ -15,11 +15,15 @@ export default class DialogBox extends Component {
     return <div className={className}>
       <div className="DialogBox-header">
         {this.props.heading}
-        <Link className="DialogBox-cancel" onClick={this.props.onClose}>
-          <Icon type="times"/>
-        </Link>
       </div>
+      <Link className="DialogBox-cancel" onClick={this.props.onClose}>
+        <Icon type="times"/>
+      </Link>
+      <DialogBox.Divider />
       {this.props.children}
     </div>
   }
 }
+
+DialogBox.Divider = (props) =>
+  <div className="DialogBox-dividier" />
