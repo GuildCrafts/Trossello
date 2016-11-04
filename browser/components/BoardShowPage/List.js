@@ -66,6 +66,7 @@ export default class List extends Component {
           {...card, order: dragging.order, list_id: dragging.listId} :
           card
       )
+      .filter(card => !card.archived)
       .filter(card => card.list_id === list.id)
       .sort((a, b) => a.order - b.order)
 
