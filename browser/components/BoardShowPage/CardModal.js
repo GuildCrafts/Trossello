@@ -3,10 +3,12 @@ import Link from '../Link'
 import Icon from '../Icon'
 import Form from '../Form'
 import Card from './Card'
+import Button from '../Button'
+import ToggleComponent from '../ToggleComponent'
+import ConfirmationButton from '../ConfirmationButton'
 import boardStore from '../../stores/boardStore'
 import './CardModal.sass'
 import $ from 'jquery'
-import ArchiveButton from './ArchiveButton'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -24,47 +26,6 @@ export default class CardModal extends Component {
       editingDescription: false,
       editingName: false,
     }
-    this.editDescription = this.editDescription.bind(this)
-    this.stopEditingDescription = this.stopEditingDescription.bind(this)
-    this.displayDescription = this.displayDescription.bind(this)
-    this.updateDescription = this.updateDescription.bind(this)
-    this.descriptionOnKeyDown = this.descriptionOnKeyDown.bind(this)
-    this.updateName = this.updateName.bind(this)
-    this.nameOnKeyDown = this.nameOnKeyDown.bind(this)
-    this.editName = this.editName.bind(this)
-    this.stopEditingName = this.stopEditingName.bind(this)
-    this.descriptionOnBlur = this.descriptionOnBlur.bind(this)
-    this.nameOnBlur = this.nameOnBlur.bind(this)
-  }
-
-  nameOnKeyDown(event) {
-    const { card } = this.props
-    const content = {
-      content: this.refs.content.value
-    }
-    if (!event.shiftKey && event.keyCode === 13) {
-      event.preventDefault()
-      this.updateName(content)
-    }
-    if (event.keyCode === 27) {
-      event.preventDefault()
-      this.updateName(content)
-    }
-  }
-
-  descriptionOnKeyDown(event) {
-    const { card } = this.props
-    const description = {
-      description: this.refs.description.value,
-    }
-    if (!event.shiftKey && event.keyCode === 13) {
-      event.preventDefault()
-      this.updateDescription(description)
-    }
-    if (event.keyCode === 27) {
-      event.preventDefault()
-      this.updateDescription(description)
-    }
   }
 
   descriptionOnBlur(event) {
@@ -76,172 +37,229 @@ export default class CardModal extends Component {
     this.updateDescription(description)
   }
 
-  nameOnBlur(event) {
-    const { card } = this.props
-    const content = {
-      content: this.refs.content.value
-    }
-    event.preventDefault()
-    this.updateName(content)
-  }
-
-  editName(){
-    this.setState({editingName: true})
-  }
-
-  stopEditingName(){
-    this.setState({editingName: false})
-  }
-
-  editDescription(){
-    this.setState({editingDescription: true})
-  }
-
-  stopEditingDescription(){
-    this.setState({editingDescription: false})
-  }
-
-  displayDescription(description){
-    if(description==''){
-      description = 'Enter notes or a description here.'
-
-    }
-    return <div>
-        {description}
-      </div>
-  }
-
-  updateDescription(description){
-    const { card } = this.props
-    $.ajax({
-      method: 'post',
-      url: `/api/cards/${card.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify(description),
-    }).then(() => {
-      this.stopEditingDescription()
-      boardStore.reload()
-    })
-  }
-  updateName(content){
-    const { card } = this.props
-    $.ajax({
-      method: 'post',
-      url: `/api/cards/${card.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify(content),
-    }).then(() => {
-      this.stopEditingName()
-      boardStore.reload()
-    })
-  }
-
-
   render(){
     const { session } = this.context
-    const description = this.displayDescription(this.props.card.description)
-    const editDescriptionForm = this.state.editingDescription ?
-      <Form className="CardModal-description-Edit" onSubmit={this.updateDescription}>
-        <textarea
-          className="CardModal-description-Edit-input"
-          onBlur={this.descriptionOnBlur}
-          onKeyDown={this.descriptonOnKeyDown}
-          ref="description"
-          defaultValue={this.props.card.description}
-        />
-        <Link className="CardModal-description-Edit-cancel" onClick={this.stopEditingDescription}>
-          <Icon type="times" />
-        </Link>
-        </Form> : <div onClick={this.editDescription} className="CardModal-description-text">{description}</div>
-    const editCardNameForm = this.state.editingName ?
-    <Form className="CardModal-header-Edit" onSubmit={this.updateName}>
-      <textarea
-        onBlur={this.nameOnBlur}
-        className="CardModal-header-Edit-input"
-        onKeyDown={this.nameOnKeyDown}
-        ref="content"
-        defaultValue={this.props.card.content}
-      />
-      <Link className="CardModal-header-Edit-cancel" onClick={this.stopEditingName}>
-        <Icon type="times" />
-      </Link>
-      </Form> : <div onClick={this.editName} className="CardModal-header-name">{this.props.card.content}</div>
+    const { card, list } = this.props
 
     return <div className="CardModal">
       <div onClick={this.props.onClose} className="CardModal-shroud">
       </div>
       <div className="CardModal-stage">
         <div className="CardModal-window">
-          <div className="CardModal-header">
-            <div className="CardModal-header-icon">
-            <Icon type="credit-card" size='2'/>
-            </div>
-            {editCardNameForm}
-          </div>
-          <div className="CardModal-details">
-            <div className="CardModal-details-margin">
-              <span className="CardModal-details-list">in List: {this.props.list.name}</span>
-              <span className="CardModal-details-board">in Board: {this.props.board.name}</span>
-              <div className="CardModal-description">
-                <div className="CardModal-description-title">
-                  Description
-                  <Link className="CardModal-description-Edit-button" onClick={this.editDescription}>
-                  Edit
-                </Link></div>
-                {editDescriptionForm}
+          <div className="CardModal-body">
+            <div className="CardModal-content">
+              <div className="CardModal-content-icon">
+                <Icon type="window-maximize" size='2'/>
               </div>
-              <div className="CardModal-comments">
-                <div className="CardModal-comments-icon">
-                <Icon size="2" type="comment-o"/>
+              <div className="CardModal-content-copy">
+                <div className="CardModal-content-title">
+                  <CardName card={card} />
                 </div>
-                <div className="CardModal-comments-header">Add Comment:</div>
-                <Form className="CardModal-comments-Form">
+                <div className="CardModal-content-list">
+                  <span className="CardModal-content-list-title">
+                    in list {list.name}
+                  </span>
+                  <span className="CardModal-content-list-eye">
+                    <Icon size="1" type="eye"  />
+                  </span>
+                </div>
+                <div className="CardModal-description">
+                  <CardDescription card={card} />
+                </div>
+              </div>
+            </div>
+            <div className="CardModal-comments">
+              <div className="CardModal-comments-icon">
+                <Icon size="2" type="comment-o"/>
+              </div>
+              <div className="CardModal-comments-content">
+                <span className="CardModal-comments-title">
+                  Add Comment:
+                </span>
+              </div>
+            </div>
+            <div className="CardModal-comments">
+              <div className="CardModal-comments-imgcontain">
+                <img className="CardModal-comments-userimage" src={session.user.avatar_url}></img>
+              </div>
+              <Form className="CardModal-comments-Form">
+                <div className="CardModal-comments-Form-content">
                   <textarea
                     className="CardModal-comments-Form-input"
                     ref="comment"
-                    defaultValue=''
+                    placeholder='Write a comment...'
                   />
-                  <img className="CardModal-comments-userimage" src={session.user.avatar_url}></img>
-                  <input type="submit" value="Send"/>
-                </Form>
-              </div>
+                </div>
+                <input type="submit" className="CardModal-comments-submit" value="Send"/>
+              </Form>
             </div>
           </div>
-        <div className="CardModal-controls">
-          <div className="CardModal-controls-add">
-            <span className="CardModal-controls-title">Add</span>
-            <div className="CardModal-controls-add-buttons">
-            </div>
-          </div>
-          <div className="CardModal-controls-actions">
-            <span className="CardModal-controls-title">Actions</span>
-            <ArchiveCardButton className="CardModal-controls-archive"/>
-          </div>
+          <Controls card={card} closeModal={this.props.onClose} />
         </div>
-
-      </div>
       </div>
     </div>
   }
 }
 
-const ArchiveCardButton = (props) => {
-  const onClick = () => {
+const Controls = ({card, closeModal}) => {
+  return <div className="CardModal-controls">
+    <div className="CardModal-controls-title">Add</div>
+    <Button><Icon type="user" /> Members</Button>
+    <div className="CardModal-controls-title">Actions</div>
+    <ArchiveCardButton card={card} onArchive={closeModal}/>
+  </div>
+}
+
+class ArchiveCardButton extends Component {
+  static propTypes = {
+    card: React.PropTypes.object.isRequired,
+    onArchive: React.PropTypes.func.isRequired,
+  }
+  constructor(props){
+    super(props)
+    this.archiveCard = this.archiveCard.bind(this)
+  }
+  archiveCard(){
     $.ajax({
       method: "POST",
-      url: `/api/cards/${props.card.id}/archive`
+      url: `/api/cards/${this.props.card.id}/archive`
+    }).then(() => {
+      boardStore.reload()
+      this.props.onArchive()
+    })
+  }
+  render(){
+    return <ConfirmationButton
+      onConfirm={this.archiveCard}
+      buttonName="Archive"
+      title='Archive Card?'
+      message='Are you sure you want to archive this card?'
+    >
+      <Icon type="archive" /> Archive
+    </ConfirmationButton>
+  }
+}
+
+class CardName extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: this.props.card.content
+    }
+    this.setValue = this.setValue.bind(this)
+    this.updateName = this.updateName.bind(this)
+  }
+
+  setValue(event) {
+    this.setState({value: event.target.value})
+  }
+
+  updateName(){
+    const card = this.props.card
+    $.ajax({
+      method: 'post',
+      url: `/api/cards/${card.id}`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({content: this.state.value}),
     }).then(() => {
       boardStore.reload()
     })
   }
-  return <ArchiveButton
-    size='0'
-    buttonName="Archive"
-    confirmationTitle='Archive Card?'
-    confirmationMessage='Are you sure you want to archive this card?'
-    onClick={onClick}
-    className={props.className}
-  />
+
+  render() {
+    return <input
+      type="text"
+      value={this.state.value}
+      onChange={this.setValue}
+      onBlur={this.updateName}
+    />
+  }
+}
+
+class CardDescription extends ToggleComponent {
+  constructor(props) {
+    super(props)
+    this.state.value = this.props.card.description || ''
+    this.setValue = this.setValue.bind(this)
+    this.updateDescription = this.updateDescription.bind(this)
+    this.cancel = this.cancel.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
+  }
+
+  componentDidMount(){
+    this.focusTextarea()
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if (!prevState.open) this.focusTextarea()
+  }
+
+  focusTextarea(){
+    if (this.state.open) this.refs.textarea.focus()
+  }
+
+  setValue(event) {
+    this.setState({value: event.target.value})
+  }
+
+  onKeyDown(event) {
+    const { card } = this.props
+    if (event.metaKey && event.key === "Enter") {
+      event.preventDefault()
+      this.updateDescription()
+    }
+    if (event.key === "Escape") {
+      event.preventDefault()
+      this.close()
+    }
+  }
+
+  updateDescription(event){
+    if (event) event.preventDefault()
+    const card = this.props.card
+    $.ajax({
+      method: 'post',
+      url: `/api/cards/${card.id}`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({description: this.state.value}),
+    }).then(() => {
+      boardStore.reload()
+      this.close()
+    })
+  }
+
+  cancel(event){
+    event.preventDefault()
+    this.close()
+  }
+
+  render() {
+    if (this.state.open){
+      return <Form onSubmit={this.updateDescription}>
+        <textarea className="CardModal-description-textarea"
+          ref="textarea"
+          onKeyDown={this.onKeyDown}
+          value={this.state.value}
+          onChange={this.setValue}
+        />
+        <div className="CardModal-description-controls">
+          <Button submit type="primary">Save</Button>
+          <Button type="invisible" onClick={this.cancel}>
+            <Icon type="times" />
+          </Button>
+        </div>
+      </Form>
+    }
+    if (this.state.value === ""){
+      return <Link onClick={this.open} className="CardModal-description">
+        <Icon type="align-justify" /> Edit the description
+      </Link>
+    }
+    return <div>
+      <div>Description <Link onClick={this.open}>Edit</Link></div>
+      <pre>{this.props.card.description}</pre>
+    </div>
+  }
 }
