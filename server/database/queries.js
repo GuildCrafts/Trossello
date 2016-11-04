@@ -39,8 +39,7 @@ const getListsAndCardsForBoard = (board) => {
   return knex.table('lists')
     .select('*')
     .where({
-      board_id: board.id,
-      archived: false
+      board_id: board.id
     })
     .orderBy('id', 'asc')
     .then(lists => {
@@ -49,7 +48,6 @@ const getListsAndCardsForBoard = (board) => {
       return knex.table('cards')
         .select('*')
         .whereIn('list_id', listIds)
-        .where('archived', false)
         .orderBy('id', 'asc')
         .then(cards => {
           board.cards = cards
