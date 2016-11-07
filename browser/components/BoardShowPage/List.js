@@ -100,7 +100,7 @@ export default class List extends Component {
 
     return <div className="BoardShowPage-List" data-list-id={list.id}>
       <div className="BoardShowPage-ListHeader">
-        {list.name}
+        <ListName list={list}/>
         <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
           <Icon type="ellipsis-h" />
         </PopoverMenuButton>
@@ -121,6 +121,48 @@ export default class List extends Component {
   }
 }
 
+class ListName extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: this.props.list.name
+    }
+    this.setValue = this.setValue.bind(this)
+    this.updateName = this.updateName.bind(this)
+    this.selectText = this.selectText.bind(this)
+  }
+
+  setValue(event){
+    this.setState({value: event.target.value})
+  }
+
+  updateName(){
+    const list = this.props.list
+    $.ajax({
+      method: 'post',
+      url: `/api/lists/${list.id}`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({name: this.state.value})
+    }).then(() => {
+      boardStore.reload()
+    })
+  }
+
+  selectText(event){
+    event.target.select()
+  }
+
+  render() {
+    return <input
+      type="text"
+      value={this.state.value}
+      onChange={this.setValue}
+      onBlur={this.updateName}
+      onFocus={this.selectText}
+    />
+  }
+}
 
 class NewCardForm extends Component {
 

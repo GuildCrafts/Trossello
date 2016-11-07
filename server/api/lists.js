@@ -6,7 +6,11 @@ const router = new express.Router()
 router.post('/:listId', (request, response, next) => {
   commands.updateList(request.params.listId, request.body)
     .then(list => {
-      response.json(list)
+      if (list){
+        response.json(list)
+      }else{
+        response.status(404).json(null)
+      }
     })
     .catch(next)
 })
