@@ -131,6 +131,7 @@ class SearchResultModal extends Component {
 
   render() {
     const { result, searchTerm, onClose } = this.props
+
     const cardNodes = result.map(card =>
       <Card
         key={card.id}
@@ -139,6 +140,15 @@ class SearchResultModal extends Component {
         onClick={this.props.onClose}
       />
     )
+
+    const searchDisplay = result.length === 0 ?
+      <div className="CardSearchForm-Result-Message">
+        <h5>No cards or boards were found matching your search</h5>
+      </div> :
+      <div className="CardSearchForm-Modal-window-results">
+        {cardNodes}
+      </div>
+
     return <div className="CardSearchForm-Modal">
       <div ref="shroud" className="CardSearchForm-Modal-shroud" onClick={this.props.onClose} />
       <div ref="window" className="CardSearchForm-Modal-window">
@@ -146,9 +156,7 @@ class SearchResultModal extends Component {
         <Link className="CardSearchForm-Modal-window-close" onClick={this.props.onClose}>
           <Icon type="times" />
         </Link>
-        <div className="CardSearchForm-Modal-window-results">
-          {cardNodes}
-        </div>
+        {searchDisplay}
       </div>
     </div>
   }
