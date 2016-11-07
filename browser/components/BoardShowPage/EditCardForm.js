@@ -84,6 +84,7 @@ export default class EditCardForm extends Component {
         ref="content"
         value={this.state.content}
         onChange={this.onContentChange}
+        onBlur={this.cancel}
       />
       <div className="BoardShowPage-EditCardForm-controls">
         <Button type="primary" submit>{this.props.submitButtonName}</Button>
