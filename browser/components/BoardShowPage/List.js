@@ -70,10 +70,10 @@ export default class List extends Component {
       .filter(card => card.list_id === list.id)
       .sort((a, b) => a.order - b.order)
 
-<<<<<<< HEAD
     const cardNodes = cards.map((card, index) =>
       <Card
         editable
+        archivable
         key={card.id}
         card={card}
         index={index}
@@ -82,20 +82,6 @@ export default class List extends Component {
         list={list}
       />
     )
-=======
-    const cardNodes = cards.map((card, index) => {
-      if(card.archived===false){
-        return <Card
-          editable
-          archivable
-          key={card.id}
-          card={card}
-          index={index}
-          ghosted={dragging && card.id === dragging.cardId}
-        />
-      }
-    })
->>>>>>> e05618f... after rebase fixed some issues with unarchive functionality
 
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
@@ -108,7 +94,6 @@ export default class List extends Component {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
     }
 
-<<<<<<< HEAD
     const listActionsMenu = <ListActionsMenu
       list={this.props.list}
       onCreateCard={this.creatingCard}
@@ -122,11 +107,6 @@ export default class List extends Component {
         </PopoverMenuButton>
       </div>
       <div
-=======
-    const optionsBlock= this.props.showOptions ?
-     <div ref="options">
-       <div
->>>>>>> 071cb7c... ArchiveItems styling and fixes
         ref="cards"
         className="BoardShowPage-cards"
         onDragStart={this.props.onDragStart}
@@ -138,18 +118,7 @@ export default class List extends Component {
          {newCardForm}
        </div>
        {newCardLink}
-     </div> : null
-
-     const archiveListButton = this.props.archivable ?
-      <ArchiveListButton list={list} /> : null
-
-    return <div className="BoardShowPage-List" data-list-id={list.id} onDrop={this.onDrop} onDragOver={this.onDragOver}>
-      <div className="BoardShowPage-ListHeader">
-        {list.name}
-        {archiveListButton}
-      </div>
-      {optionsBlock}
-    </div>
+     </div> 
   }
 }
 

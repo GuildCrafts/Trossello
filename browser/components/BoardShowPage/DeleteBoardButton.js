@@ -25,12 +25,6 @@ export default class DeleteBoardButton extends Component {
   }
 
   render(){
-<<<<<<< HEAD
     return <Button onClick={this.onClick}>Archive</Button>
-=======
-    return <button onClick={this.onClick}>
-      Archive
-    </button>
->>>>>>> db24186... MenuSideBar styling
   }
 }
