@@ -12,7 +12,7 @@ class BoardsDropdown extends ToggleComponent {
       <Dropdown ref="toggle" boards={this.props.boards} close={this.close} /> :
       null
     return <div className="BoardsDropdown" >
-      <button className={this.props.className} onClick={this.toggle}>Boards</button>
+      <button ref="button" className={this.props.className} onClick={this.toggle}>Boards</button>
       {dropdown}
     </div>
   }
