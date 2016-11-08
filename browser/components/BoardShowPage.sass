@@ -4,6 +4,36 @@
   $button-height: 30px
   $button-margin: 4px
   $list-width: 270px
+  overflow: hidden
+
+  &-sideBarOpen
+    .BoardShowPage-lists
+      right: 300px
+    .BoardShowPage-MenuSideBar
+      right: 0
+
+  &-lists
+    position: absolute
+    top: 100px
+    left: 0
+    bottom: 0
+    right: 0
+    display: flex
+    align-items: flex-start
+    overflow-x: auto
+    overflow-y: hidden
+    white-space: nowrap
+    padding: 0 10px
+    transition: right 200ms
+
+  &-MenuSideBar
+    position: absolute
+    top: 45px
+    right: -300px
+    bottom: 0
+    width: 300px
+    background-color: lightgrey
+    transition: right 200ms
 
   font-family: "Helvetica Neue"
   &-Header
@@ -29,18 +59,6 @@
       &:active
         background: linear-gradient(to bottom,#519839 0,#49852E 100%)
 
-  &-lists
-    display: flex
-    align-items: flex-start
-    position: absolute
-    top: 100px
-    left: 0
-    bottom: 0
-    right: 0
-    overflow-x: auto
-    overflow-y: hidden
-    white-space: nowrap
-    padding: 0 10px
 
   &-List
     flex-grow: 0

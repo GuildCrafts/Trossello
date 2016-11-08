@@ -1,21 +1,66 @@
 @import "../../style.sass"
 
-.MenuSideBar
+.BoardShowPage-MenuSideBar
   $button-height: 30px
   $button-margin: 4px
   $top: $header-height
 
-  height: 100vh
   display: flex
-  background-color: lightgrey
+  background-color: #edeff0
   flex-direction: column
-  top: $top
-  right: 0
-  z-index: 100
-  position: fixed
   padding: 5px
-  min-width: 260px
+  min-width: 300px
   color: black
+
+  &-Header
+    display: flex
+    > span
+      flex-grow: 1
+      flex-shrink: 1
+      text-align: center
+
+  &-panes
+    background: #edeff0
+    position: relative
+    flex-grow: 1
+    flex-shrink: 1
+    overflow: hidden
+
+  &-Pane
+    position: absolute
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    width: 100%
+    height: 100%
+    overflow: auto
+
+  .leftIn-enter
+    left: -100%
+
+  .leftIn-enter.leftIn-enter-active
+    left: 0
+    transition: left 200ms ease-in
+
+  .rightIn-enter
+    left: 100%
+
+  .rightIn-enter.rightIn-enter-active
+    left: 0
+    transition: left 200ms ease-in
+
+
+  &-MainPane
+    background: #edeff0
+  &-ChangeBackgroundPane
+    background: #edeff0
+  &-MorePane
+    background: #edeff0
+  &-SettingsPane
+    background: #edeff0
+  &-show
+    right: 0px
   &-invite, &-buttons, &-buttons-box
     padding-bottom: 5px
     margin-bottom: 5px

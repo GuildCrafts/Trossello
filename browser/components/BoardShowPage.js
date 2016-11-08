@@ -13,7 +13,7 @@ import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
 import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
-import MenuSideBarToggle from './BoardShowPage/MenuSideBarToggle'
+import MenuSideBar from './BoardShowPage/MenuSideBar'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -64,7 +64,10 @@ class BoardShowPage extends React.Component {
     this.state = {
       potentialDragging: null,
       dragging: null,
+      sideBarOpen: false,
     }
+    this.openSideBar = this.openSideBar.bind(this)
+    this.closeSideBar = this.closeSideBar.bind(this)
     this.onMouseDown = this.onMouseDown.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
     this.onMouseUp = this.onMouseUp.bind(this)
@@ -77,6 +80,16 @@ class BoardShowPage extends React.Component {
       this.refs.lists.scrollLeft = this.refs.lists.scrollWidth
       this._scrollToTheRight = false
     }
+  }
+
+  openSideBar(event){
+    if (event) event.preventDefault()
+    this.setState({sideBarOpen: true})
+  }
+
+  closeSideBar(event){
+    if (event) event.preventDefault()
+    this.setState({sideBarOpen: false})
   }
 
   scrollToTheRight(){
@@ -251,12 +264,17 @@ class BoardShowPage extends React.Component {
     }
 
 
-    return <Layout className="BoardShowPage" style={style}>
+
+
+    const className = `BoardShowPage ${this.state.sideBarOpen ? 'BoardShowPage-sideBarOpen' : ''}`
+    return <Layout className={className} style={style}>
       {cardModal}
       <div className="BoardShowPage-Header">
         <h1>{board.name}</h1>
         <div>
-          <MenuSideBarToggle board={board} />
+          <Link onClick={this.openSideBar}>
+            <Icon type='ellipsis-h' /> Menu
+          </Link>
         </div>
       </div>
       <div
@@ -270,6 +288,10 @@ class BoardShowPage extends React.Component {
         {lists}
         <NewListForm board={board} afterCreate={this.scrollToTheRight} />
       </div>
+      <MenuSideBar
+        onClose={this.closeSideBar}
+        board={board}
+      />
     </Layout>
   }
 }
