@@ -45,9 +45,9 @@ export default class EditCardForm extends Component {
       event.preventDefault()
       this.save()
     }
-    if (event.keyCode === 27) {
+    if (event.key === 'Escape') {
       event.preventDefault()
-      this.cancel()
+      this.cancel(event)
     }
     autosize(this.refs.content)
   }
@@ -66,8 +66,8 @@ export default class EditCardForm extends Component {
     })
   }
 
-  cancel(){
-    this.props.onCancel()
+  cancel(event){
+    this.props.onCancel(event)
   }
 
 
@@ -84,7 +84,6 @@ export default class EditCardForm extends Component {
         ref="content"
         value={this.state.content}
         onChange={this.onContentChange}
-        onBlur={this.cancel}
       />
       <div className="BoardShowPage-EditCardForm-controls">
         <Button type="primary" submit>{this.props.submitButtonName}</Button>

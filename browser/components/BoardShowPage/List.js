@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import Form from '../Form'
 import Link from '../Link'
@@ -175,6 +176,19 @@ class NewCardForm extends Component {
   constructor(props) {
     super(props)
     this.createCard = this.createCard.bind(this)
+    this.closeIfUserClickedOutside = this.closeIfUserClickedOutside.bind(this)
+    document.body.addEventListener('click', this.closeIfUserClickedOutside, false)
+  }
+
+  componentWillUnmount(){
+    document.body.removeEventListener('click', this.closeIfUserClickedOutside)
+  }
+
+  closeIfUserClickedOutside(event) {
+    const container = ReactDOM.findDOMNode(this.refs.container)
+    if (!container.contains(event.target) && container !== event.target) {
+      this.props.onCancel(event)
+    }
   }
 
   createCard(card) {
@@ -197,6 +211,7 @@ class NewCardForm extends Component {
       onCancel={this.props.onCancel}
       submitButtonName="Add"
       onSave={this.createCard}
+      ref="container"
     />
   }
 }
