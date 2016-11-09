@@ -14,6 +14,12 @@
 
   &-Header
     display: flex
+    font-weight: bold
+    font-size: 1.2em
+    padding: 10px
+    text-align: center
+    border-bottom: 1px solid grey
+    margin-bottom: 8px
     > span
       flex-grow: 1
       flex-shrink: 1
@@ -65,6 +71,8 @@
     padding-bottom: 5px
     margin-bottom: 5px
     border-bottom: solid 1px grey
+  &-invite
+    background-color: #fff
   &-members
     padding: 0 5px
   &-member
@@ -113,6 +121,11 @@
     text-align: center
     border-bottom: 1px solid grey
     margin-bottom: 8px
+    display: flex
+    > span
+      flex-grow: 1
+      flex-shrink: 1
+      text-align: center
   &-Toggle
     max-height: calc(100vh  - #{$top + 5px})
     color: white
@@ -150,3 +163,7 @@
       color: #A3A3A
       text-decoration: underline
       position: relative
+
+  &-separator
+    border-bottom: 1px solid grey
+    margin: 8px 0

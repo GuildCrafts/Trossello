@@ -271,11 +271,13 @@ class BoardShowPage extends React.Component {
       {cardModal}
       <div className="BoardShowPage-Header">
         <h1>{board.name}</h1>
-        <div>
-          <Link onClick={this.openSideBar}>
-            <Icon type='ellipsis-h' /> Menu
-          </Link>
-        </div>
+        <Button
+          type="invisible"
+          className="BoardShowPage-menuButton"
+          onClick={this.openSideBar}
+        >
+          <Icon type='ellipsis-h' /> Menu
+        </Button>
       </div>
       <div
         ref="lists"
@@ -294,10 +296,6 @@ class BoardShowPage extends React.Component {
       />
     </Layout>
   }
-}
-
-const DownloadBoardButton = (props) => {
-  return <Button type="invisible" className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</Button>
 }
 
 const clearTextSelection = () => {
