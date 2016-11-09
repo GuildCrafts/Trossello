@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { DragSource, DropTarget } from 'react-dnd'
 import $ from 'jquery'
 import Form from '../Form'
 import Link from '../Link'
@@ -14,7 +15,7 @@ import PopoverMenuButton from '../PopoverMenuButton'
 import ListActionsMenu from '../ListActionsMenu'
 
 
-export default class List extends Component {
+class List extends Component {
 
   static propTypes = {
     board: React.PropTypes.object.isRequired,
@@ -60,6 +61,7 @@ export default class List extends Component {
 
   render(){
     const { board, list, dragging } = this.props
+    const { connectDragSource, connectDragPreview, connectDropTarget, isDragging, isOver } = this.props
 
     const cards = board.cards
       .map(card =>
@@ -99,26 +101,36 @@ export default class List extends Component {
       onCreateCard={this.creatingCard}
     />
 
-    return <div className="BoardShowPage-List" data-list-id={list.id}>
-      <div className="BoardShowPage-ListHeader">
-        <ListName list={list}/>
-        <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
-          <Icon type="ellipsis-h" />
-        </PopoverMenuButton>
+    const opacity = isDragging ? 0 : 1
+
+    return connectDropTarget(
+      <div className="BoardShowPage-ListWrapper">
+        <div className="BoardShowPage-BehindList">
+          <div className="BoardShowPage-List" data-list-id={list.id} style={{opacity}}>
+            {connectDragSource(
+              <div className="BoardShowPage-ListHeader">
+                <ListName list={list}/>
+                <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
+                  <Icon type="ellipsis-h" />
+                </PopoverMenuButton>
+              </div>
+            )}
+            <div
+              ref="cards"
+              className="BoardShowPage-cards"
+              onDragStart={this.props.onDragStart}
+              onDragOver={this.props.onDragOver}
+              onDragEnd={this.props.onDragEnd}
+              onDrop={this.props.onDrop}
+            >
+              {cardNodes}
+              {newCardForm}
+            </div>
+            {newCardLink}
+          </div>
+        </div>
       </div>
-      <div
-        ref="cards"
-        className="BoardShowPage-cards"
-        onDragStart={this.props.onDragStart}
-        onDragOver={this.props.onDragOver}
-        onDragEnd={this.props.onDragEnd}
-        onDrop={this.props.onDrop}
-      >
-        {cardNodes}
-        {newCardForm}
-      </div>
-      {newCardLink}
-    </div>
+    )
   }
 }
 
@@ -224,3 +236,48 @@ const archiveRecord = (resource, id) => {
     boardStore.reload()
   })
 }
+
+const listSource = {
+  beginDrag(props) {
+    props.startDragging()
+    return {
+      id: props.list.id
+    }
+  },
+
+  endDrag(props) {
+    props.updateListOrder()
+    props.stopDragging()
+  }
+}
+
+const listTarget = {
+  drop(props) {
+  },
+
+  hover(props, monitor) {
+    const { id: draggedId } = monitor.getItem()
+    const { id: overId, order: overOrder } = props.list
+
+    if (draggedId !== overId) {
+      props.moveList(draggedId, overOrder)
+    }
+  }
+}
+
+function dragCollect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
+    isDragging: monitor.isDragging()
+  }
+}
+
+function dropCollect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  }
+}
+
+export default DropTarget('list', listTarget, dropCollect)(DragSource('list', listSource, dragCollect)(List))

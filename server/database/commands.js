@@ -108,6 +108,14 @@ const deleteList = (id) =>
     knex.table('cards').where('list_id', id).del(),
   ])
 
+const reorderLists = (newListOrder) => {
+  let updates = []
+  for (let listId in newListOrder) {
+    updates.push(updateList(listId, {order: newListOrder[listId]}))
+  }
+  return Promise.all(updates)
+}
+
 //
 
 const createCard = (attributes) => {
@@ -266,6 +274,7 @@ export default {
   createList,
   updateList,
   deleteList,
+  reorderLists,
   createCard,
   updateCard,
   deleteCard,

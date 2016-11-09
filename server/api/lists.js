@@ -2,6 +2,15 @@ import express from 'express'
 import {queries, commands} from '../database'
 const router = new express.Router()
 
+// MOVE
+router.post('/move', (request, response, next) => {
+  commands.reorderLists(request.body)
+  .then(() => {
+    response.json(null)
+  })
+  .catch(next)
+})
+
 // UPDATE
 router.post('/:listId', (request, response, next) => {
   commands.updateList(request.params.listId, request.body)
