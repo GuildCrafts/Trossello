@@ -20,9 +20,19 @@ const getBoardsByUserId = (userId) =>
     .whereIn('user_boards.user_id', userId)
     .where('archived', false)
 
+const getUsersForBoard = (board) => {  
+  return knex.table('users')
+    .select('users.*')
+    .join('user_boards', 'users.id', '=', 'user_boards.user_id' )
+    .whereIn('user_boards.board_id', board.id)
+    .then( users => {
+      board.users = users
+      return board
+    })
+}
 
 const getBoardById = (id) =>
-  getRecordById('boards', id).then(getListsAndCardsForBoard)
+  getRecordById('boards', id).then(getListsAndCardsForBoard).then(getUsersForBoard)
 
 const getSearchResult = (userId, searchTerm) => {
   if (!searchTerm) return Promise.resolve([])

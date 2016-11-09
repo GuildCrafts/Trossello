@@ -4,6 +4,7 @@ import $ from 'jquery'
 import boardsStore from '../../stores/boardsStore'
 import ConfirmationButton from '../ConfirmationButton'
 
+import ConfirmationLink from '../ConfirmationLink'
 export default class LeaveBoardButton extends Component {
 
   static contextTypes = {

@@ -74,6 +74,7 @@ export default class List extends Component {
     const cardNodes = cards.map((card, index) =>
       <Card
         editable
+        archivable
         key={card.id}
         card={card}
         index={index}

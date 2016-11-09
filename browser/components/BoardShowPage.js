@@ -13,6 +13,7 @@ import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
 import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
+import MenuSideBar from './BoardShowPage/MenuSideBar'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -63,7 +64,10 @@ class BoardShowPage extends React.Component {
     this.state = {
       potentialDragging: null,
       dragging: null,
+      sideBarOpen: false,
     }
+    this.openSideBar = this.openSideBar.bind(this)
+    this.closeSideBar = this.closeSideBar.bind(this)
     this.onMouseDown = this.onMouseDown.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
     this.onMouseUp = this.onMouseUp.bind(this)
@@ -76,6 +80,16 @@ class BoardShowPage extends React.Component {
       this.refs.lists.scrollLeft = this.refs.lists.scrollWidth
       this._scrollToTheRight = false
     }
+  }
+
+  openSideBar(event){
+    if (event) event.preventDefault()
+    this.setState({sideBarOpen: true})
+  }
+
+  closeSideBar(event){
+    if (event) event.preventDefault()
+    this.setState({sideBarOpen: false})
   }
 
   scrollToTheRight(){
@@ -159,7 +173,7 @@ class BoardShowPage extends React.Component {
     let {cardId, listId, order} = dragging
     order += 0.5
     const card = this.props.board.cards.find(card => card.id === cardId)
-    if (card.list_id !== listId || card.order !== order){
+    if ((card.list_id !== listId || card.order !== order) && listId !== 0){
       this.moveCard({card, listId, order})
     }
     this.setState({ dragging: null }, clearTextSelection)
@@ -208,15 +222,21 @@ class BoardShowPage extends React.Component {
     }
 
     const lists = board.lists.map(list => {
-      return <List
-        key={list.id}
-        board={board}
-        list={list}
-        onDragOver={this.onDragOver}
-        onDragEnd={this.onDragEnd}
-        onDrop={this.onDrop}
-        dragging={dragging}
-      />
+      const cards = board.cards.filter(card => card.list_id === list.id)
+      if(list.archived === false){
+        return <List
+          showOptions={true}
+          archivable={true}
+          key={list.id}
+          board={board}
+          list={list}
+          cards={cards}
+          onDragOver={this.onDragOver}
+          onDragEnd={this.onDragEnd}
+          onDrop={this.onDrop}
+          dragging={dragging}
+        />
+      }
     })
 
     const style = {
@@ -244,15 +264,20 @@ class BoardShowPage extends React.Component {
     }
 
 
-    return <Layout className="BoardShowPage" style={style}>
+
+
+    const className = `BoardShowPage ${this.state.sideBarOpen ? 'BoardShowPage-sideBarOpen' : ''}`
+    return <Layout className={className} style={style}>
       {cardModal}
       <div className="BoardShowPage-Header">
         <h1>{board.name}</h1>
-        <div>
-          <DownloadBoardButton boardId={board.id}/>
-          <InviteByEmailButton boardId={board.id}/>
-          <LeaveBoardButton boardId={board.id}/>
-        </div>
+        <Button
+          type="invisible"
+          className="BoardShowPage-menuButton"
+          onClick={this.openSideBar}
+        >
+          <Icon type='ellipsis-h' /> Menu
+        </Button>
       </div>
       <div
         ref="lists"
@@ -265,14 +290,13 @@ class BoardShowPage extends React.Component {
         {lists}
         <NewListForm board={board} afterCreate={this.scrollToTheRight} />
       </div>
+      <MenuSideBar
+        onClose={this.closeSideBar}
+        board={board}
+      />
     </Layout>
   }
 }
-
-const DownloadBoardButton = (props) => {
-  return <Button type="invisible" className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</Button>
-}
-
 
 const clearTextSelection = () => {
   var sel = window.getSelection ?
