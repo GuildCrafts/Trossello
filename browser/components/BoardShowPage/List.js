@@ -99,15 +99,6 @@ export default class List extends Component {
       onCreateCard={this.creatingCard}
     />
 
-    const optionsBlock= this.props.showOptions ?
-      <div ref="options">
-        <div ref="cards" className="BoardShowPage-cards">
-          {cardNodes}
-          {newCardForm}
-        </div>
-          {newCardLink}
-      </div> : null
-
     return <div className="BoardShowPage-List" data-list-id={list.id}>
       <div className="BoardShowPage-ListHeader">
         <ListName list={list}/>
@@ -123,9 +114,11 @@ export default class List extends Component {
         onDragEnd={this.props.onDragEnd}
         onDrop={this.props.onDrop}
       >
-         {optionsBlock}
-       </div>
-     </div>
+        {cardNodes}
+        {newCardForm}
+      </div>
+      {newCardLink}
+    </div>
   }
 }
 

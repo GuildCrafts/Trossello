@@ -308,51 +308,8 @@ const DownloadBoardButton = (props) => {
 }
 
 const UnarchivePane = ({board, onClose, gotoPane, goBack}) => {
-  const archivedListsAndCards = board.lists.map( list => {
-    const cards = board.cards.filter( card => card.list_id === list.id)
-    if( list.archived === true ) {
-      return <div key={list.id} className="ArchivedItems-item ArchivedItems-list">
-        <List
-          archivable={ false }
-          showOptions={ false }
-          key={ list.id }
-          board={ board }
-          list={ list }
-          cards={ cards }
-        />
-        <UnarchiveListButton
-          className="BoardShowPage-MenuSideBar-ArchivedItems-UnarchiveButton"
-          list={ list }
-        />
-      </div>
-    } else {
-      const cardArray = []
-      for( let i = 0; i < cards.length; i++ ) {
-        if( cards[i].archived === true ) {
-          cardArray.push( <div
-            key={ cards[i].id }
-            className="BoardShowPage-MenuSideBar-ArchivedItems-item BoardShowPage-MenuSideBar-ArchivedItems-card"
-          >
-            <Card
-              editable={ false }
-              archivable={ false }
-              key={ cards[i].id }
-              card={ cards[i] }
-            />
-            <UnarchiveCardButton
-              className="BoardShowPage-MenuSideBar-ArchivedItems-UnarchiveButton" card={cards[i]}
-            />
-          </div> )
-        }
-      }
-      return cardArray
-    }
-  })
-  return <Pane name="Unarchive">
-    <div> Unarchive Things TBD </div>
-    <div className="BoardShowPage-MenuSideBar-ArchivedItems">
-      {archivedListsAndCards}
-    </div>
+  return <Pane name="Labels">
+    <div>Unarchive Panel Under Construction</div>
   </Pane>
 }
 

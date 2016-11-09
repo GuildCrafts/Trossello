@@ -111,14 +111,13 @@ const deleteList = (id) =>
 //
 
 const createCard = (attributes) => {
-  console.log('createCard', attributes)
-  return knex.table('cards')
+  return knex
+    .table('cards')
     .where({list_id: attributes.list_id})
     .orderBy('order', 'desc')
     .limit(1)
     .then( ([result]) => {
       attributes.order = result ? result.order + 1 : 0
-      console.log('attributes2', attributes)
       return knex
         .table('cards')
         .insert(attributes)
