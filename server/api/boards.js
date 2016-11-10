@@ -112,4 +112,26 @@ router.post('/:boardId/leave', (request, response, next) => {
 
 })
 
+// STAR BOARD
+router.post('/:boardId/star', (request, response, next) => {
+  const {boardId} = request.params
+  commands.starBoard(boardId)
+    .then( board => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
+// UNSTAR BOARD
+router.post('/:boardId/unstar', (request, response, next) => {
+  const {boardId} = request.params
+  commands.unstarBoard(boardId)
+    .then( () => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
+
+
 export default router

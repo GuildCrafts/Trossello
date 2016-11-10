@@ -95,9 +95,9 @@ describe('/api/boards', () => {
             return request('get', '/api/boards').then(response => {
               expect(response).to.have.status(200)
               expect(response.body).to.be.an('array')
-              expect(response.body.length).to.eql(2)
+              expect(response.body.length).to.eql(3)
               const boardNames = response.body.map(board => board.name).sort()
-              expect(boardNames).to.eql(['Board1','Board2'])
+              expect(boardNames).to.eql(['Board1','Board2', 'Board3'])
             })
           })
         })
@@ -154,13 +154,15 @@ describe('/api/boards', () => {
         describe('POST /api/boards/:boardId', () => {
           it('should update the board', () => {
             const boardAttributes = {
-              name: 'fresh board'
+              name: 'fresh board',
+              starred: true
             }
             return request('post', '/api/boards/102', boardAttributes).then(response => {
               expect(response).to.have.status(200)
               expect(response.body.id).to.eql(102)
               expect(response.body.name).to.eql('fresh board')
               expect(response.body.background_color).to.eql('purple')
+              expect(response.body.starred).to.eql(true)
             })
           })
         })
@@ -186,6 +188,36 @@ describe('/api/boards', () => {
             return request('post', '/api/boards/52/archive').then(response => {
               expect(response).to.have.status(404)
             })
+          })
+        })
+
+        // Star Board
+        describe('POST /api/boards/<existing board id>/star', () => {
+          it('should set starred to true and return 200', () => {
+            return request('post', '/api/boards/102/star')
+              .then(response => {
+                expect(response).to.have.status(200)
+              })
+              .then( () => request('get', '/api/boards/102'))
+              .then(response => {
+                expect(response).to.have.status(200)
+                expect(response.body.starred).to.eql(true)
+              })
+          })
+        })
+
+        // Unstar Board
+        describe('POST /api/boards/<existing board id>/unstar', () => {
+          it('should set starred to false and return 200', () => {
+            return request('post', '/api/boards/103/unstar')
+              .then(response => {
+                expect(response).to.have.status(200)
+              })
+              .then( () => request('get', '/api/boards/103'))
+              .then(response => {
+                expect(response).to.have.status(200)
+                expect(response.body.starred).to.eql(false)
+              })
           })
         })
 

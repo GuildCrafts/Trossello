@@ -6,6 +6,7 @@ import Button from './Button'
 import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
+import boardsStore from '../stores/boardsStore'
 import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
 import CardModal from './BoardShowPage/CardModal'
 import List from './BoardShowPage/List'
@@ -13,6 +14,7 @@ import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
 import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
+import StarIcon from './StarIcon'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -44,7 +46,6 @@ class BoardProvider extends Component {
     const viewingCard = viewingCardId ? Number(viewingCardId) : null
     return <BoardShowPage board={boardStore.value} viewingCard={viewingCard} />
   }
-
 }
 
 export default BoardProvider
@@ -243,12 +244,16 @@ class BoardShowPage extends React.Component {
       />
     }
 
-
     return <Layout className="BoardShowPage" style={style}>
       {cardModal}
       <div className="BoardShowPage-Header">
-        <h1>{board.name}</h1>
-        <div>
+        <h1>
+          {board.name}
+        </h1>
+        <span>
+          <StarIcon board={board} onChange={reloadBoardStores}/>
+        </span>
+        <div className="BoardShowPage-Header-SideMenu">
           <DownloadBoardButton boardId={board.id}/>
           <InviteByEmailButton boardId={board.id}/>
           <LeaveBoardButton boardId={board.id}/>
@@ -273,11 +278,15 @@ const DownloadBoardButton = (props) => {
   return <Button type="invisible" className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</Button>
 }
 
-
 const clearTextSelection = () => {
   var sel = window.getSelection ?
     window.getSelection() :
     document.selection;
   if (sel && sel.removeAllRanges) sel.removeAllRanges();
   if (sel && sel.empty) sel.empty();
+}
+
+const reloadBoardStores = () => {
+  boardStore.reload()
+  boardsStore.reload()
 }

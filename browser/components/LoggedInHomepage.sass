@@ -6,16 +6,17 @@
     background-color: #026AA7
 
   &-Boards
-    display: flex
-    flex-direction: row
     padding-bottom: 20px
 
   &-Board
     display: inline-block
+    position: relative
     margin-right: 15px
     margin-bottom: 15px
     height: 90px
-    width: 250px
+    width: 30vw
+    min-width: 200px
+    max-width: 250px
     padding: 10px
     background-color: #0094ae
     color: white
@@ -23,12 +24,17 @@
     border-radius: 4px
     opacity: .8
     > span
-
+    .StarIcon
+      position: absolute
+      top: 10px
+      right: 10px
     &:hover
       opacity: 1
+      .StarIcon-inactive
+        opacity: .8
+        margin-right: 0
 
   &-BoardListHeading
     color: #4d4d4d
     font-weight: 700
     margin: 0 0 1em 0
-
