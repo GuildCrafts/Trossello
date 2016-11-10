@@ -5,6 +5,7 @@ import Button from '../Button'
 import ToggleComponent from '../ToggleComponent'
 import DeleteBoardButton from './DeleteBoardButton'
 import LeaveBoardButton from './LeaveBoardButton'
+import ChangeBackground from './ChangeBackground'
 import './MenuSideBar.sass'
 import Card from './Card'
 import List from './List'
@@ -205,7 +206,9 @@ const MainPane = ({board, onClose, gotoPane}) => {
 
 const ChangeBackgroundPane = ({board, onClose, gotoPane, goBack}) =>
   <Pane name="ChangeBackground">
-    <div>Change Background Panel TBD</div>
+    <ChangeBackground
+      board={board}
+    />
   </Pane>
 
 
