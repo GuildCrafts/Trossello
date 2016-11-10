@@ -1,6 +1,6 @@
 import knex from './knex'
 import queries from './queries'
-import { sendWelcomeEmail } from '../mail/mailer'
+import mailer from '../mailer'
 
 const firstRecord = records => records[0]
 
@@ -79,10 +79,10 @@ const findOrCreateUserFromGithubProfile = (githubProfile) => {
 
 const createUser = (attributes) =>
   createRecord('users', attributes)
-    .then(user => {
-      sendWelcomeEmail(user)
-      return user
-    })
+    .then(user =>
+      mailer.sendWelcomeEmail(user)
+        .then(() => user )
+    )
 
 const updateUser = (id, attributes) =>
   updateRecord('users', id, attributes)

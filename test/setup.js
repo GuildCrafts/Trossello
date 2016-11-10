@@ -8,12 +8,14 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const { knex, queries, commands } = require('../server/database');
+const mailer = require('../server/mail/mailer').default
 
 chai.use(chaiHttp);
 
 let browserInstance
 
 beforeEach(() => {
+  mailer.transporter.reset()
   browserInstance = chai.request.agent(server)
   return knex.migrate.latest().then(() => knex.truncateAllTables() )
 })
