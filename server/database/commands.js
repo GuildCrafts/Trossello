@@ -91,12 +91,14 @@ const updateUser = (id, attributes) =>
 const deleteUser = (id) =>
   deleteRecord('users', id)
 
-
-//
-
-const createList = (attributes) => {
-  return createRecord('lists', attributes)
-}
+const createList = (attributes) =>
+  knex
+    .table('lists')
+    .where('board_id', attributes.board_id)
+    .count()
+    .then(results =>
+      createRecord('lists', {...attributes, order: results[0].count})
+    )
 
 const updateList = (id, attributes) =>
   updateRecord('lists', id, attributes)
@@ -107,8 +109,6 @@ const deleteList = (id) =>
     deleteRecord('lists', id),
     knex.table('cards').where('list_id', id).del(),
   ])
-
-//
 
 const createCard = (attributes) => {
   return knex
@@ -138,6 +138,18 @@ const archiveCard = (id) =>
 const unarchiveCard = (id) =>
   unarchiveRecord('cards', id)
 
+const sortBoardItems = (unsortedItems, itemId, sortBefore) => {
+  const subSort = (a, b) => {
+    if (a.order < b.order) return -1
+    if (a.order > b.order) return 1
+    if (a.id === itemId) return sortBefore ? -1 : 1
+    if (b.id === itemId) return sortBefore ? 1 : -1
+    return 0
+  }
+
+  unsortedItems.sort(subSort)
+}
+
 const moveCard = ({ boardId, cardId, listId, order }) => {
   return knex
     .table('cards')
@@ -146,44 +158,86 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
     .then(allCards => {
 
       const cardBegingMoved = allCards.find(card => card.id === cardId)
+      const originalOrder = cardBegingMoved.order
+      const newOrder = order
       const originListId = cardBegingMoved.list_id
       const destinationListId = listId
       const cardsOnOriginList = allCards.filter(card => card.list_id === originListId)
 
-      const updates = []
+      allCards = allCards.filter(card =>
+        card.list_id === originListId || card.list_id === destinationListId
+      )
 
-      updates.push(updateCard(cardBegingMoved.id, {
-        list_id: destinationListId,
-        order: order,
-      }))
+      const sortBefore = originListId !== destinationListId || originalOrder > newOrder
 
-      if (originListId === destinationListId){
-        cardsOnOriginList.forEach(card => {
-          if (card !== cardBegingMoved && card.order >= order) {
-            updates.push(updateCard(card.id, {
-              order: card.order + 1,
-            }))
-          }
+      const changes = allCards.map(card => {
+        return {
+          id: card.id,
+          list_id: card.list_id,
+          order: card.order,
+        }
+      })
+
+      changes.forEach(card => {
+        if (card.id !== cardId) return
+        card.list_id = listId
+        card.order = order
+      })
+
+      const originalListCards = changes.filter(card => card.list_id === originListId)
+      const destinationListCards = originListId === destinationListId ? [] :
+        changes.filter(card => card.list_id === destinationListId)
+
+
+      sortBoardItems(originalListCards, cardId, sortBefore)
+      originalListCards.forEach((card, index) => card.order = index)
+
+      sortBoardItems(destinationListCards, cardId, sortBefore)
+      destinationListCards.forEach((card, index) => card.order = index)
+
+      const updates = originalListCards.concat(destinationListCards).map(card =>
+        updateCard(card.id, {
+          list_id: card.list_id,
+          order: card.order,
         })
-      }else{
-        const cardsOnDestinationList = allCards.filter(card =>
-          card.list_id === destinationListId
-        )
-        cardsOnOriginList.forEach(card => {
-          if (card !== cardBegingMoved && card.order >= cardBegingMoved.order) {
-            updates.push(updateCard(card.id, {
-              order: card.order - 1,
-            }))
-          }
+      )
+
+      return Promise.all(updates)
+    })
+}
+
+const moveList = ({ boardId, listId, order }) => {
+  return knex
+    .table('lists')
+    .where({board_id: boardId})
+    .orderBy('order', 'asc')
+    .then(allLists => {
+      const listBeingMoved = allLists.find(list => list.id === listId)
+      const originalOrder = listBeingMoved.order
+      const newOrder = order
+
+      const sortBefore = originalOrder > newOrder
+
+      const changes = allLists.map(list => {
+        return {
+          id: list.id,
+          order: list.order
+        }
+      })
+
+      changes.forEach(list => {
+        if (list.id != listId) return
+        list.order = order
+      })
+
+      sortBoardItems(changes, listId, sortBefore)
+      changes.forEach((list, index) => list.order = index)
+
+      const updates = changes.map( list =>
+        updateList(list.id, {
+          order: list.order
         })
-        cardsOnDestinationList.forEach(card => {
-          if (card.order >= order) {
-            updates.push(updateCard(card.id, {
-              order: card.order + 1,
-            }))
-          }
-        })
-      }
+      )
 
       return Promise.all(updates)
     })
@@ -287,6 +341,7 @@ export default {
   updateCard,
   deleteCard,
   moveCard,
+  moveList,
   createBoard,
   updateBoard,
   deleteBoard,

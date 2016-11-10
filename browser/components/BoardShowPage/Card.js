@@ -54,7 +54,6 @@ export default class Card extends Component {
   }
 
   updateCard(updates){
-    console.log('updateCard ???')
     const { card } = this.props
     const cardClone = Object.assign({}, card)
     Object.assign(card, updates)
@@ -105,7 +104,7 @@ export default class Card extends Component {
       null
 
     let className = 'BoardShowPage-Card'
-    if (ghosted) className += ' BoardShowPage-Card-ghosted'
+    if (ghosted) className += ' BoardShowPage-Ghosted'
     if (beingDragged) className += ' BoardShowPage-Card-beingDragged'
 
     return <div
@@ -121,6 +120,8 @@ export default class Card extends Component {
         data-list-id={card.list_id}
         data-order={card.order}
         onClick={this.openShowCardModal}
+        draggable
+        onDragStart={this.props.onDragStart}
       >
         <pre>{card.content}</pre>
       </Link>

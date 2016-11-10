@@ -84,14 +84,16 @@ describe('database.queries', () => {
             background_color: 'orange',
 
             lists:[
-              { id: 40, board_id: 101, name: 'List1', archived: false, },
-              { id: 41, board_id: 101, name: 'List2', archived: false, },
+              { id: 40, board_id: 101, name: 'List1', archived: false, order: 0},
+              { id: 41, board_id: 101, name: 'List2', archived: false, order: 1},
             ],
             cards: [
-              { id: 80, board_id: 101, list_id: 40, content: 'card1', description: '', archived: false, order: 0},
-              { id: 81, board_id: 101, list_id: 40, content: 'Card2', description: '', archived: false, order: 1},
-              { id: 82, board_id: 101, list_id: 41, content: 'card3', description: '', archived: false, order: 0},
-              { id: 83, board_id: 101, list_id: 41, content: 'Card4', description: '', archived: false, order: 1},
+              { id: 80, board_id: 101, list_id: 40, content: 'card1',   description: '', archived: false, order: 0},
+              { id: 81, board_id: 101, list_id: 40, content: 'Card2',   description: '', archived: false, order: 1},
+              { id: 82, board_id: 101, list_id: 41, content: 'card3',   description: '', archived: false, order: 0},
+              { id: 83, board_id: 101, list_id: 41, content: 'Card4',   description: '', archived: false, order: 1},
+              { id: 90, board_id: 101, list_id: 40, content: 'Card 90', description: '', archived: false, order: 2},
+              { id: 91, board_id: 101, list_id: 40, content: 'Card 91', description: '', archived: false, order: 3},
             ],
             users: [
               {
@@ -119,6 +121,7 @@ describe('database.queries', () => {
             board_id: 101,
             name: 'List1',
             archived: false,
+            order: 0,
           })
         })
       })
