@@ -20,7 +20,6 @@ const getBoardsByUserId = (userId) =>
     .whereIn('user_boards.user_id', userId)
     .where('archived', false)
 
-
 const getBoardById = (id) =>
   getRecordById('boards', id).then(getListsAndCardsForBoard)
 

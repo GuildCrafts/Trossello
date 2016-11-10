@@ -75,6 +75,13 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
           name: 'Board2',
           background_color: 'purple',
         })
+      ).then( () =>
+        commands.createBoard(1455, {
+          id: 103,
+          name: 'Board3',
+          background_color: 'yellow',
+          starred: true,
+        })
       )
     })
     callback()

@@ -64,9 +64,9 @@ describe('database.queries', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return an array of all boards', () => {
         return queries.getBoardsByUserId(1455).then( boards => {
-          expect(boards.length).to.eql(2)
+          expect(boards.length).to.eql(3)
           const boardNames = boards.map(board => board.name).sort()
-          expect(boardNames).to.eql(['Board1', 'Board2'])
+          expect(boardNames).to.eql(['Board1', 'Board2', 'Board3'])
         })
       })
     })
@@ -80,7 +80,9 @@ describe('database.queries', () => {
             id: 101,
             name: 'Board1',
             archived: false,
+            starred: false,
             background_color: 'orange',
+
             lists:[
               { id: 40, board_id: 101, name: 'List1', archived: false, },
               { id: 41, board_id: 101, name: 'List2', archived: false, },

@@ -629,4 +629,20 @@ describe('database.commands', () => {
 
     });
   });
+
+  describe('starBoard', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should star a board by board id', () => {
+        return queries.getBoardById(101).then( board => {
+          expect(board).to.be.a('object')
+          expect(board.id).to.eql(101)
+          return commands.starBoard(101).then( () => {
+            return queries.getBoardById(101).then( board => {
+              expect(board.starred).to.eql(true)
+            })
+          })
+        })
+      })
+    })
+  })
 })

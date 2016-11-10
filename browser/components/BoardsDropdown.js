@@ -5,6 +5,7 @@ import boardsStore from '../stores/boardsStore'
 import Link from './Link'
 import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
+import StarIcon from './StarIcon'
 
 class BoardsDropdown extends ToggleComponent {
   render() {
@@ -20,27 +21,53 @@ class BoardsDropdown extends ToggleComponent {
 
 class Dropdown extends ToggleComponent {
   render(){
-    let boards
-    if (this.props.boards === null){
-      boards = <div>Loading. . .</div>
-    }else{
-      boards = this.props.boards.map(board =>
-        <Board key={board.id} board={board} onClick={this.props.close} />
-      )
+    const { boards } = this.props
+    let content
+
+    if (!boards) {
+      return <div className="BoardsDropdown-dropdown">
+        <div className="BoardsDropdown-content">
+          <div>Loading...</div>
+        </div>
+      </div>
     }
+
+    let starredBoards = boards.filter(board => board.starred)
+    let allBoards = boards
+
+    const renderBoard = board => (
+      <Board key={board.id} board={board} onClick={this.props.close} />
+    )
+
+    starredBoards = starredBoards.map(renderBoard)
+    allBoards = allBoards.map(renderBoard)
+
+    const titleBoards = (title, boards) => {
+      if (boards.length > 0) {
+        boards.unshift(
+          <div key="header" className="BoardsDropdown-sidebar-header">
+            {title}
+          </div>
+        )
+      }
+    }
+
+    titleBoards("Starred Boards", starredBoards)
+    titleBoards("All Boards", allBoards)
+
+    let CreateBoardPopover = this.state.open ?
+      <CreateBoardPopover
+        ref="toggle"
+        onClose={this.close}
+        onSave={this.props.close}
+      /> : null
+
     return <div className="BoardsDropdown-dropdown">
       <div className="BoardsDropdown-content">
-        {boards}
+        {starredBoards}
+        {allBoards}
         <Link onClick={this.toggle}>Create new board...</Link>
       </div>
-      {this.state.open ?
-        <CreateBoardPopover
-          ref="toggle"
-          onClose={this.close}
-          onSave={this.props.close}
-        /> :
-        null
-      }
     </div>
   }
 }
@@ -53,13 +80,18 @@ const Board = ({board, onClick}) => {
       <span className="BoardsDropdown-text">
         <span className="BoardsDropdown-title">{board.name}</span>
       </span>
+      <StarIcon board={board} onChange={reloadBoardStores}/>
     </Link>
   </div>
 }
-
 
 export default createStoreProvider({
   as: 'boards',
   store: boardsStore,
   render: BoardsDropdown,
 })
+
+const reloadBoardStores = () => {
+  boardStore.reload()
+  boardsStore.reload()
+}

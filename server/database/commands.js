@@ -236,6 +236,21 @@ const addUserToBoard = (userId, boardId) => {
     })
 }
 
+const starBoard = (id) =>
+  knex
+    .table('boards')
+    .where('id', id)
+    .update({
+      starred: true
+    })
+
+const unstarBoard = (id) =>
+  knex
+    .table('boards')
+    .where('id', id)
+    .update({
+      starred: false
+    })
 
 const updateBoard = (id, attributes) =>
   updateRecord('boards', id, attributes)
@@ -281,6 +296,8 @@ export default {
   unarchiveList,
   archiveBoard,
   unarchiveBoard,
+  starBoard,
+  unstarBoard,
   createInvite,
   addUserToBoard,
   searchQuery,
