@@ -54,8 +54,8 @@ export default class EditCardForm extends Component {
 
   onContentChange(event){
     const cardContent = event.target.value
-    if (this.props.submitButtonName=== "Add"){
-        sessionStorage.setItem('cardContent', cardContent)
+    if (!this.props.card) {
+      sessionStorage.setItem('cardContent', cardContent)
       }
     this.setState({content: cardContent})
   }
