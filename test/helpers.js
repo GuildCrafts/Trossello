@@ -23,68 +23,70 @@ const withTwoUsersInTheDatabase = (callback) => {
 }
 
 const withBoardsListsAndCardsInTheDatabase = (callback) => {
-  context('when there boards, list and cards in the database', () => {
-    beforeEach( () => {
-      return commands.createBoard(1455, {
-        id: 101,
-        name: 'Board1',
-        background_color: 'orange',
-      }).then( () =>
-        commands.createList({
-          id: 40,
-          board_id: 101,
-          name: 'List1',
-        })
-      ).then( () =>
-        commands.createCard({
-          id: 80,
-          list_id: 40,
-          board_id: 101,
-          content: 'card1',
-        }),
-      ).then( () =>
-        commands.createCard({
-          id: 81,
-          list_id: 40,
-          board_id: 101,
-          content: 'Card2',
-        })
-      ).then( () =>
-        commands.createList({
-          id: 41,
-          board_id: 101,
-          name: 'List2',
-        })
-      ).then( () =>
-        commands.createCard({
-          id: 82,
-          list_id: 41,
-          board_id: 101,
-          content: 'card3',
-        })
-      ).then( () =>
-        commands.createCard({
-          id: 83,
-          list_id: 41,
-          board_id: 101,
-          content: 'Card4',
-        })
-      ).then( () =>
-        commands.createBoard(1455, {
-          id: 102,
-          name: 'Board2',
-          background_color: 'purple',
-        })
-      ).then( () =>
-        commands.createBoard(1455, {
-          id: 103,
-          name: 'Board3',
-          background_color: 'yellow',
-          starred: true,
-        })
-      )
+  withTwoUsersInTheDatabase(()=>{
+    context('when there boards, list and cards in the database', () => {
+      beforeEach( () => {
+        return commands.createBoard(1455, {
+          id: 101,
+          name: 'Board1',
+          background_color: 'orange',
+        }).then( () =>
+          commands.createList({
+            id: 40,
+            board_id: 101,
+            name: 'List1',
+          })
+        ).then( () =>
+          commands.createCard({
+            id: 80,
+            list_id: 40,
+            board_id: 101,
+            content: 'card1',
+          }),
+        ).then( () =>
+          commands.createCard({
+            id: 81,
+            list_id: 40,
+            board_id: 101,
+            content: 'Card2',
+          })
+        ).then( () =>
+          commands.createList({
+            id: 41,
+            board_id: 101,
+            name: 'List2',
+          })
+        ).then( () =>
+          commands.createCard({
+            id: 82,
+            list_id: 41,
+            board_id: 101,
+            content: 'card3',
+          })
+        ).then( () =>
+          commands.createCard({
+            id: 83,
+            list_id: 41,
+            board_id: 101,
+            content: 'Card4',
+          })
+        ).then( () =>
+          commands.createBoard(1455, {
+            id: 102,
+            name: 'Board2',
+            background_color: 'purple',
+          })
+        ).then( () =>
+          commands.createBoard(1455, {
+            id: 103,
+            name: 'Board3',
+            background_color: 'yellow',
+            starred: true,
+          })
+        )
+      })
+      callback()
     })
-    callback()
   })
 }
 
