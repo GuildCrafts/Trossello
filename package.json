@@ -81,6 +81,8 @@
     "promise": "^7.1.1",
     "randomstring": "^1.1.5",
     "react": "^15.3.2",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.3.2",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",

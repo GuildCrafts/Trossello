@@ -16,6 +16,7 @@ export default class NewListForm extends ToggleComponent {
         close={this.close}
         board={this.props.board}
         afterCreate={this.props.afterCreate}
+        order={this.props.order}
       /> :
       <Closed open={this.open} />
 
@@ -46,10 +47,11 @@ class Open extends Component {
 
   createList(event){
     event.preventDefault()
-    const { board, onCreateList } = this.props
+    const { board, onCreateList, order } = this.props
     const newList = {
       name: this.refs.name.value,
-      archived: false
+      archived: false,
+      order: order
     }
     if (newList.name.replace(/\s+/g,'') === '') return
     this.refs.name.value = ''

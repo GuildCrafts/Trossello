@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import './BoardShowPage.sass'
 import Layout from './Layout'
 import Link from './Link'
@@ -13,6 +15,7 @@ import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
 import InviteByEmailButton from './InviteByEmailButton'
 import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
+import CustomDragLayer from './BoardShowPage/CustomDragLayer'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -47,7 +50,7 @@ class BoardProvider extends Component {
 
 }
 
-export default BoardProvider
+export default DragDropContext(HTML5Backend)(BoardProvider)
 
 class BoardShowPage extends React.Component {
   static contextTypes = {
@@ -63,12 +66,20 @@ class BoardShowPage extends React.Component {
     this.state = {
       potentialDragging: null,
       dragging: null,
+      listDragging: false,
+      listDraggingId: null,
+      draggedListId: null,
+      overListId: null
     }
     this.onMouseDown = this.onMouseDown.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
     this.onMouseUp = this.onMouseUp.bind(this)
     this.scrollToTheRight = this.scrollToTheRight.bind(this)
     this.closeCardModal = this.closeCardModal.bind(this)
+    this.startDragging = this.startDragging.bind(this)
+    this.stopDragging = this.stopDragging.bind(this)
+    this.moveList = this.moveList.bind(this)
+    this.updateListOrder = this.updateListOrder.bind(this)
   }
 
   componentDidUpdate(){
@@ -83,86 +94,86 @@ class BoardShowPage extends React.Component {
   }
 
   onMouseDown(event){
-    if (event.isPropagationStopped()) return
-    const cardNode = $(event.target).closest('.BoardShowPage-Card .BoardShowPage-Card-box')
-    if (cardNode.length === 0) return
-    const cardId = Number(cardNode.data('card-id'))
-    const listId = Number(cardNode.data('list-id'))
-    const order  = Number(cardNode.data('order')) - 0.5
-    const height = cardNode.outerHeight()
-    const width = cardNode.outerWidth()
-    const top = cardNode.offset().top
-    const left = cardNode.offset().left
-    const x = event.clientX
-    const y = event.clientY
-
-    this.setState({
-      potentialDragging: { cardId, listId, order, height, width, top, left, x, y }
-    })
+    // if (event.isPropagationStopped()) return
+    // const cardNode = $(event.target).closest('.BoardShowPage-Card .BoardShowPage-Card-box')
+    // if (cardNode.length === 0) return
+    // const cardId = Number(cardNode.data('card-id'))
+    // const listId = Number(cardNode.data('list-id'))
+    // const order  = Number(cardNode.data('order')) - 0.5
+    // const height = cardNode.outerHeight()
+    // const width = cardNode.outerWidth()
+    // const top = cardNode.offset().top
+    // const left = cardNode.offset().left
+    // const x = event.clientX
+    // const y = event.clientY
+    //
+    // this.setState({
+    //   potentialDragging: { cardId, listId, order, height, width, top, left, x, y }
+    // })
   }
 
   onMouseMove(event){
-    let { potentialDragging, dragging } = this.state
-    if (!potentialDragging && !dragging) return
-
-    if (potentialDragging){
-      const distance = (
-        Math.abs(potentialDragging.y - event.clientY) +
-        Math.abs(potentialDragging.x - event.clientX)
-      )
-      if (distance < 10) return
-      dragging = potentialDragging
-    }
-
-    let { cardId, listId, order, height, width, top, left, x, y} = dragging
-    let { board } = this.props
-
-    top += event.clientY - y
-    left += event.clientX - x
-    x = event.clientX
-    y = event.clientY
-
-    const targetNode = $(event.target).closest('.BoardShowPage-List, .BoardShowPage-Card .BoardShowPage-Card-box')
-
-    if (targetNode.is('.BoardShowPage-List')){
-      const targetListId = Number(targetNode.data('list-id'))
-      if (board.cards.filter(card => card.list_id === targetListId).length === 0){
-        listId = targetListId
-        order = -0.5
-      }
-    }
-
-    if (targetNode.is('.BoardShowPage-Card .BoardShowPage-Card-box')){
-      const targetCardId = Number(targetNode.data('card-id'))
-      if (targetCardId !== cardId) {
-        const rect = targetNode[0].getBoundingClientRect()
-        const middleOfTarget = rect.top + (rect.height/2)
-        listId = Number(targetNode.data('list-id'))
-        order = Number(targetNode.data('order')) - 0.5
-        if (event.clientY > middleOfTarget) order += 1
-      }
-    }
-
-    this.setState({
-      potentialDragging: null,
-      dragging: { cardId, listId, order, height, width, top, left, x, y }
-    })
+    // let { potentialDragging, dragging } = this.state
+    // if (!potentialDragging && !dragging) return
+    //
+    // if (potentialDragging){
+    //   const distance = (
+    //     Math.abs(potentialDragging.y - event.clientY) +
+    //     Math.abs(potentialDragging.x - event.clientX)
+    //   )
+    //   if (distance < 10) return
+    //   dragging = potentialDragging
+    // }
+    //
+    // let { cardId, listId, order, height, width, top, left, x, y} = dragging
+    // let { board } = this.props
+    //
+    // top += event.clientY - y
+    // left += event.clientX - x
+    // x = event.clientX
+    // y = event.clientY
+    //
+    // const targetNode = $(event.target).closest('.BoardShowPage-List, .BoardShowPage-Card .BoardShowPage-Card-box')
+    //
+    // if (targetNode.is('.BoardShowPage-List')){
+    //   const targetListId = Number(targetNode.data('list-id'))
+    //   if (board.cards.filter(card => card.list_id === targetListId).length === 0){
+    //     listId = targetListId
+    //     order = -0.5
+    //   }
+    // }
+    //
+    // if (targetNode.is('.BoardShowPage-Card .BoardShowPage-Card-box')){
+    //   const targetCardId = Number(targetNode.data('card-id'))
+    //   if (targetCardId !== cardId) {
+    //     const rect = targetNode[0].getBoundingClientRect()
+    //     const middleOfTarget = rect.top + (rect.height/2)
+    //     listId = Number(targetNode.data('list-id'))
+    //     order = Number(targetNode.data('order')) - 0.5
+    //     if (event.clientY > middleOfTarget) order += 1
+    //   }
+    // }
+    //
+    // this.setState({
+    //   potentialDragging: null,
+    //   dragging: { cardId, listId, order, height, width, top, left, x, y }
+    // })
   }
 
   onMouseUp(event){
-    clearTimeout(this.starDraggingTimeout)
-    const { dragging } = this.state
-    if (!dragging){
-      this.setState({ potentialDragging: null })
-      return
-    }
-    let {cardId, listId, order} = dragging
-    order += 0.5
-    const card = this.props.board.cards.find(card => card.id === cardId)
-    if (card.list_id !== listId || card.order !== order){
-      this.moveCard({card, listId, order})
-    }
-    this.setState({ dragging: null }, clearTextSelection)
+    // clearTimeout(this.starDraggingTimeout)
+    // const { dragging } = this.state
+    // if (!dragging){
+    //   this.setState({ potentialDragging: null })
+    //   return
+    // }
+    // let {cardId, listId, order} = dragging
+    // order += 0.5
+    // const card = this.props.board.cards.find(card => card.id === cardId)
+    // if (card.list_id !== listId || card.order !== order){
+    //   this.moveCard({card, listId, order})
+    // }
+    // this.setState({ dragging: null }, clearTextSelection)
   }
 
   moveCard({ card, listId, order }){
@@ -190,6 +201,43 @@ class BoardShowPage extends React.Component {
     this.context.redirectTo(`/boards/${this.props.board.id}`)
   }
 
+  startDragging(){
+    this.setState({
+      listDragging: true
+    })
+  }
+
+  stopDragging(){
+    this.setState({
+      listDragging: false
+    })
+  }
+
+  moveList(draggedListId, overListOrder){
+    this.setState({
+      draggedListId: draggedListId,
+      overListOrder: overListOrder
+    })
+  }
+
+  updateListOrder(){
+    let newListOrder = {}
+
+    this.lists.forEach( (list, index) => {
+      newListOrder[list.id] = index
+    })
+
+    return $.ajax({
+      method: 'post',
+      url: `/api/lists/move`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify(newListOrder)
+    }).then(() => {
+      boardStore.reload()
+    })
+  }
+
   render() {
     const { board, viewingCard } = this.props
     const { dragging } = this.state
@@ -207,7 +255,23 @@ class BoardShowPage extends React.Component {
       />
     }
 
-    const lists = board.lists.map(list => {
+    let lists = board.lists
+      .filter(list => !list.archived)
+
+    if (this.state.listDragging) {
+      lists = lists.map( list => {
+        if (list.id === this.state.draggedListId) {
+          list.order = list.order > this.state.overListOrder ?
+            this.state.overListOrder - 0.5 :
+            this.state.overListOrder + 0.5
+        }
+        return list
+      })
+    }
+
+    this.lists = lists.sort((a, b) => a.order - b.order)
+
+    const listNodes = lists.map(list => {
       return <List
         key={list.id}
         board={board}
@@ -216,6 +280,10 @@ class BoardShowPage extends React.Component {
         onDragEnd={this.onDragEnd}
         onDrop={this.onDrop}
         dragging={dragging}
+        startDragging={this.startDragging}
+        stopDragging={this.stopDragging}
+        moveList={this.moveList}
+        updateListOrder={this.updateListOrder}
       />
     })
 
@@ -262,9 +330,21 @@ class BoardShowPage extends React.Component {
         onMouseUp={this.onMouseUp}
       >
         {cardBeingDraggedNode}
-        {lists}
-        <NewListForm board={board} afterCreate={this.scrollToTheRight} />
+        {listNodes}
+        <NewListForm board={board} afterCreate={this.scrollToTheRight} order={this.lists.length}/>
       </div>
+      <CustomDragLayer
+        board={board}
+        list={this.lists[0]}
+        onDragOver={this.onDragOver}
+        onDragEnd={this.onDragEnd}
+        onDrop={this.onDrop}
+        dragging={dragging}
+        startDragging={this.startDragging}
+        stopDragging={this.stopDragging}
+        moveList={this.moveList}
+        updateListOrder={this.updateListOrder}
+      />
     </Layout>
   }
 }
