@@ -36,11 +36,11 @@ export default class List extends Component {
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
     this.cancelCreatingCardIfUserClickedOutside = this.cancelCreatingCardIfUserClickedOutside.bind(this)
     document.body.addEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
-    this.listDragHandler = this.listDragHandler.bind(this)
-    this.listDragStartHandler = this.listDragStartHandler.bind(this)
-    this.listDragEnterHandler = this.listDragEnterHandler.bind(this)
-    this.listDragEndHandler = this.listDragEndHandler.bind(this)
-    this.listDragOverHandler = this.listDragOverHandler.bind(this)
+    // this.listDragHandler = this.listDragHandler.bind(this)
+    // this.listDragStartHandler = this.listDragStartHandler.bind(this)
+    // this.listDragEnterHandler = this.listDragEnterHandler.bind(this)
+    // this.listDragEndHandler = this.listDragEndHandler.bind(this)
+    // this.listDragOverHandler = this.listDragOverHandler.bind(this)
   }
 
   componentWillUnmount(){
@@ -69,39 +69,39 @@ export default class List extends Component {
     this.setState({creatingCard: false})
   }
 
-  listDragStartHandler(event) {
-    const dragImage = new Image()
-    dragImage.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D'
-    event.dataTransfer.setDragImage(dragImage, 0, 0)
-    this.props.listStartDragging(this.props.list.id)
-    this.setState({
-      initialX: event.clientX,
-      initialY: event.clientY,
-    })
-  }
-
-  listDragHandler(event){
-    this.setState({
-      listStyle: {transform: `translate(${event.clientX - this.state.initialX}px, ${event.clientY - this.state.initialY}px) rotate(4deg)`,
-      pointerEvents: 'none'}
-    })
-  }
-
-  listDragEnterHandler(event){
-    event.preventDefault()
-    this.props.setListDragOver(this.props.list)
-  }
-
-  listDragOverHandler(event){
-    event.preventDefault()
-  }
-
-  listDragEndHandler(event){
-    this.props.listStopDragging()
-    this.setState({
-      listStyle: {}
-    })
-  }
+  // listDragStartHandler(event) {
+  //   const dragImage = new Image()
+  //   dragImage.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D'
+  //   event.dataTransfer.setDragImage(dragImage, 0, 0)
+  //   this.props.listStartDragging(this.props.list.id)
+  //   this.setState({
+  //     initialX: event.clientX,
+  //     initialY: event.clientY,
+  //   })
+  // }
+  //
+  // listDragHandler(event){
+  //   this.setState({
+  //     listStyle: {transform: `translate(${event.clientX - this.state.initialX}px, ${event.clientY - this.state.initialY}px) rotate(4deg)`,
+  //     pointerEvents: 'none'}
+  //   })
+  // }
+  //
+  // listDragEnterHandler(event){
+  //   event.preventDefault()
+  //   this.props.setListDragOver(this.props.list)
+  // }
+  //
+  // listDragOverHandler(event){
+  //   event.preventDefault()
+  // }
+  //
+  // listDragEndHandler(event){
+  //   this.props.listStopDragging()
+  //   this.setState({
+  //     listStyle: {}
+  //   })
+  // }
 
   render(){
     const { board, list, dragging } = this.props
@@ -125,6 +125,9 @@ export default class List extends Component {
         ghosted={dragging && card.id === dragging.cardId}
         board={board}
         list={list}
+        onDragStart={this.props.onDragStart}
+        onDragEnter={this.props.onDragEnter}
+        onDragEnd={this.props.onDragEnd}
       />
     )
 
@@ -144,46 +147,61 @@ export default class List extends Component {
       onCreateCard={this.creatingCard}
     />
 
-    return <div className="BoardShowPage-ListWrapper" onDragEnter={this.listDragEnterHandler} onDragOver={this.listDragOverHandler}>
-        <div className="BoardShowPage-BehindList">
-          <div className="BoardShowPage-List" data-list-id={list.id} style={this.state.listStyle}>
-            <div className="BoardShowPage-ListHeader" draggable="true"  onDragStart={this.listDragStartHandler} onDrag={this.listDragHandler} onDragEnd={this.listDragEndHandler} >
-              <ListName list={list}/>
-              <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
-                <Icon type="ellipsis-h" />
-              </PopoverMenuButton>
-            </div>
-            <div
-              ref="cards"
-              className="BoardShowPage-cards"
-              onDragStart={this.props.onDragStart}
-              onDragOver={this.props.onDragOver}
-              onDragEnd={this.props.onDragEnd}
-              onDrop={this.props.onDrop}
-            >
-              {cardNodes}
-              {newCardForm}
-            </div>
-            {newCardLink}
+    return <div className="BoardShowPage-ListWrapper"
+        data-list-id={list.id}
+        onDragEnter={this.props.onDragEnter}
+      >
+      <div className="BoardShowPage-BehindList">
+        <div className="BoardShowPage-List" data-list-id={list.id} style={this.state.listStyle}>
+          <div
+            className="BoardShowPage-ListHeader"
+            draggable
+            onDragStart={this.props.onDragStart}
+            onDragEnd={this.props.onDragEnd}
+          >
+            <ListName list={list}/>
+            <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
+              <Icon type="ellipsis-h" />
+            </PopoverMenuButton>
           </div>
+          <div
+            ref="cards"
+            className="BoardShowPage-cards"
+          >
+            {cardNodes}
+            {newCardForm}
+          </div>
+          {newCardLink}
         </div>
       </div>
-    }
+    </div>
+  }
 }
 
 class ListName extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      editing: false,
       value: this.props.list.name
     }
     this.setValue = this.setValue.bind(this)
     this.updateName = this.updateName.bind(this)
     this.selectText = this.selectText.bind(this)
+    this.startEditing = this.startEditing.bind(this)
   }
 
   setValue(event){
     this.setState({value: event.target.value})
+  }
+
+  startEditing(event){
+    event.preventDefault()
+    this.setState({editing: true})
+  }
+
+  componentDidUpdate(){
+    if (this.state.editing) this.refs.input.focus()
   }
 
   updateName(){
@@ -195,22 +213,31 @@ class ListName extends Component {
       dataType: "json",
       data: JSON.stringify({name: this.state.value})
     }).then(() => {
+      this.setState({editing: false})
       boardStore.reload()
     })
   }
 
-  selectText(event){
-    event.target.select()
+  selectText(){
+    this.refs.input.select()
   }
 
   render() {
-    return <input
-      type="text"
-      value={this.state.value}
-      onChange={this.setValue}
-      onBlur={this.updateName}
-      onFocus={this.selectText}
-    />
+    return this.state.editing ?
+      <input
+        ref="input"
+        draggable={false}
+        type="text"
+        value={this.state.value}
+        onChange={this.setValue}
+        onBlur={this.updateName}
+        onFocus={this.selectText}
+      /> :
+      <div
+        onClick={this.startEditing}
+      >
+        {this.props.list.order} :: {this.state.value}
+      </div>
   }
 }
 

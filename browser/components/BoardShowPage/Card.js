@@ -124,6 +124,10 @@ export default class Card extends Component {
         data-list-id={card.list_id}
         data-order={card.order}
         onClick={this.onClick}
+        draggable
+        onDragStart={this.props.onDragStart}
+        onDragEnter={this.props.onDragEnter}
+        onDragEnd={this.props.onDragEnd}
       >
         <pre>{card.content}</pre>
         <div className="BoardShowPage-Card-controls">
