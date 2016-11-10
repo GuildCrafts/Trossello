@@ -32,7 +32,7 @@ export default class EditCardForm extends Component {
   }
 
   initialContentValue(props){
-    return props.defaultValue || (props.card && props.card.content) || ''
+    return props.defaultValue || (props.card && props.card.content) || sessionStorage.getItem('cardContent') || ''
   }
 
   componentDidMount() {
@@ -53,6 +53,7 @@ export default class EditCardForm extends Component {
   }
 
   onContentChange(event){
+    sessionStorage.setItem('cardContent', event.target.value)
     this.setState({content: event.target.value})
   }
 
@@ -63,10 +64,11 @@ export default class EditCardForm extends Component {
     })
     this.setState({
       content: this.initialContentValue(this.props)
-    })
+    })    
   }
 
   cancel(event){
+    sessionStorage.removeItem('cardContent')
     this.props.onCancel(event)
   }
 
@@ -76,7 +78,7 @@ export default class EditCardForm extends Component {
       <Link onClick={this.cancel}>
         <Icon type="times" />
       </Link>
-
+      
     return <Form className="BoardShowPage-EditCardForm" onSubmit={this.save}>
       <textarea
         className="BoardShowPage-Card"

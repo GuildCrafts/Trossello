@@ -190,6 +190,7 @@ class NewCardForm extends Component {
       data: JSON.stringify(card),
     }).then(() => {
       boardStore.reload()
+      sessionStorage.removeItem('cardContent')
     })
   }
 
