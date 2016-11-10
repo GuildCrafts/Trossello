@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { DragSource, DropTarget } from 'react-dnd'
+import { getEmptyImage } from 'react-dnd-html5-backend'
 import $ from 'jquery'
 import Form from '../Form'
 import Link from '../Link'
@@ -35,6 +36,10 @@ class List extends Component {
 
   componentWillUnmount(){
     document.body.removeEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
+  }
+
+  componentDidMount(){
+    this.props.connectDragPreview(getEmptyImage())
   }
 
   cancelCreatingCardIfUserClickedOutside(event){

@@ -22,6 +22,9 @@ class CustomDragLayer extends Component {
       };
     }
 
+    var draggedList = this.props.draggedList
+    console.log(draggedList)
+
     return <div style={getItemStyles(this.props)}>
       <List
         board={this.props.board}
