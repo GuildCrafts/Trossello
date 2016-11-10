@@ -28,19 +28,6 @@ export default class List extends Component {
     }
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
-    this.cancelCreatingCardIfUserClickedOutside = this.cancelCreatingCardIfUserClickedOutside.bind(this)
-    document.body.addEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
-  }
-
-  componentWillUnmount(){
-    document.body.removeEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
-  }
-
-  cancelCreatingCardIfUserClickedOutside(event){
-    const targetNode = event.target
-    let rootNode = this.refs.root
-    if (rootNode && targetNode && !rootNode.contains(targetNode))
-      this.cancelCreatingCard()
   }
 
   componentDidUpdate(){
