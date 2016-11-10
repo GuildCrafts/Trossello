@@ -181,7 +181,7 @@ class NewCardForm extends Component {
   createCard(card) {
     const { board, list } = this.props
     if (card.content.replace(/\s+/g,'') === '') return
-
+    sessionStorage.removeItem('cardContent')
     $.ajax({
       method: 'post',
       url: `/api/boards/${board.id}/lists/${list.id}/cards`,
@@ -190,7 +190,6 @@ class NewCardForm extends Component {
       data: JSON.stringify(card),
     }).then(() => {
       boardStore.reload()
-      sessionStorage.removeItem('cardContent')
     })
   }
 

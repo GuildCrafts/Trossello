@@ -53,8 +53,9 @@ export default class EditCardForm extends Component {
   }
 
   onContentChange(event){
-    sessionStorage.setItem('cardContent', event.target.value)
-    this.setState({content: event.target.value})
+    const cardContent = event.target.value
+    sessionStorage.setItem('cardContent', cardContent)
+    this.setState({content: cardContent})
   }
 
   save(event){
@@ -64,7 +65,7 @@ export default class EditCardForm extends Component {
     })
     this.setState({
       content: this.initialContentValue(this.props)
-    })    
+    })
   }
 
   cancel(event){
@@ -72,13 +73,12 @@ export default class EditCardForm extends Component {
     this.props.onCancel(event)
   }
 
-
   render() {
     const closeX = this.props.hideCloseX ? null :
       <Link onClick={this.cancel}>
         <Icon type="times" />
       </Link>
-      
+
     return <Form className="BoardShowPage-EditCardForm" onSubmit={this.save}>
       <textarea
         className="BoardShowPage-Card"
