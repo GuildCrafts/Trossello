@@ -87,7 +87,7 @@
     "rmdir": "^1.2.0",
     "sass-loader": "^4.0.2",
     "serve-favicon": "^2.3.0",
-    "simple-react-router": "0.0.8",
+    "simple-react-router": "0.0.9",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "uuid": "^2.0.3",

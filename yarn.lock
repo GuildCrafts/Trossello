@@ -4763,9 +4763,9 @@ signal-exit@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.1.tgz#5a4c884992b63a7acd9badb7894c3ee9cfccad81"
 
-simple-react-router@0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/simple-react-router/-/simple-react-router-0.0.8.tgz#0d8863dd5639d253cf75398073a89103aa5ba8d9"
+simple-react-router@0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/simple-react-router/-/simple-react-router-0.0.9.tgz#67e8ad67bb63a15c6ae825f08ef74dd07c98ca67"
   dependencies:
     pathname-router "0.0.3"
 
