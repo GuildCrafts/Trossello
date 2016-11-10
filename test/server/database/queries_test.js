@@ -93,6 +93,17 @@ describe('database.queries', () => {
               { id: 82, board_id: 101, list_id: 41, content: 'card3', description: '', archived: false, order: 0},
               { id: 83, board_id: 101, list_id: 41, content: 'Card4', description: '', archived: false, order: 1},
             ],
+            users: [
+              {
+                "id": 1455,
+                "github_id": 22312,
+                "avatar_url": null,
+                "email": "mark@zuckerburg.io",
+                "name": "Mark Zuckerburg",
+                "created_at": null,
+                "updated_at": null,
+              },
+            ],
           })
         })
       })
