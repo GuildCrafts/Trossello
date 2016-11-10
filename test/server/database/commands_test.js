@@ -480,6 +480,7 @@ describe('database.commands', () => {
             })
           })
         })
+      })
     })
   })
 
@@ -592,5 +593,5 @@ describe('database.commands', () => {
       })
     })
   })
-})
+
 })
