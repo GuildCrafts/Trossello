@@ -8,7 +8,7 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const { knex, queries, commands } = require('../server/database');
-const mailer = require('../server/mail/mailer').default
+const mailer = require('../server/mailer').default
 
 chai.use(chaiHttp);
 
@@ -46,4 +46,5 @@ module.exports = {
   knex,
   queries,
   commands,
+  mailer,
 }
