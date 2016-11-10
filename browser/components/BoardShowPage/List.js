@@ -24,12 +24,23 @@ export default class List extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      creatingCard: false
+      creatingCard: false,
+      initialX: 0,
+      initialY: 0,
+      listStyle: {}
     }
+
+
+
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
     this.cancelCreatingCardIfUserClickedOutside = this.cancelCreatingCardIfUserClickedOutside.bind(this)
     document.body.addEventListener('click', this.cancelCreatingCardIfUserClickedOutside)
+    this.listDragHandler = this.listDragHandler.bind(this)
+    this.listDragStartHandler = this.listDragStartHandler.bind(this)
+    this.listDragEnterHandler = this.listDragEnterHandler.bind(this)
+    this.listDragEndHandler = this.listDragEndHandler.bind(this)
+    this.listDragOverHandler = this.listDragOverHandler.bind(this)
   }
 
   componentWillUnmount(){
@@ -56,6 +67,40 @@ export default class List extends Component {
 
   cancelCreatingCard() {
     this.setState({creatingCard: false})
+  }
+
+  listDragStartHandler(event) {
+    const dragImage = new Image()
+    dragImage.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D'
+    event.dataTransfer.setDragImage(dragImage, 0, 0)
+    this.props.listStartDragging(this.props.list.id)
+    this.setState({
+      initialX: event.clientX,
+      initialY: event.clientY,
+    })
+  }
+
+  listDragHandler(event){
+    this.setState({
+      listStyle: {transform: `translate(${event.clientX - this.state.initialX}px, ${event.clientY - this.state.initialY}px) rotate(4deg)`,
+      pointerEvents: 'none'}
+    })
+  }
+
+  listDragEnterHandler(event){
+    event.preventDefault()
+    this.props.setListDragOver(this.props.list)
+  }
+
+  listDragOverHandler(event){
+    event.preventDefault()
+  }
+
+  listDragEndHandler(event){
+    this.props.listStopDragging()
+    this.setState({
+      listStyle: {}
+    })
   }
 
   render(){
@@ -99,27 +144,31 @@ export default class List extends Component {
       onCreateCard={this.creatingCard}
     />
 
-    return <div className="BoardShowPage-List" data-list-id={list.id}>
-      <div className="BoardShowPage-ListHeader">
-        <ListName list={list}/>
-        <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
-          <Icon type="ellipsis-h" />
-        </PopoverMenuButton>
+    return <div className="BoardShowPage-ListWrapper" onDragEnter={this.listDragEnterHandler} onDragOver={this.listDragOverHandler}>
+        <div className="BoardShowPage-BehindList">
+          <div className="BoardShowPage-List" data-list-id={list.id} style={this.state.listStyle}>
+            <div className="BoardShowPage-ListHeader" draggable="true"  onDragStart={this.listDragStartHandler} onDrag={this.listDragHandler} onDragEnd={this.listDragEndHandler} >
+              <ListName list={list}/>
+              <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
+                <Icon type="ellipsis-h" />
+              </PopoverMenuButton>
+            </div>
+            <div
+              ref="cards"
+              className="BoardShowPage-cards"
+              onDragStart={this.props.onDragStart}
+              onDragOver={this.props.onDragOver}
+              onDragEnd={this.props.onDragEnd}
+              onDrop={this.props.onDrop}
+            >
+              {cardNodes}
+              {newCardForm}
+            </div>
+            {newCardLink}
+          </div>
+        </div>
       </div>
-      <div
-        ref="cards"
-        className="BoardShowPage-cards"
-        onDragStart={this.props.onDragStart}
-        onDragOver={this.props.onDragOver}
-        onDragEnd={this.props.onDragEnd}
-        onDrop={this.props.onDrop}
-      >
-        {cardNodes}
-        {newCardForm}
-      </div>
-      {newCardLink}
-    </div>
-  }
+    }
 }
 
 class ListName extends Component {
