@@ -38,7 +38,7 @@ export default {
         const testMailer = {
           sendMail(options){
             this.sentEmails.push(options)
-            return Promise.resolve({testMailSend: options})
+            return Promise.resolve({options})
           },
           reset(){
             this.sentEmails = []

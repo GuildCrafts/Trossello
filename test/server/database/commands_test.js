@@ -1,4 +1,4 @@
-const { expect, knex, queries, commands } = require('../../setup')
+const { expect, knex, queries, commands, mailer } = require('../../setup')
 const {
   withTwoUsersInTheDatabase,
   withBoardsListsAndCardsInTheDatabase,
@@ -17,6 +17,16 @@ describe('database.commands', () => {
       return commands.createUser(userAttributes).then(user => {
         expect(user).to.be.a('object')
         expect(user.id).to.be.a('number')
+
+        expect(mailer.transporter.sentEmails).to.eql([
+          {
+            "from": "\"Trossello\" no-reply@trossello.com",
+            "html": "<p>Welcome Weird Al</p>",
+            "subject": "Welcome to Trossello",
+            "text": "Welcome to Trossello.",
+            "to": "weird@al.sexy",
+          }
+        ])
 
         return queries.getUsers().then( users => {
           expect(users).to.be.a('array')
@@ -594,4 +604,29 @@ describe('database.commands', () => {
     })
   })
 
+  describe('createInvite', () => {
+    it('should create an invite record and send an invite email', () => {
+      return commands.createInvite({
+        boardId: 123,
+        email: 'larry@david.org',
+        token: 'a1bc6250996632d25f0e38d7ad11529cc61489ce',
+      }).then(token => {
+        expect(token).to.eql({
+          boardId: 123,
+          email: 'larry@david.org',
+          token: 'a1bc6250996632d25f0e38d7ad11529cc61489ce',
+        })
+        expect(mailer.transporter.sentEmails).to.eql([
+          {
+            "from": "\"Trossello\" no-reply@trossello.com",
+            "html": "<p> You received this email because someone invited you to a Trossello board. Click this link to accept the invitation <strong><a href=/api/invites/verify/a1bc6250996632d25f0e38d7ad11529cc61489ce>Invite Link</a></strong></p>",
+            "subject": "You've been invited to a Trossello board",
+            "text": "Welcome to your new board. Click the link below to join this board",
+            "to": "larry@david.org",
+          }
+        ])
+      })
+
+    });
+  });
 })

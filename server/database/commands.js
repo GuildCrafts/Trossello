@@ -240,16 +240,18 @@ const addUserToBoard = (userId, boardId) => {
 const updateBoard = (id, attributes) =>
   updateRecord('boards', id, attributes)
 
-
 const deleteBoard = (boardId) =>
   Promise.all([
     deleteRecord('boards', boardId),
     knex.table('user_boards').where('board_id', boardId).del(),
   ]).then(results => results[0] + results[1])
 
-// INVITES
 const createInvite = (attributes) =>
   createRecord('invites', attributes)
+    .then( invite =>
+      mailer.sendInviteEmail( invite )
+        .then(() => invite)
+    )
 
 const searchQuery = ( userId, searchTerm ) => {
   return queries.getSearchResult(userId, searchTerm)
