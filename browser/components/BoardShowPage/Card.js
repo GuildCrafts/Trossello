@@ -29,7 +29,7 @@ export default class Card extends Component {
     this.editCard = this.editCard.bind(this)
     this.cancelEditingCard = this.cancelEditingCard.bind(this)
     this.updateCard = this.updateCard.bind(this)
-    this.onClick = this.onClick.bind(this)
+    this.openShowCardModal = this.openShowCardModal.bind(this)
   }
 
   editCard(event) {
@@ -72,21 +72,11 @@ export default class Card extends Component {
     })
   }
 
-  onClick(event){
-    if (event.isPropagationStopped()) return
-    event.stopPropagation()
-    this.openShowCardModal(event)
-    if (this.props.onClick) this.props.onClick()
-  }
-
   openShowCardModal(event){
     const { card } = this.props
-    const url = `/boards/${card.board_id}/cards/${card.id}`
-    if (event.ctrlKey || event.metaKey){
-      window.open(url)
-    } else {
-      this.context.redirectTo(url)
-    }
+    if (event.isPropagationStopped() || event.ctrlKey || event.metaKey || event.shiftKey) return
+    event.preventDefault()
+    this.context.redirectTo(`/boards/${card.board_id}/cards/${card.id}`)
   }
 
   render() {
@@ -123,17 +113,18 @@ export default class Card extends Component {
         style={style}
       >
       {editCardModal}
-      <div
+      <Link
+        href={`/boards/${card.board_id}/cards/${card.id}`}
         className="BoardShowPage-Card-box"
         data-card-id={card.id}
         data-list-id={card.list_id}
         data-order={card.order}
-        onClick={this.onClick}
+        onClick={this.openShowCardModal}
       >
         <pre>{card.content}</pre>
-        <div className="BoardShowPage-Card-controls">
-          {editCardButton}
-        </div>
+      </Link>
+      <div className="BoardShowPage-Card-controls">
+        {editCardButton}
       </div>
     </div>
   }
