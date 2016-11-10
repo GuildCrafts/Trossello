@@ -15,7 +15,7 @@ router.post('/:listId', (request, response, next) => {
     .catch(next)
 })
 
-// DELETE
+// ARCHIVE
 router.post('/:listId/archive', (request, response, next) => {
   commands.archiveList(request.params.listId)
     .then(() => {
