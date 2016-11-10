@@ -24,8 +24,14 @@ export default class List extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      creatingCard: false
+      creatingCard: false,
+      initialX: 0,
+      initialY: 0,
+      listStyle: {}
     }
+
+
+
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
     this.cancelCreatingCardIfUserClickedOutside = this.cancelCreatingCardIfUserClickedOutside.bind(this)
@@ -59,15 +65,9 @@ export default class List extends Component {
   }
 
   render(){
-    const { board, list, dragging } = this.props
+    const { board, list } = this.props
 
-    const cards = board.cards
-      .map(card =>
-        dragging && card.id === dragging.cardId ?
-          {...card, order: dragging.order, list_id: dragging.listId} :
-          card
-      )
-      .filter(card => !card.archived)
+    const cards = this.props.cards
       .filter(card => card.list_id === list.id)
       .sort((a, b) => a.order - b.order)
 
@@ -77,12 +77,18 @@ export default class List extends Component {
         key={card.id}
         card={card}
         index={index}
-        ghosted={dragging && card.id === dragging.cardId}
+        ghosted={card.id == this.props.draggingCardId}
         board={board}
         list={list}
+        onDragStart={this.props.onDragStart}
       />
     )
 
+
+    let className = 'BoardShowPage-List'
+    if (this.props.ghosted) className += ' BoardShowPage-Ghosted'
+    if (this.props.beingDragged) className += ' BoardShowPage-List-beingDragged'
+      
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
       newCardForm = <NewCardForm
@@ -99,25 +105,31 @@ export default class List extends Component {
       onCreateCard={this.creatingCard}
     />
 
-    return <div className="BoardShowPage-List" data-list-id={list.id}>
-      <div className="BoardShowPage-ListHeader">
-        <ListName list={list}/>
-        <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
-          <Icon type="ellipsis-h" />
-        </PopoverMenuButton>
-      </div>
-      <div
-        ref="cards"
-        className="BoardShowPage-cards"
-        onDragStart={this.props.onDragStart}
-        onDragOver={this.props.onDragOver}
-        onDragEnd={this.props.onDragEnd}
-        onDrop={this.props.onDrop}
+    return <div className="BoardShowPage-ListWrapper"
+        data-list-id={list.id}
       >
-        {cardNodes}
-        {newCardForm}
+      <div className="BoardShowPage-BehindList">
+        <div className={className} data-list-id={list.id} style={this.state.listStyle}>
+          <div
+            className="BoardShowPage-ListHeader"
+            draggable
+            onDragStart={this.props.onDragStart}
+          >
+            <ListName list={list}/>
+            <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
+              <Icon type="ellipsis-h" />
+            </PopoverMenuButton>
+          </div>
+          <div
+            ref="cards"
+            className="BoardShowPage-cards"
+          >
+            {cardNodes}
+            {newCardForm}
+          </div>
+          {newCardLink}
+        </div>
       </div>
-      {newCardLink}
     </div>
   }
 }
@@ -126,15 +138,26 @@ class ListName extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      editing: false,
       value: this.props.list.name
     }
     this.setValue = this.setValue.bind(this)
     this.updateName = this.updateName.bind(this)
     this.selectText = this.selectText.bind(this)
+    this.startEditing = this.startEditing.bind(this)
   }
 
   setValue(event){
     this.setState({value: event.target.value})
+  }
+
+  startEditing(event){
+    event.preventDefault()
+    this.setState({editing: true})
+  }
+
+  componentDidUpdate(){
+    if (this.state.editing) this.refs.input.focus()
   }
 
   updateName(){
@@ -146,22 +169,31 @@ class ListName extends Component {
       dataType: "json",
       data: JSON.stringify({name: this.state.value})
     }).then(() => {
+      this.setState({editing: false})
       boardStore.reload()
     })
   }
 
-  selectText(event){
-    event.target.select()
+  selectText(){
+    this.refs.input.select()
   }
 
   render() {
-    return <input
-      type="text"
-      value={this.state.value}
-      onChange={this.setValue}
-      onBlur={this.updateName}
-      onFocus={this.selectText}
-    />
+    return this.state.editing ?
+      <input
+        ref="input"
+        draggable={false}
+        type="text"
+        value={this.state.value}
+        onChange={this.setValue}
+        onBlur={this.updateName}
+        onFocus={this.selectText}
+      /> :
+      <div
+        onClick={this.startEditing}
+      >
+        {this.props.list.order} :: {this.state.value}
+      </div>
   }
 }
 

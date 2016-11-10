@@ -48,11 +48,27 @@
     display: inline-flex
     flex-direction: column
     border-radius: 5px
-    margin-right: 10px
     width: $list-width
     max-height: calc(100% - 10px)
     background-color: #e2e4e6
     font-family: "Helvetica Neue"
+    &-beingDragged
+      z-index: 100
+      position: fixed
+      top: 0
+      left: 0
+      transform: rotate(7deg)
+      pointer-events: none
+      cursor: grabbing
+
+
+  &-BehindList
+    border-radius: 5px
+    background-color: rgba(0,0,0,.15)
+
+  &-ListWrapper
+    height: 100%
+    margin-right: 10px
 
   &-ListHeader
     flex-grow: 0
@@ -121,6 +137,12 @@
     flex-grow: 0
     flex-shrink: 0
 
+  &-Ghosted
+    background-color: rgba(0,0,0,0.15)
+    border-radius: 3px
+    > *
+      opacity: 0
+
   &-Card
     position: relative
     margin-bottom: 6px
@@ -131,15 +153,9 @@
       position: fixed
       top: 0
       left: 0
-      transform: rotate(7deg)
+      transform: rotate(4deg)
       pointer-events: none
       cursor: grabbing
-    &-ghosted
-      background-color: darkgrey
-      border-radius: 3px
-      cursor: -webkit-grabbing
-      > *
-        visibility: hidden
     &-box
       -webkit-touch-callout: none
       -webkit-user-select: none

@@ -50,6 +50,20 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
           content: 'Card2',
         })
       ).then( () =>
+        commands.createCard({
+          id: 90,
+          list_id: 40,
+          board_id: 101,
+          content: 'Card 90',
+        })
+      ).then( () =>
+        commands.createCard({
+          id: 91,
+          list_id: 40,
+          board_id: 101,
+          content: 'Card 91',
+        })
+      ).then( () =>
         commands.createList({
           id: 41,
           board_id: 101,
