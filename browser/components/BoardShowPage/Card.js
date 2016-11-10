@@ -75,13 +75,18 @@ export default class Card extends Component {
   onClick(event){
     if (event.isPropagationStopped()) return
     event.stopPropagation()
-    this.openShowCardModal()
+    this.openShowCardModal(event)
     if (this.props.onClick) this.props.onClick()
   }
 
-  openShowCardModal(){
+  openShowCardModal(event){
     const { card } = this.props
-    this.context.redirectTo(`/boards/${card.board_id}/cards/${card.id}`)
+    const url = `/boards/${card.board_id}/cards/${card.id}`
+    if (event.ctrlKey || event.metaKey){
+      window.open(url)
+    } else {
+      this.context.redirectTo(url)
+    }
   }
 
   render() {
