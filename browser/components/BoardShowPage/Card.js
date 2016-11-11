@@ -125,9 +125,11 @@ export default class Card extends Component {
         data-order={card.order}
         onClick={this.onClick}
         draggable
-        onDragStart={this.props.onDragStart}
-        onDragEnter={this.props.onDragEnter}
-        onDragEnd={this.props.onDragEnd}
+        onDragStart={event => {console.log('card onDragStart'); return this.props.onDragStart(event) }}
+        onDragEnter={event => {console.log('card onDragEnter'); return this.props.onDragEnter(event) }}
+        onDragOver={event => { console.log('card onDragOver'); return false }}
+        onDrop={event => { console.log('card onDragDrop') }}
+        onDragEnd={event => { console.log('CARD DRAG END'); return this.props.onDragEnd(event) }}
       >
         <pre>{card.content}</pre>
         <div className="BoardShowPage-Card-controls">

@@ -104,15 +104,9 @@ export default class List extends Component {
   // }
 
   render(){
-    const { board, list, dragging } = this.props
+    const { board, list } = this.props
 
-    const cards = board.cards
-      .map(card =>
-        dragging && card.id === dragging.cardId ?
-          {...card, order: dragging.order, list_id: dragging.listId} :
-          card
-      )
-      .filter(card => !card.archived)
+    const cards = this.props.cards
       .filter(card => card.list_id === list.id)
       .sort((a, b) => a.order - b.order)
 
@@ -122,7 +116,7 @@ export default class List extends Component {
         key={card.id}
         card={card}
         index={index}
-        ghosted={dragging && card.id === dragging.cardId}
+        ghosted={false /*dragging && card.id === dragging.cardId */}
         board={board}
         list={list}
         onDragStart={this.props.onDragStart}
@@ -149,15 +143,20 @@ export default class List extends Component {
 
     return <div className="BoardShowPage-ListWrapper"
         data-list-id={list.id}
-        onDragEnter={this.props.onDragEnter}
+        onDragEnter={event => { console.log('list onDragEnter'); return this.props.onDragEnter(event)}}
+        onDragOver={event => { console.log('list onDragOver') }}
+        onDrop={event => { console.log('list onDrop') }}
       >
       <div className="BoardShowPage-BehindList">
         <div className="BoardShowPage-List" data-list-id={list.id} style={this.state.listStyle}>
           <div
             className="BoardShowPage-ListHeader"
             draggable
-            onDragStart={this.props.onDragStart}
-            onDragEnd={this.props.onDragEnd}
+            onDragStart={event => { console.log('list onDragStart'); return this.props.onDragStart(event)}}
+            onDragEnd={event => { console.log('list onDragEnd'); return this.props.onDragEnd(event)}}
+
+
+
           >
             <ListName list={list}/>
             <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
