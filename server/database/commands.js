@@ -94,9 +94,14 @@ const deleteUser = (id) =>
 
 //
 
-const createList = (attributes) => {
-  return createRecord('lists', attributes)
-}
+const createList = (attributes) =>
+  knex
+    .table('lists')
+    .where('board_id', attributes.board_id)
+    .count()
+    .then(results =>
+      createRecord('lists', {...attributes, order: results[0].count})
+    )
 
 const updateList = (id, attributes) =>
   updateRecord('lists', id, attributes)
@@ -157,7 +162,6 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
       )
 
       const sortBefore = originListId !== destinationListId || originalOrder > newOrder
-      console.log('sortBefore', sortBefore)
 
       const changes = allCards.map(card => {
         return {
@@ -166,7 +170,6 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
           order: card.order,
         }
       })
-      console.log('initial state', changes)
 
       changes.forEach(card => {
         if (card.id !== cardId) return
@@ -178,13 +181,9 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
       const destinationListCards = originListId === destinationListId ? [] :
         changes.filter(card => card.list_id === destinationListId)
 
-      console.log('originalListCards', originalListCards)
-      console.log('destinationListCards', destinationListCards)
-
       const magicSort = (a, b) => {
         if (a.order < b.order) return -1
         if (a.order > b.order) return 1
-        console.log('---> same comparison', a, b)
         if (a.id === cardId) return sortBefore ? -1 : 1
         if (b.id === cardId) return sortBefore ? 1 : -1
         return 0
@@ -193,12 +192,10 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
       originalListCards
         .sort(magicSort)
         .forEach((card, index) => card.order = index)
+
       destinationListCards
         .sort(magicSort)
         .forEach((card, index) => card.order = index)
-
-      console.log('originalListCards', originalListCards)
-      console.log('destinationListCards', destinationListCards)
 
       const updates = originalListCards.concat(destinationListCards).map(card =>
         updateCard(card.id, {

@@ -185,7 +185,7 @@ describe('database.commands', () => {
           expect(card.id).to.eql(80)
           expect(card.content).to.eql('This content has been updated')
           return knex.table('cards').then( cards => {
-            expect(cards.length).to.eql(4)
+            expect(cards.length).to.eql(6)
             cards.forEach(card => {
               if (card.id === 80){
                 expect(card).to.be.a('object')
@@ -444,6 +444,7 @@ describe('database.commands', () => {
             expect(board.lists[0].name).to.eql("Fried Foods")
             expect(board.lists[0].board_id).to.eql(83)
             expect(board.lists[0].archived).to.eql(false)
+            expect(board.lists[0].order).to.eql(0)
           })
         })
     })
