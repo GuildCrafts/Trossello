@@ -213,13 +213,7 @@ class BoardShowPage extends React.Component {
       const card = this.getCardById(this.state.draggingCardId)
       let newListId = this.state.draggingCardNewListId
       let newOrder = this.state.draggingCardNewOrder
-      if (typeof newOrder === 'number') newOrder -= 0.5
-      console.log(`moving card ${card.id} order(${card.order}->${newOrder}) listId(${card.list_id}->${newListId})`)
-      // if (list_id !== null || order !== null){
-      //   list_id = list_id === null ? card.list_id : list_id
-      //   order = order === null ? card.order : order
-      //   this.moveCard({ cardId, list_id, order })
-      // }
+      this.moveCard({ card, listId: newListId, order: newOrder })
     }
 
     this.setState({
@@ -231,6 +225,29 @@ class BoardShowPage extends React.Component {
       draggingCardNewOrder: null,
     })
   }
+
+  moveCard({ card, listId, order }){
+    const { board } = this.props
+
+    card.list_id = listId
+    // card.order = card.order > order ? order + 0.5
+    card.order = order
+
+    $.ajax({
+      method: 'post',
+      url: `/api/cards/${card.id}/move`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({
+        boardId: card.board_id,
+        listId: listId,
+        order: order,
+      }),
+    }).then(() => {
+      boardStore.reload()
+    })
+  }
+
 
   closeCardModal(){
     this.context.redirectTo(`/boards/${this.props.board.id}`)
