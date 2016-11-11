@@ -146,44 +146,66 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
     .then(allCards => {
 
       const cardBegingMoved = allCards.find(card => card.id === cardId)
+      const originalOrder = cardBegingMoved.order
+      const newOrder = order
       const originListId = cardBegingMoved.list_id
       const destinationListId = listId
       const cardsOnOriginList = allCards.filter(card => card.list_id === originListId)
 
-      const updates = []
+      allCards = allCards.filter(card =>
+        card.list_id === originListId || card.list_id === destinationListId
+      )
 
-      updates.push(updateCard(cardBegingMoved.id, {
-        list_id: destinationListId,
-        order: order,
-      }))
+      const sortBefore = originListId !== destinationListId || originalOrder > newOrder
+      console.log('sortBefore', sortBefore)
 
-      if (originListId === destinationListId){
-        cardsOnOriginList.forEach(card => {
-          if (card !== cardBegingMoved && card.order >= order) {
-            updates.push(updateCard(card.id, {
-              order: card.order + 1,
-            }))
-          }
-        })
-      }else{
-        const cardsOnDestinationList = allCards.filter(card =>
-          card.list_id === destinationListId
-        )
-        cardsOnOriginList.forEach(card => {
-          if (card !== cardBegingMoved && card.order >= cardBegingMoved.order) {
-            updates.push(updateCard(card.id, {
-              order: card.order - 1,
-            }))
-          }
-        })
-        cardsOnDestinationList.forEach(card => {
-          if (card.order >= order) {
-            updates.push(updateCard(card.id, {
-              order: card.order + 1,
-            }))
-          }
-        })
+      const changes = allCards.map(card => {
+        return {
+          id: card.id,
+          list_id: card.list_id,
+          order: card.order,
+        }
+      })
+      console.log('initial state', changes)
+
+      changes.forEach(card => {
+        if (card.id !== cardId) return
+        card.list_id = listId
+        card.order = order
+      })
+
+      const originalListCards = changes.filter(card => card.list_id === originListId)
+      const destinationListCards = originListId === destinationListId ? [] :
+        changes.filter(card => card.list_id === destinationListId)
+
+      console.log('originalListCards', originalListCards)
+      console.log('destinationListCards', destinationListCards)
+
+      const magicSort = (a, b) => {
+        if (a.order < b.order) return -1
+        if (a.order > b.order) return 1
+        console.log('---> same comparison', a, b)
+        if (a.id === cardId) return sortBefore ? -1 : 1
+        if (b.id === cardId) return sortBefore ? 1 : -1
+        return 0
       }
+
+      originalListCards
+        .sort(magicSort)
+        .forEach((card, index) => card.order = index)
+      destinationListCards
+        .sort(magicSort)
+        .forEach((card, index) => card.order = index)
+
+      console.log('originalListCards', originalListCards)
+      console.log('destinationListCards', destinationListCards)
+
+      const updates = originalListCards.concat(destinationListCards).map(card =>
+        updateCard(card.id, {
+          list_id: card.list_id,
+          order: card.order,
+        })
+      )
 
       return Promise.all(updates)
     })

@@ -197,6 +197,31 @@ class BoardShowPage extends React.Component {
 
   onDragEnd(event){
     console.log('onDragEnd', event.type, event.target)
+
+    if (this.state.dragging === 'list'){
+      const list = this.getListById(this.state.draggingListId)
+      if (typeof this.state.draggingListNewOrder === 'number'){
+        // TEMP HACK TODO FIX ME
+        list.order = this.state.draggingListNewOrder
+        this.props.board.lists
+          .sort((a, b) => a.order - b.order)
+          .forEach((list, index) => list.order = index)
+      }
+    }
+
+    if (this.state.dragging === 'card'){
+      const card = this.getCardById(this.state.draggingCardId)
+      let newListId = this.state.draggingCardNewListId
+      let newOrder = this.state.draggingCardNewOrder
+      if (typeof newOrder === 'number') newOrder -= 0.5
+      console.log(`moving card ${card.id} order(${card.order}->${newOrder}) listId(${card.list_id}->${newListId})`)
+      // if (list_id !== null || order !== null){
+      //   list_id = list_id === null ? card.list_id : list_id
+      //   order = order === null ? card.order : order
+      //   this.moveCard({ cardId, list_id, order })
+      // }
+    }
+
     this.setState({
       dragging: null,
       draggingCardId: null,
@@ -207,138 +232,9 @@ class BoardShowPage extends React.Component {
     })
   }
 
-
-  //
-  // onMouseDown(event){
-  //   if (event.isPropagationStopped()) return
-  //   const cardNode = $(event.target).closest('.BoardShowPage-Card .BoardShowPage-Card-box')
-  //   if (cardNode.length === 0) return
-  //   const cardId = Number(cardNode.data('card-id'))
-  //   const listId = Number(cardNode.data('list-id'))
-  //   const order  = Number(cardNode.data('order')) - 0.5
-  //   const height = cardNode.outerHeight()
-  //   const width = cardNode.outerWidth()
-  //   const top = cardNode.offset().top
-  //   const left = cardNode.offset().left
-  //   const x = event.clientX
-  //   const y = event.clientY
-  //
-  //   this.setState({
-  //     potentialDragging: { cardId, listId, order, height, width, top, left, x, y }
-  //   })
-  // }
-  //
-  // listStartDragging(listId){
-  //   this.setState({
-  //     listDragging: true,
-  //     listDraggingId: listId
-  //   })
-  //   console.log("Over here", listId)
-  // }
-  //
-  // listStopDragging(){
-  //   this.setState({
-  //     listDragging: false,
-  //     listDraggingId: null
-  //   })
-  // }
-  //
-  // setListDragOver(list){
-  //   console.log("Some list", this.state, list.id)
-  //   this.setState({
-  //     overList: list
-  //   })
-  // }
-  //
-  // onMouseMove(event){
-  //   // let { potentialDragging, dragging } = this.state
-  //   // if (!potentialDragging && !dragging) return
-  //   //
-  //   // if (potentialDragging){
-  //   //   const distance = (
-  //   //     Math.abs(potentialDragging.y - event.clientY) +
-  //   //     Math.abs(potentialDragging.x - event.clientX)
-  //   //   )
-  //   //   if (distance < 10) return
-  //   //   dragging = potentialDragging
-  //   // }
-  //   //
-  //   // let { cardId, listId, order, height, width, top, left, x, y} = dragging
-  //   // let { board } = this.props
-  //   //
-  //   // top += event.clientY - y
-  //   // left += event.clientX - x
-  //   // x = event.clientX
-  //   // y = event.clientY
-  //   //
-  //   // const targetNode = $(event.target).closest('.BoardShowPage-List, .BoardShowPage-Card .BoardShowPage-Card-box')
-  //   //
-  //   // if (targetNode.is('.BoardShowPage-List')){
-  //   //   const targetListId = Number(targetNode.data('list-id'))
-  //   //   if (board.cards.filter(card => card.list_id === targetListId).length === 0){
-  //   //     listId = targetListId
-  //   //     order = -0.5
-  //   //   }
-  //   // }
-  //   //
-  //   // if (targetNode.is('.BoardShowPage-Card .BoardShowPage-Card-box')){
-  //   //   const targetCardId = Number(targetNode.data('card-id'))
-  //   //   if (targetCardId !== cardId) {
-  //   //     const rect = targetNode[0].getBoundingClientRect()
-  //   //     const middleOfTarget = rect.top + (rect.height/2)
-  //   //     listId = Number(targetNode.data('list-id'))
-  //   //     order = Number(targetNode.data('order')) - 0.5
-  //   //     if (event.clientY > middleOfTarget) order += 1
-  //   //   }
-  //   // }
-  //   //
-  //   // this.setState({
-  //   //   potentialDragging: null,
-  //   //   dragging: { cardId, listId, order, height, width, top, left, x, y }
-  //   // })
-  // }
-  //
-  // onMouseUp(event){
-  //   // clearTimeout(this.starDraggingTimeout)
-  //   // const { dragging } = this.state
-  //   // if (!dragging){
-  //   //   this.setState({ potentialDragging: null })
-  //   //   return
-  //   // }
-  //   // let {cardId, listId, order} = dragging
-  //   // order += 0.5
-  //   // const card = this.props.board.cards.find(card => card.id === cardId)
-  //   // if (card.list_id !== listId || card.order !== order){
-  //   //   this.moveCard({card, listId, order})
-  //   // }
-  //   // this.setState({ dragging: null }, clearTextSelection)
-  // }
-  //
-  // moveCard({ card, listId, order }){
-  //   // const { board } = this.props
-  //   //
-  //   // card.list_id = listId
-  //   // card.order = order - 0.5
-  //   //
-  //   // $.ajax({
-  //   //   method: 'post',
-  //   //   url: `/api/cards/${card.id}/move`,
-  //   //   contentType: "application/json; charset=utf-8",
-  //   //   dataType: "json",
-  //   //   data: JSON.stringify({
-  //   //     boardId: card.board_id,
-  //   //     listId: listId,
-  //   //     order: order,
-  //   //   }),
-  //   // }).then(() => {
-  //   //   boardStore.reload()
-  //   // })
-  // }
-
   closeCardModal(){
     this.context.redirectTo(`/boards/${this.props.board.id}`)
   }
-
 
   getLists(){
     let lists = this.props.board.lists
