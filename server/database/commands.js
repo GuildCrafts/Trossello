@@ -113,8 +113,6 @@ const deleteList = (id) =>
     knex.table('cards').where('list_id', id).del(),
   ])
 
-//
-
 const createCard = (attributes) => {
   return knex
     .table('cards')
@@ -142,6 +140,18 @@ const archiveCard = (id) =>
 
 const unarchiveCard = (id) =>
   unarchiveRecord('cards', id)
+
+const sortBoardItems = (unsortedItems, itemId) => {
+  const subSort = (a, b) => {
+    if (a.order < b.order) return -1
+    if (a.order > b.order) return 1
+    if (a.id === itemId) return sortBefore ? -1 : 1
+    if (b.id === itemId) return sortBefore ? 1 : -1
+    return 0
+  }
+
+  unsortedItems.sort(subSort)
+}
 
 const moveCard = ({ boardId, cardId, listId, order }) => {
   return knex
@@ -181,21 +191,12 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
       const destinationListCards = originListId === destinationListId ? [] :
         changes.filter(card => card.list_id === destinationListId)
 
-      const magicSort = (a, b) => {
-        if (a.order < b.order) return -1
-        if (a.order > b.order) return 1
-        if (a.id === cardId) return sortBefore ? -1 : 1
-        if (b.id === cardId) return sortBefore ? 1 : -1
-        return 0
-      }
 
-      originalListCards
-        .sort(magicSort)
-        .forEach((card, index) => card.order = index)
+      sortBoardItems(originalListCards, cardId)
+      originalListCards.forEach((card, index) => card.order = index)
 
-      destinationListCards
-        .sort(magicSort)
-        .forEach((card, index) => card.order = index)
+      sortBoardItems(destinationListCards, cardId)
+      destinationListCards.forEach((card, index) => card.order = index)
 
       const updates = originalListCards.concat(destinationListCards).map(card =>
         updateCard(card.id, {
@@ -232,15 +233,7 @@ const moveList = ({ boardId, listId, order }) => {
         list.order = order
       })
 
-      const magicSortLists = (a, b) => {
-        if (a.order < b.order) return -1
-        if (a.order > b.order) return 1
-        if (a.id === listId) return sortBefore ? -1 : 1
-        if (b.id === listId) return sortBefore ? 1 : -1
-        return 0
-      }
-
-      changes.sort(magicSortLists)
+      sortBoardItems(changes, listId)
       changes.forEach((list, index) => list.order = index)
 
       const updates = changes.map( list =>
