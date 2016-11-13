@@ -170,7 +170,7 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
           order: card.order,
         }
       })
-
+      //Why do we not just use CardBeingMoved here?
       changes.forEach(card => {
         if (card.id !== cardId) return
         card.list_id = listId
@@ -201,6 +201,51 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
         updateCard(card.id, {
           list_id: card.list_id,
           order: card.order,
+        })
+      )
+
+      return Promise.all(updates)
+    })
+}
+
+const moveList = ({ boardId, listId, order }) => {
+  return knex
+    .table('lists')
+    .where({board_id: boardId})
+    .orderBy('order', 'asc')
+    .then(allLists => {
+      const listBeingMoved = allLists.find(list => list.id === listId)
+      const originalOrder = listBeingMoved.order
+      const newOrder = order
+
+      const sortBefore = originalOrder > newOrder
+
+      const changes = allLists.map(list => {
+        return {
+          id: list.id,
+          order: list.order
+        }
+      })
+      //Why do we not just use listBeingMoves here?  Does array.find return a copy of the element and not the element itself?
+      changes.forEach(list => {
+        if (list.id != listId) return
+        list.order = order
+      })
+
+      const magicSortLists = (a, b) => {
+        if (a.order < b.order) return -1
+        if (a.order > b.order) return 1
+        if (a.id === listId) return sortBefore ? -1 : 1
+        if (b.id === listId) return sortBefore ? 1 : -1
+        return 0
+      }
+
+      changes.sort(magicSortLists)
+      changes.forEach((list, index) => list.order = index)
+
+      const updates = changes.map( list =>
+        updateList(list.id, {
+          order: list.order
         })
       )
 
@@ -291,6 +336,7 @@ export default {
   updateCard,
   deleteCard,
   moveCard,
+  moveList,
   createBoard,
   updateBoard,
   deleteBoard,

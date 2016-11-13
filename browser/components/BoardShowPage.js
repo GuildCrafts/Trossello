@@ -201,11 +201,13 @@ class BoardShowPage extends React.Component {
     if (this.state.dragging === 'list'){
       const list = this.getListById(this.state.draggingListId)
       if (typeof this.state.draggingListNewOrder === 'number'){
+        let newOrder = this.state.draggingListNewOrder
+        this.moveList({list: list, order: newOrder})
         // TEMP HACK TODO FIX ME
-        list.order = this.state.draggingListNewOrder
-        this.props.board.lists
-          .sort((a, b) => a.order - b.order)
-          .forEach((list, index) => list.order = index)
+        //list.order = this.state.draggingListNewOrder
+        // this.props.board.lists
+        //   .sort((a, b) => a.order - b.order)
+        //   .forEach((list, index) => list.order = index)
       }
     }
 
@@ -223,6 +225,24 @@ class BoardShowPage extends React.Component {
       draggingListNewOrder: null,
       draggingCardNewListId: null,
       draggingCardNewOrder: null,
+    })
+  }
+
+  moveList({ list, order}){
+    const { board } = this.props
+    list.order = order
+
+    $.ajax({
+      method: 'post',
+      url: `/api/lists/${list.id}/move`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({
+        boardId: list.board_id,
+        order: order,
+      })
+    }).then(() => {
+      boardStore.reload()
     })
   }
 

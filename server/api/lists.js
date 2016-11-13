@@ -24,4 +24,18 @@ router.post('/:listId/archive', (request, response, next) => {
     .catch(next)
 })
 
+//MOVE
+router.post('/:listId/move', (request, response, next) => {
+  let { boardId, order } = request.body
+  let { listId } = request.params
+  boardId = Number(boardId)
+  listId  = Number(listId)
+  order   = Number(order)
+  commands.moveList({ boardId, listId, order })
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
 export default router
