@@ -32,7 +32,7 @@ export default class EditCardForm extends Component {
   }
 
   initialContentValue(props){
-    return props.defaultValue || (props.card && props.card.content) || ''
+    return props.defaultValue || (props.card && props.card.content) || sessionStorage.getItem('cardContent') || ''
   }
 
   componentDidMount() {
@@ -53,7 +53,11 @@ export default class EditCardForm extends Component {
   }
 
   onContentChange(event){
-    this.setState({content: event.target.value})
+    const cardContent = event.target.value
+    if (!this.props.card) {
+      sessionStorage.setItem('cardContent', cardContent)
+      }
+    this.setState({content: cardContent})
   }
 
   save(event){
@@ -67,9 +71,9 @@ export default class EditCardForm extends Component {
   }
 
   cancel(event){
+    sessionStorage.removeItem('cardContent')
     this.props.onCancel(event)
   }
-
 
   render() {
     const closeX = this.props.hideCloseX ? null :
