@@ -128,9 +128,7 @@ const MainPane = ({board, onClose, gotoPane}) => {
     <div className='BoardShowPage-MenuSideBar-members'>
       { boardMembers( board ) }
     </div>
-    <div className="BoardShowPage-MenuSideBar-InviteByEmailButton">
-      <InviteByEmailButton boardId={board.id}/>
-    </div>
+    <InviteByEmailButton boardId={board.id}/>
     <div className="BoardShowPage-MenuSideBar-separator" />
     <div>
       <Link
@@ -352,18 +350,16 @@ class InviteByEmailButton extends ToggleComponent {
   }
 
   render(){
-    const inviteByEmail = this.state.open ?
-      <InviteByEmailPopover onClose={this.close} boardId={this.props.boardId} /> :
-      null
+    const inviteByEmail = null
+    // const inviteByEmail = this.state.open ?
+    //   <InviteByEmailPopover onClose={this.close} boardId={this.props.boardId} /> :
+    //   null
 
-    return <span ref="root">
-      <Link type="invisible" onClick={this.toggle}>
-          <Icon
-            className='BoardShowPage-MenuSideBar-InviteByEmailButton-icons'
-            type='user-plus'
-          />
+    return <span ref="root" className="BoardShowPage-MenuSideBar-InviteByEmailButton">
+      <Button onClick={this.toggle}>
+        <Icon type='user-plus' />
         Add Members
-      </Link>
+      </Button>
       {inviteByEmail}
     </span>
   }
