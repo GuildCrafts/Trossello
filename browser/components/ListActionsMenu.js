@@ -31,7 +31,7 @@ class ListActionsMenu extends Component {
       <Link>Subscribe</Link>
       <DialogBox.Divider />
       <Link>Move All Cards In This List…</Link>
-      <Link>Archive All Cards In This List…</Link>
+      <ArchiveAllCardsInListLink />
       <DialogBox.Divider />
       <ArchiveListLink list={list} />
     </DialogBox>
@@ -68,6 +68,29 @@ class ArchiveListLink extends Component {
       message="Are you sure you want to archive this list?"
     >
       Archive This List
+    </ConfirmationLink>
+  }
+}
+
+class ArchiveAllCardsInListLink extends Component {
+
+  constructor(props){
+    super(props)
+    this.archiveCardsInList = this.archiveCardsInList.bind(this)
+  }
+
+  archiveCardsInList(){
+    console.log('archive all cards in this list!')
+  }
+
+  render(){
+    return <ConfirmationLink
+      onConfirm={this.archiveCardsInList}
+      buttonName="Archive All Cards in List"
+      title="Archive All Cards in List?"
+      message="Are you sure you want to archive all cards in this list?"
+    >
+      Archive All Cards In This List…
     </ConfirmationLink>
   }
 }
