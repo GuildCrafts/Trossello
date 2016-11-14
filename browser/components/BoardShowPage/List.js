@@ -25,13 +25,19 @@ export default class List extends Component {
     super(props)
     this.state = {
       creatingCard: false,
+      creatingCardTop: false
     }
     this.creatingCard = this.creatingCard.bind(this)
+    this.creatingCardTop = this.creatingCardTop.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
   }
 
   componentDidUpdate(){
     if (this.state.creatingCard){
+      const { cards } = this.refs
+      cards.scrollTop = cards.scrollHeight
+    }
+    if (this.state.creatingCardTop){
       const { cards } = this.refs
       cards.scrollTop = cards.scrollHeight
     }
@@ -41,14 +47,24 @@ export default class List extends Component {
     this.setState({creatingCard: true})
   }
 
+  creatingCardTop() {
+    this.setState({creatingCardTop: true})
+  }
+
   cancelCreatingCard() {
-    this.setState({creatingCard: false})
+    this.setState({creatingCard: false, creatingCardTop: false})
   }
 
   render(){
-    const { board, list } = this.props
+    const { board, list, dragging } = this.props
 
-    const cards = this.props.cards
+    const cards = board.cards
+      .map(card =>
+        dragging && card.id === dragging.cardId ?
+          {...card, order: dragging.order, list_id: dragging.listId} :
+          card
+      )
+      .filter(card => !card.archived)
       .filter(card => card.list_id === list.id)
       .sort((a, b) => a.order - b.order)
 
@@ -58,23 +74,24 @@ export default class List extends Component {
         key={card.id}
         card={card}
         index={index}
-        ghosted={card.id == this.props.draggingCardId}
+        ghosted={dragging && card.id === dragging.cardId}
         board={board}
         list={list}
-        onDragStart={this.props.onDragStart}
       />
     )
 
-
-    let className = 'BoardShowPage-List'
-    if (this.props.ghosted) className += ' BoardShowPage-Ghosted'
-    if (this.props.beingDragged) className += ' BoardShowPage-List-beingDragged'
-
-    let newCardForm, newCardLink
-    if (this.state.creatingCard) {
+    let newCardForm, newCardLink, newCardFormTop
+    if (this.state.creatingCard || this.state.creatingCardTop) {
+      newCardFormTop = <NewCardForm
+        board={board}
+        list={list}
+        moveToTop={true}
+        onCancel={this.cancelCreatingCard}
+      />
       newCardForm = <NewCardForm
         board={board}
         list={list}
+        moveToTop={false}
         onCancel={this.cancelCreatingCard}
       />
     } else {
@@ -82,30 +99,54 @@ export default class List extends Component {
     }
 
     const listActionsMenu = <ListActionsMenu
-      board={this.props.board}
       list={this.props.list}
-      onCreateCard={this.creatingCard}
+      onCreateCardTop={this.creatingCardTop}
     />
 
-    return <div className="BoardShowPage-List" data-list-id={list.id}>
-      <div className="BoardShowPage-List-box">
-        <div className="BoardShowPage-ListHeader"
-          className="BoardShowPage-ListHeader"
-          draggable
-          onDragStart={this.props.onDragStart}
-        >
-          <ListName list={list}/>
-        </div>
-        <PopoverMenuButton className="BoardShowPage-ListOptions" type="invisible" popover={listActionsMenu}>
-          <Icon type="ellipsis-h" />
-        </PopoverMenuButton>
-        <div ref="cards"className="BoardShowPage-cards">
+    const listHeader = <div className="BoardShowPage-ListHeader">
+      <ListName list={list}/>
+      <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
+        <Icon type="ellipsis-h" />
+      </PopoverMenuButton>
+    </div>
+
+    if(this.state.creatingCardTop){
+      return <div className="BoardShowPage-List" data-list-id={list.id}>
+        <div className="BoardShowPage-List-box">
+          {listHeader}
+          <div
+            ref="cards"
+            className="BoardShowPage-cards"
+            onDragStart={this.props.onDragStart}
+            onDragOver={this.props.onDragOver}
+            onDragEnd={this.props.onDragEnd}
+            onDrop={this.props.onDrop}
+          >
+          {newCardFormTop}
           {cardNodes}
-          {newCardForm}
         </div>
         {newCardLink}
+        </div>
       </div>
-    </div>
+    } else {
+      return <div className="BoardShowPage-List" data-list-id={list.id}>
+        <div className="BoardShowPage-List-box">
+        {listHeader}
+        <div
+          ref="cards"
+          className="BoardShowPage-cards"
+          onDragStart={this.props.onDragStart}
+          onDragOver={this.props.onDragOver}
+          onDragEnd={this.props.onDragEnd}
+          onDrop={this.props.onDrop}
+        >
+        {cardNodes}
+        {newCardForm}
+        </div>
+        {newCardLink}
+        </div>
+      </div>
+    }
   }
 }
 
@@ -113,26 +154,15 @@ class ListName extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      editing: false,
       value: this.props.list.name
     }
     this.setValue = this.setValue.bind(this)
     this.updateName = this.updateName.bind(this)
     this.selectText = this.selectText.bind(this)
-    this.startEditing = this.startEditing.bind(this)
   }
 
   setValue(event){
     this.setState({value: event.target.value})
-  }
-
-  startEditing(event){
-    event.preventDefault()
-    this.setState({editing: true})
-  }
-
-  componentDidUpdate(){
-    if (this.state.editing) this.refs.input.focus()
   }
 
   updateName(){
@@ -144,31 +174,22 @@ class ListName extends Component {
       dataType: "json",
       data: JSON.stringify({name: this.state.value})
     }).then(() => {
-      this.setState({editing: false})
       boardStore.reload()
     })
   }
 
-  selectText(){
-    this.refs.input.select()
+  selectText(event){
+    event.target.select()
   }
 
   render() {
-    return this.state.editing ?
-      <input
-        ref="input"
-        draggable={false}
-        type="text"
-        value={this.state.value}
-        onChange={this.setValue}
-        onBlur={this.updateName}
-        onFocus={this.selectText}
-      /> :
-      <div
-        onClick={this.startEditing}
-      >
-        {this.state.value}
-      </div>
+    return <input
+      type="text"
+      value={this.state.value}
+      onChange={this.setValue}
+      onBlur={this.updateName}
+      onFocus={this.selectText}
+    />
   }
 }
 
@@ -208,8 +229,20 @@ class NewCardForm extends Component {
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       data: JSON.stringify(card),
-    }).then(() => {
-      boardStore.reload()
+    })
+    .then(card => {
+      if(this.props.moveToTop===true){
+        $.ajax({
+          method: 'post',
+          url:`/api/cards/${card.id}/move`,
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          data: JSON.stringify({boardId: board.id, listId:list.id, order:0})
+        })
+        .then(() => boardStore.reload())
+      } else {
+        boardStore.reload()
+      }
     })
   }
 

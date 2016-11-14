@@ -35,6 +35,7 @@ router.post('/:cardId/archive', (request, response, next) => {
     .catch(next)
 })
 
+// MOVE
 router.post('/:cardId/move', (request, response, next) => {
   let { boardId, listId, order } = request.body
   let { cardId } = request.params

@@ -164,6 +164,8 @@
       font-family: "Helvetica Neue"
 
   &-ListHeader
+    display: flex
+    flex-direction: row
     flex-grow: 0
     flex-shrink: 0
     padding: 5px 25px 5px 11px
@@ -180,24 +182,24 @@
         background-color: white
         outline: none
 
-  &-ListOptions
-    position: absolute
-    right: 4px
-    top: -2px
-    > .Button
-      outline: none
-      text-decoration: none
-      color: #999
+    &-ListOptions
       position: absolute
-      right: 0px
-      top: 2px
-      min-height: 2px
-      padding: 4px 8px 4px 8px
-      &:hover
-        background-color: #CDD2D4
-        color: #444
-      &-text
-        margin-left: 5px
+      right: 0
+      top: -2px
+      > .Button
+        outline: none
+        text-decoration: none
+        color: #999
+        position: absolute
+        right: 0px
+        top: 2px
+        min-height: 2px
+        padding: 4px 8px 4px 8px
+        &:hover
+          background-color: #CDD2D4
+          color: #444
+        &-text
+          margin-left: 5px
 
   &-NewListForm
     flex-grow: 0
