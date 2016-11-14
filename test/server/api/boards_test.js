@@ -262,7 +262,6 @@ describe('/api/boards', () => {
             })
         })
       })
-
             // DUPLICATE LIST
       describe('POST /api/boards/:boardId/lists/:listId/duplicate', () => {
         it('should duplicate the list and render the new list', () => {
@@ -280,8 +279,26 @@ describe('/api/boards', () => {
         })
       })
 
+      //LEAVE BOARD
+      describe('POST /api/boards/:boardId/leave', () => {
+        it('should remove the user from the board', () => {
+          return request('get', '/api/boards/101')
+            .then(response => {
+              const userIds = response.body.users.map(user => user.id)
+              expect(userIds).to.include(1455)
+            })
+            .then( () => request('post', '/api/boards/101/leave'))
+            .then( response => {
+              expect(response).to.have.status(200)
+            })
+            .then( () => request('get', '/api/boards/101'))
+            .then( response => {
+              const userIds = response.body.users.map(user => user.id)
+              expect(userIds).to.not.include(1455)
+            })
+          })
+        })
+
     })
-
   })
-
 })
