@@ -31,7 +31,7 @@ class ListActionsMenu extends Component {
       <Link>Subscribe</Link>
       <DialogBox.Divider />
       <Link>Move All Cards In This List…</Link>
-      <ArchiveAllCardsInListLink />
+      <ArchiveAllCardsInListLink list={list}/>
       <DialogBox.Divider />
       <ArchiveListLink list={list} />
     </DialogBox>
@@ -80,15 +80,20 @@ class ArchiveAllCardsInListLink extends Component {
   }
 
   archiveCardsInList(){
-    console.log('archive all cards in this list!')
+    $.ajax({
+      method: "POST",
+      url: `/api/lists/${this.props.list.id}/archivecards`
+    }).then(() => {
+      boardStore.reload()
+    })
   }
 
   render(){
     return <ConfirmationLink
       onConfirm={this.archiveCardsInList}
-      buttonName="Archive All Cards in List"
-      title="Archive All Cards in List?"
-      message="Are you sure you want to archive all cards in this list?"
+      buttonName="Archive All"
+      title="Archive All Cards in this List?"
+      message="This will remove all the cards in this list from the board. To view archived cards and bring them back to the board, click “Menu” > “Archived Items.”"
     >
       Archive All Cards In This List…
     </ConfirmationLink>
