@@ -120,8 +120,6 @@ export default class List extends Component {
         board={board}
         list={list}
         onDragStart={this.props.onDragStart}
-        onDragEnter={this.props.onDragEnter}
-        onDragEnd={this.props.onDragEnd}
       />
     )
 
@@ -143,17 +141,13 @@ export default class List extends Component {
 
     return <div className="BoardShowPage-ListWrapper"
         data-list-id={list.id}
-        onDragEnter={event => { /*console.log('list onDragEnter');*/ return this.props.onDragEnter(event)}}
-        onDragOver={event => { /* console.log('list onDragOver')*/ }}
-        onDrop={event => { console.log('list onDrop') }}
       >
       <div className="BoardShowPage-BehindList">
         <div className="BoardShowPage-List" data-list-id={list.id} style={this.state.listStyle}>
           <div
             className="BoardShowPage-ListHeader"
             draggable
-            onDragStart={event => { console.log('list onDragStart'); return this.props.onDragStart(event)}}
-            onDragEnd={event => { console.log('list onDragEnd'); return this.props.onDragEnd(event)}}
+            onDragStart={this.props.onDragStart}
           >
             <ListName list={list}/>
             <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>

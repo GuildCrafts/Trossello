@@ -73,24 +73,10 @@ class BoardShowPage extends React.Component {
 
     this.onDragStart = this.onDragStart.bind(this)
     this.onDragEnter = this.onDragEnter.bind(this)
-    this.onDragEnd = this.onDragEnd.bind(this)
-    document.body.addEventListener('mouseup', this.onDragEnd, false)
-    document.body.addEventListener('dragend', this.onDragEnd, false)
-
-    // document.body.addEventListener('dragstart', event => { console.log(':D dragstart', event) }, false)
-    // document.body.addEventListener('drag',      event => { console.log(':D drag', event) }, false)
-    // document.body.addEventListener('dragenter', event => { console.log(':D dragenter', event) }, false)
-    // document.body.addEventListener('dragexit',  event => { console.log(':D dragexit', event) }, false)
-    // document.body.addEventListener('dragleave', event => { console.log(':D dragleave', event) }, false)
-    // // document.body.addEventListener('dragover',  event => { console.log(':D dragover', event) }, false)
-    // document.body.addEventListener('drop',      event => { console.log(':D drop', event) }, false)
-    // document.body.addEventListener('dragend',   event => { console.log(':D dragend', event) }, false)
-    // this.onMouseDown = this.onMouseDown.bind(this)
-    // this.onMouseMove = this.onMouseMove.bind(this)
-    // this.onMouseUp = this.onMouseUp.bind(this)
-    // this.listStartDragging = this.listStartDragging.bind(this)
-    // this.listStopDragging = this.listStopDragging.bind(this)
-    // this.setListDragOver = this.setListDragOver.bind(this)
+    this.onDrop = this.onDrop.bind(this)
+    document.addEventListener('dragenter', this.onDragEnter, false)
+    document.addEventListener('dragover', this.onDragOver, false)
+    document.addEventListener('drop', this.onDrop, false)
   }
 
   componentDidUpdate(){
@@ -101,8 +87,9 @@ class BoardShowPage extends React.Component {
   }
 
   componentWillUnmount(){
-    document.body.removeEventListener('mouseup', this.onDragEnd, false)
-    document.body.removeEventListener('dragend', this.onDragEnd, false)
+    document.removeEventListener('dragenter', this.onDragEnter, false)
+    document.removeEventListener('dragover', this.onDragOver, false)
+    document.removeEventListener('drop', this.onDrop, false)
   }
 
   scrollToTheRight(){
@@ -146,6 +133,10 @@ class BoardShowPage extends React.Component {
     return this.props.board.cards.find(card => card.id === id)
   }
 
+  onDragOver(event){
+    event.preventDefault()
+  }
+
   onDragEnter(event){
     event.preventDefault()
     if (!this.state.dragging) return
@@ -165,12 +156,14 @@ class BoardShowPage extends React.Component {
     const draggingCardNewListId = this.state.draggingCardNewListId || draggingCard.list_id
     const draggingCardNewOrder = this.state.draggingCardNewOrder || draggingCard.order
     const newListId = targetCard.list_id
+    console.log('Target Card list ID--->', newListId)
 
     const rect = dropTarget[0].getBoundingClientRect()
     const middleOfTarget = rect.top + (rect.height/2)
     const newOrder = targetCard.order + (event.clientY > middleOfTarget ? 0.5 : -0.5)
 
     if (draggingCardNewListId === newListId && draggingCardNewOrder === newOrder) return
+
     this.setState({
       draggingCardNewOrder: newOrder,
       draggingCardNewListId: newListId,
@@ -195,27 +188,25 @@ class BoardShowPage extends React.Component {
     })
   }
 
-  onDragEnd(event){
-    console.log('onDragEnd', event.type, event.target)
+  onDrop(event){
+    console.log('onDrop', event.type, event.target)
 
     if (this.state.dragging === 'list'){
       const list = this.getListById(this.state.draggingListId)
       if (typeof this.state.draggingListNewOrder === 'number'){
         let newOrder = this.state.draggingListNewOrder
         this.moveList({list: list, order: newOrder})
-        // TEMP HACK TODO FIX ME
-        //list.order = this.state.draggingListNewOrder
-        // this.props.board.lists
-        //   .sort((a, b) => a.order - b.order)
-        //   .forEach((list, index) => list.order = index)
       }
     }
 
     if (this.state.dragging === 'card'){
       const card = this.getCardById(this.state.draggingCardId)
       let newListId = this.state.draggingCardNewListId
+      console.log('NEw List ID is--->', newListId)
       let newOrder = this.state.draggingCardNewOrder
-      this.moveCard({ card, listId: newListId, order: newOrder })
+      if (newListId !== null && newOrder !== null){
+        this.moveCard({ card, listId: newListId, order: newOrder })
+      }
     }
 
     this.setState({
@@ -340,8 +331,6 @@ class BoardShowPage extends React.Component {
         list={list}
         cards={cards}
         onDragStart={this.onDragStart}
-        onDragEnter={this.onDragEnter}
-        onDragEnd={this.onDragEnd}
       />
     })
 
