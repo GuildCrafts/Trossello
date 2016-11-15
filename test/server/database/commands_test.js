@@ -482,6 +482,52 @@ describe('database.commands', () => {
     })
   })
 
+  describe('moveList', () => {
+
+    describe('when moving a list', () => {
+      withBoardsListsAndCardsInTheDatabase(() => {
+        it('should update list orders', () => {
+
+          const getOrderedListByBoardId = (board) =>
+            board.lists.sort( (a,b) => a.order - b.order)
+
+          return queries.getBoardById(101)
+            .then(board => {
+              let orderedLists = getOrderedListByBoardId(board)
+              expect(orderedLists.map(list => list.order) ).to.eql([0,1])
+              expect(orderedLists.map(list => list.id) ).to.eql([40,41])
+            })
+            .then( () =>
+              commands.moveList({
+                boardId: 101,
+                listId: 40,
+                order: 1,
+              })
+          )
+          .then( () => queries.getBoardById(101))
+          .then(board => {
+            let orderedLists = getOrderedListByBoardId(board)
+            expect(orderedLists.map(list => list.order) ).to.eql([0,1])
+            expect(orderedLists.map(list => list.id) ).to.eql([41,40])
+          })
+          .then( () =>
+            commands.moveList({
+              boardId: 101,
+              listId: 40,
+              order: 0,
+            })
+          )
+          .then( () => queries.getBoardById(101))
+          .then(board => {
+            let orderedLists = getOrderedListByBoardId(board)
+            expect(orderedLists.map(list => list.order) ).to.eql([0,1])
+            expect(orderedLists.map(list => list.id) ).to.eql([40,41])
+          })
+        })
+      })
+    })
+  })
+
   describe('archiveBoard', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should archive a board by board id', () => {

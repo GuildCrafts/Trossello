@@ -141,7 +141,7 @@ const archiveCard = (id) =>
 const unarchiveCard = (id) =>
   unarchiveRecord('cards', id)
 
-const sortBoardItems = (unsortedItems, itemId) => {
+const sortBoardItems = (unsortedItems, itemId, sortBefore) => {
   const subSort = (a, b) => {
     if (a.order < b.order) return -1
     if (a.order > b.order) return 1
@@ -192,10 +192,10 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
         changes.filter(card => card.list_id === destinationListId)
 
 
-      sortBoardItems(originalListCards, cardId)
+      sortBoardItems(originalListCards, cardId, sortBefore)
       originalListCards.forEach((card, index) => card.order = index)
 
-      sortBoardItems(destinationListCards, cardId)
+      sortBoardItems(destinationListCards, cardId, sortBefore)
       destinationListCards.forEach((card, index) => card.order = index)
 
       const updates = originalListCards.concat(destinationListCards).map(card =>
@@ -233,7 +233,7 @@ const moveList = ({ boardId, listId, order }) => {
         list.order = order
       })
 
-      sortBoardItems(changes, listId)
+      sortBoardItems(changes, listId, sortBefore)
       changes.forEach((list, index) => list.order = index)
 
       const updates = changes.map( list =>
