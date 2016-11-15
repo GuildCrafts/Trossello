@@ -232,7 +232,7 @@ describe('database.commands', () => {
           expect(card.id).to.eql(80)
           expect(card.content).to.eql('This content has been updated')
           return knex.table('cards').then( cards => {
-            expect(cards.length).to.eql(6)
+            expect(cards.length).to.eql(11)
             cards.forEach(card => {
               if (card.id === 80){
                 expect(card).to.be.a('object')
@@ -241,7 +241,7 @@ describe('database.commands', () => {
               }else if (card.id === 81){
                 expect(card).to.be.a('object')
                 expect(card.list_id).to.eql(40)
-                expect(card.content).to.eql('Card2')
+                expect(card.content).to.eql('happy')
               }
             })
           })
@@ -264,9 +264,9 @@ describe('database.commands', () => {
           return queries.getBoardById(101)
             .then(board => {
               let list40Cards = getOrderedCardsByListId(board, 40)
-              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
-              expect(list40Cards.map(card => card.id)     ).to.eql([80,81,90,91])
-              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
+              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+              expect(list40Cards.map(card => card.id)     ).to.eql([80,81,82,90,91])
+              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
             })
             .then( () =>
               commands.moveCard({
@@ -279,9 +279,9 @@ describe('database.commands', () => {
             .then( () => queries.getBoardById(101))
             .then(board => {
               let list40Cards = getOrderedCardsByListId(board, 40)
-              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
-              expect(list40Cards.map(card => card.id)     ).to.eql([80,90,91,81])
-              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
+              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+              expect(list40Cards.map(card => card.id)     ).to.eql([80,82,90,81,91])
+              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
             })
             .then( () =>
               commands.moveCard({
@@ -294,9 +294,9 @@ describe('database.commands', () => {
             .then( () => queries.getBoardById(101))
             .then(board => {
               let list40Cards = getOrderedCardsByListId(board, 40)
-              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
-              expect(list40Cards.map(card => card.id)     ).to.eql([81,80,90,91])
-              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
+              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+              expect(list40Cards.map(card => card.id)     ).to.eql([81,80,82,90,91])
+              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
             })
         })
       })
@@ -315,13 +315,13 @@ describe('database.commands', () => {
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
 
-              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
-              expect(list40Cards.map(card => card.id)     ).to.eql([80,81,90,91])
-              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
+              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+              expect(list40Cards.map(card => card.id)     ).to.eql([80,81,82,90,91])
+              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
 
-              expect(list41Cards.map(card => card.order)  ).to.eql([0,1])
-              expect(list41Cards.map(card => card.id)     ).to.eql([82,83])
-              expect(list41Cards.map(card => card.list_id)).to.eql([41,41])
+              expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+              expect(list41Cards.map(card => card.id)     ).to.eql([83,84,85,86,87])
+              expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41])
             })
             .then( () =>
               commands.moveCard({
@@ -336,13 +336,13 @@ describe('database.commands', () => {
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
 
-              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2])
-              expect(list40Cards.map(card => card.id)     ).to.eql([80,90,91])
-              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40])
+              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
+              expect(list40Cards.map(card => card.id)     ).to.eql([80,82,90,91])
+              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
 
-              expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2])
-              expect(list41Cards.map(card => card.id)     ).to.eql([81,82,83])
-              expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41])
+              expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4,5])
+              expect(list41Cards.map(card => card.id)     ).to.eql([81,83,84,85,86,87])
+              expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41,41])
             })
             .then( () =>
               commands.moveCard({
@@ -357,13 +357,13 @@ describe('database.commands', () => {
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
 
-              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
-              expect(list40Cards.map(card => card.id)     ).to.eql([80,90,91,81])
-              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
+              expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+              expect(list40Cards.map(card => card.id)     ).to.eql([80,82,90,81,91])
+              expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
 
-              expect(list41Cards.map(card => card.order)  ).to.eql([0,1])
-              expect(list41Cards.map(card => card.id)     ).to.eql([82,83])
-              expect(list41Cards.map(card => card.list_id)).to.eql([41,41])
+              expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+              expect(list41Cards.map(card => card.id)     ).to.eql([83,84,85,86,87])
+              expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41])
             })
         })
       })
@@ -382,13 +382,13 @@ describe('database.commands', () => {
             let list40Cards = getOrderedCardsByListId(board, 40)
             let list41Cards = getOrderedCardsByListId(board, 41)
 
-            expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
-            expect(list40Cards.map(card => card.id)     ).to.eql([80,81,90,91])
-            expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
+            expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+            expect(list40Cards.map(card => card.id)     ).to.eql([80,81,82,90,91])
+            expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
 
-            expect(list41Cards.map(card => card.order)  ).to.eql([0,1])
-            expect(list41Cards.map(card => card.id)     ).to.eql([82,83])
-            expect(list41Cards.map(card => card.list_id)).to.eql([41,41])
+            expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+            expect(list41Cards.map(card => card.id)     ).to.eql([83,84,85,86,87])
+            expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41])
           })
           .then( () =>
             commands.moveCard({
@@ -403,13 +403,13 @@ describe('database.commands', () => {
             let list40Cards = getOrderedCardsByListId(board, 40)
             let list41Cards = getOrderedCardsByListId(board, 41)
 
-            expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
-            expect(list40Cards.map(card => card.id)     ).to.eql([81,80,90,91])
-            expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
+            expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+            expect(list40Cards.map(card => card.id)     ).to.eql([81,80,82,90,91])
+            expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
 
-            expect(list41Cards.map(card => card.order)  ).to.eql([0,1])
-            expect(list41Cards.map(card => card.id)     ).to.eql([82,83])
-            expect(list41Cards.map(card => card.list_id)).to.eql([41,41])
+            expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
+            expect(list41Cards.map(card => card.id)     ).to.eql([83,84,85,86,87])
+            expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41])
           })
           .then( () =>
             commands.moveCard({
@@ -424,13 +424,13 @@ describe('database.commands', () => {
             let list40Cards = getOrderedCardsByListId(board, 40)
             let list41Cards = getOrderedCardsByListId(board, 41)
 
-            expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2])
-            expect(list40Cards.map(card => card.id)     ).to.eql([80,90,91])
-            expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40])
+            expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
+            expect(list40Cards.map(card => card.id)     ).to.eql([80,82,90,91])
+            expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
 
-            expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2])
-            expect(list41Cards.map(card => card.id)     ).to.eql([81,82,83])
-            expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41])
+            expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4,5])
+            expect(list41Cards.map(card => card.id)     ).to.eql([81,83,84,85,86,87])
+            expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41,41])
           })
       })
     })

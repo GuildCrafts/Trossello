@@ -53,8 +53,8 @@ describe('database.queries', () => {
         return queries.getCardById(82).then( card => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(82)
-          expect(card.list_id).to.eql(41)
-          expect(card.content).to.eql('card3')
+          expect(card.list_id).to.eql(40)
+          expect(card.content).to.eql('Card2')
         })
       })
     })
@@ -88,12 +88,16 @@ describe('database.queries', () => {
               { id: 41, board_id: 101, name: 'List2', archived: false, order: 1},
             ],
             cards: [
-              { id: 80, board_id: 101, list_id: 40, content: 'card1',   description: '', archived: false, order: 0},
-              { id: 81, board_id: 101, list_id: 40, content: 'Card2',   description: '', archived: false, order: 1},
-              { id: 82, board_id: 101, list_id: 41, content: 'card3',   description: '', archived: false, order: 0},
-              { id: 83, board_id: 101, list_id: 41, content: 'Card4',   description: '', archived: false, order: 1},
-              { id: 90, board_id: 101, list_id: 40, content: 'Card 90', description: '', archived: false, order: 2},
-              { id: 91, board_id: 101, list_id: 40, content: 'Card 91', description: '', archived: false, order: 3},
+              { id: 80, board_id: 101, list_id: 40, content: 'card1',      description: '', archived: false, order: 0},
+              { id: 81, board_id: 101, list_id: 40, content: 'happy',      description: '', archived: false, order: 1},
+              { id: 82, board_id: 101, list_id: 40, content: 'Card2',      description: '', archived: false, order: 2},
+              { id: 83, board_id: 101, list_id: 41, content: 'card3',      description: '', archived: false, order: 0},
+              { id: 84, board_id: 101, list_id: 41, content: 'Card4',      description: '', archived: false, order: 1},
+              { id: 85, board_id: 101, list_id: 41, content: 'happy card', description: '', archived: false, order: 2},
+              { id: 86, board_id: 101, list_id: 41, content: 'HAPPY',      description: '', archived: false, order: 3},
+              { id: 87, board_id: 101, list_id: 41, content: 'HAPPYS',     description: '', archived: false, order: 4},
+              { id: 90, board_id: 101, list_id: 40, content: 'Card 90',    description: '', archived: false, order: 3},
+              { id: 91, board_id: 101, list_id: 40, content: 'Card 91',    description: '', archived: false, order: 4},
             ],
             users: [
               {

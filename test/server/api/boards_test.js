@@ -296,8 +296,23 @@ describe('/api/boards', () => {
               const userIds = response.body.users.map(user => user.id)
               expect(userIds).to.not.include(1455)
             })
-          })
+
         })
+      })
+
+      //SEARCH CARDS
+      describe('POST /api/boards/search', () => {
+        const textSearch = {searchTerm:"hAppY"}
+
+        it('should return cards that contain the search term', () => {
+          return request ('post', '/api/boards/search', textSearch)
+            .then(response => {
+              expect(response).to.have.status(200)
+              const cards = response.body.map(card => card.content)
+              expect(cards).to.eql(['happy', 'happy card', 'HAPPY', 'HAPPYS'])
+            })
+        })
+      })
 
     })
   })
