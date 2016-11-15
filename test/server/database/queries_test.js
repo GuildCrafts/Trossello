@@ -125,8 +125,17 @@ describe('database.queries', () => {
     })
   })
 
+  describe('getListByName', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should return a list when given a name', () => {
+        return queries.getListByName("List1").then( list => {
+          expect(list.name).to.eql("List1")
+        })
+      })
+    })
+  })
 
-  describe('getListById', () => {
+  describe('getCardById', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
         return queries.getCardById(80).then( board => {
