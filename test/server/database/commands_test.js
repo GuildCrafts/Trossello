@@ -185,7 +185,7 @@ describe('database.commands', () => {
           expect(card.id).to.eql(80)
           expect(card.content).to.eql('This content has been updated')
           return knex.table('cards').then( cards => {
-            expect(cards.length).to.eql(4)
+            expect(cards.length).to.eql(9)
             cards.forEach(card => {
               if (card.id === 80){
                 expect(card).to.be.a('object')
@@ -194,7 +194,7 @@ describe('database.commands', () => {
               }else if (card.id === 81){
                 expect(card).to.be.a('object')
                 expect(card.list_id).to.eql(40)
-                expect(card.content).to.eql('Card2')
+                expect(card.content).to.eql('happy')
               }
             })
           })
@@ -218,10 +218,10 @@ describe('database.commands', () => {
             .then(board => {
               let list40Cards = getOrderedCardsByListId(board, 40)
 
-              expect(list40Cards.length).to.eql(2)
+              expect(list40Cards.length).to.eql(3)
               expect(list40Cards[0].content).to.eql('card1')
               expect(list40Cards[0].order  ).to.eql(0)
-              expect(list40Cards[1].content).to.eql('Card2')
+              expect(list40Cards[1].content).to.eql('happy')
               expect(list40Cards[1].order  ).to.eql(1)
             })
             .then( () =>
@@ -235,8 +235,8 @@ describe('database.commands', () => {
             .then( () => queries.getBoardById(101))
             .then(board => {
               let list40Cards = getOrderedCardsByListId(board, 40)
-              expect(list40Cards.length).to.eql(2)
-              expect(list40Cards[0].content).to.eql('Card2')
+              expect(list40Cards.length).to.eql(3)
+              expect(list40Cards[0].content).to.eql('happy')
               expect(list40Cards[0].order  ).to.eql(0)
               expect(list40Cards[1].content).to.eql('card1')
               expect(list40Cards[1].order  ).to.eql(1)
@@ -258,7 +258,7 @@ describe('database.commands', () => {
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
 
-              expect(list40Cards.length).to.eql(2)
+              expect(list40Cards.length).to.eql(3)
               expect(list40Cards[0].id).to.eql(80)
               expect(list40Cards[0].list_id).to.eql(40)
               expect(list40Cards[0].order  ).to.eql(0)
@@ -266,11 +266,11 @@ describe('database.commands', () => {
               expect(list40Cards[1].list_id).to.eql(40)
               expect(list40Cards[1].order  ).to.eql(1)
 
-              expect(list41Cards.length).to.eql(2)
-              expect(list41Cards[0].id).to.eql(82)
+              expect(list41Cards.length).to.eql(5)
+              expect(list41Cards[0].id).to.eql(83)
               expect(list41Cards[0].list_id).to.eql(41)
               expect(list41Cards[0].order  ).to.eql(0)
-              expect(list41Cards[1].id).to.eql(83)
+              expect(list41Cards[1].id).to.eql(84)
               expect(list41Cards[1].list_id).to.eql(41)
               expect(list41Cards[1].order  ).to.eql(1)
             })
@@ -287,19 +287,19 @@ describe('database.commands', () => {
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
 
-              expect(list40Cards.length).to.eql(1)
+              expect(list40Cards.length).to.eql(2)
               expect(list40Cards[0].id).to.eql(80)
               expect(list40Cards[0].list_id).to.eql(40)
               expect(list40Cards[0].order  ).to.eql(0)
 
-              expect(list41Cards.length).to.eql(3)
+              expect(list41Cards.length).to.eql(6)
               expect(list41Cards[0].id).to.eql(81)
               expect(list41Cards[0].list_id).to.eql(41)
               expect(list41Cards[0].order  ).to.eql(0)
-              expect(list41Cards[1].id).to.eql(82)
+              expect(list41Cards[1].id).to.eql(83)
               expect(list41Cards[1].list_id).to.eql(41)
               expect(list41Cards[1].order  ).to.eql(1)
-              expect(list41Cards[2].id).to.eql(83)
+              expect(list41Cards[2].id).to.eql(84)
               expect(list41Cards[2].list_id).to.eql(41)
               expect(list41Cards[2].order  ).to.eql(2)
             })
@@ -320,13 +320,13 @@ describe('database.commands', () => {
             let list40Cards = getOrderedCardsByListId(board, 40)
             let list41Cards = getOrderedCardsByListId(board, 41)
 
-            expect(list40Cards.length).to.eql(2)
+            expect(list40Cards.length).to.eql(3)
             expect(list40Cards[0].content).to.eql('card1')
             expect(list40Cards[0].order  ).to.eql(0)
-            expect(list40Cards[1].content).to.eql('Card2')
+            expect(list40Cards[1].content).to.eql('happy')
             expect(list40Cards[1].order  ).to.eql(1)
 
-            expect(list41Cards.length).to.eql(2)
+            expect(list41Cards.length).to.eql(5)
             expect(list41Cards[0].content).to.eql('card3')
             expect(list41Cards[0].order  ).to.eql(0)
             expect(list41Cards[1].content).to.eql('Card4')
@@ -345,13 +345,13 @@ describe('database.commands', () => {
             let list40Cards = getOrderedCardsByListId(board, 40)
             let list41Cards = getOrderedCardsByListId(board, 41)
 
-            expect(list40Cards.length).to.eql(2)
-            expect(list40Cards[0].content).to.eql('Card2')
+            expect(list40Cards.length).to.eql(3)
+            expect(list40Cards[0].content).to.eql('happy')
             expect(list40Cards[0].order  ).to.eql(0)
             expect(list40Cards[1].content).to.eql('card1')
             expect(list40Cards[1].order  ).to.eql(1)
 
-            expect(list41Cards.length).to.eql(2)
+            expect(list41Cards.length).to.eql(5)
             expect(list41Cards[0].content).to.eql('card3')
             expect(list41Cards[0].order  ).to.eql(0)
             expect(list41Cards[1].content).to.eql('Card4')
@@ -370,12 +370,12 @@ describe('database.commands', () => {
             let list40Cards = getOrderedCardsByListId(board, 40)
             let list41Cards = getOrderedCardsByListId(board, 41)
 
-            expect(list40Cards.length).to.eql(1)
+            expect(list40Cards.length).to.eql(2)
             expect(list40Cards[0].content).to.eql('card1')
             expect(list40Cards[0].order  ).to.eql(0)
 
-            expect(list41Cards.length).to.eql(3)
-            expect(list41Cards[0].content).to.eql('Card2')
+            expect(list41Cards.length).to.eql(6)
+            expect(list41Cards[0].content).to.eql('happy')
             expect(list41Cards[0].order  ).to.eql(0)
             expect(list41Cards[1].content).to.eql('card3')
             expect(list41Cards[1].order  ).to.eql(1)
