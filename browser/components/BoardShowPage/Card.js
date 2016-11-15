@@ -109,7 +109,7 @@ export default class Card extends Component {
       null
 
     let className = 'BoardShowPage-Card'
-    if (ghosted) className += ' BoardShowPage-Card-ghosted'
+    if (ghosted) className += ' BoardShowPage-Ghosted'
     if (beingDragged) className += ' BoardShowPage-Card-beingDragged'
 
     return <div

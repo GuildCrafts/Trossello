@@ -116,13 +116,18 @@ export default class List extends Component {
         key={card.id}
         card={card}
         index={index}
-        ghosted={false /*dragging && card.id === dragging.cardId */}
+        ghosted={card.id == this.props.draggingCardId}
         board={board}
         list={list}
         onDragStart={this.props.onDragStart}
       />
     )
 
+
+    let className = 'BoardShowPage-List'
+    if (this.props.ghosted) className += 'BoardShowPage-Ghosted'
+    if (this.props.beingDragged) className += 'BoardShowPage-List-beingDragged'
+      
     let newCardForm, newCardLink
     if (this.state.creatingCard) {
       newCardForm = <NewCardForm
@@ -143,7 +148,7 @@ export default class List extends Component {
         data-list-id={list.id}
       >
       <div className="BoardShowPage-BehindList">
-        <div className="BoardShowPage-List" data-list-id={list.id} style={this.state.listStyle}>
+        <div className={className} data-list-id={list.id} style={this.state.listStyle}>
           <div
             className="BoardShowPage-ListHeader"
             draggable

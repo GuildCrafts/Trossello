@@ -97,14 +97,14 @@ class BoardShowPage extends React.Component {
   }
 
   onDragStart(event){
+    console.log('this is the dragged object', event.target)
     const dragTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
     // dragging card
     if (dragTarget.is('.BoardShowPage-Card-box')){
-      console.log('started dragging card', dragTarget.data('card-id'))
       this.setState({
         dragging: 'card',
         draggingCardId: dragTarget.data('card-id'),
-        draggingListId: null,
+        draggingListId: null
       })
       return
     }
@@ -329,8 +329,11 @@ class BoardShowPage extends React.Component {
         key={list.id}
         board={board}
         list={list}
+        ghosted={this.state.draggingListId == list.id}
         cards={cards}
         onDragStart={this.onDragStart}
+        draggingCardId={this.state.draggingCardId}
+        beingDragged={false}
       />
     })
 
