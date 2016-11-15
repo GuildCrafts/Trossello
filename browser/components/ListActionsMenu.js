@@ -13,11 +13,11 @@ class ListActionsMenu extends Component {
 
   constructor(props){
     super(props)
-    this.createCard = this.createCard.bind(this)
+    this.createCardTop = this.createCardTop.bind(this)
   }
 
-  createCard(event){
-    this.props.onCreateCard()
+  createCardTop(event){
+    this.props.onCreateCardTop()
     this.props.onClose()
     //This looks like a good place to start
   }
@@ -25,7 +25,7 @@ class ListActionsMenu extends Component {
   render(){
     const { list } = this.props
     return <DialogBox className="ListActionsMenu" heading="List Actions" onClose={this.props.onClose}>
-      <Link onClick={this.createCard}>Add a Card…</Link>
+      <Link onClick={this.createCardTop}>Add a Card…</Link>
       <DialogBox.Divider />
       <Link>Copy List…</Link>
       <Link>Move List…</Link>
