@@ -69,6 +69,40 @@ describe('/api/lists', () => {
         })
       })
 
+      // DELETE ALL CARDS IN LIST
+      describe('POST /api/lists/:listId/archivecards', () => {
+        it('should archive all cards in the list', () => {
+          return queries.getCardById(80)
+            .then(card => {
+              expect(card.id).to.eql(80)
+              expect(card.list_id).to.eql(40)
+              expect(card.archived).to.eql(false)
+            })
+            .then(() => queries.getCardById(81))
+            .then(card => {
+              expect(card.id).to.eql(81)
+              expect(card.list_id).to.eql(40)
+              expect(card.archived).to.eql(false)
+            })
+            .then(() => request('post', '/api/lists/40/archivecards'))
+            .then(response => {
+              expect(response).to.have.status(200)
+            })
+            .then(() => queries.getCardById(80))
+            .then(card => {
+              expect(card.id).to.eql(80)
+              expect(card.list_id).to.eql(40)
+              expect(card.archived).to.eql(true)
+            })
+            .then(() => queries.getCardById(81))
+            .then(card => {
+              expect(card.id).to.eql(81)
+              expect(card.list_id).to.eql(40)
+              expect(card.archived).to.eql(true)
+            })
+        }
+      })
+
     })
 
   })

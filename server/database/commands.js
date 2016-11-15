@@ -255,6 +255,9 @@ const unarchiveList = (id) =>
     unarchiveListItems(id)
   ])
 
+const archiveCardsInList = (id) =>
+  archiveListItems(id)
+
 const archiveBoard = (id) =>
   archiveRecord('boards', id)
 
@@ -351,6 +354,7 @@ export default {
   unarchiveList,
   archiveBoard,
   unarchiveBoard,
+  archiveCardsInList,
   starBoard,
   unstarBoard,
   createInvite,
