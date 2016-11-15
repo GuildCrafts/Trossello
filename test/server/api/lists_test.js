@@ -72,35 +72,34 @@ describe('/api/lists', () => {
       // DELETE ALL CARDS IN LIST
       describe('POST /api/lists/:listId/archivecards', () => {
         it('should archive all cards in the list', () => {
-          return queries.getCardById(80)
-            .then(card => {
-              expect(card.id).to.eql(80)
-              expect(card.list_id).to.eql(40)
-              expect(card.archived).to.eql(false)
-            })
-            .then(() => queries.getCardById(81))
-            .then(card => {
-              expect(card.id).to.eql(81)
-              expect(card.list_id).to.eql(40)
-              expect(card.archived).to.eql(false)
+          const getCards = () =>
+            Promise.all([
+              queries.getCardById(80),
+              queries.getCardById(81)
+            ])
+          return getCards()
+            .then(([card80, card81]) => {
+                expect(card80.id).to.eql(80)
+                expect(card80.list_id).to.eql(40)
+                expect(card80.archived).to.eql(false)
+                expect(card81.id).to.eql(81)
+                expect(card81.list_id).to.eql(40)
+                expect(card81.archived).to.eql(false)
             })
             .then(() => request('post', '/api/lists/40/archivecards'))
             .then(response => {
               expect(response).to.have.status(200)
             })
-            .then(() => queries.getCardById(80))
-            .then(card => {
-              expect(card.id).to.eql(80)
-              expect(card.list_id).to.eql(40)
-              expect(card.archived).to.eql(true)
+            .then(getCards)
+            .then(([card80, card81]) => {
+              expect(card80.id).to.eql(80)
+              expect(card80.list_id).to.eql(40)
+              expect(card80.archived).to.eql(true)
+              expect(card81.id).to.eql(81)
+              expect(card81.list_id).to.eql(40)
+              expect(card81.archived).to.eql(true)
             })
-            .then(() => queries.getCardById(81))
-            .then(card => {
-              expect(card.id).to.eql(81)
-              expect(card.list_id).to.eql(40)
-              expect(card.archived).to.eql(true)
-            })
-        }
+        })
       })
 
     })
