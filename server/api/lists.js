@@ -24,4 +24,17 @@ router.post('/:listId/archive', (request, response, next) => {
     .catch(next)
 })
 
+// COPY
+router.post('/:listId/copy', (request, response, next) => {
+  const listId = request.params.listId
+  const fromListBoardId = request.body.board_id
+  const listName = request.body.name
+
+  commands.copyList(listId, fromListBoardId, listName)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
 export default router

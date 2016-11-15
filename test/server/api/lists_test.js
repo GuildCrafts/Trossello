@@ -28,6 +28,16 @@ describe('/api/lists', () => {
             })
         })
       })
+
+      // COPY
+      describe('POST /api/lists/:listId/copy', () => {
+        it('should render 400 Not Authorized', () => {
+          return request('post', '/api/lists/40/copy')
+            .then(response => {
+              expect(response).to.have.status(400)
+            })
+        })
+      })
     })
 
     context('when logged in', () => {
@@ -69,7 +79,29 @@ describe('/api/lists', () => {
         })
       })
 
-    })
+      // COPY
+      describe('POST /api/lists/:listId/copy', () => {
+        it('should copy old list and render a new list with copied cards', () => {
+          const newListAttributes = {
+            board_id: 101,
+            name: 'Jim\'s Detailed List'
+          }
+          return request('post', '/api/lists/41/copy', newListAttributes)
+            .then(response => {
+              expect(response).to.have.status(200)
+            })
+            .then(() => queries.getListByName("Jim's Detailed List"))
+            .then( list => {
+              expect(list.name).to.eql("Jim's Detailed List")
+              expect(list.board_id).to.eql(101)
+                return queries.getCardsByListId(list.id).then( cards => {
+                  expect(cards.length).to.eql(2)
+                })
+            })
 
+        })
+      })
+
+    })
   })
 })
