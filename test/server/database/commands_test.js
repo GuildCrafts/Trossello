@@ -185,7 +185,7 @@ describe('database.commands', () => {
           expect(card.id).to.eql(80)
           expect(card.content).to.eql('This content has been updated')
           return knex.table('cards').then( cards => {
-            expect(cards.length).to.eql(4)
+            expect(cards.length).to.eql(5)
             cards.forEach(card => {
               if (card.id === 80){
                 expect(card).to.be.a('object')
@@ -266,7 +266,7 @@ describe('database.commands', () => {
               expect(list40Cards[1].list_id).to.eql(40)
               expect(list40Cards[1].order  ).to.eql(1)
 
-              expect(list41Cards.length).to.eql(2)
+              expect(list41Cards.length).to.eql(3)
               expect(list41Cards[0].id).to.eql(82)
               expect(list41Cards[0].list_id).to.eql(41)
               expect(list41Cards[0].order  ).to.eql(0)
@@ -292,7 +292,7 @@ describe('database.commands', () => {
               expect(list40Cards[0].list_id).to.eql(40)
               expect(list40Cards[0].order  ).to.eql(0)
 
-              expect(list41Cards.length).to.eql(3)
+              expect(list41Cards.length).to.eql(4)
               expect(list41Cards[0].id).to.eql(81)
               expect(list41Cards[0].list_id).to.eql(41)
               expect(list41Cards[0].order  ).to.eql(0)
@@ -326,7 +326,7 @@ describe('database.commands', () => {
             expect(list40Cards[1].content).to.eql('Card2')
             expect(list40Cards[1].order  ).to.eql(1)
 
-            expect(list41Cards.length).to.eql(2)
+            expect(list41Cards.length).to.eql(3)
             expect(list41Cards[0].content).to.eql('card3')
             expect(list41Cards[0].order  ).to.eql(0)
             expect(list41Cards[1].content).to.eql('Card4')
@@ -351,7 +351,7 @@ describe('database.commands', () => {
             expect(list40Cards[1].content).to.eql('card1')
             expect(list40Cards[1].order  ).to.eql(1)
 
-            expect(list41Cards.length).to.eql(2)
+            expect(list41Cards.length).to.eql(3)
             expect(list41Cards[0].content).to.eql('card3')
             expect(list41Cards[0].order  ).to.eql(0)
             expect(list41Cards[1].content).to.eql('Card4')
@@ -374,7 +374,7 @@ describe('database.commands', () => {
             expect(list40Cards[0].content).to.eql('card1')
             expect(list40Cards[0].order  ).to.eql(0)
 
-            expect(list41Cards.length).to.eql(3)
+            expect(list41Cards.length).to.eql(4)
             expect(list41Cards[0].content).to.eql('Card2')
             expect(list41Cards[0].order  ).to.eql(0)
             expect(list41Cards[1].content).to.eql('card3')
@@ -542,10 +542,10 @@ describe('database.commands', () => {
     })
   })
 
-  describe('copyCardsFromList', () => {
+  describe.only('copyCardsFromList', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('it should duplicate cards from source list and give them a new list id', () => {
-        return commands.copyCardsFromList(40, 6).then( () => {
+        return commands.copyCardsFromList(41, 6).then( () => {
           return queries.getCardsByListId(6).then( cards => {
             expect(cards[0].list_id).to.eql(6)
             expect(cards.length).to.eql(2)

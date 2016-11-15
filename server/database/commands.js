@@ -206,7 +206,7 @@ const copyCardsFromList = (fromListId, toListId) => {
   return knex.raw(
     `INSERT INTO cards (board_id,list_id,content,archived,"order",description)
     SELECT board_id,?,content,archived,"order",description
-    FROM cards WHERE list_id=?`, [toListId, fromListId])
+    FROM cards WHERE list_id=? AND archived=false`, [toListId, fromListId])
 }
 
 const archiveBoard = (id) =>

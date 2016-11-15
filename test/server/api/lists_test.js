@@ -95,7 +95,7 @@ describe('/api/lists', () => {
               expect(list.name).to.eql("Jim's Detailed List")
               expect(list.board_id).to.eql(101)
                 return queries.getCardsByListId(list.id).then( cards => {
-                  expect(cards.length).to.eql(2)
+                  expect(cards.length).to.eql(3)
                 })
             })
 
