@@ -38,4 +38,13 @@ router.post('/:listId/move', (request, response, next) => {
     .catch(next)
 })
 
+// ARCHIVE ALL CARDS IN A LIST
+router.post('/:listId/archivecards', (request, response, next) => {
+  commands.archiveCardsInList(request.params.listId)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
 export default router

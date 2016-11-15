@@ -592,6 +592,42 @@ describe('database.commands', () => {
     })
   })
 
+  describe('archiveCardsInList', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should archive all cards in a list by list id', () => {
+        return queries.getCardById(80)
+          .then( card => {
+            expect(card).to.be.a('object')
+            expect(card.id).to.eql(80)
+            expect(card.list_id).to.eql(40)
+            expect(card.archived).to.eql(false)
+          })
+          .then( () => queries.getCardById(81))
+          .then( card => {
+            expect(card).to.be.a('object')
+            expect(card.id).to.eql(81)
+            expect(card.list_id).to.eql(40)
+            expect(card.archived).to.eql(false)
+          })
+          .then( () => commands.archiveCardsInList(40))
+          .then( () => queries.getCardById(80))
+          .then( card => {
+            expect(card).to.be.a('object')
+            expect(card.id).to.eql(80)
+            expect(card.list_id).to.eql(40)
+            expect(card.archived).to.eql(true)
+          })
+          .then( () => queries.getCardById(81))
+          .then( card => {
+            expect(card).to.be.a('object')
+            expect(card.id).to.eql(81)
+            expect(card.list_id).to.eql(40)
+            expect(card.archived).to.eql(true)
+          })
+      })
+    })
+  })
+
   describe('createBoard', () => {
     it('should create a new board entry in db, and associate it with a user', () => {
       return commands.createBoard(15, {name: "My Board", archived: false,})
