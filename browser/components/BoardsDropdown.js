@@ -55,7 +55,7 @@ class Dropdown extends ToggleComponent {
     titleBoards("Starred Boards", starredBoards)
     titleBoards("All Boards", allBoards)
 
-    let CreateBoardPopover = this.state.open ?
+    let createBoardPopover = this.state.open ?
       <CreateBoardPopover
         ref="toggle"
         onClose={this.close}
@@ -66,8 +66,9 @@ class Dropdown extends ToggleComponent {
       <div className="BoardsDropdown-content">
         {starredBoards}
         {allBoards}
-        <Link onClick={this.toggle}>Create new board...</Link>
+        <Link onClick={this.toggle}>{this.state.open ? 'Cancel' : 'Create new board…'}</Link>
       </div>
+      {createBoardPopover}
     </div>
   }
 }

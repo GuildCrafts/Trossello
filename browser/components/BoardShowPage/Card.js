@@ -33,6 +33,7 @@ export default class Card extends Component {
   }
 
   editCard(event) {
+    event.preventDefault()
     event.stopPropagation()
     const rect = this.refs.card.getBoundingClientRect()
     this.setState({
