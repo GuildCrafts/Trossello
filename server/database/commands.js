@@ -91,9 +91,6 @@ const updateUser = (id, attributes) =>
 const deleteUser = (id) =>
   deleteRecord('users', id)
 
-
-//
-
 const createList = (attributes) => {
   return createRecord('lists', attributes)
 }
@@ -107,8 +104,6 @@ const deleteList = (id) =>
     deleteRecord('lists', id),
     knex.table('cards').where('list_id', id).del(),
   ])
-
-//
 
 const createCard = (attributes) => {
   return knex
