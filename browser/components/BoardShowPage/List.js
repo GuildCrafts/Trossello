@@ -125,8 +125,8 @@ export default class List extends Component {
 
 
     let className = 'BoardShowPage-List'
-    if (this.props.ghosted) className += 'BoardShowPage-Ghosted'
-    if (this.props.beingDragged) className += 'BoardShowPage-List-beingDragged'
+    if (this.props.ghosted) className += ' BoardShowPage-Ghosted'
+    if (this.props.beingDragged) className += ' BoardShowPage-List-beingDragged'
       
     let newCardForm, newCardLink
     if (this.state.creatingCard) {

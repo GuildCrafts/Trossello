@@ -74,6 +74,8 @@ class BoardShowPage extends React.Component {
     this.onDragStart = this.onDragStart.bind(this)
     this.onDragEnter = this.onDragEnter.bind(this)
     this.onDrop = this.onDrop.bind(this)
+    //this.onCardDragOverCardBox = this.onCardDragOverCardBox.bind(this)
+    //this.onCardDragOverList = this.onCardDragOverList.bind(this)
     document.addEventListener('dragenter', this.onDragEnter, false)
     document.addEventListener('dragover', this.onDragOver, false)
     document.addEventListener('drop', this.onDrop, false)
@@ -97,7 +99,6 @@ class BoardShowPage extends React.Component {
   }
 
   onDragStart(event){
-    console.log('this is the dragged object', event.target)
     const dragTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
     // dragging card
     if (dragTarget.is('.BoardShowPage-Card-box')){
@@ -143,6 +144,51 @@ class BoardShowPage extends React.Component {
     if (this.state.dragging === 'card') return this.onCardDragEnter(event)
     if (this.state.dragging === 'list') return this.onListDragEnter(event)
   }
+
+
+  // onCardDragOverList(event, dropTarget){
+  //   const newListId = dropTarget.data('list-id')
+  //   const targetList = this.getListById(newListId)
+  //   const cardArray = targetList.props.cards
+  //   const newOrder = cardArray.length
+  //   this.setState({
+  //     draggingCardNewOrder: newOrder,
+  //     draggingCardNewListId: newListId,
+  //   })
+  // }
+
+  // onCardDragOverCardBox(event, dropTarget){
+  //   const targetCardId = dropTarget.data('card-id')
+  //   if (draggingCardId === targetCardId) return
+  //   const targetCard = this.getCardById(targetCardId)
+  //   const draggingCard = this.getCardById(draggingCardId)
+
+  //   const draggingCardNewListId = this.state.draggingCardNewListId || draggingCard.list_id
+  //   const draggingCardNewOrder = this.state.draggingCardNewOrder || draggingCard.order
+  //   const newListId = targetCard.list_id
+
+  //   const rect = dropTarget[0].getBoundingClientRect()
+  //   const middleOfTarget = rect.top + (rect.height/2)
+  //   const newOrder = targetCard.order + (event.clientY > middleOfTarget ? 0.5 : -0.5)
+
+  //   if (draggingCardNewListId === newListId && draggingCardNewOrder === newOrder)return
+  //   this.setState({
+  //     draggingCardNewOrder: newOrder,
+  //     draggingCardNewListId: newListId,
+  //   })
+  // }
+
+  // onCardDragEnter(event){
+  //   const dropTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
+  //   if(dropTarget.length === 0) return 
+  //   const draggingCardId = this.state.draggingCardId
+  //   if(dropTarget.is('.BoardShowPage-Card-box')) {
+  //     this.onCardDragOverCards(event, dropTarget)
+  //   } else if(dropTarget.is('.BoardShowPage-ListWrapper')) {
+  //     this.onCardDragOverList(event, dropTarget)
+  //   } 
+  // }
+
 
   onCardDragEnter(event){
     const dropTarget = $(event.target).closest('.BoardShowPage-Card-box')
