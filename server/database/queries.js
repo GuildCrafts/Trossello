@@ -93,6 +93,7 @@ const verifyToken = (token) => {
 
 export default {
   getUsers,
+  getRecords,
   getUserById,
   getCardById,
   getSearchResult,

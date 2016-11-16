@@ -12,7 +12,7 @@ describe('database.queries', () => {
       it('should return an array of all users', () => {
         return queries.getUsers().then( users => {
           expect(users).to.be.a('array')
-          expect(users.length).to.eql(2)
+          expect(users.length).to.eql(3)
 
           users.forEach(user => {
             if (user.id === 1455){
@@ -25,7 +25,12 @@ describe('database.queries', () => {
               expect(user.id).to.eql(6672)
               expect(user.name).to.eql('Larry Harvey')
               expect(user.email).to.eql('larry@harvey.to')
-            }else{
+            }else if (user.id === 10000) {
+              expect(user).to.be.a('object')
+              expect(user.id).to.eql(10000)
+              expect(user.name).to.eql('Bob Taylor')
+              expect(user.email).to.eql('bob@bob.com')
+            } else {
               throw new Error('unexpected user record')
             }
           })
@@ -53,8 +58,8 @@ describe('database.queries', () => {
         return queries.getCardById(82).then( card => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(82)
-          expect(card.list_id).to.eql(41)
-          expect(card.content).to.eql('card3')
+          expect(card.list_id).to.eql(40)
+          expect(card.content).to.eql('happy')
         })
       })
     })
@@ -90,8 +95,12 @@ describe('database.queries', () => {
             cards: [
               { id: 80, board_id: 101, list_id: 40, content: 'card1', description: '', archived: false, order: 0},
               { id: 81, board_id: 101, list_id: 40, content: 'Card2', description: '', archived: false, order: 1},
-              { id: 82, board_id: 101, list_id: 41, content: 'card3', description: '', archived: false, order: 0},
-              { id: 83, board_id: 101, list_id: 41, content: 'Card4', description: '', archived: false, order: 1},
+              { id: 82, board_id: 101, list_id: 40, content: 'happy', description: '', archived: false, order: 2},
+              { id: 83, board_id: 101, list_id: 41, content: 'card3', description: '', archived: false, order: 0},
+              { id: 84, board_id: 101, list_id: 41, content: 'Card4', description: '', archived: false, order: 1},
+              { id: 85, board_id: 101, list_id: 41, content: 'happy card', description: '', archived: false, order: 2},
+              { id: 86, board_id: 101, list_id: 41, content: 'HAPPY', description: '', archived: false, order: 3},
+              { id: 87, board_id: 101, list_id: 41, content: 'HAPPYS', description: '', archived: false, order: 4},
             ],
             users: [
               {

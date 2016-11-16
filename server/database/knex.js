@@ -13,9 +13,9 @@ knex.truncateAllTables = function(){
     TRUNCATE lists       RESTART IDENTITY CASCADE;
     TRUNCATE boards      RESTART IDENTITY CASCADE;
     TRUNCATE users       RESTART IDENTITY CASCADE;
+    TRUNCATE invites     RESTART IDENTITY CASCADE;
     COMMIT;
   `)
 }
 
 export default knex
-

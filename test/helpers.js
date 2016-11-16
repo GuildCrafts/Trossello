@@ -15,6 +15,12 @@ const withTwoUsersInTheDatabase = (callback) => {
           github_id: 9775,
           name: 'Larry Harvey',
           email: 'larry@harvey.to',
+        }),
+        commands.createUser({
+          id: 10000,
+          github_id: 5000,
+          name: 'Bob Taylor',
+          email: 'bob@bob.com'
         })
       ])
     })
@@ -51,6 +57,13 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
             content: 'Card2',
           })
         ).then( () =>
+          commands.createCard({
+            id: 82,
+            list_id: 40,
+            board_id: 101,
+            content: 'happy',
+          }),
+        ).then( () =>
           commands.createList({
             id: 41,
             board_id: 101,
@@ -58,17 +71,38 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
           })
         ).then( () =>
           commands.createCard({
-            id: 82,
+            id: 83,
             list_id: 41,
             board_id: 101,
             content: 'card3',
           })
         ).then( () =>
           commands.createCard({
-            id: 83,
+            id: 84,
             list_id: 41,
             board_id: 101,
             content: 'Card4',
+          })
+        ).then( () =>
+          commands.createCard({
+            id:85,
+            list_id:41,
+            board_id: 101,
+            content: 'happy card'
+          })
+        ).then( () =>
+          commands.createCard({
+            id:86,
+            list_id:41,
+            board_id: 101,
+            content: 'HAPPY'
+          })
+        ).then( () =>
+          commands.createCard({
+            id:87,
+            list_id:41,
+            board_id: 101,
+            content: 'HAPPYS'
           })
         ).then( () =>
           commands.createBoard(1455, {
@@ -82,6 +116,25 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
             name: 'Board3',
             background_color: 'yellow',
             starred: true,
+          })
+        ).then( () =>
+          commands.createBoard(6672, {
+            id: 104,
+            name: 'Board4',
+            background_color: 'purple',
+          })
+        ).then( () =>
+          commands.createList({
+            id: 42,
+            board_id: 104,
+            name: 'Unhappy list'
+          })
+        ).then( () =>
+          commands.createCard({
+            id:88,
+            list_id:42,
+            board_id: 104,
+            content: 'Not happy on board 2'
           })
         )
       })
