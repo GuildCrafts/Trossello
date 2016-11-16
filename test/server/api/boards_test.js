@@ -246,7 +246,7 @@ describe('/api/boards', () => {
         })
       })
 
-      // CREATE BOARD
+      // CREATE CARD
       describe('POST /api/boards/:boardId/lists/:listId/cards', () => {
         it('should create a card for that list and board and render it as json', () => {
           const cardAttributes = {
