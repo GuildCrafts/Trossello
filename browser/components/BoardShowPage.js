@@ -151,8 +151,14 @@ class BoardShowPage extends React.Component {
     const newListId = dropTarget.data('list-id')
     const targetList = this.getListById(newListId)
     //const cardArray = How do I get the card array length?
-    const rect = dropTarget[0].getBoundingClientRect()
-    const newOrder = 1000 //Should be end of the card array.
+    const rect = dropTarget[0].children[0].getBoundingClientRect()
+    const belowTarget = rect.bottom - 40
+    let newOrder = null
+    if(event.clientY > belowTarget){
+      newOrder = 1000
+    } else {
+      return
+    }
     this.setState({
       draggingCardNewOrder: newOrder,
       draggingCardNewListId: newListId,
