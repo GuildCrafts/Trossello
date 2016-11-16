@@ -1,287 +1,283 @@
+import React, { Component } from 'react'
+import './BoardShowPage.sass'
+import Layout from './Layout'
+import Link from './Link'
+import Button from './Button'
+import Icon from './Icon'
+import $ from 'jquery'
+import boardStore from '../stores/boardStore'
+import DeleteBoardButton from './BoardShowPage/DeleteBoardButton'
+import CardModal from './BoardShowPage/CardModal'
+import List from './BoardShowPage/List'
+import Card from './BoardShowPage/Card'
+import NewListForm from './BoardShowPage/NewListForm'
+import InviteByEmailButton from './InviteByEmailButton'
+import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
 
-import knex from './knex'
-import queries from './queries'
-import { sendWelcomeEmail } from '../mail/mailer'
-
-const firstRecord = records => records[0]
-
-const createRecord = (table, attributes) =>
-  knex
-    .table(table)
-    .insert(attributes)
-    .returning('*')
-    .then(firstRecord)
-
-
-const updateRecord = (table, id, attributes) =>
-  knex
-    .table(table)
-    .where('id', id)
-    .update(attributes)
-    .returning('*')
-    .then(firstRecord)
-
-const deleteRecord = (table, id) =>
-  knex
-    .table(table)
-    .where('id', id)
-    .del()
-
-
-const removeUserFromBoard = (userId, boardId) =>
-  knex
-    .table('user_boards')
-    .where({'user_id': userId , 'board_id': boardId})
-    .del()
-
-const archiveRecord = (table, id) =>
-  knex
-    .table(table)
-    .where('id', id)
-    .update({
-      archived: true,
-    })
-
-const unarchiveRecord = (table, id) =>
-  knex
-    .table(table)
-    .where('id', id)
-    .update({
-      archived: false,
-    })
-
-const archiveListItems = (id) =>
-  knex
-    .table('cards')
-    .where('list_id', id)
-    .update({
-      archived: true,
-    })
-
-const unarchiveListItems = (id) =>
-  knex
-    .table('cards')
-    .where('list_id', id)
-    .update({
-      archived: false,
-    })
-
-const findOrCreateUserFromGithubProfile = (githubProfile) => {
-  const github_id = githubProfile.id
-  const userAttributes = {
-    github_id: github_id,
-    name: githubProfile.name,
-    email: githubProfile.email,
-    avatar_url: githubProfile.avatar_url,
+class BoardProvider extends Component {
+  constructor(props){
+    super(props)
+    this.rerender = this.rerender.bind(this)
+    boardStore.setBoardId(props.location.params.boardId)
+    boardStore.subscribe(this.rerender)
   }
-  return knex.table('users').where('github_id', github_id).first('*')
-    .then(user => user ? user : createUser(userAttributes))
-}
 
-const createUser = (attributes) =>
-  createRecord('users', attributes)
-    .then(user => {
-      sendWelcomeEmail(user)
-      return user
-    })
+  componentWillUnmount(){
+    boardStore.unsubscribe(this.rerender)
+  }
 
-const updateUser = (id, attributes) =>
-  updateRecord('users', id, attributes)
+  rerender(){
+    this.forceUpdate()
+  }
 
-
-const deleteUser = (id) =>
-  deleteRecord('users', id)
-
-
-//
-
-const createList = (attributes) => {
-  return createRecord('lists', attributes)
-}
-
-const updateList = (id, attributes) =>
-  updateRecord('lists', id, attributes)
-
-
-const deleteList = (id) =>
-  Promise.all([
-    deleteRecord('lists', id),
-    knex.table('cards').where('list_id', id).del(),
-  ])
-
-//
-
-const createCard = (attributes) => {
-  return knex
-    .table('cards')
-    .where({list_id: attributes.list_id})
-    .orderBy('order', 'desc')
-    .limit(1)
-    .then( ([result]) => {
-      attributes.order = result ? result.order + 1 : 0
-      return knex
-        .table('cards')
-        .insert(attributes)
-        .returning('*')
-        .then(firstRecord)
-    })
-}
-
-const updateCard = (id, attributes) =>
-  updateRecord('cards', id, attributes)
-
-const deleteCard = (id) =>
-  deleteRecord('cards', id)
-
-const archiveCard = (id) =>
-  archiveRecord('cards', id)
-
-const unarchiveCard = (id) =>
-  unarchiveRecord('cards', id)
-
-const moveCard = ({ boardId, cardId, listId, order }) => {
-  return knex
-    .table('cards')
-    .where({board_id: boardId})
-    .orderBy('order', 'asc')
-    .then(allCards => {
-
-      const cardBegingMoved = allCards.find(card => card.id === cardId)
-      const originListId = cardBegingMoved.list_id
-      const destinationListId = listId
-      const cardsOnOriginList = allCards.filter(card => card.list_id === originListId)
-
-      const updates = []
-
-      updates.push(updateCard(cardBegingMoved.id, {
-        list_id: destinationListId,
-        order: order,
-      }))
-
-      if (originListId === destinationListId){
-        cardsOnOriginList.forEach(card => {
-          if (card !== cardBegingMoved && card.order >= order) {
-            updates.push(updateCard(card.id, {
-              order: card.order + 1,
-            }))
-          }
-        })
-      }else{
-        const cardsOnDestinationList = allCards.filter(card =>
-          card.list_id === destinationListId
-        )
-        cardsOnOriginList.forEach(card => {
-          if (card !== cardBegingMoved && card.order >= cardBegingMoved.order) {
-            updates.push(updateCard(card.id, {
-              order: card.order - 1,
-            }))
-          }
-        })
-        cardsOnDestinationList.forEach(card => {
-          if (card.order >= order) {
-            updates.push(updateCard(card.id, {
-              order: card.order + 1,
-            }))
-          }
-        })
-      }
-
-      return Promise.all(updates)
-    })
-}
-
-const archiveList = (id) =>
-  Promise.all([
-    archiveListItems(id),
-    archiveRecord('lists', id)
-  ])
-
-const unarchiveList = (id) =>
-  Promise.all([
-    unarchiveRecord('lists', id),
-    unarchiveListItems(id)
-  ])
-
-const archiveBoard = (id) =>
-  archiveRecord('boards', id)
-
-const unarchiveBoard = (id) =>
-  unarchiveRecord('boards', id)
-
-const createBoard = (userId, attributes) => {
-  if (!attributes.background_color) delete attributes.background_color
-  return createRecord('boards', attributes).then(board => {
-    let attrs = {
-      user_id: userId,
-      board_id: board.id,
+  componentWillReceiveProps(nextProps){
+    const boardId = this.props.location.params.boardId
+    const nextBoardId = nextProps.location.params.boardId
+    if (boardId !== nextBoardId){
+      boardStore.setBoardId(nextBoardId)
+      boardStore.reload()
     }
-    return createRecord('user_boards', attrs).then(() => board)
-  })
-}
-
-const addUserToBoard = (userId, boardId) => {
-  let attrs = {
-    user_id: userId,
-    board_id: boardId,
   }
-  return knex.table('user_boards')
-    .select('*')
-    .where({
-      user_id: userId,
-      board_id: boardId
+
+  render(){
+    const viewingCardId = this.props.location.params.cardId
+    const viewingCard = viewingCardId ? Number(viewingCardId) : null
+    return <BoardShowPage board={boardStore.value} viewingCard={viewingCard} />
+  }
+
+}
+
+export default BoardProvider
+
+class BoardShowPage extends React.Component {
+  static contextTypes = {
+    redirectTo: React.PropTypes.func.isRequired,
+  };
+
+  static propTypes = {
+    name: React.PropTypes.string,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      potentialDragging: null,
+      dragging: null,
+    }
+    this.onMouseDown = this.onMouseDown.bind(this)
+    this.onMouseMove = this.onMouseMove.bind(this)
+    this.onMouseUp = this.onMouseUp.bind(this)
+    this.scrollToTheRight = this.scrollToTheRight.bind(this)
+    this.closeCardModal = this.closeCardModal.bind(this)
+  }
+
+  componentDidUpdate(){
+    if (this._scrollToTheRight){
+      this.refs.lists.scrollLeft = this.refs.lists.scrollWidth
+      this._scrollToTheRight = false
+    }
+  }
+
+  scrollToTheRight(){
+    this._scrollToTheRight = true
+  }
+
+  onMouseDown(event){
+    if (event.isPropagationStopped()) return
+    const cardNode = $(event.target).closest('.BoardShowPage-Card .BoardShowPage-Card-box')
+    if (cardNode.length === 0) return
+    const cardId = Number(cardNode.data('card-id'))
+    const listId = Number(cardNode.data('list-id'))
+    const order  = Number(cardNode.data('order')) - 0.5
+    const height = cardNode.outerHeight()
+    const width = cardNode.outerWidth()
+    const top = cardNode.offset().top
+    const left = cardNode.offset().left
+    const x = event.clientX
+    const y = event.clientY
+
+    this.setState({
+      potentialDragging: { cardId, listId, order, height, width, top, left, x, y }
     })
-    .whereNotExists( function() {
-      this.select('*')
-      .from('user_boards')
-      return createRecord('user_boards', attrs)
+  }
+
+  onMouseMove(event){
+    let { potentialDragging, dragging } = this.state
+    if (!potentialDragging && !dragging) return
+
+    if (potentialDragging){
+      const distance = (
+        Math.abs(potentialDragging.y - event.clientY) +
+        Math.abs(potentialDragging.x - event.clientX)
+      )
+      if (distance < 10) return
+      dragging = potentialDragging
+    }
+
+    let { cardId, listId, order, height, width, top, left, x, y} = dragging
+    let { board } = this.props
+
+    top += event.clientY - y
+    left += event.clientX - x
+    x = event.clientX
+    y = event.clientY
+
+    const targetNode = $(event.target).closest('.BoardShowPage-List, .BoardShowPage-Card .BoardShowPage-Card-box')
+
+    if (targetNode.is('.BoardShowPage-List')){
+      const targetListId = Number(targetNode.data('list-id'))
+      if (board.cards.filter(card => card.list_id === targetListId).length === 0){
+        listId = targetListId
+        order = -0.5
+      }
+    }
+
+    if (targetNode.is('.BoardShowPage-Card .BoardShowPage-Card-box')){
+      const targetCardId = Number(targetNode.data('card-id'))
+      if (targetCardId !== cardId) {
+        const rect = targetNode[0].getBoundingClientRect()
+        const middleOfTarget = rect.top + (rect.height/2)
+        listId = Number(targetNode.data('list-id'))
+        order = Number(targetNode.data('order')) - 0.5
+        if (event.clientY > middleOfTarget) order += 1
+      }
+    }
+
+    this.setState({
+      potentialDragging: null,
+      dragging: { cardId, listId, order, height, width, top, left, x, y }
     })
+  }
+
+  onMouseUp(event){
+    clearTimeout(this.starDraggingTimeout)
+    const { dragging } = this.state
+    if (!dragging){
+      this.setState({ potentialDragging: null })
+      return
+    }
+    let {cardId, listId, order} = dragging
+    order += 0.5
+    const card = this.props.board.cards.find(card => card.id === cardId)
+    if (card.list_id !== listId || card.order !== order){
+      this.moveCard({card, listId, order})
+    }
+    this.setState({ dragging: null }, clearTextSelection)
+  }
+
+  moveCard({ card, listId, order }){
+    const { board } = this.props
+
+    card.list_id = listId
+    card.order = order - 0.5
+
+    $.ajax({
+      method: 'post',
+      url: `/api/cards/${card.id}/move`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({
+        boardId: card.board_id,
+        listId: listId,
+        order: order,
+      }),
+    }).then(() => {
+      boardStore.reload()
+    })
+  }
+
+  closeCardModal(){
+    this.context.redirectTo(`/boards/${this.props.board.id}`)
+  }
+
+  render() {
+    const { board, viewingCard } = this.props
+    const { dragging } = this.state
+    if (!board) return <Layout className="BoardShowPage" />
+
+    let cardModal
+    if (viewingCard) {
+      let card = board.cards.find(card => card.id === viewingCard)
+      let list = board.lists.find(list => list.id === card.list_id)
+      cardModal = <CardModal
+        card={card}
+        list={list}
+        board={board}
+        onClose={this.closeCardModal}
+      />
+    }
+
+    const lists = board.lists.map(list => {
+      return <List
+        key={list.id}
+        board={board}
+        list={list}
+        onDragOver={this.onDragOver}
+        onDragEnd={this.onDragEnd}
+        onDrop={this.onDrop}
+        dragging={dragging}
+      />
+    })
+
+    const style = {
+      backgroundColor: board.background_color,
+      userSelect: dragging ? 'none' : 'auto',
+    }
+
+    let cardBeingDraggedNode
+    if (dragging){
+      const cardBeingDragged = board.cards
+        .find(card => card.id === dragging.cardId)
+      cardBeingDraggedNode = <Card
+        editable
+        key={cardBeingDragged.id}
+        card={cardBeingDragged}
+        beingDragged
+        order={dragging.order}
+        style={{
+          height: dragging.height+'px',
+          width: dragging.width+'px',
+          top: dragging.top+'px',
+          left: dragging.left+'px',
+        }}
+      />
+    }
+
+
+    return <Layout className="BoardShowPage" style={style}>
+      {cardModal}
+      <div className="BoardShowPage-Header">
+        <h1>{board.name}</h1>
+        <div>
+          <DownloadBoardButton boardId={board.id}/>
+          <InviteByEmailButton boardId={board.id}/>
+          <LeaveBoardButton boardId={board.id}/>
+        </div>
+      </div>
+      <div
+        ref="lists"
+        className="BoardShowPage-lists"
+        onMouseDown={this.onMouseDown}
+        onMouseMove={this.onMouseMove}
+        onMouseUp={this.onMouseUp}
+      >
+        {cardBeingDraggedNode}
+        {lists}
+        <NewListForm board={board} afterCreate={this.scrollToTheRight} />
+      </div>
+    </Layout>
+  }
+}
+
+const DownloadBoardButton = (props) => {
+  return <Button type="invisible" className="BoardShowPage-button BoardShowPage-DeleteBoardButton" href={`/api/boards/${props.boardId}?download=1`}>Export Board</Button>
 }
 
 
-const updateBoard = (id, attributes) =>
-  updateRecord('boards', id, attributes)
-
-
-const deleteBoard = (boardId) =>
-  Promise.all([
-    deleteRecord('boards', boardId),
-    knex.table('user_boards').where('board_id', boardId).del(),
-  ]).then(results => results[0] + results[1])
-
-// INVITES
-const createInvite = (attributes) =>
-  createRecord('invites', attributes)
-
-const searchQuery = ( userId, searchTerm ) => {
-  return queries.getSearchResult(userId, searchTerm)
-  .then(result => {
-    return result
-  })
-}
-
-export default {
-  createUser,
-  updateUser,
-  deleteUser,
-  findOrCreateUserFromGithubProfile,
-  createList,
-  updateList,
-  deleteList,
-  createCard,
-  updateCard,
-  deleteCard,
-  moveCard,
-  createBoard,
-  updateBoard,
-  deleteBoard,
-  archiveCard,
-  unarchiveCard,
-  archiveList,
-  unarchiveList,
-  archiveBoard,
-  unarchiveBoard,
-  createInvite,
-  addUserToBoard,
-  searchQuery,
-  removeUserFromBoard,
+const clearTextSelection = () => {
+  var sel = window.getSelection ?
+    window.getSelection() :
+    document.selection;
+  if (sel && sel.removeAllRanges) sel.removeAllRanges();
+  if (sel && sel.empty) sel.empty();
 }
