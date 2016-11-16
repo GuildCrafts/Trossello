@@ -129,6 +129,17 @@ const createCard = (attributes) => {
 const updateCard = (id, attributes) =>
   updateRecord('cards', id, attributes)
 
+const moveAllCards = (cards, newList, orderOffset) => {
+  const updates = []
+
+  for(let i=cards.length-1; i>=0; i--){
+    let newOrder = cards[i].order + orderOffset
+    updates.push(updateCard(cards[i].id,
+      { list_id: newList, order: newOrder }))
+  }
+  return Promise.all(updates)
+}
+
 const deleteCard = (id) =>
   deleteRecord('cards', id)
 
@@ -285,6 +296,7 @@ export default {
   deleteList,
   createCard,
   updateCard,
+  moveAllCards,
   deleteCard,
   moveCard,
   createBoard,
