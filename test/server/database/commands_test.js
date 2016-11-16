@@ -53,7 +53,7 @@ describe('database.commands', () => {
           expect(user.email).to.eql('majid@gmail.com')
 
           return queries.getUsers().then( users => {
-            expect(users.length).to.eql(2)
+            expect(users.length).to.eql(3)
             users.forEach(user => {
               if (user.id === 1455){
                 expect(user).to.be.a('object')
@@ -65,7 +65,12 @@ describe('database.commands', () => {
                 expect(user.id).to.eql(6672)
                 expect(user.name).to.eql('Larry Harvey')
                 expect(user.email).to.eql('larry@harvey.to')
-              }else{
+              }else if (user.id === 10000){
+                expect(user).to.be.a('object')
+                expect(user.id).to.eql(10000)
+                expect(user.name).to.eql('Bob Taylor')
+                expect(user.email).to.eql('bob@bob.com')
+              } else {
                 throw new Error('unexpected user record')
               }
             })

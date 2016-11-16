@@ -15,6 +15,12 @@ const withTwoUsersInTheDatabase = (callback) => {
           github_id: 9775,
           name: 'Larry Harvey',
           email: 'larry@harvey.to',
+        }),
+        commands.createUser({
+          id: 10000,
+          github_id: 5000,
+          name: 'Bob Taylor',
+          email: 'bob@bob.com'
         })
       ])
     })
