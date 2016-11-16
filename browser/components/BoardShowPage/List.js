@@ -92,30 +92,23 @@ export default class List extends Component {
       onCreateCard={this.creatingCard}
     />
 
-    return <div className="BoardShowPage-ListWrapper"
-        data-list-id={list.id}
-      >
-      <div className="BoardShowPage-BehindList">
-        <div className={className} data-list-id={list.id} style={this.state.listStyle}>
-          <div
-            className="BoardShowPage-ListHeader"
-            draggable
-            onDragStart={this.props.onDragStart}
-          >
-            <ListName list={list}/>
-            <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
-              <Icon type="ellipsis-h" />
-            </PopoverMenuButton>
-          </div>
-          <div
-            ref="cards"
-            className="BoardShowPage-cards"
-          >
-            {cardNodes}
-            {newCardForm}
-          </div>
-          {newCardLink}
+    return <div className="BoardShowPage-List" data-list-id={list.id}>
+      <div className="BoardShowPage-List-box">
+        <div className="BoardShowPage-ListHeader"
+          className="BoardShowPage-ListHeader"
+          draggable
+          onDragStart={this.props.onDragStart}
+        >
+          <ListName list={list}/>
+          <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
+            <Icon type="ellipsis-h" />
+          </PopoverMenuButton>
         </div>
+        <div ref="cards"className="BoardShowPage-cards">
+          {cardNodes}
+          {newCardForm}
+        </div>
+        {newCardLink}
       </div>
     </div>
   }

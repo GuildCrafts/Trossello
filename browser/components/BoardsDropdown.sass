@@ -2,6 +2,13 @@
 
 .BoardsDropdown
   color: $default-text-color
+
+  &-header
+    padding: 11px
+    background-color: $grey
+    h4
+      margin: 0
+
   &-dropdown
     display: flex
     flex-direction: column
@@ -9,6 +16,7 @@
     background-color: white
     border-radius: 3px
     box-shadow: 2px 2px 10px black
+    min-width: 260px
   &-sidebar-header
     color: #222222
     margin-bottom: 3px
@@ -17,6 +25,27 @@
     padding: 1em
     max-height: 100%
     min-width: 100%
+    display: flex
+    flex-direction: column
+    margin: 3px
+    > .Link
+      padding: 8px
+      border-radius: 3px
+      &:hover
+        background-color: $grey
+    &::-webkit-scrollbar
+      -webkit-appearance: none
+
+    &::-webkit-scrollbar:vertical
+      width: 9px
+
+    &::-webkit-scrollbar-thumb
+      border-radius: 4px
+      background-color: rgba(0, 0, 0, .1)
+
+    &::-webkit-scrollbar-track
+      border-radius: 4px
+      background-color: rgba(0, 0, 0, .1)
 
   &-board
     display: block
@@ -25,7 +54,6 @@
     text-decoration: none
     color: inherit
     height: 36px
-    min-height: 1em
     position: relative
 
   &-background
@@ -85,3 +113,7 @@
     position: absolute
     top: 0
     left: 0
+
+.locked
+  border-radius: 0
+  box-shadow: none

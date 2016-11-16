@@ -66,16 +66,16 @@ class Open extends Component {
   }
 
   render(){
-    return <Form
-      onSubmit={this.createList}
-      className="BoardShowPage-NewListForm-Form">
-      <input type="text" ref="name" />
-      <div>
-        <Button type="primary" action="submit" className="button">Save</Button>
-        <Link onClick={this.props.close}>
-          <Icon type="times" />
-        </Link>
-      </div>
-    </Form>
+    return <div className="BoardShowPage-NewListForm-Form">
+      <Form onSubmit={this.createList}>
+        <input type="text" ref="name" />
+        <div>
+          <Button type="primary" action="submit" className="button">Save</Button>
+          <Link onClick={this.props.close}>
+            <Icon type="times" />
+          </Link>
+        </div>
+      </Form>
+    </div>
   }
 }

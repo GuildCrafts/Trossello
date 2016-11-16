@@ -129,6 +129,53 @@ describe('database.commands', () => {
     })
   })
 
+  describe('lockDropdown', () => {
+    withTwoUsersInTheDatabase(() => {
+      it('should lock the boards dropdown menu', () => {
+        return queries.getUserById(1455)
+          .then(user => {
+            expect(user).to.be.a('object')
+            expect(user.id).to.eql(1455)
+            expect(user.boards_dropdown_lock).to.eql(false)
+          })
+          .then(() => commands.lockDropdown(1455))
+          .then(() => {
+            queries.getUserById(1455)
+              .then(user => {
+                expect(user).to.be.a('object')
+                expect(user.id).to.eql(1455)
+                expect(user.boards_dropdown_lock).to.eql(true)
+              })
+          })
+      })
+    })
+  })
+
+  describe('unlockDropdown', () => {
+    withTwoUsersInTheDatabase(() => {
+      it('should lock the boards dropdown menu', () => {
+        return commands.lockDropdown(1455)
+          .then(() => {
+            queries.getUserById(1455)
+              .then(user => {
+                expect(user).to.be.a('object')
+                expect(user.id).to.eql(1455)
+                expect(user.boards_dropdown_lock).to.eql(true)
+              })
+          })
+          .then(() => commands.unlockDropdown(1455))
+          .then(() => {
+            queries.getUserById(1455)
+              .then(user => {
+                expect(user).to.be.a('object')
+                expect(user.id).to.eql(1455)
+                expect(user.boards_dropdown_lock).to.eql(false)
+              })
+          })
+      })
+    })
+  })
+
   describe('createCard', () => {
     it('should insert a card into the cards table', () => {
       return knex.table('cards').count()
