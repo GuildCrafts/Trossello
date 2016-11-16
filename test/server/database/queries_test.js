@@ -92,6 +92,7 @@ describe('database.queries', () => {
               { id: 81, board_id: 101, list_id: 40, content: 'Card2', description: '', archived: false, order: 1},
               { id: 82, board_id: 101, list_id: 41, content: 'card3', description: '', archived: false, order: 0},
               { id: 83, board_id: 101, list_id: 41, content: 'Card4', description: '', archived: false, order: 1},
+              { id: 84, board_id: 101, list_id: 41, content: 'Card5', description: '', archived: true, order: 2},
             ],
             users: [
               {
@@ -125,8 +126,17 @@ describe('database.queries', () => {
     })
   })
 
+  describe('getListByName', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should return a list when given a name', () => {
+        return queries.getListByName("List1").then( list => {
+          expect(list.name).to.eql("List1")
+        })
+      })
+    })
+  })
 
-  describe('getListById', () => {
+  describe('getCardById', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
         return queries.getCardById(80).then( board => {
