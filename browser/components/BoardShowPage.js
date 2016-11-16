@@ -146,53 +146,20 @@ class BoardShowPage extends React.Component {
   }
 
 
-  // onCardDragOverList(event, dropTarget){
-  //   const newListId = dropTarget.data('list-id')
-  //   const targetList = this.getListById(newListId)
-  //   const cardArray = targetList.props.cards
-  //   const newOrder = cardArray.length
-  //   this.setState({
-  //     draggingCardNewOrder: newOrder,
-  //     draggingCardNewListId: newListId,
-  //   })
-  // }
+  onCardDragOverList(event, dropTarget){
+    const draggingCardId = this.state.draggingCardId
+    const newListId = dropTarget.data('list-id')
+    const targetList = this.getListById(newListId)
+    //const cardArray = How do I get the card array length?
+    const rect = dropTarget[0].getBoundingClientRect()
+    const newOrder = 1000 //Should be end of the card array.
+    this.setState({
+      draggingCardNewOrder: newOrder,
+      draggingCardNewListId: newListId,
+    })
+  }
 
-  // onCardDragOverCardBox(event, dropTarget){
-  //   const targetCardId = dropTarget.data('card-id')
-  //   if (draggingCardId === targetCardId) return
-  //   const targetCard = this.getCardById(targetCardId)
-  //   const draggingCard = this.getCardById(draggingCardId)
-
-  //   const draggingCardNewListId = this.state.draggingCardNewListId || draggingCard.list_id
-  //   const draggingCardNewOrder = this.state.draggingCardNewOrder || draggingCard.order
-  //   const newListId = targetCard.list_id
-
-  //   const rect = dropTarget[0].getBoundingClientRect()
-  //   const middleOfTarget = rect.top + (rect.height/2)
-  //   const newOrder = targetCard.order + (event.clientY > middleOfTarget ? 0.5 : -0.5)
-
-  //   if (draggingCardNewListId === newListId && draggingCardNewOrder === newOrder)return
-  //   this.setState({
-  //     draggingCardNewOrder: newOrder,
-  //     draggingCardNewListId: newListId,
-  //   })
-  // }
-
-  // onCardDragEnter(event){
-  //   const dropTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
-  //   if(dropTarget.length === 0) return 
-  //   const draggingCardId = this.state.draggingCardId
-  //   if(dropTarget.is('.BoardShowPage-Card-box')) {
-  //     this.onCardDragOverCards(event, dropTarget)
-  //   } else if(dropTarget.is('.BoardShowPage-ListWrapper')) {
-  //     this.onCardDragOverList(event, dropTarget)
-  //   } 
-  // }
-
-
-  onCardDragEnter(event){
-    const dropTarget = $(event.target).closest('.BoardShowPage-Card-box')
-    if (dropTarget.length === 0) return
+  onCardDragOverCards(event, dropTarget){
     const draggingCardId = this.state.draggingCardId
     const targetCardId = dropTarget.data('card-id')
     if (draggingCardId === targetCardId) return
@@ -202,19 +169,55 @@ class BoardShowPage extends React.Component {
     const draggingCardNewListId = this.state.draggingCardNewListId || draggingCard.list_id
     const draggingCardNewOrder = this.state.draggingCardNewOrder || draggingCard.order
     const newListId = targetCard.list_id
-    console.log('Target Card list ID--->', newListId)
 
     const rect = dropTarget[0].getBoundingClientRect()
     const middleOfTarget = rect.top + (rect.height/2)
     const newOrder = targetCard.order + (event.clientY > middleOfTarget ? 0.5 : -0.5)
 
-    if (draggingCardNewListId === newListId && draggingCardNewOrder === newOrder) return
-
+    if (draggingCardNewListId === newListId && draggingCardNewOrder === newOrder)return
     this.setState({
       draggingCardNewOrder: newOrder,
       draggingCardNewListId: newListId,
     })
   }
+
+  onCardDragEnter(event){
+    const dropTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
+    if(dropTarget.length === 0) return
+
+    if(dropTarget.is('.BoardShowPage-Card-box')) {
+      this.onCardDragOverCards(event, dropTarget)
+    } else if(dropTarget.is('.BoardShowPage-ListWrapper')) {
+      this.onCardDragOverList(event, dropTarget)
+    }
+  }
+
+
+  // onCardDragEnter(event){
+  //   const dropTarget = $(event.target).closest('.BoardShowPage-Card-box')
+  //   if (dropTarget.length === 0) return
+  //   const draggingCardId = this.state.draggingCardId
+  //   const targetCardId = dropTarget.data('card-id')
+  //   if (draggingCardId === targetCardId) return
+  //   const targetCard = this.getCardById(targetCardId)
+  //   const draggingCard = this.getCardById(draggingCardId)
+  //
+  //   const draggingCardNewListId = this.state.draggingCardNewListId || draggingCard.list_id
+  //   const draggingCardNewOrder = this.state.draggingCardNewOrder || draggingCard.order
+  //   const newListId = targetCard.list_id
+  //   console.log('Target Card list ID--->', newListId)
+  //
+  //   const rect = dropTarget[0].getBoundingClientRect()
+  //   const middleOfTarget = rect.top + (rect.height/2)
+  //   const newOrder = targetCard.order + (event.clientY > middleOfTarget ? 0.5 : -0.5)
+  //
+  //   if (draggingCardNewListId === newListId && draggingCardNewOrder === newOrder) return
+  //
+  //   this.setState({
+  //     draggingCardNewOrder: newOrder,
+  //     draggingCardNewListId: newListId,
+  //   })
+  // }
 
   onListDragEnter(event){
     const dropTarget = $(event.target).closest('.BoardShowPage-ListWrapper')
