@@ -103,7 +103,7 @@ const Header = (props) => {
     <Link onClick={props.onClose} className="BoardShowPage-MenuSideBar-Header-link">
       <Icon type="times" />
     </Link>
-  </div>
+  </div>  
 }
 
 const Pane = (props) => {
