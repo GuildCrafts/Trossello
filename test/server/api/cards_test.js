@@ -70,6 +70,47 @@ describe('/api/cards', () => {
         })
       })
 
+      //MOVE CARD
+      describe('POST /api/cards/:cardId/move', () => {
+
+        it('should move the card and re-order other cards', () => {
+          const moveTo = {
+            boardId: 101,
+            listId: 41,
+            order: 2
+          }
+          return queries.getCardById(80)
+            .then(response => {
+              expect(response.list_id).to.eql(40)
+              expect(response.order).to.eql(0)
+            })
+            .then(() => queries.getCardById(84))
+            .then(response => {
+              expect(response.order).to.eql(1)
+            })
+            .then(() => queries.getCardById(86))
+            .then(response => {
+              expect(response.list_id).to.eql(41)
+              expect(response.order).to.eql(3)
+            })
+            .then(() => request('POST', '/api/cards/80/move', moveTo))
+            .then(() => queries.getCardById(80))
+            .then(response => {
+              expect(response.order).to.eql(2)
+              expect(response.list_id).to.eql(41)
+            })
+            .then(() => queries.getCardById(84))
+            .then(response => {
+              expect(response.order).to.eql(1)
+            })
+            .then(() => queries.getCardById(86))
+            .then(response => {
+              expect(response.list_id).to.eql(41)
+              expect(response.order).to.eql(4)
+            })
+        })
+      })
+
     })
   })
 })
