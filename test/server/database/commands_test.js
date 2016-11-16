@@ -646,3 +646,61 @@ describe('database.commands', () => {
     })
   })
 })
+
+describe('POST /api/lists/cards/move', () => {
+  withBoardsListsAndCardsInTheDatabase(() => {
+    it.only('It should move all cards to another list', () => {
+      const cardsToMove = [
+        {
+          id: 80,
+          list_id: 40,
+          board_id: 101,
+          content: 'card1',
+        },
+        {  id: 81,
+           list_id: 40,
+           board_id: 101,
+           content: 'Card2',
+        }
+      ]
+
+      const listToMove = { cardsToMove: cardsToMove, newList: 41, orderOffset: 2 }
+
+      const getOrderedCardsByListId = (board, listId) =>
+        board.cards
+          .filter(card => card.list_id === listId)
+          .sort( (a,b) => a.order - b.order)
+
+      return queries.getBoardById(101)
+        .then(board => {
+          let list40Cards = getOrderedCardsByListId(board, 40)
+          let list41Cards = getOrderedCardsByListId(board, 41)
+
+          expect(list40Cards.length).to.eql(2)
+          expect(list41Cards.length).to.eql(2)
+        })
+        .then(() => queries.getCardById(80))
+        .then(card => expect(card.list_id).to.eql(40))
+        .then(() => queries.getCardById(81))
+        .then(card => expect(card.list_id).to.eql(40))
+        .then(() => commands.moveAllCards(
+          listToMove.cardsToMove,
+          listToMove.newList,
+          listToMove.orderOffset,
+        ))
+        .then(() => queries.getBoardById(101))
+        .then(board => {
+          let list40Cards = getOrderedCardsByListId(board, 40)
+          let list41Cards = getOrderedCardsByListId(board, 41)
+          console.log('------------->', list40Cards.length)
+
+          expect(list40Cards.length).to.eql(0)
+          expect(list41Cards.length).to.eql(4)
+        })
+        .then(() => queries.getCardById(80))
+        .then(card => expect(card.list_id).to.eql(41))
+        .then(() => queries.getCardById(81))
+        .then(card => expect(card.list_id).to.eql(41))
+    })
+  })
+})
