@@ -24,7 +24,7 @@ const withTwoUsersInTheDatabase = (callback) => {
 
 const withBoardsListsAndCardsInTheDatabase = (callback) => {
   withTwoUsersInTheDatabase(()=>{
-    context('when there boards, list and cards in the database', () => {
+    context('when there are boards, lists and cards in the database', () => {
       beforeEach( () => {
         return commands.createBoard(1455, {
           id: 101,

@@ -79,6 +79,7 @@ const getListsAndCardsForBoard = (board) => {
 const getListById = (id) =>
   getRecordById('lists', id)
 
+
 const getCardById = (id) =>
   getRecordById('cards', id)
 

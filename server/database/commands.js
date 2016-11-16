@@ -119,6 +119,26 @@ const createList = (attributes) =>
 const updateList = (id, attributes) =>
   updateRecord('lists', id, attributes)
 
+const duplicateList = (boardId, listId, name) =>
+  createList({name: name, board_id: boardId})
+    .then( newList =>
+      knex.raw(
+        `
+          INSERT INTO
+            cards (board_id, list_id, content, archived, "order", description)
+          SELECT
+            board_id, ?, content, archived, "order", description
+          FROM
+            cards
+          WHERE
+            list_id=?
+          AND
+            archived=false
+        `,
+        [newList.id, listId]
+      ).then( _ => newList)
+    )
+
 
 const deleteList = (id) =>
   Promise.all([
@@ -356,6 +376,7 @@ export default {
   createList,
   updateList,
   deleteList,
+  duplicateList,
   createCard,
   updateCard,
   deleteCard,

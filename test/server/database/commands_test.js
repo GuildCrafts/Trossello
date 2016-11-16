@@ -674,6 +674,30 @@ describe('database.commands', () => {
     })
   })
 
+  describe('duplicateList', () => {
+    withBoardsListsAndCardsInTheDatabase( () => {
+      it('it should duplicate the list and its cards given the new name', () => {
+        return commands.duplicateList(101, 40, "Bob's New List" ).then( list => {
+          expect(list).to.eql({
+            id: list.id,
+            board_id: 101,
+            name: "Bob's New List",
+            archived: false,
+          })
+          return queries.getBoardById(101).then( board => {
+            expect(board.lists).to.include(list)
+            const fromListCards = board.cards.filter(card => card.list_id === 40)
+            const newListCards  = board.cards.filter(card => card.list_id === list.id)
+            expect(newListCards.length).to.eql(fromListCards.length)
+            expect( fromListCards.map(card => card.name).sort() ).to.eql(
+              newListCards.map(card => card.name).sort()
+            )
+          })
+        })
+      })
+    })
+  })
+
   describe('createBoard', () => {
     it('should create a new board entry in db, and associate it with a user', () => {
       return commands.createBoard(15, {name: "My Board", archived: false,})

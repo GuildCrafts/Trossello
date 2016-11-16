@@ -129,8 +129,7 @@ describe('database.queries', () => {
     })
   })
 
-
-  describe('getListById', () => {
+  describe('getCardById', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
         return queries.getCardById(80).then( board => {

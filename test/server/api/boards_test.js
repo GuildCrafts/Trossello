@@ -79,6 +79,16 @@ describe('/api/boards', () => {
             })
         })
       })
+
+      // DUPLICATE LIST
+      describe('POST /api/boards/:boardId/lists/:listId/duplicate', () => {
+        it('should render 400 Not Authorized', () => {
+          return request('post', '/api/boards/101/lists/1/duplicate', {})
+            .then(response => {
+              expect(response).to.have.status(400)
+            })
+        })
+      })
     })
 
 
@@ -252,6 +262,23 @@ describe('/api/boards', () => {
             })
         })
       })
+
+            // DUPLICATE LIST
+      describe('POST /api/boards/:boardId/lists/:listId/duplicate', () => {
+        it('should duplicate the list and render the new list', () => {
+          return request('post', '/api/boards/101/lists/1/duplicate', {name: 'new list name'})
+            .then(response => {
+              expect(response).to.have.status(200)
+              expect(response.body).to.eql({
+                id: response.body.id,
+                board_id: 101,
+                name: "new list name",
+                archived: false,
+              })
+            })
+        })
+      })
+
     })
 
   })

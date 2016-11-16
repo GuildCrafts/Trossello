@@ -28,6 +28,7 @@ describe('/api/lists', () => {
             })
         })
       })
+
     })
 
     context('when logged in', () => {
@@ -103,6 +104,5 @@ describe('/api/lists', () => {
       })
 
     })
-
   })
 })

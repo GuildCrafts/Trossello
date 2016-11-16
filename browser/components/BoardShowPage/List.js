@@ -100,10 +100,10 @@ export default class List extends Component {
           onDragStart={this.props.onDragStart}
         >
           <ListName list={list}/>
-          <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
-            <Icon type="ellipsis-h" />
-          </PopoverMenuButton>
         </div>
+        <PopoverMenuButton className="BoardShowPage-ListOptions" type="invisible" popover={listActionsMenu}>
+          <Icon type="ellipsis-h" />
+        </PopoverMenuButton>
         <div ref="cards"className="BoardShowPage-cards">
           {cardNodes}
           {newCardForm}

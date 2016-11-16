@@ -132,6 +132,18 @@ router.post('/:boardId/unstar', (request, response, next) => {
     .catch(next)
 })
 
+// DUPLICATE LIST
+router.post('/:boardId/lists/:listId/duplicate', (request, response, next) => {
+  const { boardId, listId } = request.params
+  const { name } = request.body
+
+  commands.duplicateList(boardId, listId, name)
+    .then(newList => {
+      response.json(newList)
+    })
+    .catch(next)
+})
+
 
 
 export default router
