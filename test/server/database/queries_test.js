@@ -104,6 +104,7 @@ describe('database.queries', () => {
                 "name": "Mark Zuckerburg",
                 "created_at": null,
                 "updated_at": null,
+                "boards_dropdown_lock": false
               },
             ],
           })

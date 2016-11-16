@@ -91,6 +91,22 @@ const updateUser = (id, attributes) =>
 const deleteUser = (id) =>
   deleteRecord('users', id)
 
+const lockDropdown = (id) =>
+  knex
+    .table('users')
+    .where('id', id)
+    .update({
+      boards_dropdown_lock: true,
+    })
+
+const unlockDropdown = (id) =>
+  knex
+    .table('users')
+    .where('id', id)
+    .update({
+      boards_dropdown_lock: false,
+    })
+
 const createList = (attributes) =>
   knex
     .table('lists')
@@ -361,4 +377,6 @@ export default {
   addUserToBoard,
   searchQuery,
   removeUserFromBoard,
+  lockDropdown,
+  unlockDropdown
 }

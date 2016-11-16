@@ -70,7 +70,7 @@ class BoardShowPage extends React.Component {
       draggingCardNewListId: null,
       draggingCardNewOrder: null,
     }
-    this.openSideBar = this.openSideBar.bind(this)
+    this.toggleSideBar = this.toggleSideBar.bind(this)
     this.closeSideBar = this.closeSideBar.bind(this)
     this.scrollToTheRight = this.scrollToTheRight.bind(this)
     this.closeCardModal = this.closeCardModal.bind(this)
@@ -91,9 +91,9 @@ class BoardShowPage extends React.Component {
     }
   }
 
-  openSideBar(event){
+  toggleSideBar(event){
     if (event) event.preventDefault()
-    this.setState({sideBarOpen: true})
+    this.setState({sideBarOpen: !this.state.sideBarOpen})
   }
 
   closeSideBar(event){
@@ -116,7 +116,7 @@ class BoardShowPage extends React.Component {
     dragImage.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D'
     event.dataTransfer.setDragImage(dragImage, 0, 0);
 
-    const dragTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
+    const dragTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-List')
 
     this.dragGhost = dragTarget.clone()
     const offset = dragTarget.offset()
@@ -151,7 +151,7 @@ class BoardShowPage extends React.Component {
       return
     }
 
-    if (dragTarget.is('.BoardShowPage-ListWrapper')){
+    if (dragTarget.is('.BoardShowPage-List')){
       this.setState({
         dragging: 'list',
         draggingListId: dragTarget.data('list-id'),
@@ -167,7 +167,7 @@ class BoardShowPage extends React.Component {
   }
 
   onListDragEnter(event){
-    const dropTarget = $(event.target).closest('.BoardShowPage-ListWrapper')
+    const dropTarget = $(event.target).closest('.BoardShowPage-List')
     if (dropTarget.length === 0) return
     const draggingListId = this.state.draggingListId
     const targetListId = dropTarget.data('list-id')
@@ -204,13 +204,13 @@ class BoardShowPage extends React.Component {
   }
 
   onCardDragOver(event){
-    const dropTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
+    const dropTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-List')
     if (dropTarget.length === 0) return
 
     if (dropTarget.is('.BoardShowPage-Card-box'))
       return this.onCardDragOverAnotherCard(event, dropTarget)
 
-    if (dropTarget.is('.BoardShowPage-ListWrapper'))
+    if (dropTarget.is('.BoardShowPage-List'))
       return this.onCardDragOverAList(event, dropTarget)
   }
 
@@ -419,28 +419,18 @@ class BoardShowPage extends React.Component {
     const className = `BoardShowPage ${this.state.sideBarOpen ? 'BoardShowPage-sideBarOpen' : ''}`
     return <Layout className={className} style={style}>
       {cardModal}
-      <div className="BoardShowPage-Header">
-        <h1>{board.name}</h1>
-        <span>
-          <StarIcon board={board} onChange={reloadBoardStores}/>
-        </span>
-        <div className="flex-spacer" />
-        <Link
-          className="BoardShowPage-menuButton"
-          onClick={this.openSideBar}
+      <div className="BoardShowPage-container">
+        <Header board={board} toggleSideBar={this.toggleSideBar} sideBarOpen={this.state.sideBarOpen} />
+        <div
+          ref="lists"
+          className="BoardShowPage-lists"
+          onMouseDown={this.onMouseDown}
+          onMouseMove={this.onMouseMove}
+          onMouseUp={this.onMouseUp}
         >
-          <Icon className='BoardShowPage-menuButton-icon' type='ellipsis-h' />Show Menu
-        </Link>
-      </div>
-      <div
-        ref="lists"
-        className="BoardShowPage-lists"
-        onMouseDown={this.onMouseDown}
-        onMouseMove={this.onMouseMove}
-        onMouseUp={this.onMouseUp}
-      >
-        {listNodes}
-        <NewListForm board={board} afterCreate={this.scrollToTheRight} />
+          {listNodes}
+          <NewListForm board={board} afterCreate={this.scrollToTheRight} />
+        </div>
       </div>
       <MenuSideBar
         onClose={this.closeSideBar}
@@ -449,6 +439,22 @@ class BoardShowPage extends React.Component {
     </Layout>
   }
 }
+
+const Header = ({board, sideBarOpen, toggleSideBar}) =>
+  <div className="BoardShowPage-Header">
+    <h1>{board.name}</h1>
+    <span>
+      <StarIcon board={board} onChange={reloadBoardStores} />
+    </span>
+    <div className="flex-spacer" />
+    <Link
+      className="BoardShowPage-menuButton"
+      onClick={toggleSideBar}
+    >
+      <Icon className="BoardShowPage-menuButton-icon" type="ellipsis-h" />
+      {sideBarOpen ? 'Hide' : 'Show'} Manu
+    </Link>
+  </div>
 
 const clearTextSelection = () => {
   var sel = window.getSelection ?
