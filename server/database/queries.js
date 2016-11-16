@@ -7,6 +7,9 @@ const getRecords = (table) =>
 const getRecordById = (table, id) =>
   knex.table(table).where('id', id).first('*')
 
+const getRecordByName = (table, name) =>
+  knex.table(table).where('name', name).first('*')
+
 const getUsers = () =>
   getRecords('users')
 
@@ -79,8 +82,14 @@ const getListsAndCardsForBoard = (board) => {
 const getListById = (id) =>
   getRecordById('lists', id)
 
+const getListByName = (name) =>
+  getRecordByName('lists', name)
+
 const getCardById = (id) =>
   getRecordById('cards', id)
+
+const getCardsByListId = (id) =>
+  knex.table('cards').where('list_id', id)
 
 // INVITES
 
@@ -95,9 +104,11 @@ export default {
   getUsers,
   getUserById,
   getCardById,
+  getCardsByListId,
   getSearchResult,
   getBoardsByUserId,
   getBoardById,
   getListById,
+  getListByName,
   verifyToken,
 }

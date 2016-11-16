@@ -101,6 +101,12 @@ const createList = (attributes) => {
 const updateList = (id, attributes) =>
   updateRecord('lists', id, attributes)
 
+const copyList = (fromListId, fromListBoardId, newListName) => {
+    return createList({name: newListName, board_id: fromListBoardId})
+      .then( newList => {
+        return copyCardsFromList(fromListId, newList.id)
+      })
+}
 
 const deleteList = (id) =>
   Promise.all([
@@ -201,6 +207,13 @@ const unarchiveList = (id) =>
     unarchiveListItems(id)
   ])
 
+const copyCardsFromList = (fromListId, toListId) => {
+  return knex.raw(
+    `INSERT INTO cards (board_id,list_id,content,archived,"order",description)
+    SELECT board_id,?,content,archived,"order",description
+    FROM cards WHERE list_id=? AND archived=false`, [toListId, fromListId])
+}
+
 const archiveBoard = (id) =>
   archiveRecord('boards', id)
 
@@ -283,6 +296,7 @@ export default {
   createList,
   updateList,
   deleteList,
+  copyList,
   createCard,
   updateCard,
   deleteCard,
@@ -294,6 +308,7 @@ export default {
   unarchiveCard,
   archiveList,
   unarchiveList,
+  copyCardsFromList,
   archiveBoard,
   unarchiveBoard,
   starBoard,

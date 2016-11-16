@@ -71,6 +71,14 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
             content: 'Card4',
           })
         ).then( () =>
+          commands.createCard({
+            id: 84,
+            list_id: 41,
+            board_id: 101,
+            content: 'Card5',
+            archived: true,
+          })
+        ).then( () =>
           commands.createBoard(1455, {
             id: 102,
             name: 'Board2',
