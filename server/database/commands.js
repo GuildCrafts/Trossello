@@ -165,6 +165,19 @@ const createCard = (attributes) => {
 const updateCard = (id, attributes) =>
   updateRecord('cards', id, attributes)
 
+const moveAllCards = (cardIds, newList, orderOffset) => {
+  const updates = []
+
+  for(let i=cardIds.length-1; i>=0; i--) {
+    queries.getCardById(cardIds[i])
+      .then( card => {
+        let newOrder = card.order + orderOffset
+        updates.push(updateCard(card.id, {list_id: newList, order: newOrder}) )
+      })
+  }
+  return Promise.all(updates)
+}
+
 const deleteCard = (id) =>
   deleteRecord('cards', id)
 
@@ -379,6 +392,7 @@ export default {
   duplicateList,
   createCard,
   updateCard,
+  moveAllCards,
   deleteCard,
   moveCard,
   moveList,

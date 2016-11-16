@@ -82,6 +82,7 @@ export default class List extends Component {
     }
 
     const listActionsMenu = <ListActionsMenu
+      board={this.props.board}
       list={this.props.list}
       onCreateCard={this.creatingCard}
     />

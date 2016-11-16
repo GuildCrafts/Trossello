@@ -7,11 +7,13 @@ import Icon from './Icon'
 import Button from './Button'
 import DialogBox from './DialogBox'
 import ConfirmationLink from './ConfirmationLink'
+import boardStore from '../stores/boardStore'
 
 class ListActionsMenu extends Component {
 
   static propTypes = {
-    list: React.PropTypes.object.isRequired
+    board: React.PropTypes.object.isRequired,
+    list: React.PropTypes.object.isRequired,
   }
 
   constructor(props){
@@ -142,15 +144,73 @@ class CopyListPane extends Component {
   }
 }
 
+
+class MoveAllCardsPane extends Component {
+
+  static propTypes = {
+    list: React.PropTypes.object.isRequired,
+    board: React.PropTypes.object.isRequired,
+  }
+
+  moveCards(destinationList){
+    const { list: sourceList, board } = this.props
+    const cardsToMove = board.cards.filter( card => card.list_id === sourceList.id )
+    const orderOffset = cardsToMove.length
+    const cardsIds = cardsToMove.map(card => card.id)
+
+    $.ajax({
+      method: 'post',
+      url: `/api/lists/${sourceList.id}/cards/move`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({
+        cardIds: cardsIds,
+        newList: destinationList.id,
+        orderOffset: orderOffset
+      }),
+    }).then(() => {
+      this.props.onClose()
+      boardStore.reload()
+    })
+  }
+
+  moveCardsTo(list){
+    return (event) => {
+      event.preventDefault()
+      this.moveCards(list)
+    }
+  }
+
+  render(){
+    const { board, onClose } = this.props
+    const lists = board.lists
+      .filter(list => !list.archived)
+      .sort((a,b) => a.order - b.order)
+      .map(list =>
+        <Button
+          type="invisible"
+          key={list.id}
+          onClick={this.moveCardsTo(list)}
+        >{list.name}</Button>
+      )
+
+    return <DialogBox
+        className="ListActionsMenu ListActionsMenu-MoveAllCardsPane"
+        heading="Select A List To Move All Cards"
+        onClose={onClose}
+      >
+      <div className="ListActionsMenu-MoveAllCards">
+        {lists}
+      </div>
+    </DialogBox>
+  }
+}
+
 const MoveListPane = ({onClose}) => {
   return <DialogBox className="ListActionsMenu-MoveListPane" heading="Move List" onClose={onClose}>
   </DialogBox>
 }
 
-const MoveAllCardsPane = ({onClose}) => {
-  return <DialogBox className="ListActionsMenu-MoveAllCardsPane" heading="Move All Cards" onClose={onClose}>
-  </DialogBox>
-}
 
 class ArchiveAllCardsPane extends Component {
 
