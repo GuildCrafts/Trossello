@@ -24,14 +24,21 @@ export default class List extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      creatingCard: false
+      creatingCard: false,
+      creatingCardTop: false
     }
     this.creatingCard = this.creatingCard.bind(this)
+    this.creatingCardTop = this.creatingCardTop.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
+    this.cancelCreatingCardTop = this.cancelCreatingCardTop.bind(this)
   }
 
   componentDidUpdate(){
     if (this.state.creatingCard){
+      const { cards } = this.refs
+      cards.scrollTop = cards.scrollHeight
+    }
+    if (this.state.creatingCardTop){
       const { cards } = this.refs
       cards.scrollTop = cards.scrollHeight
     }
@@ -41,8 +48,16 @@ export default class List extends Component {
     this.setState({creatingCard: true})
   }
 
+  creatingCardTop() {
+    this.setState({creatingCardTop: true})
+  }
+
   cancelCreatingCard() {
     this.setState({creatingCard: false})
+  }
+
+  cancelCreatingCardTop() {
+    this.setState({creatingCardTop: false})
   }
 
   render(){
@@ -70,8 +85,13 @@ export default class List extends Component {
       />
     )
 
-    let newCardForm, newCardLink
-    if (this.state.creatingCard) {
+    let newCardForm, newCardLink, newCardFormTop
+    if (this.state.creatingCard || this.state.creatingCardTop) {
+      newCardFormTop = <NewCardForm
+        board={board}
+        list={list}
+        onCancel={this.cancelCreatingCardTop}
+      />
       newCardForm = <NewCardForm
         board={board}
         list={list}
@@ -83,16 +103,35 @@ export default class List extends Component {
 
     const listActionsMenu = <ListActionsMenu
       list={this.props.list}
-      onCreateCard={this.creatingCard}
+      onCreateCardTop={this.creatingCardTop}
     />
 
-    return <div className="BoardShowPage-List" data-list-id={list.id}>
-      <div className="BoardShowPage-ListHeader">
-        <ListName list={list}/>
-        <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
-          <Icon type="ellipsis-h" />
-        </PopoverMenuButton>
+    const listHeader = <div className="BoardShowPage-ListHeader">
+      <ListName list={list}/>
+      <PopoverMenuButton className="BoardShowPage-ListHeader-ListOptions" type="invisible" popover={listActionsMenu}>
+        <Icon type="ellipsis-h" />
+      </PopoverMenuButton>
+    </div>
+
+    if(this.state.creatingCardTop){
+      return <div className="BoardShowPage-List" data-list-id={list.id}>
+      {listHeader}
+      <div
+        ref="cards"
+        className="BoardShowPage-cards"
+        onDragStart={this.props.onDragStart}
+        onDragOver={this.props.onDragOver}
+        onDragEnd={this.props.onDragEnd}
+        onDrop={this.props.onDrop}
+      >
+        {newCardFormTop}
+        {cardNodes}
       </div>
+      {newCardLink}
+    </div>
+    }else {
+      return <div className="BoardShowPage-List" data-list-id={list.id}>
+        {listHeader}
       <div
         ref="cards"
         className="BoardShowPage-cards"
@@ -106,6 +145,7 @@ export default class List extends Component {
       </div>
       {newCardLink}
     </div>
+    }
   }
 }
 
