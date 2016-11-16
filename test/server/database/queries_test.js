@@ -54,7 +54,7 @@ describe('database.queries', () => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(82)
           expect(card.list_id).to.eql(40)
-          expect(card.content).to.eql('Card2')
+          expect(card.content).to.eql('happy')
         })
       })
     })
@@ -89,8 +89,8 @@ describe('database.queries', () => {
             ],
             cards: [
               { id: 80, board_id: 101, list_id: 40, content: 'card1',      description: '', archived: false, order: 0},
-              { id: 81, board_id: 101, list_id: 40, content: 'happy',      description: '', archived: false, order: 1},
-              { id: 82, board_id: 101, list_id: 40, content: 'Card2',      description: '', archived: false, order: 2},
+              { id: 81, board_id: 101, list_id: 40, content: 'Card2',      description: '', archived: false, order: 1},
+              { id: 82, board_id: 101, list_id: 40, content: 'happy',      description: '', archived: false, order: 2},
               { id: 83, board_id: 101, list_id: 41, content: 'card3',      description: '', archived: false, order: 0},
               { id: 84, board_id: 101, list_id: 41, content: 'Card4',      description: '', archived: false, order: 1},
               { id: 85, board_id: 101, list_id: 41, content: 'happy card', description: '', archived: false, order: 2},

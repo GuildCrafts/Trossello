@@ -11,6 +11,7 @@ exports.seed = (knex) => {
       knex.truncate('lists'),
       knex.truncate('boards'),
       knex.truncate('users'),
+      knex.truncate('invites')
     ])
   }
 

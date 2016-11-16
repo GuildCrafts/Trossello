@@ -241,7 +241,7 @@ describe('database.commands', () => {
               }else if (card.id === 81){
                 expect(card).to.be.a('object')
                 expect(card.list_id).to.eql(40)
-                expect(card.content).to.eql('happy')
+                expect(card.content).to.eql('Card2')
               }
             })
           })
