@@ -98,6 +98,21 @@ describe('database.commands', () => {
     })
   })
 
+  describe('removeUserFromBoard', () => {
+    withBoardsListsAndCardsInTheDatabase( () => {
+      it('should remove a user from a board by user id', () => {
+        return queries.getBoardsByUserId(1455).then( boards => {
+          expect(boards[0].id).to.be.eql(101)
+          return commands.removeUserFromBoard(1455,101).then( () => {
+            return queries.getBoardsByUserId(1455).then( boards => {
+              expect(boards[0].id).to.not.eql(101)
+            })
+          })
+        })
+      })
+    })
+  })
+
   describe('findOrCreateUserFromGithubProfile', () => {
     withTwoUsersInTheDatabase(() => {
 
@@ -473,6 +488,23 @@ describe('database.commands', () => {
     })
   })
 
+  describe('unarchiveCard', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should unarchive a card by card id', () => {
+        return commands.archiveCard(83).then( () => {
+          return queries.getCardById(83).then( card => {
+            expect(card.archived).to.eql(true)
+            return commands.unarchiveCard(83).then( () => {
+              return queries.getCardById(83).then( card => {
+                expect(card.archived).to.eql(false)
+              })
+            })
+          })
+        })
+      })
+    })
+  })
+
   describe('createList', () => {
     beforeEach(() =>
       commands.createBoard(1455, {
@@ -499,6 +531,23 @@ describe('database.commands', () => {
             expect(board.lists[0].order).to.eql(0)
           })
         })
+    })
+  })
+
+  describe('unarchiveBoard', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should unarchive a board by board id', () => {
+        return commands.archiveBoard(101).then( () => {
+          return queries.getBoardById(101).then( board => {
+            expect(board.archived).to.eql(true)
+            return commands.unarchiveBoard(101).then( () => {
+              return queries.getBoardById(101).then( board => {
+                expect(board.archived).to.eql(false)
+              })
+            })
+          })
+        })
+      })
     })
   })
 
@@ -574,6 +623,23 @@ describe('database.commands', () => {
             let orderedLists = getOrderedListByBoardId(board)
             expect(orderedLists.map(list => list.order) ).to.eql([0,1])
             expect(orderedLists.map(list => list.id) ).to.eql([40,41])
+          })
+        })
+      })
+    })
+  })
+
+  describe('unarchiveList', () => {
+    withBoardsListsAndCardsInTheDatabase( () => {
+      it('should unarchive a list by list id', () => {
+        return commands.archiveList(40).then( () => {
+          return queries.getListById(40).then( list => {
+            expect(list.archived).to.eql(true)
+            return commands.unarchiveList(40).then( () => {
+              return queries.getListById(40).then( list => {
+                expect(list.archived).to.eql(false)
+              })
+            })
           })
         })
       })
@@ -792,6 +858,21 @@ describe('database.commands', () => {
     });
   });
 
+  describe('addUserToBoard', () => {
+    withBoardsListsAndCardsInTheDatabase( () => {
+      it('should add a user to a board', () => {
+        return queries.getBoardsByUserId(10000).then( boards => {
+          expect(boards).to.have.length(0)
+          return commands.addUserToBoard(10000,101).then( () => {
+            return queries.getBoardsByUserId(10000).then( boards => {
+              expect(boards[0].id).to.eql(101)
+            })
+          })
+        })
+      })
+    })
+  })
+
   describe('starBoard', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should star a board by board id', () => {
@@ -842,4 +923,15 @@ describe('database.commands', () => {
       })
     })
   })
+
+  describe('searchQuery', () => {
+    withBoardsListsAndCardsInTheDatabase( () => {
+      it('should return a result if searchTerm exists', () => {
+        return commands.searchQuery(1455, 'card1').then( result => {
+          expect(result[0].content).to.eql('card1')
+        })
+      })
+    })
+  })
+
 })

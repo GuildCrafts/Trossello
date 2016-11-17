@@ -55,7 +55,6 @@ const getSearchResult = (userId, searchTerm) => {
 }
 
 const getListsAndCardsForBoard = (board) => {
-  if (!board) return Promise.resolve(board)
   return knex.table('lists')
     .select('*')
     .where({
