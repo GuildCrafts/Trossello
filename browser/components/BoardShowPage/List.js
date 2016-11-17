@@ -24,7 +24,7 @@ export default class List extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      creatingCard: false
+      creatingCard: false,
     }
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
@@ -82,6 +82,7 @@ export default class List extends Component {
     }
 
     const listActionsMenu = <ListActionsMenu
+      board={this.props.board}
       list={this.props.list}
       onCreateCard={this.creatingCard}
     />
