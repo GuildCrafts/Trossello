@@ -44,6 +44,7 @@ router.get('/:boardId', (request, response, next ) => {
 
 // UPDATE
 router.post('/:boardId', (request, response, next) => {
+  console.log(request.body);
   commands.updateBoard(request.params.boardId, request.body)
   .then(boardId => {
       response.json(boardId)

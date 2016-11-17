@@ -1,24 +1,25 @@
 import knex from './knex'
 import queries from './queries'
 import mailer from '../mailer'
-
 const firstRecord = records => records[0]
 
-const createRecord = (table, attributes) =>
-  knex
+const createRecord = (table, attributes) =>{
+  return knex
     .table(table)
     .insert(attributes)
     .returning('*')
     .then(firstRecord)
+}
 
-
-const updateRecord = (table, id, attributes) =>
-  knex
+const updateRecord = (table, id, attributes) =>{
+  attributes.updated_at = new Date()
+  return knex
     .table(table)
     .where('id', id)
     .update(attributes)
     .returning('*')
     .then(firstRecord)
+}
 
 const deleteRecord = (table, id) =>
   knex
@@ -26,27 +27,28 @@ const deleteRecord = (table, id) =>
     .where('id', id)
     .del()
 
-
 const removeUserFromBoard = (userId, boardId) =>
   knex
     .table('user_boards')
     .where({'user_id': userId , 'board_id': boardId})
     .del()
 
-const archiveRecord = (table, id) =>
-  knex
+const archiveRecord = (table, id) =>{
+  return knex
     .table(table)
     .where('id', id)
     .update({
       archived: true,
+      updated_at: new Date(),
     })
-
+}
 const unarchiveRecord = (table, id) =>
   knex
     .table(table)
     .where('id', id)
     .update({
       archived: false,
+      updated_at: new Date(),
     })
 
 const archiveListItems = (id) =>
@@ -55,6 +57,7 @@ const archiveListItems = (id) =>
     .where('list_id', id)
     .update({
       archived: true,
+      updated_at: new Date(),
     })
 
 const unarchiveListItems = (id) =>
@@ -63,6 +66,7 @@ const unarchiveListItems = (id) =>
     .where('list_id', id)
     .update({
       archived: false,
+      updated_at: new Date(),
     })
 
 const findOrCreateUserFromGithubProfile = (githubProfile) => {
@@ -84,15 +88,12 @@ const createUser = (attributes) =>
         .then(() => user )
     )
 
-const updateUser = (id, attributes) =>
-  updateRecord('users', id, attributes)
-
+const updateUser = (id, attributes) =>{
+  return updateRecord('users', id, attributes)
+}
 
 const deleteUser = (id) =>
   deleteRecord('users', id)
-
-
-//
 
 const createList = (attributes) => {
   return createRecord('lists', attributes)
@@ -128,6 +129,7 @@ const createCard = (attributes) => {
 
 const updateCard = (id, attributes) =>
   updateRecord('cards', id, attributes)
+
 
 const deleteCard = (id) =>
   deleteRecord('cards', id)
