@@ -25,10 +25,10 @@ router.post('/:listId/archive', (request, response, next) => {
 })
 
 //MOVE ALL CARDS
-router.post('/cards/move', (request, response, next) => {
-  const { cardsToMove, newList, orderOffset } = request.body
+router.post('/:listId/cards/move', (request, response, next) => {
+  const { cardIds, newList, orderOffset } = request.body
 
-  commands.moveAllCards(cardsToMove, newList, orderOffset)
+  commands.moveAllCards(cardIds, newList, orderOffset)
     .then(() => {
       response.json(null)
     })

@@ -69,23 +69,9 @@ describe('/api/lists', () => {
         })
       })
 
-      describe('POST /api/lists/cards/move', () => {
+      describe('POST /api/lists/41/cards/move', () => {
         it('It should move all cards to another list', () => {
-          const cardsToMove = [
-            {
-              id: 80,
-              list_id: 40,
-              board_id: 101,
-              content: 'card1',
-            },
-            {  id: 81,
-               list_id: 40,
-               board_id: 101,
-               content: 'Card2',
-            }
-          ]
-
-          const listToMove = { cardsToMove: cardsToMove, newList: 41, orderOffset: 2 }
+          const cardIds = [81, 80]
 
           const getOrderedCardsByListId = (board, listId) =>
             board.cards
@@ -97,6 +83,7 @@ describe('/api/lists', () => {
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
 
+
               expect(list40Cards.length).to.eql(2)
               expect(list41Cards.length).to.eql(2)
             })
@@ -104,12 +91,17 @@ describe('/api/lists', () => {
             .then(card => expect(card.list_id).to.eql(40))
             .then(() => queries.getCardById(81))
             .then(card => expect(card.list_id).to.eql(40))
-            .then(() => request('post', '/api/lists/cards/move', listToMove ))
+            .then(() => {
+              return request('post', '/api/lists/41/cards/move', {
+                cardIds,
+                newList: 41,
+                orderOffset: 2
+              })
+            })
             .then(() => queries.getBoardById(101))
             .then(board => {
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
-              console.log('------------->', list40Cards.length)
 
               expect(list40Cards.length).to.eql(0)
               expect(list41Cards.length).to.eql(4)
@@ -120,8 +112,6 @@ describe('/api/lists', () => {
             .then(card => expect(card.list_id).to.eql(41))
         })
       })
-
     })
-
   })
 })

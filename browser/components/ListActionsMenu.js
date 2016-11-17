@@ -87,15 +87,14 @@ const MainPane = ({list, board, goToPane, createCard, onClose}) => {
 }
 
 const MoveAllCardsPane = ({list, board, goToPane, createCard, onClose}) => {
-  const oldListId = list.id
   const cardsToMove = board.cards.filter( card => {
-    if(card.list_id === oldListId) return card
-  })
-  
+    if(card.list_id === list.id) return card
+  }).map(card => card.id)
+
   const updateAllCards = (updates) => {
     $.ajax({
       method: 'post',
-      url: `/api/lists/cards/move`,
+      url: `/api/lists/${list.id}/cards/move`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       data: JSON.stringify(updates),
@@ -110,7 +109,7 @@ const MoveAllCardsPane = ({list, board, goToPane, createCard, onClose}) => {
       if(card.list_id === list.id) return card
     }).length
     const updates = {
-      cardsToMove: cardsToMove,
+      cardIds: cardsToMove,
       newList: targetList.id,
       orderOffset: orderOffset
     }
