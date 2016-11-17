@@ -683,6 +683,7 @@ describe('database.commands', () => {
             board_id: 101,
             name: "Bob's New List",
             archived: false,
+            order: 2,
           })
           return queries.getBoardById(101).then( board => {
             expect(board.lists).to.include(list)

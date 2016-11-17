@@ -274,6 +274,7 @@ describe('/api/boards', () => {
                 board_id: 101,
                 name: "new list name",
                 archived: false,
+                order: 2,
               })
             })
         })
