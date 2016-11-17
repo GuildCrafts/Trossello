@@ -21,21 +21,13 @@ class BoardsDropdown extends ToggleComponent {
 
   toggleBoardsDropdownLock(){
     const {user} = this.context.session
-    if (user.boards_dropdown_lock) {
-      $.ajax({
-        method: 'post',
-        url: `/api/users/${user.id}/unlockdropdown`
-      }).then(() => {
-        sessionStore.reload()
-      })
-    } else {
-      $.ajax({
-        method: 'post',
-        url: `/api/users/${user.id}/lockdropdown`
-      }).then(() => {
-        sessionStore.reload()
-      })
-    }
+    const url = `/api/users/${user.id}/${user.boards_dropdown_lock ? 'unlock' : 'lock'}dropdown`
+    $.ajax({
+      method: 'post',
+      url: url,
+    }).then(() => {
+      sessionStore.reload()
+    })
   }
 
   render(){
