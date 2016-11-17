@@ -73,8 +73,14 @@ class BoardShowPage extends React.Component {
 
     this.onDragStart = this.onDragStart.bind(this)
     this.onDragEnter = this.onDragEnter.bind(this)
+<<<<<<< HEAD
     this.onDragOver = this.onDragOver.bind(this)
     this.onDrop = this.onDrop.bind(this)
+=======
+    this.onDrop = this.onDrop.bind(this)
+    //this.onCardDragOverCardBox = this.onCardDragOverCardBox.bind(this)
+    //this.onCardDragOverList = this.onCardDragOverList.bind(this)
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
     document.addEventListener('dragenter', this.onDragEnter, false)
     document.addEventListener('dragover', this.onDragOver, false)
     document.addEventListener('drop', this.onDrop, false)
@@ -98,6 +104,7 @@ class BoardShowPage extends React.Component {
   }
 
   onDragStart(event){
+<<<<<<< HEAD
     const dragImage = new Image()
     dragImage.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D'
     event.dataTransfer.setDragImage(dragImage, 0, 0);
@@ -128,10 +135,15 @@ class BoardShowPage extends React.Component {
     this.dragGhost.appendTo('body')
  
 
+=======
+    const dragTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
+    // dragging card
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
     if (dragTarget.is('.BoardShowPage-Card-box')){
       this.setState({
         dragging: 'card',
         draggingCardId: dragTarget.data('card-id'),
+<<<<<<< HEAD
         draggingListId: null,
       })
       return
@@ -145,10 +157,44 @@ class BoardShowPage extends React.Component {
       })
       return
     }
+=======
+        draggingListId: null
+      })
+      return
+    }
+    // dragging list
+    if (dragTarget.is('.BoardShowPage-ListWrapper')){
+      console.log('started dragging list', dragTarget.data('list-id'))
+      const x = {
+        dragging: 'list',
+        draggingListId: dragTarget.data('list-id'),
+        draggingCardId: null,
+      }
+      console.log(x)
+      this.setState(x)
+      return
+    }
+    // const dragImage = new Image()
+    // dragImage.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D'
+    // event.dataTransfer.setDragImage(dragImage, 0, 0)
+  }
+
+
+  getListById(id){
+    return this.props.board.lists.find(list => list.id === id)
+  }
+  getCardById(id){
+    return this.props.board.cards.find(card => card.id === id)
+  }
+
+  onDragOver(event){
+    event.preventDefault()
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
   }
 
   onDragEnter(event){
     event.preventDefault()
+<<<<<<< HEAD
     if (this.state.dragging === 'list') return this.onListDragEnter(event)
   }
 
@@ -174,12 +220,112 @@ class BoardShowPage extends React.Component {
     event.preventDefault()
     if (!this.dragGhost) return
     let {top, left, x, y} = this.dragGhost.data('position')
+=======
+    if (!this.state.dragging) return
+    if (this.state.dragging === 'card') return this.onCardDragEnter(event)
+    if (this.state.dragging === 'list') return this.onListDragEnter(event)
+  }
 
-    top += event.clientY - y
-    left += event.clientX - x
-    x = event.clientX
-    y = event.clientY
 
+  onCardDragOverList(event, dropTarget){
+    const draggingCardId = this.state.draggingCardId
+    const newListId = dropTarget.data('list-id')
+    const targetList = this.getListById(newListId)
+    //const cardArray = How do I get the card array length?
+    const rect = dropTarget[0].children[0].getBoundingClientRect()
+    const belowTarget = rect.bottom - 40
+    let newOrder = null
+    if(event.clientY > belowTarget){
+      newOrder = 1000
+    } else {
+      return
+    }
+    this.setState({
+      draggingCardNewOrder: newOrder,
+      draggingCardNewListId: newListId,
+    })
+  }
+
+  onCardDragOverCards(event, dropTarget){
+    const draggingCardId = this.state.draggingCardId
+    const targetCardId = dropTarget.data('card-id')
+    if (draggingCardId === targetCardId) return
+    const targetCard = this.getCardById(targetCardId)
+    const draggingCard = this.getCardById(draggingCardId)
+
+    const draggingCardNewListId = this.state.draggingCardNewListId || draggingCard.list_id
+    const draggingCardNewOrder = this.state.draggingCardNewOrder || draggingCard.order
+    const newListId = targetCard.list_id
+
+    const rect = dropTarget[0].getBoundingClientRect()
+    const middleOfTarget = rect.top + (rect.height/2)
+    const newOrder = targetCard.order + (event.clientY > middleOfTarget ? 0.5 : -0.5)
+
+    if (draggingCardNewListId === newListId && draggingCardNewOrder === newOrder)return
+    this.setState({
+      draggingCardNewOrder: newOrder,
+      draggingCardNewListId: newListId,
+    })
+  }
+
+  onCardDragEnter(event){
+    const dropTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-ListWrapper')
+    if(dropTarget.length === 0) return
+
+    if(dropTarget.is('.BoardShowPage-Card-box')) {
+      this.onCardDragOverCards(event, dropTarget)
+    } else if(dropTarget.is('.BoardShowPage-ListWrapper')) {
+      this.onCardDragOverList(event, dropTarget)
+    }
+  }
+
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
+
+  // onCardDragEnter(event){
+  //   const dropTarget = $(event.target).closest('.BoardShowPage-Card-box')
+  //   if (dropTarget.length === 0) return
+  //   const draggingCardId = this.state.draggingCardId
+  //   const targetCardId = dropTarget.data('card-id')
+  //   if (draggingCardId === targetCardId) return
+  //   const targetCard = this.getCardById(targetCardId)
+  //   const draggingCard = this.getCardById(draggingCardId)
+  //
+  //   const draggingCardNewListId = this.state.draggingCardNewListId || draggingCard.list_id
+  //   const draggingCardNewOrder = this.state.draggingCardNewOrder || draggingCard.order
+  //   const newListId = targetCard.list_id
+  //   console.log('Target Card list ID--->', newListId)
+  //
+  //   const rect = dropTarget[0].getBoundingClientRect()
+  //   const middleOfTarget = rect.top + (rect.height/2)
+  //   const newOrder = targetCard.order + (event.clientY > middleOfTarget ? 0.5 : -0.5)
+  //
+  //   if (draggingCardNewListId === newListId && draggingCardNewOrder === newOrder) return
+  //
+  //   this.setState({
+  //     draggingCardNewOrder: newOrder,
+  //     draggingCardNewListId: newListId,
+  //   })
+  // }
+
+  onListDragEnter(event){
+    const dropTarget = $(event.target).closest('.BoardShowPage-ListWrapper')
+    if (dropTarget.length === 0) return
+    const draggingListId = this.state.draggingListId
+    const targetListId = dropTarget.data('list-id')
+    if (draggingListId === targetListId) return
+    const targetList = this.getListById(targetListId)
+    const draggingList = this.getListById(draggingListId)
+    const draggingListNewOrder = this.state.draggingListNewOrder || draggingList.order
+    const newOrder = targetList.order + (
+      draggingListNewOrder < targetList.order ? 0.5 : -0.5
+    )
+    if (draggingListNewOrder === newOrder) return
+    this.setState({
+      draggingListNewOrder: newOrder
+    })
+  }
+
+<<<<<<< HEAD
     this.dragGhost.data('position', {top, left, x, y})
     this.dragGhost.css({
       top:  top+'px',
@@ -241,6 +387,11 @@ class BoardShowPage extends React.Component {
   }
 
   onDrop(event){
+=======
+  onDrop(event){
+    console.log('onDrop', event.type, event.target)
+
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
     if (this.state.dragging === 'list'){
       const list = this.getListById(this.state.draggingListId)
       if (typeof this.state.draggingListNewOrder === 'number'){
@@ -252,6 +403,10 @@ class BoardShowPage extends React.Component {
     if (this.state.dragging === 'card'){
       const card = this.getCardById(this.state.draggingCardId)
       let newListId = this.state.draggingCardNewListId
+<<<<<<< HEAD
+=======
+      console.log('NEw List ID is--->', newListId)
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
       let newOrder = this.state.draggingCardNewOrder
       if (newListId !== null && newOrder !== null){
         this.moveCard({ card, listId: newListId, order: newOrder })
@@ -268,6 +423,7 @@ class BoardShowPage extends React.Component {
       draggingListNewOrder: null,
       draggingCardNewListId: null,
       draggingCardNewOrder: null,
+<<<<<<< HEAD
       positionInfo: null,
     })
   }
@@ -281,6 +437,11 @@ class BoardShowPage extends React.Component {
   }
 
 
+=======
+    })
+  }
+
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
   moveList({ list, order}){
     const { board } = this.props
     list.order = order
@@ -303,6 +464,10 @@ class BoardShowPage extends React.Component {
     const { board } = this.props
 
     card.list_id = listId
+<<<<<<< HEAD
+=======
+    // card.order = card.order > order ? order + 0.5
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
     card.order = order
 
     $.ajax({
@@ -365,6 +530,7 @@ class BoardShowPage extends React.Component {
   }
 
   render() {
+    console.log('RENDER', {state: this.state})
     const { board, viewingCard } = this.props
     if (!board) return <Layout className="BoardShowPage" />
 
@@ -402,6 +568,20 @@ class BoardShowPage extends React.Component {
     }
 
     let cardBeingDraggedNode
+<<<<<<< HEAD
+=======
+    if (this.state.dragging === 'card'){
+      const cardBeingDragged = board.cards
+        .find(card => card.id === this.state.draggingCardId)
+      cardBeingDraggedNode = <Card
+        editable
+        key={cardBeingDragged.id}
+        card={cardBeingDragged}
+        beingDragged
+        order={this.state.draggingCardNewOrder}
+      />
+    }
+>>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
 
     return <Layout className="BoardShowPage" style={style}>
       {cardModal}
