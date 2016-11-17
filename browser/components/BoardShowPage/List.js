@@ -25,13 +25,7 @@ export default class List extends Component {
     super(props)
     this.state = {
       creatingCard: false,
-      initialX: 0,
-      initialY: 0,
-      listStyle: {}
     }
-
-
-
     this.creatingCard = this.creatingCard.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
   }
