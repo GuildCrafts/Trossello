@@ -1,25 +1,25 @@
 import knex from './knex'
 import queries from './queries'
 import mailer from '../mailer'
-const dateNow = new Date()
-const now = dateNow.toISOString()
 const firstRecord = records => records[0]
 
-const createRecord = (table, attributes) =>
-  knex
+const createRecord = (table, attributes) =>{
+  return knex
     .table(table)
     .insert(attributes)
     .returning('*')
     .then(firstRecord)
+}
 
-
-const updateRecord = (table, id, attributes) =>
-  knex
+const updateRecord = (table, id, attributes) =>{
+  attributes.updated_at = new Date()
+  return knex
     .table(table)
     .where('id', id)
     .update(attributes)
     .returning('*')
     .then(firstRecord)
+}
 
 const deleteRecord = (table, id) =>
   knex
@@ -33,22 +33,22 @@ const removeUserFromBoard = (userId, boardId) =>
     .where({'user_id': userId , 'board_id': boardId})
     .del()
 
-const archiveRecord = (table, id) =>
-  knex
+const archiveRecord = (table, id) =>{
+  return knex
     .table(table)
     .where('id', id)
     .update({
       archived: true,
-      updated_at: now,
+      updated_at: new Date(),
     })
-
+}
 const unarchiveRecord = (table, id) =>
   knex
     .table(table)
     .where('id', id)
     .update({
       archived: false,
-      updated_at: now,
+      updated_at: new Date(),
     })
 
 const archiveListItems = (id) =>
@@ -57,7 +57,7 @@ const archiveListItems = (id) =>
     .where('list_id', id)
     .update({
       archived: true,
-      updated_at: now
+      updated_at: new Date(),
     })
 
 const unarchiveListItems = (id) =>
@@ -66,7 +66,7 @@ const unarchiveListItems = (id) =>
     .where('list_id', id)
     .update({
       archived: false,
-      updated_at: now
+      updated_at: new Date(),
     })
 
 const findOrCreateUserFromGithubProfile = (githubProfile) => {
@@ -89,24 +89,19 @@ const createUser = (attributes) =>
     )
 
 const updateUser = (id, attributes) =>{
-  attributes.updated_at = now
-  updateRecord('users', id, attributes)
+  return updateRecord('users', id, attributes)
 }
 
 const deleteUser = (id) =>
   deleteRecord('users', id)
 
-
-//
-
 const createList = (attributes) => {
   return createRecord('lists', attributes)
 }
 
-const updateList = (id, attributes) =>{
-  attributes.updated_at = now
+const updateList = (id, attributes) =>
   updateRecord('lists', id, attributes)
-}
+
 
 const deleteList = (id) =>
   Promise.all([
@@ -132,10 +127,9 @@ const createCard = (attributes) => {
     })
 }
 
-const updateCard = (id, attributes) =>{
-  attributes.updated_at = now
+const updateCard = (id, attributes) =>
   updateRecord('cards', id, attributes)
-}
+
 
 const deleteCard = (id) =>
   deleteRecord('cards', id)
