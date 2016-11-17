@@ -42,7 +42,7 @@ describe('POST /api/invites/:boardId', () => {
             const invitedEmails = response.map(invitee => invitee.email)
             expect(invitedEmails).to.include('larry@harvey.to')
           })
-        })
+
       })
 
       // get board, check if user is added, then check again
