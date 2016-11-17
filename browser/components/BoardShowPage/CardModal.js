@@ -37,6 +37,10 @@ export default class CardModal extends Component {
     this.updateDescription(description)
   }
 
+  cardArchived(){
+    return
+  }
+
   render(){
     const { session } = this.context
     const { card, list } = this.props
