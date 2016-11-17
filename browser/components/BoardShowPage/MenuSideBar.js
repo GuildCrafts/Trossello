@@ -28,6 +28,15 @@ export default class MenuSideBar extends Component {
     this.close = this.close.bind(this)
     this.gotoPane = this.gotoPane.bind(this)
     this.goBack = this.goBack.bind(this)
+    this.goBackIfUserHitsEscape = this.goBackIfUserHitsEscape.bind(this)
+  }
+
+  componentDidMount(){
+    document.addEventListener('keydown', this.goBackIfUserHitsEscape, false)
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener('keydown', this.goBackIfUserHitsEscape)
   }
 
   close(event) {
@@ -50,6 +59,13 @@ export default class MenuSideBar extends Component {
       panes: this.state.panes.slice(1),
       goingBack: true,
     })
+  }
+
+  goBackIfUserHitsEscape(event) {
+    if (event.key === "Escape") {
+      event.preventDefault()
+      this.goBack()
+    }
   }
 
   render() {
