@@ -91,12 +91,7 @@ const updateUser = (id, attributes) =>
 const deleteUser = (id) =>
   deleteRecord('users', id)
 
-<<<<<<< HEAD
-=======
 
-//
-
->>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
 const createList = (attributes) =>
   knex
     .table('lists')
@@ -173,7 +168,6 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
       allCards = allCards.filter(card =>
         card.list_id === originListId || card.list_id === destinationListId
       )
-<<<<<<< HEAD
 
       const sortBefore = originListId !== destinationListId || originalOrder > newOrder
 
@@ -213,47 +207,6 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
     })
 }
 
-=======
-
-      const sortBefore = originListId !== destinationListId || originalOrder > newOrder
-
-      const changes = allCards.map(card => {
-        return {
-          id: card.id,
-          list_id: card.list_id,
-          order: card.order,
-        }
-      })
-      //Why do we not just use CardBeingMoved here?
-      changes.forEach(card => {
-        if (card.id !== cardId) return
-        card.list_id = listId
-        card.order = order
-      })
-
-      const originalListCards = changes.filter(card => card.list_id === originListId)
-      const destinationListCards = originListId === destinationListId ? [] :
-        changes.filter(card => card.list_id === destinationListId)
-
-
-      sortBoardItems(originalListCards, cardId, sortBefore)
-      originalListCards.forEach((card, index) => card.order = index)
-
-      sortBoardItems(destinationListCards, cardId, sortBefore)
-      destinationListCards.forEach((card, index) => card.order = index)
-
-      const updates = originalListCards.concat(destinationListCards).map(card =>
-        updateCard(card.id, {
-          list_id: card.list_id,
-          order: card.order,
-        })
-      )
-
-      return Promise.all(updates)
-    })
-}
-
->>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
 const moveList = ({ boardId, listId, order }) => {
   return knex
     .table('lists')
@@ -272,11 +225,7 @@ const moveList = ({ boardId, listId, order }) => {
           order: list.order
         }
       })
-<<<<<<< HEAD
 
-=======
-      //Why do we not just use listBeingMoves here?  Does array.find return a copy of the element and not the element itself?
->>>>>>> d16e6c385d9d897cf587f62b7825582f74cff38a
       changes.forEach(list => {
         if (list.id != listId) return
         list.order = order
