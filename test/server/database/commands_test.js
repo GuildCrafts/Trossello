@@ -174,16 +174,19 @@ describe('database.commands', () => {
 
   })
 
-  describe('updateCard', () => {
+  describe.only('updateCard', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should update a card with given attributes', () => {
         const cardAttributes = {
           content: 'This content has been updated',
         }
+        const now = Date.now()
         return commands.updateCard(80, cardAttributes).then( card => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(80)
           expect(card.content).to.eql('This content has been updated')
+          expect(card.created_at).to.be.at.least(now - 1500)
+          expect(card.created_at).to.be.at.most(now)
           return knex.table('cards').then( cards => {
             expect(cards.length).to.eql(4)
             cards.forEach(card => {

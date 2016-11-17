@@ -1,7 +1,8 @@
 import knex from './knex'
 import queries from './queries'
 import mailer from '../mailer'
-
+const dateNow = new Date()
+const now = dateNow.toISOString()
 const firstRecord = records => records[0]
 
 const createRecord = (table, attributes) =>
@@ -26,7 +27,6 @@ const deleteRecord = (table, id) =>
     .where('id', id)
     .del()
 
-
 const removeUserFromBoard = (userId, boardId) =>
   knex
     .table('user_boards')
@@ -39,6 +39,7 @@ const archiveRecord = (table, id) =>
     .where('id', id)
     .update({
       archived: true,
+      updated_at: now,
     })
 
 const unarchiveRecord = (table, id) =>
@@ -47,6 +48,7 @@ const unarchiveRecord = (table, id) =>
     .where('id', id)
     .update({
       archived: false,
+      updated_at: now,
     })
 
 const archiveListItems = (id) =>
@@ -55,6 +57,7 @@ const archiveListItems = (id) =>
     .where('list_id', id)
     .update({
       archived: true,
+      updated_at: now
     })
 
 const unarchiveListItems = (id) =>
@@ -63,6 +66,7 @@ const unarchiveListItems = (id) =>
     .where('list_id', id)
     .update({
       archived: false,
+      updated_at: now
     })
 
 const findOrCreateUserFromGithubProfile = (githubProfile) => {
@@ -84,9 +88,10 @@ const createUser = (attributes) =>
         .then(() => user )
     )
 
-const updateUser = (id, attributes) =>
+const updateUser = (id, attributes) =>{
+  attributes.updated_at = now
   updateRecord('users', id, attributes)
-
+}
 
 const deleteUser = (id) =>
   deleteRecord('users', id)
@@ -98,9 +103,10 @@ const createList = (attributes) => {
   return createRecord('lists', attributes)
 }
 
-const updateList = (id, attributes) =>
+const updateList = (id, attributes) =>{
+  attributes.updated_at = now
   updateRecord('lists', id, attributes)
-
+}
 
 const deleteList = (id) =>
   Promise.all([
@@ -126,8 +132,10 @@ const createCard = (attributes) => {
     })
 }
 
-const updateCard = (id, attributes) =>
+const updateCard = (id, attributes) =>{
+  attributes.updated_at = now
   updateRecord('cards', id, attributes)
+}
 
 const deleteCard = (id) =>
   deleteRecord('cards', id)
