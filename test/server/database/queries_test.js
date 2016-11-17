@@ -110,6 +110,21 @@ describe('database.queries', () => {
     })
   })
 
+  describe('getSearchResult', () => {
+    withBoardsListsAndCardsInTheDatabase( () => {
+      it('should return an empty array if searchTerm does not exist', () => {
+        return queries.getSearchResult(1455, null ).then( result => {
+          expect(result, 'Empty resolved promise').to.eql([])
+        })
+      })
+      it('should return a card if searchTerm exists', () => {
+        return queries.getSearchResult(1455, 'card1').then( card => {
+          expect(card, 'Card1 length').to.have.length(1)
+        })
+      })
+    })
+  })
+
   describe('getListById', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
@@ -140,6 +155,14 @@ describe('database.queries', () => {
             order: 0
           })
         })
+      })
+    })
+  })
+
+  describe('verifyToken', () => {
+    it('should return first row with given token', () => {
+      return queries.verifyToken('a1bc6250996632d25f0e38d7ad11529cc61489ce').then( invite => {
+        expect(invite.boardId).to.eql(123)
       })
     })
   })
