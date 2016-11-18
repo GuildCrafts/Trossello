@@ -103,47 +103,43 @@ describe('/api/lists', () => {
         })
       })
 
-      describe('POST /api/lists/41/cards/move', () => {
+      describe('POST /api/lists/40/cards/move-to/41', () => {
         it('It should move all cards to another list', () => {
-          const cardIds = [82, 81, 80]
-
           const getOrderedCardsByListId = (board, listId) =>
             board.cards
               .filter(card => card.list_id === listId)
               .sort( (a,b) => a.order - b.order)
 
-          return queries.getBoardById(101)
-            .then(board => {
+          return request('get', '/api/boards/101')
+            .then(response => {
+              expect(response).to.have.status(200)
+              const board = response.body
+              expect(board.id).to.eql(101)
+
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
-
-
-              expect(list40Cards.length).to.eql(2)
-              expect(list41Cards.length).to.eql(2)
+              expect(list40Cards.map(card => card.id)).to.eql([80,81,82,90,91])
+              expect(list41Cards.map(card => card.id)).to.eql([83,84,85,86,87])
+              expect(list40Cards.map(card => card.order)).to.eql([0,1,2,3,4])
+              expect(list41Cards.map(card => card.order)).to.eql([0,1,2,3,4])
             })
-            .then(() => queries.getCardById(80))
-            .then(card => expect(card.list_id).to.eql(40))
-            .then(() => queries.getCardById(81))
-            .then(card => expect(card.list_id).to.eql(40))
-            .then(() => {
-              return request('post', '/api/lists/40/cards/move', {
-                cardIds,
-                newList: 41,
-                orderOffset: 2
-              })
+            .then(_ => request('post', '/api/lists/40/cards/move-to/41') )
+            .then(response => {
+              expect(response).to.have.status(200)
             })
-            .then(() => queries.getBoardById(101))
-            .then(board => {
+            .then(_ => request('get', '/api/boards/101') )
+            .then(response => {
+              expect(response).to.have.status(200)
+              const board = response.body
+              expect(board.id).to.eql(101)
+
               let list40Cards = getOrderedCardsByListId(board, 40)
               let list41Cards = getOrderedCardsByListId(board, 41)
-
-              expect(list40Cards.length).to.eql(0)
-              expect(list41Cards.length).to.eql(4)
+              expect(list40Cards.map(card => card.id)).to.eql([])
+              expect(list41Cards.map(card => card.id)).to.eql([83,84,85,86,87,80,81,82,90,91])
+              expect(list40Cards.map(card => card.order)).to.eql([])
+              expect(list41Cards.map(card => card.order)).to.eql([0,1,2,3,4,5,6,7,8,9])
             })
-            .then(() => queries.getCardById(80))
-            .then(card => expect(card.list_id).to.eql(41))
-            .then(() => queries.getCardById(81))
-            .then(card => expect(card.list_id).to.eql(41))
         })
       })
     })

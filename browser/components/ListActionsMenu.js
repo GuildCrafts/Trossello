@@ -153,21 +153,13 @@ class MoveAllCardsPane extends Component {
   }
 
   moveCards(destinationList){
-    const { list: sourceList, board } = this.props
-    const cardsToMove = board.cards.filter( card => card.list_id === sourceList.id )
-    const orderOffset = cardsToMove.length
-    const cardsIds = cardsToMove.map(card => card.id)
+    const { list: fromList, board } = this.props
 
     $.ajax({
       method: 'post',
-      url: `/api/lists/${sourceList.id}/cards/move`,
+      url: `/api/lists/${fromList.id}/cards/move-to/${destinationList.id}`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      data: JSON.stringify({
-        cardIds: cardsIds,
-        newList: destinationList.id,
-        orderOffset: orderOffset
-      }),
     }).then(() => {
       this.props.onClose()
       boardStore.reload()

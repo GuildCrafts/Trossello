@@ -48,14 +48,14 @@ router.post('/:listId/archivecards', (request, response, next) => {
 })
 
 //MOVE ALL CARDS
-router.post('/:listId/cards/move', (request, response, next) => {
-  const { cardIds, newList, orderOffset } = request.body
+router.post('/:fromListId/cards/move-to/:toListId', (request, response, next) => {
+  const { fromListId, toListId } = request.params
 
-  commands.moveAllCards(cardIds, newList, orderOffset)
+  commands.moveAllCards(Number(fromListId), Number(toListId))
     .then(() => {
       response.json(null)
     })
-    .catch(error => console.error(error))
+    .catch(next)
 })
 
 export default router

@@ -165,18 +165,31 @@ const createCard = (attributes) => {
 const updateCard = (id, attributes) =>
   updateRecord('cards', id, attributes)
 
-const moveAllCards = (cardIds, newList, orderOffset) => {
-  const updates = []
+const moveAllCards = (fromListId, toListId) =>
+  knex
+    .table('cards')
+    .select('*')
+    .whereIn('list_id', [fromListId, toListId])
+    .then(cards => {
+      const fromListCards = cards.filter(card => card.list_id === fromListId)
+      const toListCards = cards.filter(card => card.list_id === toListId)
+      const orderOffset = toListCards.length === 0 ?
+        0 :
+        toListCards.sort((a,b) => b.order - a.order)[0].order + 1
 
-  for(let i=cardIds.length-1; i>=0; i--) {
-    queries.getCardById(cardIds[i])
-      .then( card => {
-        let newOrder = card.order + orderOffset
-        updates.push(updateCard(card.id, {list_id: newList, order: newOrder}) )
-      })
-  }
-  return Promise.all(updates)
-}
+      return knex.raw(`
+        UPDATE
+          cards
+        SET
+          list_id = ?,
+          "order" = "order" + ?
+        WHERE
+          list_id = ?
+        `,
+        [toListId, orderOffset, fromListId]
+      )
+    })
+
 
 const deleteCard = (id) =>
   deleteRecord('cards', id)
