@@ -60,14 +60,15 @@ const getListsAndCardsForBoard = (board) => {
     .where({
       board_id: board.id
     })
-    .orderBy('id', 'asc')
+    .orderBy('order', 'asc')
     .then(lists => {
       board.lists = lists
       const listIds = lists.map(list => list.id)
       return knex.table('cards')
         .select('*')
         .whereIn('list_id', listIds)
-        .orderBy('id', 'asc')
+        .orderBy('list_id', 'asc')
+        .orderBy('order', 'asc')
         .then(cards => {
           board.cards = cards
           return board
