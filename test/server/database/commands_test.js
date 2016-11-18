@@ -864,7 +864,8 @@ describe('database.commands', () => {
           expect(boards).to.have.length(0)
           return commands.addUserToBoard(10000,101).then( () => {
             return queries.getBoardsByUserId(10000).then( boards => {
-              expect(boards[0].id).to.eql(101)
+              expect(boards).to.have.length(1)
+              expect(boards.map(board => board.id)).to.eql([101])
             })
           })
         })

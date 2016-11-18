@@ -339,21 +339,14 @@ const createBoard = (userId, attributes) => {
 }
 
 const addUserToBoard = (userId, boardId) => {
-  let attrs = {
-    user_id: userId,
-    board_id: boardId,
-  }
-  return knex.table('user_boards')
-    .select('*')
-    .where({
+  const insert = knex
+    .table('user_boards')
+    .insert({
       user_id: userId,
       board_id: boardId
     })
-    .whereNotExists( function() {
-      this.select('*')
-      .from('user_boards')
-      return createRecord('user_boards', attrs)
-    })
+
+  return knex.raw(`${insert} ON CONFLICT DO NOTHING RETURNING *`)
 }
 
 const starBoard = (id) =>
