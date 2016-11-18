@@ -748,24 +748,44 @@ describe('database.commands', () => {
   describe('duplicateList', () => {
     withBoardsListsAndCardsInTheDatabase( () => {
       it('it should duplicate the list and its cards given the new name', () => {
-        return commands.duplicateList(101, 40, "Bob's New List" ).then( list => {
-          expect(list).to.eql({
-            id: list.id,
-            board_id: 101,
-            name: "Bob's New List",
-            archived: false,
-            order: 2,
+        return queries.getBoardById(101)
+          .then( board => {
+            expect(board.lists.map(list => list.order)).to.eql([0,1])
+            expect(board.lists.map(list => list.name)).to.eql([
+              "List1",
+              "List2",
+            ])
           })
-          return queries.getBoardById(101).then( board => {
-            expect(board.lists).to.include(list)
-            const fromListCards = board.cards.filter(card => card.list_id === 40)
-            const newListCards  = board.cards.filter(card => card.list_id === list.id)
-            expect(newListCards.length).to.eql(fromListCards.length)
-            expect( fromListCards.map(card => card.name).sort() ).to.eql(
-              newListCards.map(card => card.name).sort()
-            )
+          .then(_ => commands.duplicateList(101, 40, "Bob's New List" ) )
+          .then(newList => {
+            expect(newList).to.eql({
+              id: newList.id,
+              board_id: 101,
+              name: "Bob's New List",
+              archived: false,
+              order: 2,
+            })
           })
-        })
+          .then(_ => queries.getBoardById(101) )
+          .then( board => {
+            expect(board.lists.map(list => list.order)).to.eql([0,1,2])
+            expect(board.lists.map(list => list.name)).to.eql([
+              "List1",
+              "Bob's New List",
+              "List2",
+            ])
+            const newListId = board.lists[0].id
+            const newListCards = board.cards.filter(card => card.list_id === newListId)
+            const oldListId = 40
+            const oldListCards = board.cards.filter(card => card.list_id === oldListId)
+
+            const commonProps = card => ({
+              content: card.content,
+              order: card.order,
+            })
+
+            expect(newListCards.map(commonProps)).to.eql(oldListCards.map(commonProps))
+          })
       })
     })
   })

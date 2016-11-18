@@ -137,8 +137,20 @@ const duplicateList = (boardId, listId, name) =>
             archived=false
         `,
         [newList.id, listId]
-      ).then( _ => newList)
+      )
+      .then( () =>
+        queries.getListById(listId)
+          .then( oldList =>
+            moveList({
+              boardId: boardId,
+              listId: newList.id,
+              order: oldList.order + 1,
+            })
+              .then( () => newList )
+          )
+      )
     )
+
 
 
 const deleteList = (id) =>
