@@ -84,7 +84,8 @@
     "promise": "^7.1.1",
     "randomstring": "^1.1.5",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react-addons-test-utils": "^15.4.0",
+    "react-dom": "^15.4.0",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
     "rmdir": "^1.2.0",
@@ -98,6 +99,8 @@
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
+    "enzyme": "^2.6.0",
+    "jsdom": "^9.8.3",
     "nodemon": "^1.10.2",
     "webpack-error-notification": "^0.1.6"
   }
