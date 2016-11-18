@@ -171,18 +171,19 @@ describe('database.queries', () => {
     })
   })
 
-  describe('verifyToken', () => {
+  describe('getInviteByToken', () => {
     it('should return first row with given token', () => {
       return commands.createInvite({
         boardId: 123,
         email: 'larry@david.org',
-        token: 'a1bc6250996632d25f0e38d7ad11529cc61489ce',
       })
-      .then(_ => queries.verifyToken('a1bc6250996632d25f0e38d7ad11529cc61489ce'))
-      .then( invite => {
-        expect(invite).to.be.an('object')
-        expect(invite.boardId).to.eql(123)
-      })
+      .then(invite =>
+        queries.getInviteByToken(invite.token).then( invite => {
+          expect(invite).to.be.an('object')
+          expect(invite.boardId).to.eql(123)
+          expect(invite.email).to.eql('larry@david.org')
+        })
+      )
     })
   })
 

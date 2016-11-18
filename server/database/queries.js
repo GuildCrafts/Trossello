@@ -84,7 +84,7 @@ const getCardById = (id) =>
 
 // INVITES
 
-const verifyToken = (token) => {
+const getInviteByToken = (token) => {
   return knex.table('invites')
     .select('*')
     .where('token', token)
@@ -99,5 +99,5 @@ export default {
   getBoardsByUserId,
   getBoardById,
   getListById,
-  verifyToken,
+  getInviteByToken,
 }

@@ -1,6 +1,7 @@
 import knex from './knex'
 import queries from './queries'
 import mailer from '../mailer'
+import uuid from 'uuid'
 
 const firstRecord = records => records[0]
 
@@ -380,12 +381,14 @@ const deleteBoard = (boardId) =>
     knex.table('user_boards').where('board_id', boardId).del(),
   ]).then(results => results[0] + results[1])
 
-const createInvite = (attributes) =>
-  createRecord('invites', attributes)
+const createInvite = (attributes) => {
+  attributes.token = uuid.v1()
+  return createRecord('invites', attributes)
     .then( invite =>
       mailer.sendInviteEmail( invite )
         .then(() => invite)
     )
+}
 
 const searchQuery = ( userId, searchTerm ) => {
   return queries.getSearchResult(userId, searchTerm)

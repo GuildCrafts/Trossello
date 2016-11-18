@@ -837,17 +837,16 @@ describe('database.commands', () => {
       return commands.createInvite({
         boardId: 123,
         email: 'larry@david.org',
-        token: 'a1bc6250996632d25f0e38d7ad11529cc61489ce',
-      }).then(token => {
-        expect(token).to.eql({
+      }).then(invite => {
+        expect(invite).to.eql({
           boardId: 123,
           email: 'larry@david.org',
-          token: 'a1bc6250996632d25f0e38d7ad11529cc61489ce',
+          token: invite.token,
         })
         expect(mailer.transporter.sentEmails).to.eql([
           {
             "from": "\"Trossello\" no-reply@trossello.com",
-            "html": "<p> You received this email because someone invited you to a Trossello board. Click this link to accept the invitation <strong><a href=/api/invites/verify/a1bc6250996632d25f0e38d7ad11529cc61489ce>Invite Link</a></strong></p>",
+            "html": `<p> You received this email because someone invited you to a Trossello board. Click this link to accept the invitation <strong><a href=/api/invites/verify/${invite.token}>Invite Link</a></strong></p>`,
             "subject": "You've been invited to a Trossello board",
             "text": "Welcome to your new board. Click the link below to join this board",
             "to": "larry@david.org",

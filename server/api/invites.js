@@ -1,13 +1,12 @@
 import express from 'express'
 import {queries, commands} from '../database'
 const router = new express.Router()
-import uuid from 'uuid'
+
 
 router.post('/:boardId', (request, response, next) => {
   const email = request.body.email
   const { boardId } = request.params
-  const token = uuid.v1()
-  const attributes = {boardId: boardId, email: email, token: token}
+  const attributes = {boardId: boardId, email: email}
   commands.createInvite(attributes)
     .then( () => {
       response.json(null)
@@ -18,7 +17,7 @@ router.post('/:boardId', (request, response, next) => {
 router.get('/verify/:token', (request, response, next) => {
   let {token} = request.params
   let  {userId} = request.session
-  queries.verifyToken(token).then(invite =>{
+  queries.getInviteByToken(token).then(invite =>{
     let boardId = invite.boardId
     let boardURL = `/boards/${boardId}`
     if ( !request.session.userId ){
