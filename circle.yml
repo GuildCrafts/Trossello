@@ -1,4 +1,6 @@
 machine:
+  pre:
+    - mkdir ~/.yarn-cache
   node:
     version: 6.3.0
   environment:
@@ -10,5 +12,19 @@ machine:
 
 
 dependencies:
+  pre:
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
   cache_directories:
-    - "node_modules"
+    - ~/.yarn-cache
+  override:
+    - yarn install
+
+test:
+  override:
+    - yarn test
+
+deployment:
+  production:
+    branch: master
+    heroku:
+      appname: trossello
