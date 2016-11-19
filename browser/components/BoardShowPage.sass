@@ -207,11 +207,18 @@
 
   &-EditButton
     text-decoration: none
-    opacity: 0.5
+    opacity: 0.7
     color: inherit
-    margin: 0 2px
+    margin: 0 -2px 0 0
+    border-radius: 3px
+    padding: 3px 5px
+    visibility: hidden
+    background-color: $hover-grey
+    > .fa-pencil
+      transform: scale(.7)
     &:hover
       opacity: 1
+      background-color: #d6dadc
 
 
   &-cards
@@ -255,6 +262,11 @@
     margin-bottom: 6px
     flex-grow: 0
     flex-shrink: 0
+    &:hover
+      .BoardShowPage-Card-box
+        background-color: $hover-grey
+      .BoardShowPage-EditButton
+        visibility: visible
     &-beingDragged
       z-index: 100
       position: fixed
