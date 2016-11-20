@@ -337,6 +337,61 @@ describe('/api/boards', () => {
             })
         })
       })
+
+      //CREATE LABEL
+      describe('POST /api/boards/:boardId/labels', () => {
+        const labelContent= {color: 'blue', text: 'blue label'}
+
+        it('should add a label to the board', () => {
+          return request('post', '/api/boards/101/labels', labelContent)
+            .then(response => {
+              expect(response).to.have.status(200)
+              return queries.getBoardById(101)
+            })
+            .then(board => {
+              expect(board.labels).to.include({id:2, board_id:101, color:'blue', text: 'blue label'})
+            })
+        })
+      })
+
+      //UPDATE LABEL
+      describe('POST /api/boards/:boardId/labels/:labelId', () => {
+        const labelContent= {color: 'green', text: 'green label'}
+
+        it('should update a label with new values', () => {
+          return queries.getBoardById(101)
+            .then(board => {
+              expect(board.labels).to.include({id: 1, board_id: 101, text: 'purple label', color:'purple'})
+            })
+            .then(() => request('post', '/api/boards/101/labels/1', labelContent))
+            .then(response => {
+              expect(response).to.have.status(200)
+              return queries.getBoardById(101)
+            })
+            .then(board => {
+              expect(board.labels).to.include({id:1, board_id:101, color:'green', text: 'green label'})
+            })
+        })
+      })
+
+      //DELETE LABEL
+      describe('POST /api/boards/:boardId/labels/:labelId/delete', () => {
+        it('should update a label with new values', () => {
+          return queries.getBoardById(101)
+            .then(board => {
+              expect(board.labels).to.include({id: 1, board_id: 101, text: 'purple label', color:'purple'})
+            })
+            .then(() => request('post', '/api/boards/101/labels/1/delete'))
+            .then(response => {
+              expect(response).to.have.status(200)
+              return queries.getBoardById(101)
+            })
+            .then(board => {
+              expect(board.labels).to.not.include({id:1, board_id:101, color:'purple', text: 'purple label'})
+            })
+        })
+      })
+
     })
   })
 })

@@ -14,7 +14,6 @@ const createRecord = (table, attributes) =>
 
 
 const updateRecord = (table, id, attributes) => {
-  attributes.updated_at = new Date()
   return knex
     .table(table)
     .where('id', id)
@@ -91,9 +90,10 @@ const createUser = (attributes) =>
         .then(() => user )
     )
 
-const updateUser = (id, attributes) =>
-  updateRecord('users', id, attributes)
-
+const updateUser = (id, attributes) =>{
+  attributes.updated_at = new Date()
+  return updateRecord('users', id, attributes)
+}
 
 const deleteUser = (id) =>
   deleteRecord('users', id)
@@ -424,6 +424,34 @@ const searchQuery = ( userId, searchTerm ) => {
   })
 }
 
+const createLabel = (attributes) =>
+  createRecord('labels',attributes)
+
+const updateLabel = (labelId, attributes) =>
+  updateRecord('labels', labelId, attributes)
+
+const deleteLabel = (labelId) =>
+  deleteRecord('labels', labelId)
+
+const addOrRemoveCardLabel = (cardId, labelId) => {
+  const attributes = {card_id: cardId, label_id: labelId}
+
+  return knex.table('card_labels')
+    .select('*')
+    .where(attributes)
+    .returning('*')
+    .then( result => {
+      if(result.length === 0) {
+        return createRecord('card_labels', attributes)
+      } else {
+        return knex.table('card_labels')
+        .select('*')
+        .where(attributes)
+        .del()
+      }
+    })
+}
+
 export default {
   createUser,
   updateUser,
@@ -456,5 +484,9 @@ export default {
   searchQuery,
   removeUserFromBoard,
   lockDropdown,
-  unlockDropdown
+  unlockDropdown,
+  addOrRemoveCardLabel,
+  createLabel,
+  updateLabel,
+  deleteLabel,
 }

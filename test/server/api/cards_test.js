@@ -111,6 +111,20 @@ describe('/api/cards', () => {
         })
       })
 
+      //ADD OR REMOVE LABEL
+      describe('POST /api/cards/:cardId/labels/:labelId', () => {
+        it('should add and then remove a label from a card', () => {
+          return queries.getBoardById(101)
+            .then(board => expect(board.cards.find(card => card.id===80).labels.length).to.eql(0))
+            .then(() => request('post', '/api/cards/80/labels/1'))
+            .then(() => queries.getBoardById(101))
+            .then(board => expect(board.cards.find(card => card.id===80).labels).to.include({id: 1, board_id:101, color:"purple", text:"purple label", card_id:80, label_id:1}))
+            .then(() => request('post', '/api/cards/80/labels/1'))
+            .then(() => queries.getBoardById(101))
+            .then(board => expect(board.cards.find(card => card.id===80).labels.length).to.eql(0))
+        })
+      })
+
     })
   })
 })

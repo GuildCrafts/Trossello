@@ -8,6 +8,7 @@ import autosize from 'autosize'
 import ArchiveButton from './ArchiveButton'
 import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
+import CardLabel from './Card/CardLabel'
 
 export default class Card extends Component {
   static contextTypes = {
@@ -89,6 +90,12 @@ export default class Card extends Component {
       style
     } = this.props
 
+    let cardLabels = card.labels.map( label =>
+      <div key={label.id} className="BoardShowPage-Card-label">
+        <CardLabel color={label.color} text={''} checked={false} />
+      </div>
+    )
+
     const editCardButton = this.props.editable ?
       <EditCardButton onClick={this.editCard} /> : null
 
@@ -112,10 +119,10 @@ export default class Card extends Component {
     if (beingDragged) className += ' BoardShowPage-Card-beingDragged'
 
     return <div
-        ref="card"
-        className={className}
-        style={style}
-      >
+      ref="card"
+      className={className}
+      style={style}
+    >
       {editCardModal}
       <Link
         href={`/boards/${card.board_id}/cards/${card.id}`}
@@ -127,8 +134,11 @@ export default class Card extends Component {
         draggable
         onDragStart={this.props.onDragStart}
       >
-        <pre>{card.content}</pre>
-        {archivedFooter}
+      <div className="BoardShowPage-Card-labels">
+        {cardLabels}
+      </div>
+      <pre>{card.content}</pre>
+      {archivedFooter}
       </Link>
       <div className="BoardShowPage-Card-controls">
         {editCardButton}

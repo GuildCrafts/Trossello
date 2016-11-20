@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import boardStore from '../../stores/boardStore'
 import boardsStore from '../../stores/boardsStore'
+import ColorBox from './ColorBox'
 import $ from 'jquery'
 
 export default class ChangeBackground extends Component {
@@ -13,14 +14,14 @@ export default class ChangeBackground extends Component {
     this.updateColor = this.updateColor.bind(this)
   }
 
-  updateColor(color){
+  updateColor(event){
     const { board } = this.props
-    if (color != board.background_color) {
+    if (event.target.attributes.color.value != board.background_color) {
       $.ajax({
         method: 'post',
         url: `/api/boards/${board.id}`,
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({background_color: color}),
+        data: JSON.stringify({background_color: event.target.attributes.color.value}),
       }).then(() => {
         boardStore.reload()
         boardsStore.reload()
@@ -30,22 +31,17 @@ export default class ChangeBackground extends Component {
 
   render () {
     const colorBoxes = colors.map(color =>
-      <ColorBox key={color} color={color} onClick={this.updateColor} />
+      <ColorBox key={color}
+        color={color}
+        onClick={this.updateColor}
+        className="BoardShowPage-MenuSideBar-ChangeBackgroundPane-box"
+      />
     )
 
     return <div className="BoardShowPage-MenuSideBar-ChangeBackgroundPane-container">
       {colorBoxes}
     </div>
   }
-}
-
-const ColorBox = (props) => {
-  const {onClick, color} = props
-  return <div
-    onClick={()=>{ onClick(color) }}
-    style={{backgroundColor: color}}
-    className="BoardShowPage-MenuSideBar-ChangeBackgroundPane-box"
-  />
 }
 
 const colors = [

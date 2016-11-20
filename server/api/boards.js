@@ -151,6 +151,53 @@ router.post('/:boardId/lists/:listId/duplicate', (request, response, next) => {
     .catch(next)
 })
 
+//CREATE LABEL
+router.post('/:boardId/labels', (request, response, next) => {
+  const { boardId } = request.params
+  const { color, text } = request.body
+  const attributes = {board_id: boardId, text: text, color: color}
 
+  commands.createLabel(attributes)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
+//UPDATE LABEL
+router.post('/:boardId/labels/:labelId', (request, response, next) => {
+  const { boardId, labelId } = request.params
+  const { color, text } = request.body
+  const attributes ={board_id: boardId, text: text, color: color}
+
+  commands.updateLabel(labelId, attributes)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
+//DELETE LABEL
+router.post('/:boardId/labels/:labelId/delete', (request, response, next) => {
+  const { boardId, labelId } = request.params
+
+  commands.deleteLabel(labelId)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
+
+//GET LABEL
+router.get('/:boardId/labels/:labelId', (request, response, next) => {
+  const {boardId, labelId} = request.params
+
+  queries.getLabelById(labelId)
+    .then(label => {
+      response.json(label)
+    })
+    .catch(next)
+})
 
 export default router

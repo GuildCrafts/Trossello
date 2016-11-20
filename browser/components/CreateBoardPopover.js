@@ -7,6 +7,7 @@ import Form from './Form'
 import Button from './Button'
 import boardsStore from '../stores/boardsStore'
 import DialogBox from './DialogBox'
+import ColorBox from './BoardShowPage/ColorBox'
 
 
 class CreateBoardPopover extends Component {
@@ -20,8 +21,6 @@ class CreateBoardPopover extends Component {
     this.state = {
       color: '',
     }
-    this.updateColor = this.updateColor.bind(this)
-    this.onClick = this.onClick.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -29,21 +28,16 @@ class CreateBoardPopover extends Component {
     this.refs.name.focus()
   }
 
-  updateColor(event, color){
-    if (event.target === this.refs.color)
-      color = event.target.value
-    this.setState({color})
-  }
-
-  onClick(event){
+  updateColor(color, event){
     event.preventDefault()
+    this.setState({color: color})
   }
 
   onSubmit(event){
     event.preventDefault()
     const board = {
       name: this.refs.name.value,
-      background_color: this.refs.color.value,
+      background_color: this.state.color,
       archived: false
     }
     if (board.name.replace(/\s+/g,'') === '') return
@@ -68,7 +62,7 @@ class CreateBoardPopover extends Component {
 
   render(props){
     const colorBoxes = colors.map(color =>
-      <ColorBox key={color} color={color} onClick={this.updateColor} />
+      <ColorBox key={color} color={color} onClick={this.updateColor.bind(this, color)} />
     )
 
     return <DialogBox
@@ -99,24 +93,16 @@ class CreateBoardPopover extends Component {
   }
 }
 
-const ColorBox = (props) => {
-  const {onClick, color} = props
-  return <div
-    onClick={(event)=>{ onClick(event, color) }}
-    style={{backgroundColor: color}}
-    className="CreateBoardPopover-createBackgroundColor-box"
-  />
-}
-
 const colors = [
   "#0079bf",
-  "#61bd4f",
-  "#f2d600",
-  "#ffab4a",
-  "#eb5a46",
-  "#c377e0",
-  "#ff80ce",
-  "#00c2e0"
+  "#d8a359",
+  "#70a95d",
+  "#bc6858",
+  "#9d7cae",
+  "#d478a4",
+  "#6cc885",
+  "#30bbd3",
+  "#98a0a4"
 ]
 
 export default CreateBoardPopover
