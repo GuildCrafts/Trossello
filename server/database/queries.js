@@ -50,13 +50,24 @@ const getUsersForBoard = (board) => {
     })
 }
 
+const getLabelsForBoard = (board) => {
+  return knex.table('labels')
+    .select('*')
+    .where({board_id: board.id})
+    .then( labels => {
+      board.labels = labels
+      return board
+    })
+}
+
 const getBoardById = (id) =>
   getRecordById('boards', id)
     .then( board => {
       if (board){
         return Promise.all([
           getListsAndCardsForBoard(board),
-          getUsersForBoard(board)
+          getUsersForBoard(board),
+          getLabelsForBoard(board)
         ]).then( () => board)
       }else{
         return Promise.resolve(board)
@@ -89,8 +100,23 @@ const getListsAndCardsForBoard = (board) => {
         .orderBy('list_id', 'asc')
         .orderBy('order', 'asc')
         .then(cards => {
-          board.cards = cards
-          return board
+          const cardIds = cards.map(card => card.id)
+          return knex.table('labels')
+            .select('*')
+            .join('card_labels', 'labels.id', '=', 'card_labels.label_id')
+            .whereIn('card_labels.card_id', cardIds)
+            .then(labels => {
+              cards.forEach(card => {
+                card.labels = []
+                labels.filter(label => {
+                  if(label.card_id === card.id){
+                    card.labels.push(label)
+                  }
+                })
+              })
+              board.cards = cards
+              return board
+            })
         })
     })
 }
@@ -102,7 +128,8 @@ const getListById = (id) =>
 const getCardById = (id) =>
   getRecordById('cards', id)
 
-// INVITES
+const getLabelById = (id) =>
+  getRecordById('labels', id)
 
 const getInviteByToken = (token) => {
   return knex.table('invites')
@@ -117,8 +144,10 @@ export default {
   getCardById,
   getSearchResult,
   getBoardsByUserId,
+  getLabelsForBoard,
   getBoardById,
   getListById,
   getInviteByToken,
   getBoardMoveTargetsForUserId,
+  getLabelById,
 }

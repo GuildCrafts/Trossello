@@ -966,4 +966,53 @@ describe('database.commands', () => {
     })
   })
 
+  describe('label commands', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+
+      describe('createLabel', () => {
+        it('should add a label to the database', () => {
+          return commands.createLabel({board_id: 101, color: 'yellow', text:'yellow label'})
+          .then(() => queries.getBoardById(101))
+          .then(board => expect(board.labels).to.include({id: 2, board_id: 101, color: 'yellow', text:'yellow label'}))
+        })
+      })
+
+      describe('updateLabel', () => {
+        it('should update a label in the database', () => {
+          return queries.getBoardById(101)
+          .then(board => expect(board.labels).to.not.include({id:1, board_id:101, text:'violet label', color:'violet'}))
+          .then(() => commands.updateLabel(1, {text:'violet label', color:'violet'}))
+          .then(() => queries.getBoardById(101))
+          .then(board => expect(board.labels).to.include({id:1, board_id:101, text:'violet label', color:'violet'}))
+        })
+      })
+
+      describe('deleteLabel', () => {
+        it('should delete a label from the database', () => {
+          return queries.getBoardById(101)
+          .then(board => expect(board.labels).to.include({id:1, board_id:101, text:'purple label', color:'purple'}))
+          .then(() => commands.deleteLabel(1))
+          .then(() => queries.getBoardById(101))
+          .then(board => expect(board.labels).to.not.include({id:1, board_id:101, text:'purple label', color:'purple'}))
+        })
+      })
+
+    })
+  })
+
+  describe('Add and Remove Labels From Cards', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should add and then remove a label from a card', () => {
+        return queries.getBoardById(101)
+          .then(board => expect(board.cards.find(card => card.id===80).labels.length).to.eql(0))
+          .then(() => commands.addOrRemoveCardLabel(80, 1))
+          .then(() => queries.getBoardById(101))
+          .then(board => expect(board.cards.find(card => card.id===80).labels).to.include({id: 1, board_id:101, color:"purple", text:"purple label", card_id:80, label_id:1}))
+          .then(() => commands.addOrRemoveCardLabel(80, 1))
+          .then(() => queries.getBoardById(101))
+          .then(board => expect(board.cards.find(card => card.id===80).labels.length).to.eql(0))
+      })
+    })
+  })
+
 })

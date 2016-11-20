@@ -1,4 +1,4 @@
-@import "../../style.sass"
+@import "../../../style.sass"
 
 .CardModal
   &-archivedBanner
@@ -53,10 +53,20 @@
     display: flex
     flex-direction: column
     flex: 1
+    margin-right: 20px
   &-content
     padding-top: 7px
     display: flex
     flex-direction: row
+    &-labels
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      &-header
+        color: #999999
+        margin: 10px 0 5px
+    &-label
+      margin-right: 0.25em
     &-icon
       font-size: .9em
       color: grey
@@ -83,6 +93,17 @@
     &-eye
       padding-left: 8px
       font-size: .7em
+  &-description
+    &-content
+      font-size: 0.9em
+      font-family: sans-serif
+    &-header
+      color: #999999
+      margin: 10px 0 5px
+      font-size: .8em
+      font-weight: normal
+      &-edit
+        text-decoration: underline
   &-controls
     display: flex
     flex-direction: column
@@ -243,6 +264,7 @@
           outline: none
           border-color: #298FCA
           box-shadow: 0 0 2px #298FCA
+
 input[type="submit"].CardModal-comments-submit
   width: 100px
   margin: 8px 0px 6px 0px

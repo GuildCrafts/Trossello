@@ -119,6 +119,12 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
             content: 'Card 91',
           })
         ).then( () =>
+          commands.createLabel({
+            board_id: 101,
+            color: 'purple',
+            text: 'purple label'
+          })
+      ).then( () =>
           commands.createBoard(1455, {
             id: 102,
             name: 'Board2',
