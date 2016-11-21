@@ -82,16 +82,18 @@ describe('database.queries', () => {
             archived: false,
             starred: false,
             background_color: 'orange',
+            created_at: board.created_at,
+            updated_at: board.updated_at,
 
             lists:[
-              { id: 40, board_id: 101, name: 'List1', archived: false, },
-              { id: 41, board_id: 101, name: 'List2', archived: false, },
+              { id: 40, board_id: 101, name: 'List1', archived: false, created_at: board.lists[0].created_at, updated_at: board.lists[0].updated_at},
+              { id: 41, board_id: 101, name: 'List2', archived: false, created_at: board.lists[1].created_at, updated_at: board.lists[1].updated_at},
             ],
             cards: [
-              { id: 80, board_id: 101, list_id: 40, content: 'card1', description: '', archived: false, order: 0},
-              { id: 81, board_id: 101, list_id: 40, content: 'Card2', description: '', archived: false, order: 1},
-              { id: 82, board_id: 101, list_id: 41, content: 'card3', description: '', archived: false, order: 0},
-              { id: 83, board_id: 101, list_id: 41, content: 'Card4', description: '', archived: false, order: 1},
+              { id: 80, board_id: 101, list_id: 40, content: 'card1', description: '', archived: false, order: 0, created_at: board.cards[0].created_at, updated_at: board.cards[0].updated_at},
+              { id: 81, board_id: 101, list_id: 40, content: 'Card2', description: '', archived: false, order: 1, created_at: board.cards[1].created_at, updated_at: board.cards[1].updated_at},
+              { id: 82, board_id: 101, list_id: 41, content: 'card3', description: '', archived: false, order: 0, created_at: board.cards[2].created_at, updated_at: board.cards[2].updated_at},
+              { id: 83, board_id: 101, list_id: 41, content: 'Card4', description: '', archived: false, order: 1, created_at: board.cards[3].created_at, updated_at: board.cards[3].updated_at},
             ],
             users: [
               {
@@ -119,6 +121,8 @@ describe('database.queries', () => {
             board_id: 101,
             name: 'List1',
             archived: false,
+            created_at: board.created_at,
+            updated_at: board.updated_at,
           })
         })
       })
@@ -137,7 +141,9 @@ describe('database.queries', () => {
             content: 'card1',
             description: '',
             archived: false,
-            order: 0
+            order: 0,
+            created_at: board.created_at,
+            updated_at: board.updated_at,
           })
         })
       })

@@ -184,6 +184,8 @@ describe('database.commands', () => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(80)
           expect(card.content).to.eql('This content has been updated')
+          expect(card.updated_at).to.be.at.least(new Date() - 1500)
+          expect(card.updated_at).to.be.at.most(new Date())
           return knex.table('cards').then( cards => {
             expect(cards.length).to.eql(4)
             cards.forEach(card => {
@@ -240,6 +242,8 @@ describe('database.commands', () => {
               expect(list40Cards[0].order  ).to.eql(0)
               expect(list40Cards[1].content).to.eql('card1')
               expect(list40Cards[1].order  ).to.eql(1)
+              expect(list40Cards[1].updated_at ).to.be.at.most(new Date())
+              expect(list40Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
             })
         })
       })
@@ -265,6 +269,8 @@ describe('database.commands', () => {
               expect(list40Cards[1].id).to.eql(81)
               expect(list40Cards[1].list_id).to.eql(40)
               expect(list40Cards[1].order  ).to.eql(1)
+              expect(list40Cards[1].updated_at ).to.be.at.most(new Date())
+              expect(list40Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
 
               expect(list41Cards.length).to.eql(2)
               expect(list41Cards[0].id).to.eql(82)
@@ -272,7 +278,9 @@ describe('database.commands', () => {
               expect(list41Cards[0].order  ).to.eql(0)
               expect(list41Cards[1].id).to.eql(83)
               expect(list41Cards[1].list_id).to.eql(41)
-              expect(list41Cards[1].order  ).to.eql(1)
+              expect(list41Cards[1].list_id).to.eql(41)
+              expect(list41Cards[1].updated_at ).to.be.at.most(new Date())
+              expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
             })
             .then( () =>
               commands.moveCard({
@@ -302,6 +310,8 @@ describe('database.commands', () => {
               expect(list41Cards[2].id).to.eql(83)
               expect(list41Cards[2].list_id).to.eql(41)
               expect(list41Cards[2].order  ).to.eql(2)
+              expect(list41Cards[2].updated_at ).to.be.at.most(new Date())
+              expect(list41Cards[2].updated_at ).to.be.at.least(new Date() - 5000)
             })
         })
       })
@@ -331,6 +341,8 @@ describe('database.commands', () => {
             expect(list41Cards[0].order  ).to.eql(0)
             expect(list41Cards[1].content).to.eql('Card4')
             expect(list41Cards[1].order  ).to.eql(1)
+            expect(list41Cards[1].updated_at ).to.be.at.most(new Date())
+            expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
           })
           .then( () =>
             commands.moveCard({
@@ -356,6 +368,8 @@ describe('database.commands', () => {
             expect(list41Cards[0].order  ).to.eql(0)
             expect(list41Cards[1].content).to.eql('Card4')
             expect(list41Cards[1].order  ).to.eql(1)
+            expect(list41Cards[1].updated_at ).to.be.at.most(new Date())
+            expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
           })
           .then( () =>
             commands.moveCard({
@@ -381,6 +395,8 @@ describe('database.commands', () => {
             expect(list41Cards[1].order  ).to.eql(1)
             expect(list41Cards[2].content).to.eql('Card4')
             expect(list41Cards[2].order  ).to.eql(2)
+            expect(list41Cards[2].updated_at ).to.be.at.most(new Date())
+            expect(list41Cards[2].updated_at ).to.be.at.least(new Date() - 5000)
           })
       })
     })
@@ -411,6 +427,8 @@ describe('database.commands', () => {
           return commands.archiveCard(83).then( () => {
             return queries.getCardById(83).then( card => {
               expect(card.archived).to.eql(true)
+              expect(card.updated_at ).to.be.at.most(new Date())
+              expect(card.updated_at ).to.be.at.least(new Date() - 5000)
             })
           })
         })
@@ -615,6 +633,8 @@ describe('database.commands', () => {
           boardId: 123,
           email: 'larry@david.org',
           token: 'a1bc6250996632d25f0e38d7ad11529cc61489ce',
+          created_at: token.created_at,
+          updated_at: token.updated_at
         })
         expect(mailer.transporter.sentEmails).to.eql([
           {
