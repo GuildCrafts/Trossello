@@ -15,6 +15,8 @@ import NewListForm from './BoardShowPage/NewListForm'
 import LeaveBoardButton from './BoardShowPage/LeaveBoardButton'
 import StarIcon from './StarIcon'
 import MenuSideBar from './BoardShowPage/MenuSideBar'
+import RenameBoardDropdown from './BoardShowPage/RenameBoardDropdown'
+import PopoverMenuButton from './PopoverMenuButton'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -415,12 +417,16 @@ class BoardShowPage extends React.Component {
       backgroundColor: board.background_color,
     }
 
+    const renameBoardDropdown =
+      <RenameBoardDropdown
+        board={this.props.board}
+      />
 
     const className = `BoardShowPage ${this.state.sideBarOpen ? 'BoardShowPage-sideBarOpen' : ''}`
     return <Layout className={className} style={style}>
       {cardModal}
       <div className="BoardShowPage-container">
-        <Header board={board} toggleSideBar={this.toggleSideBar} sideBarOpen={this.state.sideBarOpen} />
+        <Header board={board} toggleSideBar={this.toggleSideBar} sideBarOpen={this.state.sideBarOpen} renameBoardDropdown={renameBoardDropdown}/>
         <div
           ref="lists"
           className="BoardShowPage-lists"
@@ -440,9 +446,11 @@ class BoardShowPage extends React.Component {
   }
 }
 
-const Header = ({board, sideBarOpen, toggleSideBar}) =>
+const Header = ({board, sideBarOpen, toggleSideBar, renameBoardDropdown}) =>
   <div className="BoardShowPage-Header">
-    <h1>{board.name}</h1>
+    <PopoverMenuButton className="BoardShowPage-RenameBoardButton" type="invisible" popover={renameBoardDropdown}>
+      <h1>{board.name}</h1>
+    </PopoverMenuButton>
     <span>
       <StarIcon board={board} onChange={reloadBoardStores} />
     </span>
