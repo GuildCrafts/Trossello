@@ -81,6 +81,11 @@ describe('database.queries', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
         return queries.getBoardById(101).then( board => {
+          board.activity.forEach( activity => {
+            expect(activity.created_at).to.match(
+              /^[A-Z][a-z]{2} [A-Z][a-z]{2} [0-9]{2} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT-[0-9]{4} \([A-Z]{3}\)$/
+            )
+          })
           expect(board).to.eql({
             id: 101,
             name: 'Board1',
@@ -93,16 +98,16 @@ describe('database.queries', () => {
               { id: 41, board_id: 101, name: 'List2', archived: false, order: 1},
             ],
             cards: [
-              { id: 80, board_id: 101, list_id: 40, content: 'card1',      description: '', archived: false, order: 0},
-              { id: 81, board_id: 101, list_id: 40, content: 'Card2',      description: '', archived: false, order: 1},
-              { id: 82, board_id: 101, list_id: 40, content: 'happy',      description: '', archived: false, order: 2},
-              { id: 90, board_id: 101, list_id: 40, content: 'Card 90',    description: '', archived: false, order: 3},
-              { id: 91, board_id: 101, list_id: 40, content: 'Card 91',    description: '', archived: false, order: 4},
-              { id: 83, board_id: 101, list_id: 41, content: 'card3',      description: '', archived: false, order: 0},
-              { id: 84, board_id: 101, list_id: 41, content: 'Card4',      description: '', archived: false, order: 1},
-              { id: 85, board_id: 101, list_id: 41, content: 'happy card', description: '', archived: false, order: 2},
-              { id: 86, board_id: 101, list_id: 41, content: 'HAPPY',      description: '', archived: false, order: 3},
-              { id: 87, board_id: 101, list_id: 41, content: 'HAPPYS',     description: '', archived: false, order: 4},
+              { id: 80, board_id: 101, list_id: 40, content: 'card1', archived: false, order: 0, description: ''},
+              { id: 81, board_id: 101, list_id: 40, content: 'Card2', archived: false, order: 1, description: ''},
+              { id: 82, board_id: 101, list_id: 40, content: 'happy', archived: false, order: 2, description: ''},
+              { id: 90, board_id: 101, list_id: 40, content: 'Card 90', archived: false, order: 3, description: ''},
+              { id: 91, board_id: 101, list_id: 40, content: 'Card 91', archived: false, order: 4, description: ''},
+              { id: 83, board_id: 101, list_id: 41, content: 'card3', archived: false, order: 0, description: ''},
+              { id: 84, board_id: 101, list_id: 41, content: 'Card4', archived: false, order: 1, description: ''},
+              { id: 85, board_id: 101, list_id: 41, content: 'happy card', archived: false, order: 2, description: ''},
+              { id: 86, board_id: 101, list_id: 41, content: 'HAPPY', archived: false, order: 3, description: ''},
+              { id: 87, board_id: 101, list_id: 41, content: 'HAPPYS', archived: false, order: 4, description: ''}
             ],
             users: [
               {
@@ -116,6 +121,21 @@ describe('database.queries', () => {
                 "boards_dropdown_lock": false
               },
             ],
+            activity: [
+              {id: 1, created_at: board.activity[0].created_at, user_id: 1455, type: 'CreatedBoard', board_id: 101, card_id: null, metadata: '{"board_name":"Board1"}'},
+              {id: 2, created_at: board.activity[1].created_at, user_id: 1455, type: 'AddedList', board_id: 101, card_id: null, metadata: '{"list_id":40,"list_name":"List1"}'},
+              {id: 3, created_at: board.activity[2].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 80, metadata: '{"content":"card1"}'},
+              {id: 4, created_at: board.activity[3].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 81, metadata: '{"content":"Card2"}'},
+              {id: 5, created_at: board.activity[4].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 82, metadata: '{"content":"happy"}'},
+              {id: 6, created_at: board.activity[5].created_at, user_id: 1455, type: 'AddedList', board_id: 101, card_id: null, metadata: '{"list_id":41,"list_name":"List2"}'},
+              {id: 7, created_at: board.activity[6].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 83, metadata: '{"content":"card3"}'},
+              {id: 8, created_at: board.activity[7].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 84, metadata: '{"content":"Card4"}'},
+              {id: 9, created_at: board.activity[8].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 85, metadata: '{"content":"happy card"}'},
+              {id: 10, created_at: board.activity[9].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 86, metadata: '{"content":"HAPPY"}'},
+              {id: 11, created_at: board.activity[10].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 87, metadata: '{"content":"HAPPYS"}'},
+              {id: 12, created_at: board.activity[11].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 90, metadata: '{"content":"Card 90"}'},
+              {id: 13, created_at: board.activity[12].created_at, user_id: 1455, type: 'AddedCard', board_id: 101, card_id: 91, metadata: '{"content":"Card 91"}'}
+            ]
           })
         })
       })
@@ -173,7 +193,7 @@ describe('database.queries', () => {
 
   describe('getInviteByToken', () => {
     it('should return first row with given token', () => {
-      return commands.createInvite({
+      return commands.createInvite(1455, {
         boardId: 123,
         email: 'larry@david.org',
       })
@@ -184,6 +204,140 @@ describe('database.queries', () => {
           expect(invite.email).to.eql('larry@david.org')
         })
       )
+    })
+  })
+
+  describe('getActivityByBoardId', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should get Activities by boardId', () => {
+        return queries.getActivityByBoardId(101)
+          .then( activities => {
+            activities.forEach( activity => {
+              expect(activity.created_at).to.match(
+                /^[A-Z][a-z]{2} [A-Z][a-z]{2} [0-9]{2} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT-[0-9]{4} \([A-Z]{3}\)$/
+              )
+            })
+            expect(activities).to.eql([
+              {
+                id: 1,
+                created_at: activities[0].created_at,
+                user_id: 1455,
+                type: 'CreatedBoard',
+                board_id: 101,
+                card_id: null,
+                metadata: '{"board_name":"Board1"}'
+              },
+              {
+                id: 2,
+                created_at: activities[1].created_at,
+                user_id: 1455,
+                type: 'AddedList',
+                board_id: 101,
+                card_id: null,
+                metadata: '{"list_id":40,"list_name":"List1"}'
+              },
+              {
+                id: 3,
+                created_at: activities[2].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 80,
+                metadata: '{"content":"card1"}'
+              },
+              {
+                id: 4,
+                created_at: activities[3].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 81,
+                metadata: '{"content":"Card2"}'
+              },
+              {
+                id: 5,
+                created_at: activities[4].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 82,
+                metadata: '{"content":"happy"}'
+              },
+              {
+                id: 6,
+                created_at: activities[5].created_at,
+                user_id: 1455,
+                type: 'AddedList',
+                board_id: 101,
+                card_id: null,
+                metadata: '{"list_id":41,"list_name":"List2"}'
+              },
+              {
+                id: 7,
+                created_at: activities[6].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 83,
+                metadata: '{"content":"card3"}'
+              },
+              {
+                id: 8,
+                created_at: activities[7].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 84,
+                metadata: '{"content":"Card4"}'
+              },
+              {
+                id: 9,
+                created_at: activities[8].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 85,
+                metadata: '{"content":"happy card"}'
+              },
+              {
+                id: 10,
+                created_at: activities[9].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 86,
+                metadata: '{"content":"HAPPY"}'
+              },
+              {
+                id: 11,
+                created_at: activities[10].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 87,
+                metadata: '{"content":"HAPPYS"}'
+              },
+              {
+                id: 12,
+                created_at: activities[11].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 90,
+                metadata: '{"content":"Card 90"}'
+              },
+              {
+                id: 13,
+                created_at: activities[12].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 101,
+                card_id: 91,
+                metadata: '{"content":"Card 91"}'
+              }
+            ])
+          })
+      })
     })
   })
 

@@ -6,8 +6,9 @@ const router = new express.Router()
 router.post('/:boardId', (request, response, next) => {
   const email = request.body.email
   const { boardId } = request.params
+  const { userId } = request.session
   const attributes = {boardId: boardId, email: email}
-  commands.createInvite(attributes)
+  commands.createInvite(userId, attributes)
     .then( () => {
       response.json(null)
     })

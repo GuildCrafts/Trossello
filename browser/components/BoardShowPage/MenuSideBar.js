@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import Icon from '../Icon'
 import Link from '../Link'
 import Button from '../Button'
-import ToggleComponent from '../ToggleComponent'
+import ActivityPanel from './ActivityPanel'
+import ChangeBackground from './ChangeBackground'
 import DeleteBoardButton from './DeleteBoardButton'
 import LeaveBoardButton from './LeaveBoardButton'
-import ChangeBackground from './ChangeBackground'
+import ToggleComponent from '../ToggleComponent'
 import './MenuSideBar.sass'
 import Card from './Card'
 import List from './List'
@@ -215,6 +216,7 @@ const MainPane = ({board, onClose, gotoPane}) => {
         Activity
       </Link>
     </div>
+    <ActivityPanel board={board}/>
   </Pane>
 }
 
@@ -246,7 +248,7 @@ const StickersPane = ({board, onClose, gotoPane, goBack}) =>
 
 const ActivityPane = ({board, onClose, gotoPane, goBack}) =>
   <Pane name="Activity">
-    <div>Activity Panel</div>
+    <ActivityPanel board={board}/>
   </Pane>
 
 
