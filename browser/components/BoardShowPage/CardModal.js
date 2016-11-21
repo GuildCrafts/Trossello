@@ -40,74 +40,139 @@ export default class CardModal extends Component {
   render(){
     const { session } = this.context
     const { card, list } = this.props
-
+    const archivedBanner = card.archived?
+      <div className='CardModal-window-archivedBanner'> <Icon type="archive" /> This card is archived</div>:
+      null
     return <div className="CardModal">
       <div onClick={this.props.onClose} className="CardModal-shroud">
       </div>
       <div className="CardModal-stage">
         <div className="CardModal-window">
-          <div className="CardModal-body">
-            <div className="CardModal-content">
-              <div className="CardModal-content-icon">
-                <Icon type="window-maximize" size='2'/>
+            {archivedBanner}
+            <div className="CardModal-columns">
+              <div className="CardModal-body">
+                <div className="CardModal-content">
+                  <div className="CardModal-content-icon">
+                    <Icon type="window-maximize" size='2'/>
+                  </div>
+                  <div className="CardModal-content-copy">
+                    <div className="CardModal-content-title">
+                      <CardName card={card} />
+                    </div>
+                    <div className="CardModal-content-list">
+                      <span className="CardModal-content-list-title">
+                        in list {list.name}
+                      </span>
+                      <span className="CardModal-content-list-eye">
+                        <Icon size="1" type="eye"  />
+                      </span>
+                    </div>
+                      <CardDescription card={card} />
+                  </div>
+                </div>
+                <div className="CardModal-comments">
+                  <div className="CardModal-comments-icon">
+                    <Icon size="2" type="comment-o"/>
+                  </div>
+                  <div className="CardModal-comments-content">
+                    <span className="CardModal-comments-title">
+                      Add Comment:
+                    </span>
+                  </div>
+                </div>
+                <div className="CardModal-comments">
+                  <div className="CardModal-comments-imgcontain">
+                    <img className="CardModal-comments-userimage" src={session.user.avatar_url}></img>
+                  </div>
+                  <Form className="CardModal-comments-Form">
+                    <div className="CardModal-comments-Form-content">
+                      <textarea
+                        className="CardModal-comments-Form-input"
+                        ref="comment"
+                        placeholder='Write a comment...'
+                      />
+                    </div>
+                    <input type="submit" className="CardModal-comments-submit" value="Send"/>
+                  </Form>
+                </div>
               </div>
-              <div className="CardModal-content-copy">
-                <div className="CardModal-content-title">
-                  <CardName card={card} />
-                </div>
-                <div className="CardModal-content-list">
-                  <span className="CardModal-content-list-title">
-                    in list {list.name}
-                  </span>
-                  <span className="CardModal-content-list-eye">
-                    <Icon size="1" type="eye"  />
-                  </span>
-                </div>
-                <div className="CardModal-description">
-                  <CardDescription card={card} />
-                </div>
-              </div>
+              <Controls card={card} closeModal={this.props.onClose} />
             </div>
-            <div className="CardModal-comments">
-              <div className="CardModal-comments-icon">
-                <Icon size="2" type="comment-o"/>
-              </div>
-              <div className="CardModal-comments-content">
-                <span className="CardModal-comments-title">
-                  Add Comment:
-                </span>
-              </div>
-            </div>
-            <div className="CardModal-comments">
-              <div className="CardModal-comments-imgcontain">
-                <img className="CardModal-comments-userimage" src={session.user.avatar_url}></img>
-              </div>
-              <Form className="CardModal-comments-Form">
-                <div className="CardModal-comments-Form-content">
-                  <textarea
-                    className="CardModal-comments-Form-input"
-                    ref="comment"
-                    placeholder='Write a comment...'
-                  />
-                </div>
-                <input type="submit" className="CardModal-comments-submit" value="Send"/>
-              </Form>
-            </div>
-          </div>
-          <Controls card={card} closeModal={this.props.onClose} />
+        </div>
         </div>
       </div>
-    </div>
-  }
+    }
 }
 
 const Controls = ({card, closeModal}) => {
+  const toggleOnArchived = card.archived ?
+  <div>
+    <UnArchiveCardButton card={card} />
+    <DeleteCardButton card={card} onDelete={closeModal} />
+  </div> :
+  <ArchiveCardButton card={card} onArchive={closeModal}/>
   return <div className="CardModal-controls">
     <div className="CardModal-controls-title">Add</div>
     <Button><Icon type="user" /> Members</Button>
     <div className="CardModal-controls-title">Actions</div>
-    <ArchiveCardButton card={card} onArchive={closeModal}/>
+    {toggleOnArchived}
   </div>
+}
+
+class DeleteCardButton extends Component {
+  static propTypes = {
+    card: React.PropTypes.object.isRequired,
+    onDelete: React.PropTypes.func.isRequired,
+  }
+  constructor(props){
+    super(props)
+    this.delete = this.delete.bind(this)
+  }
+  delete(){
+    $.ajax({
+      method: "POST",
+      url: `/api/cards/${this.props.card.id}/delete`
+    }).then(() => {
+      boardStore.reload()
+      this.props.onDelete()
+    })
+  }
+  render(){
+    return <ConfirmationButton
+      onConfirm={this.delete}
+      buttonName='Delete'
+      title='Delete Card?'
+      message='All actions will be removed from the activity feed and you won’t be able to re-open the card. There is no undo.'
+      className='CardModal-controls-delete'
+    >
+      <Icon type="trash" /> Delete
+    </ConfirmationButton>
+  }
+}
+
+class UnArchiveCardButton extends Component {
+  static propTypes = {
+    card: React.PropTypes.object.isRequired
+  }
+  constructor(props){
+    super(props)
+    this.unArchive = this.unArchive.bind(this)
+  }
+  unArchive(){
+    $.ajax({
+      method: "POST",
+      url: `/api/cards/${this.props.card.id}/unarchive`
+    }).then(() => {
+      boardStore.reload()
+    })
+  }
+  render(){
+    return <Button
+      onClick={this.unArchive}
+    >
+      <Icon type="refresh" /> Return to Board
+    </Button>
+  }
 }
 
 class ArchiveCardButton extends Component {

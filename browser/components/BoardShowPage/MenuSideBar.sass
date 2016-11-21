@@ -177,12 +177,42 @@
     flex-wrap: nowrap
     padding: 0 10px
     min-height: 30%
-    max-width: 260px
+    &-Header
+      display: flex
+      align-items: flex-start
+    &-SearchBox
+      transition: background 85ms ease-in,border-color 85ms ease-in
+      background: #E2E4E6
+      border: 1px solid #CDD2D4
+      border-radius: 3px
+      margin-bottom: 9px
+      min-height: 34px
+      padding: 7px
+      outline: 0
+      &:hover
+        border-color:#A5ACB0
+      &:focus
+        background: #fff
+        border-color: #298FCA
+        box-shadow: 0 0 2px #298FCA
+    &-ToggleDisplay
+      color: #8c8c8c
+      padding: 6px 8px
+      position: relative
+      user-select: none
+      font-size: 14px
+      &:active
+        background: #CDD2D4
+        color: #4d4d4d
+      &:hover
+        background: #D6DADC
+        color: #4d4d4d
+
     &-item
       margin-top: 8px
     &-list
       margin-right: 200px
-
+  
 
     &-UnarchiveButton
       left: 10px
