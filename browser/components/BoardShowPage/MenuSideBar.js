@@ -11,6 +11,7 @@ import Card from './Card'
 import List from './List'
 import $ from 'jquery'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
+import Unarchive from './Unarchive'
 
 export default class MenuSideBar extends Component {
 
@@ -324,7 +325,7 @@ const DownloadBoardButton = (props) => {
 
 const UnarchivePane = ({board, onClose, gotoPane, goBack}) =>
   <Pane name="Labels">
-    <div>Unarchive Panel Under Construction</div>
+    <Unarchive board={board} />
   </Pane>
 
 
