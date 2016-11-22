@@ -249,52 +249,70 @@ const ActivityPane = ({board, onClose, gotoPane, goBack}) =>
     <div>Activity Panel</div>
   </Pane>
 
+class MorePane extends Component {
+  constructor (props) {
+    super(props)
+  }
 
-const MorePane = ({board, onClose, gotoPane, goBack}) => {
-  return <Pane name="More">
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        onClick={gotoPane('Settings')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='gear' />
-        </span>
-        Settings
-      </Link>
-    </div>
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        onClick={gotoPane('Labels')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='tag' />
-        </span>
-        Labels
-      </Link>
-    </div>
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        onClick={gotoPane('Unarchive')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='archive' />
-        </span>
-        Unarchive
-      </Link>
-    </div>
-    <div className="BoardShowPage-MenuSideBar-separator" />
-    <div>
-      <DownloadBoardButton className='BoardShowPage-MenuSideBar-options' boardId={board.id}/>
-    </div>
-    <div className="BoardShowPage-MenuSideBar-separator" />
-    <div>
-      <LeaveBoardButton className='BoardShowPage-MenuSideBar-options' boardId={board.id}/>
-    </div>
-    <div className="BoardShowPage-MenuSideBar-separator" />
-  </Pane>
+  componentDidMount(){
+    this.refs.input.focus()
+    this.refs.input.select()
+  }
+
+
+  render() {
+    const { board, onClose, gotoPane, goBack } = this.props
+    const url = window.location.href
+
+    return <Pane name="More">
+      <div>
+        <Link
+          className='BoardShowPage-MenuSideBar-options'
+          onClick={gotoPane('Settings')}
+        >
+          <span className='BoardShowPage-MenuSideBar-icons'>
+            <Icon type='gear' />
+          </span>
+          Settings
+        </Link>
+      </div>
+      <div>
+        <Link
+          className='BoardShowPage-MenuSideBar-options'
+          onClick={gotoPane('Labels')}
+        >
+          <span className='BoardShowPage-MenuSideBar-icons'>
+            <Icon type='tag' />
+          </span>
+          Labels
+        </Link>
+      </div>
+      <div>
+        <Link
+          className='BoardShowPage-MenuSideBar-options'
+          onClick={gotoPane('Unarchive')}
+        >
+          <span className='BoardShowPage-MenuSideBar-icons'>
+            <Icon type='archive' />
+          </span>
+          Unarchive
+        </Link>
+      </div>
+      <div className="BoardShowPage-MenuSideBar-separator" />
+      <div>
+        <DownloadBoardButton className='BoardShowPage-MenuSideBar-options' boardId={board.id}/>
+      </div>
+      <div className="BoardShowPage-MenuSideBar-separator" />
+      <div>
+        <LeaveBoardButton className='BoardShowPage-MenuSideBar-options BordShowPage-MenuSideBar-options-delete' boardId={board.id}/>
+      </div>
+      <div className="BoardShowPage-MenuSideBar-separator" />
+      <form className="BoardShowPage-MenuSideBar-form" >
+        <label>Link to this board:</label>
+        <input type="text" ref='input' readOnly value={url} ></input>
+      </form>
+    </Pane>
+  }
 }
 
 const SettingsPane = ({board, onClose, gotoPane, goBack}) =>

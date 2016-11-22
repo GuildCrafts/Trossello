@@ -79,6 +79,9 @@
         cursor: pointer
   &-MorePane
     background: #edeff0
+    button
+      padding-left: 28px
+      width: 100%
   &-SettingsPane
     background: #edeff0
   &-show
@@ -139,7 +142,7 @@
     width: 100%
     text-align: left
     &:hover
-      background-color: rgb(192, 192, 192)
+      background-color: #D6DADC
       opacity: 1
       cursor: pointer
   &-header
@@ -195,6 +198,22 @@
   &-separator
     border-bottom: 1px solid #d6dadc
     margin: 8px 0
+
+  &-form
+    display: flex
+    flex-direction: column
+    margin-left: 28px
+    label
+      font-weight: bold
+      color: $black
+      margin-bottom: 4px
+    input
+      padding: 7px
+      border: 1px solid #CDD2D4
+      border-radius: 3px
+      &:focus
+        border-color: #298FCA
+        box-shadow: 0 0 2px #298FCA
 
   &-InviteByEmailButton
     display: block
