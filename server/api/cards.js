@@ -27,15 +27,6 @@ router.post('/:cardId/archive', (request, response, next) => {
 })
 
 // MOVE
-router.post('/:cardId/archive', (request, response, next) => {
-  commands.archiveCard(request.params.cardId)
-    .then(() => {
-      response.json(null)
-    })
-    .catch(next)
-})
-
-// MOVE
 router.post('/:cardId/move', (request, response, next) => {
   let { boardId, listId, order } = request.body
   let { cardId } = request.params
