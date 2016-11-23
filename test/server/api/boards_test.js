@@ -268,13 +268,10 @@ describe('/api/boards', () => {
           return request('post', '/api/boards/101/lists/1/duplicate', {name: 'new list name'})
             .then(response => {
               expect(response).to.have.status(200)
-              expect(response.body).to.eql({
-                id: response.body.id,
-                board_id: 101,
-                name: "new list name",
-                archived: false,
-                order: 2,
-              })
+              expect(response.body.board_id).to.eql(101)
+              expect(response.body.name).to.eql("new list name")
+              expect(response.body.archived).to.eql(false)
+              expect(response.body.order).to.eql(2)
             })
         })
       })

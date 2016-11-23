@@ -258,6 +258,8 @@ describe('database.commands', () => {
                 expect(card).to.be.a('object')
                 expect(card.list_id).to.eql(40)
                 expect(card.content).to.eql('This content has been updated')
+                expect(card.updated_at).to.be.at.least(new Date() - 1500)
+                expect(card.updated_at).to.be.at.most(new Date())
               }else if (card.id === 81){
                 expect(card).to.be.a('object')
                 expect(card.list_id).to.eql(40)
@@ -317,6 +319,8 @@ describe('database.commands', () => {
               expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
               expect(list40Cards.map(card => card.id)     ).to.eql([81,80,82,90,91])
               expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
+              expect(list40Cards[1].updated_at ).to.be.at.most(new Date())
+              expect(list40Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
             })
         })
       })
@@ -338,10 +342,14 @@ describe('database.commands', () => {
               expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
               expect(list40Cards.map(card => card.id)     ).to.eql([80,81,82,90,91])
               expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
+              expect(list40Cards[1].updated_at ).to.be.at.most(new Date())
+              expect(list40Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
 
               expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
               expect(list41Cards.map(card => card.id)     ).to.eql([83,84,85,86,87])
               expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41])
+              expect(list41Cards[1].updated_at ).to.be.at.most(new Date())
+              expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
             })
             .then( () =>
               commands.moveCard({
@@ -363,6 +371,8 @@ describe('database.commands', () => {
               expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4,5])
               expect(list41Cards.map(card => card.id)     ).to.eql([81,83,84,85,86,87])
               expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41,41])
+              expect(list41Cards[2].updated_at ).to.be.at.most(new Date())
+              expect(list41Cards[2].updated_at ).to.be.at.least(new Date() - 5000)
             })
             .then( () =>
               commands.moveCard({
@@ -409,6 +419,8 @@ describe('database.commands', () => {
             expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
             expect(list41Cards.map(card => card.id)     ).to.eql([83,84,85,86,87])
             expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41])
+            expect(list41Cards[1].updated_at ).to.be.at.most(new Date())
+            expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
           })
           .then( () =>
             commands.moveCard({
@@ -430,6 +442,8 @@ describe('database.commands', () => {
             expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4])
             expect(list41Cards.map(card => card.id)     ).to.eql([83,84,85,86,87])
             expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41])
+            expect(list41Cards[1].updated_at ).to.be.at.most(new Date())
+            expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
           })
           .then( () =>
             commands.moveCard({
@@ -451,6 +465,8 @@ describe('database.commands', () => {
             expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4,5])
             expect(list41Cards.map(card => card.id)     ).to.eql([81,83,84,85,86,87])
             expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41,41])
+            expect(list41Cards[2].updated_at ).to.be.at.most(new Date())
+            expect(list41Cards[2].updated_at ).to.be.at.least(new Date() - 5000)
           })
       })
     })
@@ -481,6 +497,8 @@ describe('database.commands', () => {
           return commands.archiveCard(83).then( () => {
             return queries.getCardById(83).then( card => {
               expect(card.archived).to.eql(true)
+              expect(card.updated_at ).to.be.at.most(new Date())
+              expect(card.updated_at ).to.be.at.least(new Date() - 5000)
             })
           })
         })
@@ -758,13 +776,10 @@ describe('database.commands', () => {
           })
           .then(_ => commands.duplicateList(101, 40, "Bob's New List" ) )
           .then(newList => {
-            expect(newList).to.eql({
-              id: newList.id,
-              board_id: 101,
-              name: "Bob's New List",
-              archived: false,
-              order: 2,
-            })
+            expect(newList.board_id).to.eql(101)
+            expect(newList.name).to.eql("Bob's New List")
+            expect(newList.archived).to.eql(false)
+            expect(newList.order).to.eql(2)
           })
           .then(_ => queries.getBoardById(101) )
           .then( board => {
@@ -858,11 +873,8 @@ describe('database.commands', () => {
         boardId: 123,
         email: 'larry@david.org',
       }).then(invite => {
-        expect(invite).to.eql({
-          boardId: 123,
-          email: 'larry@david.org',
-          token: invite.token,
-        })
+        expect(invite.boardId).to.eql(123)
+        expect(invite.email).to.eql('larry@david.org')
         expect(mailer.transporter.sentEmails).to.eql([
           {
             "from": "\"Trossello\" no-reply@trossello.com",
