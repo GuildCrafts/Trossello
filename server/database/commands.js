@@ -13,13 +13,15 @@ const createRecord = (table, attributes) =>
     .then(firstRecord)
 
 
-const updateRecord = (table, id, attributes) =>
-  knex
+const updateRecord = (table, id, attributes) => {
+  attributes.updated_at = new Date()
+  return knex
     .table(table)
     .where('id', id)
     .update(attributes)
     .returning('*')
     .then(firstRecord)
+}
 
 const deleteRecord = (table, id) =>
   knex
@@ -40,6 +42,7 @@ const archiveRecord = (table, id) =>
     .where('id', id)
     .update({
       archived: true,
+      updated_at: new Date(),
     })
 
 const unarchiveRecord = (table, id) =>
@@ -48,6 +51,7 @@ const unarchiveRecord = (table, id) =>
     .where('id', id)
     .update({
       archived: false,
+      updated_at: new Date(),
     })
 
 const archiveListItems = (id) =>
@@ -56,6 +60,7 @@ const archiveListItems = (id) =>
     .where('list_id', id)
     .update({
       archived: true,
+      updated_at: new Date(),
     })
 
 const unarchiveListItems = (id) =>
@@ -64,6 +69,7 @@ const unarchiveListItems = (id) =>
     .where('list_id', id)
     .update({
       archived: false,
+      updated_at: new Date(),
     })
 
 const findOrCreateUserFromGithubProfile = (githubProfile) => {

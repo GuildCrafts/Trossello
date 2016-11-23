@@ -81,42 +81,34 @@ describe('database.queries', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
         return queries.getBoardById(101).then( board => {
-          expect(board).to.eql({
-            id: 101,
-            name: 'Board1',
-            archived: false,
-            starred: false,
-            background_color: 'orange',
+          expect(board.id).to.eql(101)
+          expect(board.name).to.eql('Board1')
+          expect(board.archived).to.eql(false)
+          expect(board.starred).to.eql(false)
+          expect(board.background_color).to.eql('orange')
 
-            lists:[
-              { id: 40, board_id: 101, name: 'List1', archived: false, order: 0},
-              { id: 41, board_id: 101, name: 'List2', archived: false, order: 1},
-            ],
-            cards: [
-              { id: 80, board_id: 101, list_id: 40, content: 'card1',      description: '', archived: false, order: 0},
-              { id: 81, board_id: 101, list_id: 40, content: 'Card2',      description: '', archived: false, order: 1},
-              { id: 82, board_id: 101, list_id: 40, content: 'happy',      description: '', archived: false, order: 2},
-              { id: 90, board_id: 101, list_id: 40, content: 'Card 90',    description: '', archived: false, order: 3},
-              { id: 91, board_id: 101, list_id: 40, content: 'Card 91',    description: '', archived: false, order: 4},
-              { id: 83, board_id: 101, list_id: 41, content: 'card3',      description: '', archived: false, order: 0},
-              { id: 84, board_id: 101, list_id: 41, content: 'Card4',      description: '', archived: false, order: 1},
-              { id: 85, board_id: 101, list_id: 41, content: 'happy card', description: '', archived: false, order: 2},
-              { id: 86, board_id: 101, list_id: 41, content: 'HAPPY',      description: '', archived: false, order: 3},
-              { id: 87, board_id: 101, list_id: 41, content: 'HAPPYS',     description: '', archived: false, order: 4},
-            ],
-            users: [
-              {
-                "id": 1455,
-                "github_id": 22312,
-                "avatar_url": null,
-                "email": "mark@zuckerburg.io",
-                "name": "Mark Zuckerburg",
-                "created_at": null,
-                "updated_at": null,
-                "boards_dropdown_lock": false
-              },
-            ],
-          })
+          expect(board.users[0].id).to.eql(1455)
+          expect(board.users[0].github_id).to.eql(22312)
+          expect(board.users[0].avatar_url).to.eql(null)
+          expect(board.users[0].email).to.eql("mark@zuckerburg.io")
+          expect(board.users[0].name).to.eql("Mark Zuckerburg")
+          expect(board.users[0].created_at).to.eql(null)
+          expect(board.users[0].updated_at).to.eql(null)
+          expect(board.users[0].boards_dropdown_lock).to.eql(false)
+
+          expect(board.lists.map(list => list.id)).to.eql([40,41])
+          expect(board.lists.map(list => list.board_id)).to.eql([101,101])
+          expect(board.lists.map(list => list.name)).to.eql(['List1','List2'])
+          expect(board.lists.map(list => list.archived)).to.eql([false,false])
+          expect(board.lists.map(list => list.order)).to.eql([0,1])
+
+          expect(board.cards.map(card => card.id)).to.eql([80,81,82,90,91,83,84,85,86,87])
+          expect(board.cards.map(card => card.board_id)).to.eql([101,101,101,101,101,101,101,101,101,101])
+          expect(board.cards.map(card => card.list_id)).to.eql([40,40,40,40,40,41,41,41,41,41])
+          expect(board.cards.map(card => card.content)).to.eql(['card1','Card2','happy','Card 90','Card 91','card3','Card4','happy card','HAPPY','HAPPYS'])
+          expect(board.cards.map(card => card.description)).to.eql(['','','','','','','','','',''])
+          expect(board.cards.map(card => card.archived)).to.eql([false,false,false,false,false,false,false,false,false,false])
+          expect(board.cards.map(card => card.order)).to.eql([0,1,2,3,4,0,1,2,3,4])
         })
       })
     })
@@ -141,13 +133,11 @@ describe('database.queries', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
         return queries.getListById(40).then( board => {
-          expect(board).to.eql({
-            id: 40,
-            board_id: 101,
-            name: 'List1',
-            archived: false,
-            order: 0,
-          })
+          expect(board.id).to.eql(40)
+          expect(board.board_id).to.eql(101)
+          expect(board.name).to.eql('List1')
+          expect(board.archived).to.eql(false)
+          expect(board.order).to.eql(0)
         })
       })
     })
@@ -157,15 +147,13 @@ describe('database.queries', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
         return queries.getCardById(80).then( board => {
-          expect(board).to.eql({
-            id: 80,
-            list_id: 40,
-            board_id: 101,
-            content: 'card1',
-            description: '',
-            archived: false,
-            order: 0
-          })
+          expect(board.id).to.eql(80)
+          expect(board.list_id).to.eql(40)
+          expect(board.board_id).to.eql(101)
+          expect(board.content).to.eql('card1')
+          expect(board.description).to.eql('')
+          expect(board.archived).to.eql(false)
+          expect(board.order).to.eql(0)
         })
       })
     })
