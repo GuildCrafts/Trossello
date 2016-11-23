@@ -160,6 +160,10 @@ const deleteList = (id) =>
   ])
 
 const createCard = (attributes) => {
+  let order = null
+  if (attributes.hasOwnProperty('order')) {
+    order = attributes.order
+  }
   return knex
     .table('cards')
     .where({list_id: attributes.list_id})
@@ -172,6 +176,18 @@ const createCard = (attributes) => {
         .insert(attributes)
         .returning('*')
         .then(firstRecord)
+    })
+    .then( card => {
+      if (order !== null) {
+        moveCard({
+          boardId: card.board_id,
+          cardId: card.id,
+          listId: card.list_id,
+          order: order
+        })
+        card.order = order
+      }
+      return card
     })
 }
 

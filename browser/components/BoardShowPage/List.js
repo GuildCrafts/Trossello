@@ -25,9 +25,12 @@ export default class List extends Component {
     super(props)
     this.state = {
       creatingCard: false,
+      newCardPosition: 0
     }
     this.creatingCard = this.creatingCard.bind(this)
+    this.creatingCardTop = this.creatingCardTop.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
+    this.increaseNewCardPosition = this.increaseNewCardPosition.bind(this)
   }
 
   componentDidUpdate(){
@@ -38,11 +41,23 @@ export default class List extends Component {
   }
 
   creatingCard() {
-    this.setState({creatingCard: true})
+    const {cards, list} = this.props
+    const newCardPosition = cards.filter(card =>
+      card.list_id === list.id && card.archived === false
+    ).length
+    this.setState({creatingCard: true, newCardPosition: newCardPosition})
+  }
+
+  creatingCardTop() {
+    this.setState({creatingCard: true, newCardPosition: 0})
   }
 
   cancelCreatingCard() {
     this.setState({creatingCard: false})
+  }
+
+  increaseNewCardPosition() {
+    this.setState({newCardPosition: this.state.newCardPosition + 1})
   }
 
   render(){
@@ -51,6 +66,20 @@ export default class List extends Component {
     const cards = this.props.cards
       .filter(card => card.list_id === list.id)
       .sort((a, b) => a.order - b.order)
+
+    let newCardForm, newCardFormTop, newCardLink
+    if (this.state.creatingCard) {
+      newCardForm = <NewCardForm
+        key={'new-card'}
+        board={board}
+        list={list}
+        onCancel={this.cancelCreatingCard}
+        newCardPosition={this.state.newCardPosition}
+        increaseNewCardPosition={this.increaseNewCardPosition}
+      />
+    } else {
+      newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
+    }
 
     const cardNodes = cards.map((card, index) =>
       <Card
@@ -65,26 +94,16 @@ export default class List extends Component {
       />
     )
 
+    cardNodes.splice(this.state.newCardPosition, 0, newCardForm)
 
     let className = 'BoardShowPage-List'
     if (this.props.ghosted) className += ' BoardShowPage-Ghosted'
     if (this.props.beingDragged) className += ' BoardShowPage-List-beingDragged'
 
-    let newCardForm, newCardLink
-    if (this.state.creatingCard) {
-      newCardForm = <NewCardForm
-        board={board}
-        list={list}
-        onCancel={this.cancelCreatingCard}
-      />
-    } else {
-      newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
-    }
-
     const listActionsMenu = <ListActionsMenu
       board={this.props.board}
       list={this.props.list}
-      onCreateCard={this.creatingCard}
+      onCreateCard={this.creatingCardTop}
     />
 
     return <div className="BoardShowPage-List" data-list-id={list.id}>
@@ -101,7 +120,6 @@ export default class List extends Component {
         </PopoverMenuButton>
         <div ref="cards"className="BoardShowPage-cards">
           {cardNodes}
-          {newCardForm}
         </div>
         {newCardLink}
       </div>
@@ -201,6 +219,9 @@ class NewCardForm extends Component {
   createCard(card) {
     const { board, list } = this.props
     if (card.content.replace(/\s+/g,'') === '') return
+    card.order = this.props.newCardPosition
+
+    this.props.increaseNewCardPosition()
 
     $.ajax({
       method: 'post',
