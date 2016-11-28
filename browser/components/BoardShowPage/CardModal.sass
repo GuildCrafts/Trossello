@@ -1,6 +1,17 @@
 @import "../../style.sass"
 
 .CardModal
+  &-archivedBanner
+    background-color: #FDFAE5
+    background-image: linear-gradient(to bottom right,rgba(0,0,0,.05) 25%,transparent 25%,transparent 50%,rgba(0,0,0,.05) 50%,rgba(0,0,0,.05) 75%,transparent 75%,transparent)
+    background-size: 14px 14px
+    min-height: 30px
+    padding: 9pt 9pt 9pt 50px
+    display: block
+
+  .Button
+    margin-bottom: 7px
+
   &-shroud, &-stage
     position: fixed
     top: 0
@@ -16,16 +27,28 @@
     display: flex
     justify-content: center
     align-items: center
+  &-columns
+    flex-wrap: wrap
+    display: flex
+    padding: 13px
   &-window
     pointer-events: auto
-    min-width: 700px
     max-width: 700px
+    width: 100%
     min-height: 300px
-    padding: 13px
     border-radius: 5px
     background-color: #eff1f2
     display: flex
-    flex-direction: row
+    flex-direction: column
+    margin: 5px
+    &-archivedBanner
+      background-color: #FDFAE5
+      background-image: linear-gradient(to bottom right,rgba(0,0,0,.05) 25%,transparent 25%,transparent 50%,rgba(0,0,0,.05) 50%,rgba(0,0,0,.05) 75%,transparent 75%,transparent)
+      background-size: 14px 14px
+      height: 50px
+      padding: 9pt 9pt 9pt 50px
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
   &-body
     display: flex
     flex-direction: column
@@ -63,7 +86,7 @@
   &-controls
     display: flex
     flex-direction: column
-    flex: 0 0 130px
+    flex: 0 0 115px
     margin-top: 10px
     > .Button,  > span > .Button
       display: block
@@ -74,8 +97,26 @@
     &-title
       margin: 25px 0 5px 0
       font-weight: bold
+    &-delete
+      background: #CF513D
+      color: white
+      border: none
+      width: 100%
+      &:hover
+        background: darken(#CF513D, 10%)
+        border: none
   &-description
-    margin: 10px 20px 10px 0px
+    display: block
+    color: #8c8c8c
+    width: 96%
+    margin-top: 5px
+    padding: 5px 10px 5px 5px
+    border-radius: 3px
+    &:hover
+      color: #4d4d4d
+      cursor: pointer
+      background-color: #D6DADC
+      text-decoration: underline
     &-title
       margin-bottom: 5px
       color: grey
@@ -112,6 +153,7 @@
       resize: none
       padding: 10px
       flex: 1
+      width: 96%
     &-Form-input:focus
       outline: none
     &-header
@@ -136,5 +178,5 @@
   &-name
     max-width: 100%
 input[type="submit"].CardModal-comments-submit
-  max-width: 25%
+  width: 100px
   margin: 8px 0px 6px 0px

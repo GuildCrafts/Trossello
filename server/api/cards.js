@@ -26,15 +26,28 @@ router.post('/:cardId/archive', (request, response, next) => {
     .catch(next)
 })
 
-// MOVE
-router.post('/:cardId/archive', (request, response, next) => {
-  commands.archiveCard(request.params.cardId)
+// UNARCHIVE
+router.post('/:cardId/unarchive', (request, response, next) => {
+  commands.unarchiveCard(request.params.cardId)
     .then(() => {
       response.json(null)
     })
     .catch(next)
 })
 
+// DELETE
+router.post('/:cardId/delete', (request, response, next) => {
+  console.log("Delete API")
+  commands.deleteCard(request.params.cardId)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
+
+
+// MOVE
 router.post('/:cardId/move', (request, response, next) => {
   let { boardId, listId, order } = request.body
   let { cardId } = request.params

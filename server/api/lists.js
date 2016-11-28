@@ -58,4 +58,13 @@ router.post('/:fromListId/cards/move-to/:toListId', (request, response, next) =>
     .catch(next)
 })
 
+// UNARCHIVE
+router.post('/:listId/unarchive', (request, response, next) => {
+  commands.unarchiveList(request.params.listId)
+    .then(() => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
 export default router
