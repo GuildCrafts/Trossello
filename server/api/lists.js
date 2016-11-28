@@ -17,7 +17,7 @@ router.post('/:listId', (request, response, next) => {
 
 // ARCHIVE
 router.post('/:listId/archive', (request, response, next) => {
-  commands.archiveList(request.params.listId)
+  commands.archiveList(request.session.userId, request.params.listId)
     .then(() => {
       response.json(null)
     })

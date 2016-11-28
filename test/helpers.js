@@ -37,82 +37,82 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
           name: 'Board1',
           background_color: 'orange',
         }).then( () =>
-          commands.createList({
+          commands.createList(1455, {
             id: 40,
             board_id: 101,
             name: 'List1',
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 80,
             list_id: 40,
             board_id: 101,
             content: 'card1',
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 81,
             list_id: 40,
             board_id: 101,
             content: 'Card2',
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 82,
             list_id: 40,
             board_id: 101,
             content: 'happy',
           }),
         ).then( () =>
-          commands.createList({
+          commands.createList(1455, {
             id: 41,
             board_id: 101,
             name: 'List2',
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 83,
             list_id: 41,
             board_id: 101,
             content: 'card3',
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 84,
             list_id: 41,
             board_id: 101,
             content: 'Card4',
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 85,
             list_id: 41,
             board_id: 101,
             content: 'happy card'
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 86,
             list_id: 41,
             board_id: 101,
             content: 'HAPPY'
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 87,
             list_id: 41,
             board_id: 101,
             content: 'HAPPYS'
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 90,
             list_id: 40,
             board_id: 101,
             content: 'Card 90',
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(1455, {
             id: 91,
             list_id: 40,
             board_id: 101,
@@ -138,13 +138,13 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
             background_color: 'purple',
           })
         ).then( () =>
-          commands.createList({
+          commands.createList(6672, {
             id: 42,
             board_id: 104,
             name: 'Unhappy list'
           })
         ).then( () =>
-          commands.createCard({
+          commands.createCard(6672, {
             id:88,
             list_id:42,
             board_id: 104,
