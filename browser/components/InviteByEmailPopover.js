@@ -12,6 +12,9 @@ import DialogBox from './DialogBox'
 class InviteByEmailPopover extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      creatingInvite: false,
+    }
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -19,19 +22,19 @@ class InviteByEmailPopover extends Component {
     this.refs.email.focus()
   }
 
-  reset(){
-    if (this.refs.email) this.refs.email.value = ''
-  }
-
   onSubmit(event){
     event.preventDefault()
     const email = this.refs.email.value
+    this.setState({creatingInvite: true})
     $.ajax({
       method: "POST",
       url: `/api/invites/${this.props.boardId}`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       data: JSON.stringify({email}),
+    }).then(_ => {
+      this.setState({creatingInvite: false})
+      this.props.onClose()
     })
   }
 
@@ -43,12 +46,23 @@ class InviteByEmailPopover extends Component {
       null
 
     return <DialogBox className="InviteByEmailPopover" onClose={this.props.onClose} heading="Add Members">
-      <Form onSubmit={this.onSubmit && this.props.onClose}>
-        <input className='emailInput' type="email" ref="email" name='email' placeholder="e.g. burritos@trossello.com" />
+      <Form onSubmit={this.onSubmit}>
+        <input
+          className='emailInput'
+          type="email"
+          ref="email"
+          name='email'
+          placeholder="e.g. burritos@trossello.com"
+          disabled={this.state.creatingInvite}
+        />
         <p className='InviteByEmailPopover-text'>
           Enter an email address to invite someone new to this board.
         </p>
-        <Button type="primary" action="submit">Invite</Button>
+        <Button
+          type="primary"
+          action="submit"
+          disabled={this.state.creatingInvite}
+        >{this.state.creatingInvite ? 'Saving…' : 'Invite'}</Button>
       </Form>
     </DialogBox>
   }
