@@ -55,20 +55,22 @@ export default class CardModal extends Component {
       board={board}
     />
 
-    const cardLabels = card.labels.map(label =>
-      <PopoverMenuButton
-        key={label.id}
-        className="CardModal-content-label"
-        type="unstyled"
-        popover={labelPanel}
-      >
-        <CardLabel
-          color={label.color}
-          text={label.text}
-          checked={false}
-        />
-      </PopoverMenuButton>
-    )
+    const cardLabels = card.label_ids
+      .map( labelId => board.labels.find(label => label.id === labelId))
+      .map(label =>
+        <PopoverMenuButton
+          key={label.id}
+          className="CardModal-content-label"
+          type="unstyled"
+          popover={labelPanel}
+        >
+          <CardLabel
+            color={label.color}
+            text={label.text}
+            checked={false}
+          />
+        </PopoverMenuButton>
+      )
 
     return <div className="CardModal">
       <div onClick={this.props.onClose} className="CardModal-shroud">

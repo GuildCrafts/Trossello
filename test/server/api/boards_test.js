@@ -272,7 +272,8 @@ describe('/api/boards', () => {
             })
         })
       })
-            // DUPLICATE LIST
+
+      // DUPLICATE LIST
       describe('POST /api/boards/:boardId/lists/:listId/duplicate', () => {
         it('should create a new list, duplicate all the cards from the old list and preserve card labels', () => {
           return request('get', '/api/boards/101')
@@ -288,7 +289,6 @@ describe('/api/boards', () => {
                   expect(response.body.archived).to.eql(false)
                   expect(response.body.order).to.eql(2)
                   const newListId = response.body.id
-                  console.log('newListId', newListId)
                   return request('get', '/api/boards/101')
                     .then(response => {
                       const board = response.body
@@ -297,9 +297,9 @@ describe('/api/boards', () => {
                       expect(newCards.length).to.eql(oldCards.length)
                       expect(newCards.map(card => card.content)).to.eql(oldCards.map(card => card.content))
                       expect(
-                        newCards.map(card => card.labels.map(label => label.id))
+                        newCards.map(card => card.labels_ids)
                       ).to.eql(
-                        oldCards.map(card => card.labels.map(label => label.id))
+                        oldCards.map(card => card.labels_ids)
                       )
                     })
                 })
@@ -361,36 +361,35 @@ describe('/api/boards', () => {
 
       //CREATE LABEL
       describe('POST /api/boards/:boardId/labels', () => {
-        const labelContent= {color: 'blue', text: 'blue label'}
-
         it('should add a label to the board', () => {
-          return request('post', '/api/boards/101/labels', labelContent)
+          return request('post', '/api/boards/101/labels', {color: 'blue', text: 'blue label'})
             .then(response => {
               expect(response).to.have.status(200)
+              expect(response.body.color).to.eql('blue')
+              expect(response.body.text).to.eql('blue label')
+              const newLabelId = response.body.id
               return queries.getBoardById(101)
-            })
-            .then(board => {
-              expect(board.labels).to.include({id:2, board_id:101, color:'blue', text: 'blue label'})
+                .then(board => {
+                  expect(board.labels).to.include({id: newLabelId, board_id:101, color:'blue', text: 'blue label'})
+                })
             })
         })
       })
 
       //UPDATE LABEL
       describe('POST /api/boards/:boardId/labels/:labelId', () => {
-        const labelContent= {color: 'green', text: 'green label'}
-
         it('should update a label with new values', () => {
           return queries.getBoardById(101)
             .then(board => {
-              expect(board.labels).to.include({id: 1, board_id: 101, text: 'purple label', color:'purple'})
+              expect(board.labels).to.include({id: 301, board_id: 101, text: 'purple label', color:'purple'})
             })
-            .then(() => request('post', '/api/boards/101/labels/1', labelContent))
+            .then(() => request('post', '/api/boards/101/labels/301', {color: 'green', text: 'green label'}))
             .then(response => {
               expect(response).to.have.status(200)
               return queries.getBoardById(101)
             })
             .then(board => {
-              expect(board.labels).to.include({id:1, board_id:101, color:'green', text: 'green label'})
+              expect(board.labels).to.include({id:301, board_id:101, color:'green', text: 'green label'})
             })
         })
       })
@@ -400,15 +399,15 @@ describe('/api/boards', () => {
         it('should update a label with new values', () => {
           return queries.getBoardById(101)
             .then(board => {
-              expect(board.labels).to.include({id: 1, board_id: 101, text: 'purple label', color:'purple'})
+              expect(board.labels).to.include({id: 301, board_id: 101, text: 'purple label', color:'purple'})
             })
-            .then(() => request('post', '/api/boards/101/labels/1/delete'))
+            .then(() => request('post', '/api/boards/101/labels/301/delete'))
             .then(response => {
               expect(response).to.have.status(200)
               return queries.getBoardById(101)
             })
             .then(board => {
-              expect(board.labels).to.not.include({id:1, board_id:101, color:'purple', text: 'purple label'})
+              expect(board.labels).to.not.include({id:301, board_id:101, color:'purple', text: 'purple label'})
             })
         })
       })

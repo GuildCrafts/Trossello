@@ -16,7 +16,13 @@ export default class Card extends Component {
   };
 
   static propTypes = {
+    board: React.PropTypes.object.isRequired,
     card: React.PropTypes.object.isRequired,
+    index: React.PropTypes.number.isRequired,
+    editable: React.PropTypes.bool.isRequired,
+    ghosted: React.PropTypes.bool.isRequired,
+    beingDragged: React.PropTypes.bool,
+    style: React.PropTypes.object,
   };
 
   constructor(props){
@@ -82,6 +88,7 @@ export default class Card extends Component {
 
   render() {
     const {
+      board,
       card,
       index,
       editable,
@@ -90,11 +97,13 @@ export default class Card extends Component {
       style
     } = this.props
 
-    let cardLabels = card.labels.map( label =>
-      <div key={label.id} className="BoardShowPage-Card-label">
-        <CardLabel color={label.color} text={''} checked={false} />
-      </div>
-    )
+    let cardLabels = card.label_ids
+      .map( labelId => board.labels.find(label => label.id === labelId))
+      .map( label =>
+        <div key={label.id} className="BoardShowPage-Card-label">
+          <CardLabel color={label.color} text={''} checked={false} />
+        </div>
+      )
 
     const editCardButton = this.props.editable ?
       <EditCardButton onClick={this.editCard} /> : null

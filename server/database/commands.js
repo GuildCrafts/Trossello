@@ -162,15 +162,13 @@ const copyCardsFromListToList = (oldListId, newListId) =>
     })
 
 
-const duplicateList = (boardId, listId, name) => {
-  console.log('??', boardId, listId, name)
-  return Promise.all([
+const duplicateList = (boardId, listId, name) =>
+  Promise.all([
     queries.getListById(listId),
     createList({name: name, board_id: boardId}),
   ])
-  .then( ([oldList, newList]) => {
-    console.log('??', oldList, newList)
-    return copyCardsFromListToList(oldList.id, newList.id)
+  .then( ([oldList, newList]) =>
+    copyCardsFromListToList(oldList.id, newList.id)
       .then( () =>
         moveList({
           boardId: boardId,
@@ -179,8 +177,8 @@ const duplicateList = (boardId, listId, name) => {
         })
       )
       .then( () => newList )
-  })
-}
+  )
+
 
 
 const deleteList = (id) =>
@@ -455,7 +453,10 @@ const updateLabel = (labelId, attributes) =>
   updateRecord('labels', labelId, attributes)
 
 const deleteLabel = (labelId) =>
-  deleteRecord('labels', labelId)
+  Promise.all([
+    deleteRecord('labels', labelId),
+    knex.table('card_labels').where('label_id', labelId).del(),
+  ])
 
 const addOrRemoveCardLabel = (cardId, labelId) => {
   const attributes = {card_id: cardId, label_id: labelId}
@@ -465,7 +466,7 @@ const addOrRemoveCardLabel = (cardId, labelId) => {
     .where(attributes)
     .returning('*')
     .then( result => {
-      if(result.length === 0) {
+      if (result.length === 0) {
         return createRecord('card_labels', attributes)
       } else {
         return knex.table('card_labels')
