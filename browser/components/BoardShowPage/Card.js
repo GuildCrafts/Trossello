@@ -16,13 +16,18 @@ export default class Card extends Component {
   };
 
   static propTypes = {
-    board: React.PropTypes.object.isRequired,
     card: React.PropTypes.object.isRequired,
-    index: React.PropTypes.number.isRequired,
-    editable: React.PropTypes.bool.isRequired,
-    ghosted: React.PropTypes.bool.isRequired,
+    board: React.PropTypes.object,
+    editable: React.PropTypes.bool,
+    ghosted: React.PropTypes.bool,
     beingDragged: React.PropTypes.bool,
     style: React.PropTypes.object,
+  };
+
+  static defaultProps = {
+    editable: false,
+    ghosted: false,
+    beingDragged: false,
   };
 
   constructor(props){
@@ -90,14 +95,13 @@ export default class Card extends Component {
     const {
       board,
       card,
-      index,
       editable,
       ghosted,
       beingDragged,
       style
     } = this.props
 
-    let cardLabels = card.label_ids
+    let cardLabels = !board ? null : card.label_ids
       .map( labelId => board.labels.find(label => label.id === labelId))
       .map( label =>
         <div key={label.id} className="BoardShowPage-Card-label">
