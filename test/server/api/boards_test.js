@@ -274,14 +274,35 @@ describe('/api/boards', () => {
       })
             // DUPLICATE LIST
       describe('POST /api/boards/:boardId/lists/:listId/duplicate', () => {
-        it('should duplicate the list and render the new list', () => {
-          return request('post', '/api/boards/101/lists/1/duplicate', {name: 'new list name'})
+        it('should create a new list, duplicate all the cards from the old list and preserve card labels', () => {
+          return request('get', '/api/boards/101')
             .then(response => {
-              expect(response).to.have.status(200)
-              expect(response.body.board_id).to.eql(101)
-              expect(response.body.name).to.eql("new list name")
-              expect(response.body.archived).to.eql(false)
-              expect(response.body.order).to.eql(2)
+              const board = response.body
+              const oldList = board.lists.find(list => list.id === 40)
+              const oldCards = board.cards.filter(card => card.list_id === 40)
+              return request('post', '/api/boards/101/lists/40/duplicate', {name: 'dead things'})
+                .then(response => {
+                  expect(response).to.have.status(200)
+                  expect(response.body.board_id).to.eql(101)
+                  expect(response.body.name).to.eql("dead things")
+                  expect(response.body.archived).to.eql(false)
+                  expect(response.body.order).to.eql(2)
+                  const newListId = response.body.id
+                  console.log('newListId', newListId)
+                  return request('get', '/api/boards/101')
+                    .then(response => {
+                      const board = response.body
+                      const newList = board.lists.find(list => list.id === newListId)
+                      const newCards = board.cards.filter(card => card.list_id === newListId)
+                      expect(newCards.length).to.eql(oldCards.length)
+                      expect(newCards.map(card => card.content)).to.eql(oldCards.map(card => card.content))
+                      expect(
+                        newCards.map(card => card.labels.map(label => label.id))
+                      ).to.eql(
+                        oldCards.map(card => card.labels.map(label => label.id))
+                      )
+                    })
+                })
             })
         })
       })

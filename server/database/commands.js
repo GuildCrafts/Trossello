@@ -126,37 +126,61 @@ const createList = (attributes) =>
 const updateList = (id, attributes) =>
   updateRecord('lists', id, attributes)
 
-const duplicateList = (boardId, listId, name) =>
-  createList({name: name, board_id: boardId})
-    .then( newList =>
-      knex.raw(
-        `
-          INSERT INTO
-            cards (board_id, list_id, content, archived, "order", description)
-          SELECT
-            board_id, ?, content, archived, "order", description
-          FROM
-            cards
-          WHERE
-            list_id=?
-          AND
-            archived=false
-        `,
-        [newList.id, listId]
-      )
-      .then( () =>
-        queries.getListById(listId)
-          .then( oldList =>
-            moveList({
-              boardId: boardId,
-              listId: newList.id,
-              order: oldList.order + 1,
-            })
-              .then( () => newList )
+const copyCardsFromListToList = (oldListId, newListId) =>
+  knex.table('cards')
+    .where('list_id', oldListId)
+    .where('archived', false)
+    .then(oldCards => {
+      const newCards = oldCards.map(oldCard => {
+        const newCard = Object.assign({}, oldCard)
+        delete newCard.id
+        newCard.list_id = newListId
+        return newCard
+      })
+      return knex.table('cards').insert(newCards).returning('*')
+        .then(newCards =>
+          Promise.all(
+            newCards.map((newCard, index) =>
+              knex.raw(
+                `
+                  INSERT INTO
+                    card_labels (card_id, label_id)
+                  SELECT
+                    ?, label_id
+                  FROM
+                    card_labels
+                  WHERE
+                    card_id=?
+                  RETURNING
+                    *
+                `,
+                [newCard.id, oldCards[index].id]
+              )
+            )
           )
-      )
-    )
+        )
+    })
 
+
+const duplicateList = (boardId, listId, name) => {
+  console.log('??', boardId, listId, name)
+  return Promise.all([
+    queries.getListById(listId),
+    createList({name: name, board_id: boardId}),
+  ])
+  .then( ([oldList, newList]) => {
+    console.log('??', oldList, newList)
+    return copyCardsFromListToList(oldList.id, newList.id)
+      .then( () =>
+        moveList({
+          boardId: boardId,
+          listId: newList.id,
+          order: oldList.order + 1,
+        })
+      )
+      .then( () => newList )
+  })
+}
 
 
 const deleteList = (id) =>
