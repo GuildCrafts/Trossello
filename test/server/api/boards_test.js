@@ -91,6 +91,16 @@ describe('/api/boards', () => {
       })
     })
 
+    // MOVE TARGETS
+    describe('GET /api/boards/move-targets', () => {
+      it('should render 400 Not Authorized', () => {
+        return request('get', '/api/boards/move-targets', {})
+          .then( response => {
+            expect(response).to.have.status(400)
+          })
+      })
+    })
+
 
     context('when logged in', () => {
       beforeEach(() => {
@@ -311,6 +321,22 @@ describe('/api/boards', () => {
         })
       })
 
+      //MOVE TARGETS
+      describe('GET /api/boards/move-targets', () => {
+        it('should render 200 and an object with boards, lists and card count', () => {
+          return request ('get', '/api/boards/move-targets')
+            .then(response => {
+              const boards = response.body
+              expect(boards).to.have.length(3)
+              expect(boards[0].lists).to.have.length(2)
+              expect(boards[1].lists).to.have.length(0)
+              expect(boards[2].lists).to.have.length(0)
+              expect(boards[0].lists[0].card_count).to.eql(5)
+              expect(boards[0].lists[1].card_count).to.eql(5)
+              expect(response).to.have.status(200)
+            })
+        })
+      })
     })
   })
 })

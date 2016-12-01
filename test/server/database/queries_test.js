@@ -175,4 +175,20 @@ describe('database.queries', () => {
     })
   })
 
+  describe('getBoardMoveTargetsForUserId', () => {
+    withBoardsListsAndCardsInTheDatabase(()=>{
+      it('should return boards, lists, and card counts for user', () => {
+        return queries.getBoardMoveTargetsForUserId(1455)
+          .then(boards => {
+            expect(boards).to.have.length(3)
+            expect(boards[0].lists).to.have.length(2)
+            expect(boards[1].lists).to.have.length(0)
+            expect(boards[2].lists).to.have.length(0)
+            expect(boards[0].lists[0].card_count).to.eql(5)
+            expect(boards[0].lists[1].card_count).to.eql(5)
+          })
+      })
+    })
+  })
+
 })

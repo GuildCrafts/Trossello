@@ -20,6 +20,25 @@ const getBoardsByUserId = (userId) =>
     .whereIn('user_boards.user_id', userId)
     .where('archived', false)
 
+const getBoardMoveTargetsForUserId = (userId) =>
+  getBoardsByUserId(userId).then(boards =>
+    knex.table('lists')
+      .select('lists.*')
+      .count('cards.id AS card_count')
+      .join('cards', 'cards.list_id', '=', 'lists.id')
+      .whereIn('lists.board_id', boards.map(board => board.id))
+      .orderBy('lists.board_id', 'asc')
+      .orderBy('lists.order', 'asc')
+      .groupBy('lists.id')
+      .then(lists => {
+        lists.forEach(lists => lists.card_count = Number(lists.card_count))
+        boards.forEach(board => {
+          board.lists = lists.filter(list => list.board_id === board.id)
+        })
+        return boards
+      })
+  )
+
 const getUsersForBoard = (board) => {
   return knex.table('users')
     .select('users.*')
@@ -101,4 +120,5 @@ export default {
   getBoardById,
   getListById,
   getInviteByToken,
+  getBoardMoveTargetsForUserId,
 }

@@ -7,7 +7,14 @@ router.get('/', (request, response, next) => {
   queries.getBoardsByUserId(request.session.userId).then(boards => {
     response.json(boards)
   }).catch(next)
-} )
+})
+
+// MOVE TARGETS
+router.get('/move-targets', (request, response, next) => {
+  queries.getBoardMoveTargetsForUserId(request.session.userId).then(boards => {
+    response.json(boards)
+  }).catch(next)
+})
 
 //SEARCH
 router.post('/search', ( request, response, next ) => {
