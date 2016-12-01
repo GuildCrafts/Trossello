@@ -23,7 +23,7 @@ export default class CardSearchForm extends Component {
     this.setSearchTerm = this.setSearchTerm.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onKeyUp = this.onKeyUp.bind(this)
-    this.search = debounce(500, true, this.search.bind(this))
+    this.search = debounce(200, this.search.bind(this))
     this.close = this.close.bind(this)
     this.focus = this.focus.bind(this)
     this.focusOnSlash = this.focusOnSlash.bind(this)
@@ -74,14 +74,17 @@ export default class CardSearchForm extends Component {
 
   search() {
     this.setState({loading: true})
-    $.ajax({
+    if (this.searchRequest) this.searchRequest.abort()
+
+    this.searchRequest = $.ajax({
       method: "POST",
       url: "/api/boards/search",
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       data: JSON.stringify({searchTerm: this.state.searchTerm}),
     })
-    .then(result => {
+
+    this.searchRequest.then(result => {
       this.setState({result, loading: false})
     })
   }
