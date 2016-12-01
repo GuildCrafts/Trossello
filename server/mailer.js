@@ -65,14 +65,8 @@ export default {
     }
   })(process.env.NODE_ENV),
 
-  sendInviteEmail(user){
-    return this.transporter.sendMail( inviteOptions( user.email, user.token ), ( err , res ) => {
-      if (err){
-        console.log(err)
-      } else {
-        console.log(res);
-      }
-    })
+  sendInviteEmail(invite){
+    return this.transporter.sendMail( inviteOptions( invite.email, invite.token ))
   },
 
   sendWelcomeEmail(user){
@@ -80,5 +74,3 @@ export default {
   }
 
 }
-
-
