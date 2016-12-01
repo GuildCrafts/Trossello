@@ -42,12 +42,12 @@ class InviteByEmailPopover extends Component {
       </Link> :
       null
 
-    return <DialogBox className="InviteByEmailPopover" onClose={this.props.onClose} heading="Invite to Board With Email">
-      <Form onSubmit={this.onSubmit}>
-        <label>
-          <div className="label">Email</div>
-          <input className='emailInput' type="email" ref="email" name='email' placeholder="john.doe@example.com" />
-        </label>
+    return <DialogBox className="InviteByEmailPopover" onClose={this.props.onClose} heading="Add Members">
+      <Form onSubmit={this.onSubmit && this.props.onClose}>
+        <input className='emailInput' type="email" ref="email" name='email' placeholder="e.g. burritos@trossello.com" />
+        <p className='InviteByEmailPopover-text'>
+          Enter an email address to invite someone new to this board.
+        </p>
         <Button type="primary" action="submit">Invite</Button>
       </Form>
     </DialogBox>

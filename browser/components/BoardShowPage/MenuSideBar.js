@@ -12,6 +12,7 @@ import List from './List'
 import $ from 'jquery'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import Unarchive from './Unarchive'
+import InviteByEmailPopover from '../InviteByEmailPopover'
 
 export default class MenuSideBar extends Component {
 
@@ -141,81 +142,68 @@ const BoardMember = (props) => {
   </span>
 }
 
-const MainPane = ({board, onClose, gotoPane}) => {
-  return <Pane name="Main">
+const BoardMembersArea = (props) => {
+  const { board } = props
+  return <div>
     <div className='BoardShowPage-MenuSideBar-members'>
       { boardMembers( board ) }
     </div>
     <InviteByEmailButton boardId={board.id}/>
+    </div>
+}
+
+const MenuPaneLink = (props) => {
+  const { onClick, iconType, children } = props
+  return <Link
+      className='BoardShowPage-MenuSideBar-options'
+      onClick={onClick}
+    >
+      <Icon type={iconType} />
+      {children}
+    </Link>
+}
+
+const MainPane = ({board, onClose, gotoPane}) => {
+  return <Pane name="Main">
+    <BoardMembersArea board={board} />
     <div className="BoardShowPage-MenuSideBar-separator" />
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        type="invisible"
-        onClick={gotoPane('Change Background')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='square' />
-        </span>
-        Change Background
-      </Link>
-    </div>
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        onClick={gotoPane('Filter Cards')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='filter' />
-        </span>
-        Filter Cards
-      </Link>
-    </div>
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        onClick={gotoPane('Power-Ups')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='rocket' />
-        </span>
-        Power-Ups
-      </Link>
-    </div>
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        onClick={gotoPane('Stickers')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='sticky-note' />
-        </span>
-        Stickers
-      </Link>
-    </div>
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        onClick={gotoPane('More')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='ellipsis-h' />
-        </span>
-        More
-      </Link>
-    </div>
+    <MenuPaneLink
+      onClick={gotoPane('Change Background')}
+      iconType='square'
+    >
+      Change Background
+    </MenuPaneLink>
+    <MenuPaneLink
+      onClick={gotoPane('Filter Cards')}
+      iconType='filter'
+    >
+      Filter Cards
+    </MenuPaneLink>
+    <MenuPaneLink
+      onClick={gotoPane('Power-Ups')}
+      iconType='rocket'
+    >
+      Power-Ups
+    </MenuPaneLink>
+    <MenuPaneLink
+      onClick={gotoPane('Stickers')}
+      iconType='sticky-note'
+    >
+      Stickers
+    </MenuPaneLink>
+    <MenuPaneLink
+      onClick={gotoPane('More')}
+      iconType='ellipsis-h'
+    >
+      More
+    </MenuPaneLink>
     <div className="BoardShowPage-MenuSideBar-separator" />
-    <div>
-      <Link
-        className='BoardShowPage-MenuSideBar-options'
-        onClick={gotoPane('Activity')}
-      >
-        <span className='BoardShowPage-MenuSideBar-icons'>
-          <Icon type='list' />
-        </span>
-        Activity
-      </Link>
-    </div>
+    <MenuPaneLink
+      onClick={gotoPane('Activity')}
+      iconType='list'
+    >
+      Activity
+    </MenuPaneLink>
   </Pane>
 }
 
@@ -266,47 +254,28 @@ class MorePane extends Component {
     const url = window.location.href
 
     return <Pane name="More">
-      <div>
-        <Link
-          className='BoardShowPage-MenuSideBar-options'
-          onClick={gotoPane('Settings')}
-        >
-          <span className='BoardShowPage-MenuSideBar-icons'>
-            <Icon type='gear' />
-          </span>
-          Settings
-        </Link>
-      </div>
-      <div>
-        <Link
-          className='BoardShowPage-MenuSideBar-options'
-          onClick={gotoPane('Labels')}
-        >
-          <span className='BoardShowPage-MenuSideBar-icons'>
-            <Icon type='tag' />
-          </span>
-          Labels
-        </Link>
-      </div>
-      <div>
-        <Link
-          className='BoardShowPage-MenuSideBar-options'
-          onClick={gotoPane('Unarchive')}
-        >
-          <span className='BoardShowPage-MenuSideBar-icons'>
-            <Icon type='archive' />
-          </span>
-          Unarchive
-        </Link>
-      </div>
+      <MenuPaneLink
+        onClick={gotoPane('Settings')}
+        iconType='gear'
+      >
+        Settings
+      </MenuPaneLink>
+      <MenuPaneLink
+        onClick={gotoPane('Labels')}
+        iconType='tag'
+      >
+        Labels
+      </MenuPaneLink>
+      <MenuPaneLink
+        onClick={gotoPane('Unarchive')}
+        iconType='archive'
+      >
+        Unarchive
+      </MenuPaneLink>
       <div className="BoardShowPage-MenuSideBar-separator" />
-      <div>
-        <DownloadBoardButton className='BoardShowPage-MenuSideBar-options' boardId={board.id}/>
-      </div>
+      <DownloadBoardButton className='BoardShowPage-MenuSideBar-options' boardId={board.id}/>
       <div className="BoardShowPage-MenuSideBar-separator" />
-      <div>
-        <LeaveBoardButton className='BoardShowPage-MenuSideBar-options BordShowPage-MenuSideBar-options-delete' boardId={board.id}/>
-      </div>
+      <LeaveBoardButton className='BoardShowPage-MenuSideBar-options' boardId={board.id}/>
       <div className="BoardShowPage-MenuSideBar-separator" />
       <form className="BoardShowPage-MenuSideBar-form" >
         <label>Link to this board:</label>
@@ -329,16 +298,13 @@ const LabelsPane = ({board, onClose, gotoPane, goBack}) =>
 
 
 const DownloadBoardButton = (props) => {
-  return <Button
-    type="invisible"
+  return <a
     className="BoardShowPage-MenuSideBar-options"
     href={`/api/boards/${props.boardId}?download=1`}
   >
-    <span className='BoardShowPage-MenuSideBar-icons'>
-      <Icon type='download' />
-    </span>
+    <Icon type='download' />
     Export Board
-  </Button>
+  </a>
 }
 
 const UnarchivePane = ({board, onClose, gotoPane, goBack}) =>
@@ -388,15 +354,14 @@ class InviteByEmailButton extends ToggleComponent {
   }
 
   render(){
-    const inviteByEmail = null
-    // const inviteByEmail = this.state.open ?
-    //   <InviteByEmailPopover onClose={this.close} boardId={this.props.boardId} /> :
-    //   null
+    const inviteByEmail = this.state.open ?
+      <InviteByEmailPopover onClose={this.close} boardId={this.props.boardId} /> :
+      null
 
-    return <span ref="root" className="BoardShowPage-MenuSideBar-InviteByEmailButton">
-      <Button onClick={this.toggle}>
+    return <span ref="root">
+      <Button className="BoardShowPage-MenuSideBar-InviteByEmailButton" onClick={this.toggle}>
         <Icon type='user-plus' />
-        Add Members
+        Add Members...
       </Button>
       {inviteByEmail}
     </span>

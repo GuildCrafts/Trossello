@@ -460,7 +460,7 @@ const Header = ({board, sideBarOpen, toggleSideBar, renameBoardDropdown}) =>
       onClick={toggleSideBar}
     >
       <Icon className="BoardShowPage-menuButton-icon" type="ellipsis-h" />
-      {sideBarOpen ? 'Hide' : 'Show'} Manu
+      {sideBarOpen ? 'Hide' : 'Show'} Menu
     </Link>
   </div>
 
