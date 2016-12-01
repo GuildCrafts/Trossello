@@ -1,13 +1,14 @@
 import './CardSearchForm.sass'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import debounce from 'throttle-debounce/debounce'
+import $ from 'jquery'
+import boardsStore from '../stores/boardsStore'
 import Form from './Form'
 import Link from './Link'
 import Icon from './Icon'
 import Loader from './Loader'
-import $ from 'jquery'
 import Card from './BoardShowPage/Card'
-import { debounce } from 'throttle-debounce'
 
 export default class CardSearchForm extends Component {
 
@@ -23,7 +24,7 @@ export default class CardSearchForm extends Component {
     this.setSearchTerm = this.setSearchTerm.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onKeyUp = this.onKeyUp.bind(this)
-    this.search = debounce(500, this.search.bind(this))
+    this.search = debounce(500, true, this.search.bind(this))
     this.close = this.close.bind(this)
     this.focus = this.focus.bind(this)
     this.focusOnSlash = this.focusOnSlash.bind(this)
@@ -84,9 +85,6 @@ export default class CardSearchForm extends Component {
     .then(result => {
       this.setState({result, loading: false})
       boardStore.reload()
-    })
-    .catch(error => {
-      console.error(error)
     })
   }
 
@@ -168,7 +166,6 @@ class SearchResultModal extends Component {
         onClick={onClose}
       />
     )
-
 
     const searchDisplay = result.length === 0 ?
       <div className="CardSearchForm-Result-Message">
