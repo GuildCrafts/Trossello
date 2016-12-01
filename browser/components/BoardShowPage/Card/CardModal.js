@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
-import Link from '../Link'
-import Icon from '../Icon'
-import Form from '../Form'
-import Card from './Card'
-import Button from '../Button'
-import ToggleComponent from '../ToggleComponent'
-import DialogBox from '../DialogBox'
-import ConfirmationButton from '../ConfirmationButton'
-import boardStore from '../../stores/boardStore'
-import PopoverMenuButton from '../PopoverMenuButton'
-import CopyCard from './CopyCard'
-import './CardModal.sass'
 import $ from 'jquery'
+import React, { Component } from 'react'
+import './CardModal.sass'
+import LabelMenu from './LabelMenu'
+import CardLabel from './CardLabel'
+import Card from '../Card'
+import Link from '../../Link'
+import Icon from '../../Icon'
+import Form from '../../Form'
+import Button from '../../Button'
+import ToggleComponent from '../../ToggleComponent'
+import ConfirmationButton from '../../ConfirmationButton'
+import boardStore from '../../../stores/boardStore'
+import PopoverMenuButton from '../../PopoverMenuButton'
+import CopyCard from '../CopyCard'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -47,68 +48,100 @@ export default class CardModal extends Component {
       <div className='CardModal-window-archivedBanner'>
         <Icon type="archive" /> This card is archived
       </div> : null
+
+
+    const labelPanel = <LabelMenu
+      card={card}
+      board={board}
+    />
+
+    const cardLabels = card.labels.map(label =>
+      <PopoverMenuButton
+        key={label.id}
+        className="CardModal-content-label"
+        type="unstyled"
+        popover={labelPanel}
+      >
+        <CardLabel
+          color={label.color}
+          text={label.text}
+          checked={false}
+        />
+      </PopoverMenuButton>
+    )
+
     return <div className="CardModal">
       <div onClick={this.props.onClose} className="CardModal-shroud">
       </div>
       <div className="CardModal-stage">
         <div className="CardModal-window">
-            {archivedBanner}
-            <div className="CardModal-columns">
-              <div className="CardModal-body">
-                <div className="CardModal-content">
-                  <div className="CardModal-content-icon">
-                    <Icon type="window-maximize" size='2'/>
-                  </div>
-                  <div className="CardModal-content-copy">
-                    <div className="CardModal-content-title">
-                      <CardName card={card} />
-                    </div>
-                    <div className="CardModal-content-list">
-                      <span className="CardModal-content-list-title">
-                        in list {list.name}
-                      </span>
-                      <span className="CardModal-content-list-eye">
-                        <Icon size="1" type="eye"  />
-                      </span>
-                    </div>
-                      <CardDescription card={card} />
-                  </div>
+          {archivedBanner}
+          <div className="CardModal-columns">
+            <div className="CardModal-body">
+              <div className="CardModal-content">
+                <div className="CardModal-content-icon">
+                  <Icon type="window-maximize" size='2'/>
                 </div>
-                <div className="CardModal-comments">
-                  <div className="CardModal-comments-icon">
-                    <Icon size="2" type="comment-o"/>
+                <div className="CardModal-content-copy">
+                  <div className="CardModal-content-title">
+                    <CardName card={card} />
                   </div>
-                  <div className="CardModal-comments-content">
-                    <span className="CardModal-comments-title">
-                      Add Comment:
+                  <div className="CardModal-content-list">
+                    <span className="CardModal-content-list-title">
+                      in list {list.name}
+                    </span>
+                    <span className="CardModal-content-list-eye">
+                      <Icon size="1" type="eye"  />
                     </span>
                   </div>
-                </div>
-                <div className="CardModal-comments">
-                  <div className="CardModal-comments-imgcontain">
-                    <img className="CardModal-comments-userimage" src={session.user.avatar_url}></img>
+                  <div className="CardModal-content-labels-header">Labels</div>
+                  <div className="CardModal-content-labels">
+                    {cardLabels}
                   </div>
-                  <Form className="CardModal-comments-Form">
-                    <div className="CardModal-comments-Form-content">
-                      <textarea
-                        className="CardModal-comments-Form-input"
-                        ref="comment"
-                        placeholder='Write a comment...'
-                      />
-                    </div>
-                    <input type="submit" className="CardModal-comments-submit" value="Send"/>
-                  </Form>
+                  <CardDescription card={card} />
                 </div>
               </div>
-              <Controls list={this.props.list} card={card} closeModal={this.props.onClose} board={board} />
+              <div className="CardModal-comments">
+                <div className="CardModal-comments-icon">
+                  <Icon size="2" type="comment-o"/>
+                </div>
+                <div className="CardModal-comments-content">
+                  <span className="CardModal-comments-title">
+                    Add Comment:
+                  </span>
+                </div>
+              </div>
+              <div className="CardModal-comments">
+                <div className="CardModal-comments-imgcontain">
+                  <img className="CardModal-comments-userimage" src={session.user.avatar_url}></img>
+                </div>
+                <Form className="CardModal-comments-Form">
+                  <div className="CardModal-comments-Form-content">
+                    <textarea
+                      className="CardModal-comments-Form-input"
+                      ref="comment"
+                      placeholder='Write a comment...'
+                    />
+                  </div>
+                <input type="submit" className="CardModal-comments-submit" value="Send"/>
+                </Form>
+              </div>
             </div>
+            <Controls
+              board={board}
+              list={this.props.list}
+              card={card}
+              closeModal={this.props.onClose}
+              labelPanel={labelPanel}
+            />
           </div>
         </div>
       </div>
+    </div>
     }
 }
 
-const Controls = ({card, closeModal, board, list}) => {
+const Controls = ({board, list, card, closeModal, labelPanel}) => {
   const copyCard = <CopyCard card={card} board={board} list={list}/>
   const toggleOnArchived = card.archived ?
     <div>
@@ -116,9 +149,13 @@ const Controls = ({card, closeModal, board, list}) => {
       <DeleteCardButton card={card} onDelete={closeModal} />
     </div> :
     <ArchiveCardButton card={card} onArchive={closeModal}/>
+
   return <div className="CardModal-controls">
     <div className="CardModal-controls-title">Add</div>
     <Button><Icon type="user" /> Members</Button>
+    <PopoverMenuButton className="CardModal-controls-label" type="default" popover={labelPanel}>
+      <Icon type="tag" /> Labels
+    </PopoverMenuButton>
     <div className="CardModal-controls-title">Actions</div>
     {toggleOnArchived}
     <PopoverMenuButton className="CardModal-controls-copy" type="default" popover={copyCard}>
@@ -331,8 +368,8 @@ class CardDescription extends ToggleComponent {
       </Link>
     }
     return <div>
-      <div>Description <Link onClick={this.open}>Edit</Link></div>
-      <pre>{this.props.card.description}</pre>
+      <div className="CardModal-description-header">Description <Link className="CardModal-description-header-edit" onClick={this.open}>Edit</Link></div>
+      <pre className="CardModal-description-content">{this.props.card.description}</pre>
     </div>
   }
 }

@@ -62,4 +62,16 @@ router.post('/:cardId/move', (request, response, next) => {
     .catch(next)
 })
 
+//ADD/REMOVE LABEL
+router.post('/:cardId/labels/:labelId', (request, response, next) => {
+  let {cardId, labelId} = request.params
+
+  commands.addOrRemoveCardLabel(cardId, labelId)
+  .then(() => {
+    response.json(null)
+  })
+  .catch(next)
+
+})
+
 export default router

@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import $ from 'jquery'
 import './ListActionsMenu.sass'
 import Link from './Link'
+import ActionsMenu from './ActionsMenu'
+import ActionsMenuPane from './ActionsMenuPane'
 import Form from './Form'
 import Icon from './Icon'
 import Button from './Button'
@@ -9,29 +11,18 @@ import DialogBox from './DialogBox'
 import ConfirmationLink from './ConfirmationLink'
 import boardStore from '../stores/boardStore'
 
+
 class ListActionsMenu extends Component {
 
   static propTypes = {
     board: React.PropTypes.object.isRequired,
     list: React.PropTypes.object.isRequired,
+    // onClose: React.PropTypes.func.isRequired,
   }
 
   constructor(props){
     super(props)
-    this.state = {
-      pane: 'List Actions'
-    }
     this.createCard = this.createCard.bind(this)
-    this.goToPane = this.goToPane.bind(this)
-  }
-
-  goToPane(pane) {
-    return event => {
-      if (event) event.preventDefault()
-      this.setState({
-        pane: pane
-      })
-    }
   }
 
   createCard(event){
@@ -40,40 +31,33 @@ class ListActionsMenu extends Component {
   }
 
   render(){
-    const { list } = this.props
-    const paneName = this.state.pane || 'List Actions'
-    const panesMap = {
-      "List Actions": ListActionsPane,
-      "Copy List": CopyListPane,
-      "Move List": MoveListPane,
-      "Move All Cards": MoveAllCardsPane,
-      "Archive All Cards": ArchiveAllCardsPane,
-    }
-    const PaneComponent = panesMap[paneName]
-    return <div className="ListActionsMenu">
-      <GoBackArrow
-        pane={this.state.pane}
-        goToPane={this.goToPane}
-      />
-      <PaneComponent
-        onClose={this.props.onClose}
-        createCard={this.createCard}
-        list={this.props.list}
-        board={this.props.board}
-        goToPane={this.goToPane}
-      />
-    </div>
+    const { board, list, onClose } = this.props
+    return <ActionsMenu
+      className="ListActionsMenu"
+      defaultPane="List Actions"
+      paneProps={{
+        board,
+        list,
+        onClose,
+        createCard: this.createCard,
+      }}
+      panes={{
+        "List Actions": ListActionsPane,
+        "Copy List": CopyListPane,
+        "Move List": MoveListPane,
+        "Move All Cards": MoveAllCardsPane,
+        "Archive All Cards": ArchiveAllCardsPane,
+      }}
+    />
   }
 }
 
-const GoBackArrow = ({pane, goToPane}) => {
-  const goBackIcon = pane === 'List Actions' ? null :
-    <Link onClick={goToPane('List Actions')}><Icon type="arrow-left" /></Link>
-  return <div className="ListActionsMenu-GoBackArrow"> {goBackIcon} </div>
-}
-
 const ListActionsPane = ({onClose, createCard, list, goToPane}) => {
-  return <DialogBox className="ListActionsMenu-ListActionsPane" heading="List Actions" onClose={onClose}>
+  return <ActionsMenuPane
+      className="ListActionsMenu-ListActionsPane"
+      heading="List Actions"
+      onClose={onClose}
+    >
     <Link onClick={createCard}>Add a Card…</Link>
     <DialogBox.Divider />
     <Link onClick={goToPane('Copy List')}>Copy List…</Link>
@@ -84,7 +68,7 @@ const ListActionsPane = ({onClose, createCard, list, goToPane}) => {
     <Link onClick={goToPane('Archive All Cards')}>Archive All Cards In This List…</Link>
     <DialogBox.Divider />
     <ArchiveListLink list={list} />
-  </DialogBox>
+  </ActionsMenuPane>
 }
 
 class CopyListPane extends Component {
@@ -130,7 +114,12 @@ class CopyListPane extends Component {
   }
 
   render() {
-    return <DialogBox className="ListActionsMenu-CopyListPane" heading="Copy List" onClose={this.props.onClose}>
+    return <ActionsMenuPane
+      className="ListActionsMenu-CopyListPane"
+      heading="Copy List"
+      onClose={this.props.onClose}
+      onBack={this.props.goToPane('List Actions')}
+    >
       <Form onSubmit={this.copyListHandler}>
         <div>Name</div>
         <textarea
@@ -140,7 +129,7 @@ class CopyListPane extends Component {
         />
         <Button type="primary" submit>Create List</Button>
       </Form>
-    </DialogBox>
+    </ActionsMenuPane>
   }
 }
 
@@ -186,21 +175,27 @@ class MoveAllCardsPane extends Component {
         >{list.name}</Button>
       )
 
-    return <DialogBox
+    return <ActionsMenuPane
         className="ListActionsMenu ListActionsMenu-MoveAllCardsPane"
         heading="Select A List To Move All Cards"
         onClose={onClose}
+        onBack={this.props.goToPane('List Actions')}
       >
       <div className="ListActionsMenu-MoveAllCards">
         {lists}
       </div>
-    </DialogBox>
+    </ActionsMenuPane>
   }
 }
 
-const MoveListPane = ({onClose}) => {
-  return <DialogBox className="ListActionsMenu-MoveListPane" heading="Move List" onClose={onClose}>
-  </DialogBox>
+const MoveListPane = ({onClose, goToPane}) => {
+  return <ActionsMenuPane
+    className="ListActionsMenu-MoveListPane"
+    heading="Move List"
+    onClose={onClose}
+    onBack={goToPane('List Actions')}
+    >
+  </ActionsMenuPane>
 }
 
 
@@ -221,10 +216,11 @@ class ArchiveAllCardsPane extends Component {
   }
 
   render(){
-    return <DialogBox
+    return <ActionsMenuPane
       className="ListActionsMenu-ArchiveAllCardsPane"
       heading="Archive All Cards in this List?"
       onClose={this.props.onClose}
+      onBack={this.props.goToPane('List Actions')}
     >
       <div className="ListActionsMenu-DialogBox-content">
         <p>
@@ -233,7 +229,7 @@ class ArchiveAllCardsPane extends Component {
         </p>
         <Button type="danger" onClick={this.archiveCardsInList}>Archive All</Button>
       </div>
-    </DialogBox>
+    </ActionsMenuPane>
   }
 }
 

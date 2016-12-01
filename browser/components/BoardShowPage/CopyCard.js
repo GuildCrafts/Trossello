@@ -3,7 +3,6 @@ import $ from 'jquery'
 import Form from '../Form'
 import Button from '../Button'
 import DialogBox from '../DialogBox'
-import './CardModal.sass'
 
 export default class CopyCard extends Component {
   constructor(props){
