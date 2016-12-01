@@ -29,20 +29,7 @@ export default class CardModal extends Component {
     this.state = {
       editingDescription: false,
       editingName: false,
-      showingLabelMenu: false,
     }
-    this.showLabelMenu = this.showLabelMenu.bind(this)
-    this.stopShowingLabelMenu = this.stopShowingLabelMenu.bind(this)
-  }
-
-  showLabelMenu(event) {
-    event.preventDefault()
-    this.setState({showingLabelMenu: true})
-  }
-
-  stopShowingLabelMenu(event) {
-    event.preventDefault()
-    this.setState({showingLabelMenu: false})
   }
 
   descriptionOnBlur(event) {
@@ -62,18 +49,26 @@ export default class CardModal extends Component {
         <Icon type="archive" /> This card is archived
       </div> : null
 
-    const labelPanel = this.state.showingLabelMenu ?
-      <LabelMenu
-        card={card}
-        board={board}
-        onClose={this.stopShowingLabelMenu}
-      /> : null
 
-    const cardLabels = card.labels.map(label => {
-      return <div className="CardModal-content-label" onClick={this.showLabelMenu}>
-        <CardLabel key={label.id} id={label.id} cardId={card.id} color={label.color} text={label.text} />
-      </div>
-    })
+    const labelPanel = <LabelMenu
+      card={card}
+      board={board}
+    />
+
+    const cardLabels = card.labels.map(label =>
+      <PopoverMenuButton
+        key={label.id}
+        className="CardModal-content-label"
+        type="unstyled"
+        popover={labelPanel}
+      >
+        <CardLabel
+          color={label.color}
+          text={label.text}
+          checked={false}
+        />
+      </PopoverMenuButton>
+    )
 
     return <div className="CardModal">
       <div onClick={this.props.onClose} className="CardModal-shroud">
@@ -137,8 +132,6 @@ export default class CardModal extends Component {
               list={this.props.list}
               card={card}
               closeModal={this.props.onClose}
-              showLabelMenu={this.showLabelMenu}
-              stopShowingLabelMenu={this.stopShowingLabelMenu}
               labelPanel={labelPanel}
             />
           </div>
@@ -148,7 +141,7 @@ export default class CardModal extends Component {
     }
 }
 
-const Controls = ({board, list, card, closeModal, showLabelMenu, stopShowingLabelMenu, labelPanel}) => {
+const Controls = ({board, list, card, closeModal, labelPanel}) => {
   const copyCard = <CopyCard card={card} board={board} list={list}/>
   const toggleOnArchived = card.archived ?
     <div>
@@ -160,8 +153,9 @@ const Controls = ({board, list, card, closeModal, showLabelMenu, stopShowingLabe
   return <div className="CardModal-controls">
     <div className="CardModal-controls-title">Add</div>
     <Button><Icon type="user" /> Members</Button>
-    <Button onClick={showLabelMenu}><Icon type="tag"/>Labels</Button>
-    {labelPanel}
+    <PopoverMenuButton className="CardModal-controls-label" type="default" popover={labelPanel}>
+      <Icon type="tag" /> Labels
+    </PopoverMenuButton>
     <div className="CardModal-controls-title">Actions</div>
     {toggleOnArchived}
     <PopoverMenuButton className="CardModal-controls-copy" type="default" popover={copyCard}>

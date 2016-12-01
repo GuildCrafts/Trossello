@@ -17,7 +17,7 @@ class ListActionsMenu extends Component {
   static propTypes = {
     board: React.PropTypes.object.isRequired,
     list: React.PropTypes.object.isRequired,
-    onClose: React.PropTypes.func.isRequired,
+    // onClose: React.PropTypes.func.isRequired,
   }
 
   constructor(props){

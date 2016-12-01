@@ -158,8 +158,8 @@ router.post('/:boardId/labels', (request, response, next) => {
   const attributes = {board_id: boardId, text: text, color: color}
 
   commands.createLabel(attributes)
-    .then(() => {
-      response.json(null)
+    .then(label => {
+      response.json(label)
     })
     .catch(next)
 })
@@ -171,8 +171,8 @@ router.post('/:boardId/labels/:labelId', (request, response, next) => {
   const attributes ={board_id: boardId, text: text, color: color}
 
   commands.updateLabel(labelId, attributes)
-    .then(() => {
-      response.json(null)
+    .then(label => {
+      response.json(label)
     })
     .catch(next)
 })

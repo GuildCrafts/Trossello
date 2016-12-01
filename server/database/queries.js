@@ -54,6 +54,7 @@ const getLabelsForBoard = (board) => {
   return knex.table('labels')
     .select('*')
     .where({board_id: board.id})
+    .orderBy('id', 'asc')
     .then( labels => {
       board.labels = labels
       return board
@@ -105,6 +106,7 @@ const getListsAndCardsForBoard = (board) => {
             .select('*')
             .join('card_labels', 'labels.id', '=', 'card_labels.label_id')
             .whereIn('card_labels.card_id', cardIds)
+            .orderBy('id', 'asc')
             .then(labels => {
               cards.forEach(card => {
                 card.labels = []
