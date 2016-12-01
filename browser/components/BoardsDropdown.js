@@ -10,8 +10,13 @@ import StarIcon from './StarIcon'
 import $ from 'jquery'
 
 class BoardsDropdown extends ToggleComponent {
+
   static contextTypes = {
-    session: React.PropTypes.object.isRequired
+    session: React.PropTypes.object.isRequired,
+  }
+
+  static propTypes = {
+    boards: React.PropTypes.array.isRequired,
   }
 
   constructor(props){
