@@ -433,10 +433,10 @@ const deleteBoard = (boardId) =>
 const createInvite = (attributes) => {
   attributes.token = uuid.v1()
   return createRecord('invites', attributes)
-    .then( invite =>
-      mailer.sendInviteEmail( invite )
-        .then(() => invite)
-    )
+    .then( data => {
+      const invite = { email: data.email, token: data.token }
+      return mailer.sendInviteEmail( invite ).then( _ => data)
+    })
 }
 
 const searchQuery = ( userId, searchTerm ) => {
