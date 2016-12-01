@@ -10,6 +10,8 @@
   flex-direction: column
   min-width: 300px
   color: black
+  line-height: 20px
+  padding: 0 5px
 
   &-Header
     display: flex
@@ -105,8 +107,9 @@
       color: #fff
   &-members
     padding: 0 5px
+    padding-bottom: 5px
   &-member
-    padding: 4px
+    padding: 2px
     &-img
       height: 30px
       width: 30px
@@ -127,9 +130,6 @@
     color: inherit
     cursor: pointer
     margin-bottom: 5px
-  &-icons
-    font-size: 1pc
-    padding-right: 7px
   &-options
     font-weight: bold
     display: block
@@ -138,9 +138,13 @@
     text-decoration: none
     color: black
     border: none
+    border-radius: 3px
     background-color: inherit
     width: 100%
     text-align: left
+    > .Icon
+      font-size: 1pc
+      padding-right: 7px
     &:hover
       background-color: #D6DADC
       opacity: 1
@@ -246,9 +250,16 @@
         box-shadow: 0 0 2px #298FCA
 
   &-InviteByEmailButton
+    color: #5f6060
     display: block
-    > .Button
-      display: block
-      width: 100%
-      text-align: left
-      font-weight: bold
+    width: 100%
+    text-align: left
+    font-weight: bold
+    padding: 3px 0
+    > .Icon
+      font-size: 0.8pc
+      padding-right: 5px
+      padding-left: 5px
+    &:hover
+      > .Icon
+        color: #fff
