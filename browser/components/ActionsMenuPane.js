@@ -6,9 +6,6 @@ import Icon from './Icon'
 export default class ActionsMenuPane extends Component {
 
   static propTypes = {
-    board: React.PropTypes.object.isRequired,
-    list: React.PropTypes.object,
-    card: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
     onBack: React.PropTypes.func,
   }

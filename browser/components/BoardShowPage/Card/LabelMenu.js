@@ -86,8 +86,6 @@ class MainLabelPanel extends Component {
 
     return <ActionsMenuPane
       heading="Labels"
-      card={this.props.card}
-      board={this.props.board}
       onClose={this.props.onClose}
       className="LabelMenu-MainLabelPane"
     >
