@@ -94,6 +94,7 @@
     "serve-favicon": "^2.3.0",
     "simple-react-router": "0.0.9",
     "style-loader": "^0.13.1",
+    "throttle-debounce": "^1.0.1",
     "url-loader": "^0.5.7",
     "uuid": "^2.0.3",
     "webpack": "^1.13.2",

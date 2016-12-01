@@ -24,3 +24,10 @@ $sky: #00C2E0
 
 $header-height: 44px
 $default-text-color: $black
+
+// Mixin for keyframe animation
+=keyframes($name)
+  @-webkit-keyframes #{$name}
+    @content
+  @keyframes #{$name}
+    @content
