@@ -5,8 +5,11 @@ import Form from '../Form'
 import Card from './Card'
 import Button from '../Button'
 import ToggleComponent from '../ToggleComponent'
+import DialogBox from '../DialogBox'
 import ConfirmationButton from '../ConfirmationButton'
 import boardStore from '../../stores/boardStore'
+import PopoverMenuButton from '../PopoverMenuButton'
+import CopyCard from './CopyCard'
 import './CardModal.sass'
 import $ from 'jquery'
 
@@ -39,10 +42,11 @@ export default class CardModal extends Component {
 
   render(){
     const { session } = this.context
-    const { card, list } = this.props
+    const { card, list, board } = this.props
     const archivedBanner = card.archived?
-      <div className='CardModal-window-archivedBanner'> <Icon type="archive" /> This card is archived</div>:
-      null
+      <div className='CardModal-window-archivedBanner'>
+        <Icon type="archive" /> This card is archived
+      </div> : null
     return <div className="CardModal">
       <div onClick={this.props.onClose} className="CardModal-shroud">
       </div>
@@ -96,26 +100,30 @@ export default class CardModal extends Component {
                   </Form>
                 </div>
               </div>
-              <Controls card={card} closeModal={this.props.onClose} />
+              <Controls list={this.props.list} card={card} closeModal={this.props.onClose} board={board} />
             </div>
-        </div>
+          </div>
         </div>
       </div>
     }
 }
 
-const Controls = ({card, closeModal}) => {
+const Controls = ({card, closeModal, board, list}) => {
+  const copyCard = <CopyCard card={card} board={board} list={list}/>
   const toggleOnArchived = card.archived ?
-  <div>
-    <UnArchiveCardButton card={card} />
-    <DeleteCardButton card={card} onDelete={closeModal} />
-  </div> :
-  <ArchiveCardButton card={card} onArchive={closeModal}/>
+    <div>
+      <UnArchiveCardButton card={card} />
+      <DeleteCardButton card={card} onDelete={closeModal} />
+    </div> :
+    <ArchiveCardButton card={card} onArchive={closeModal}/>
   return <div className="CardModal-controls">
     <div className="CardModal-controls-title">Add</div>
     <Button><Icon type="user" /> Members</Button>
     <div className="CardModal-controls-title">Actions</div>
     {toggleOnArchived}
+    <PopoverMenuButton className="CardModal-controls-copy" type="default" popover={copyCard}>
+      <Icon type="files-o" /> Copy
+    </PopoverMenuButton>
   </div>
 }
 

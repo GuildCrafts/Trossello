@@ -88,8 +88,9 @@
     flex-direction: column
     flex: 0 0 115px
     margin-top: 10px
-    > .Button,  > span > .Button
+    > .Button,  > span > .Button, > div > .Button
       display: block
+      margin-bottom: 5px
       width: 100%
       text-align: left
       > .Icon
@@ -177,6 +178,71 @@
       flex: 1
   &-name
     max-width: 100%
+
+  &-CopyCardDialog
+    &-SelectContainer
+      position: relative
+      height: auto
+      border: 1px solid #E2E4E6
+      width: 100%
+      padding: 7px
+      margin-bottom: 7px
+      font-size: 20px
+      font-weight: bold
+      border-radius: 3px
+      background: linear-gradient(to bottom,#fff 0,#F8F9F9 100%)
+      text-overflow: ellipsis
+      white-space: nowrap
+      overflow: hidden
+      &:hover
+        background: #298FCA
+        color: white
+        .CardModal-CopyCardDialog-SelectContainer-Label
+          color: white
+    &-Wrapper
+      display: flex
+      width: 100%
+      div:nth-of-type(1)
+        max-width: 210px
+      div:nth-of-type(2)
+        width: 40%
+        margin-left: 7px
+    label
+      font-size: 12px
+      color: #8c8c8c
+    select
+      height: 60px
+      width: 100%
+      opacity: 0
+      position: absolute
+      top: 0
+      bottom: 0
+      right: 0
+      left: 0
+      border-radius: 5px
+      padding: 5px
+      &:hover
+        cursor: pointer
+    > .Form
+      padding: 10px
+      align-items: flex-start
+      > textarea
+        margin: 10px 0
+        border-radius: 3px
+        height: 72px
+        width: 100%
+        border: 1px solid #CDD2D4
+        background: #E2E4E6
+        padding: 7px
+        color: #4d4d4d
+        font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif
+        line-height: 18px
+        transition: background .15s
+        &:focus
+          background: #fff
+          outline: none
+          border-color: #298FCA
+          box-shadow: 0 0 2px #298FCA
 input[type="submit"].CardModal-comments-submit
   width: 100px
   margin: 8px 0px 6px 0px
