@@ -134,7 +134,11 @@ export default class CopyCard extends Component {
 
   render(){
     if (this.state.boards === null){
-      return <DialogBox className="CardModal-CopyCardDialog" heading='Copy Card' onClose={this.props.onClose}>
+      return <DialogBox
+        className="CardModal-CopyCardDialog CardModal-CopyCardDialog-loading"
+        heading='Copy Card'
+        onClose={this.props.onClose}
+      >
         Loading…
       </DialogBox>
     }
