@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import debounce from 'throttle-debounce/debounce'
 import $ from 'jquery'
-import boardsStore from '../stores/boardsStore'
 import Form from './Form'
 import Link from './Link'
 import Icon from './Icon'
@@ -84,7 +83,6 @@ export default class CardSearchForm extends Component {
     })
     .then(result => {
       this.setState({result, loading: false})
-      boardStore.reload()
     })
   }
 
