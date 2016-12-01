@@ -83,7 +83,21 @@ const getSearchResult = (userId, searchTerm) => {
     .whereIn('user_boards.user_id', userId)
     .where(knex.raw('archived = false AND lower(content) LIKE ?', `%${searchTerm.toLowerCase()}%`))
     .orderBy('id', 'asc')
+    .then(loadLabelIdsForCards)
 }
+
+const loadLabelIdsForCards = cards =>
+  knex.table('card_labels')
+    .select('*')
+    .whereIn('card_labels.card_id', cards.map(card => card.id))
+    .then(cardLabels => {
+      cards.forEach(card => {
+        card.label_ids = cardLabels
+          .filter(cardLabel => cardLabel.card_id === card.id)
+          .map(cardLabel => cardLabel.label_id)
+      })
+      return cards
+    })
 
 const getListsAndCardsForBoard = (board) => {
   return knex.table('lists')
@@ -100,20 +114,10 @@ const getListsAndCardsForBoard = (board) => {
         .whereIn('list_id', listIds)
         .orderBy('list_id', 'asc')
         .orderBy('order', 'asc')
+        .then(loadLabelIdsForCards)
         .then(cards => {
-          const cardIds = cards.map(card => card.id)
-          return knex.table('card_labels')
-            .select('*')
-            .whereIn('card_labels.card_id', cardIds)
-            .then(cardLabels => {
-              cards.forEach(card => {
-                card.label_ids = cardLabels
-                  .filter(cardLabel => cardLabel.card_id === card.id)
-                  .map(cardLabel => cardLabel.label_id)
-              })
-              board.cards = cards
-              return board
-            })
+          board.cards = cards
+          return board
         })
     })
 }
