@@ -7,6 +7,7 @@ import Link from '../../Link'
 import Form from '../../Form'
 import Icon from '../../Icon'
 import Button from '../../Button'
+import ConfirmationButton from '../../ConfirmationButton'
 import ActionsMenu from '../../ActionsMenu'
 import ActionsMenuPane from '../../ActionsMenuPane'
 import boardStore from '../../../stores/boardStore'
@@ -16,7 +17,7 @@ export default class LabelMenu extends Component {
   static propTypes = {
     card: React.PropTypes.object.isRequired,
     board: React.PropTypes.object.isRequired,
-    onClose: React.PropTypes.func.isRequired
+    // onClose: React.PropTypes.func.isRequired
   }
 
   constructor(props){
@@ -73,13 +74,13 @@ class MainLabelPanel extends Component {
   render() {
     const { card, board } = this.props
     const boardLabels = board.labels.map( label => {
-      const checked = card.labels.map(card => card.id).includes(label.id)
+      const checked = card.labels.map(label => label.id).includes(label.id)
       return <LabelRow
-      key={label.id}
-      checked={checked}
-      label={label}
-      onEdit={this.editLabel.bind(this, label.id)}
-      onClick={this.addOrRemoveLabel.bind(this, label.id)}
+        key={label.id}
+        checked={checked}
+        label={label}
+        onEdit={this.editLabel.bind(this, label.id)}
+        onClick={this.addOrRemoveLabel.bind(this, label.id)}
       />
     })
 
@@ -118,69 +119,97 @@ class CreateLabelPanel extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      value: this.props.content || '',
-      status: null,
-      header: null,
-      deleteButton: false,
-      labelText:'',
-      labelColor:'#fff',
+    this.state = {}
+
+    if (props.state.editingLabel === null){
+      this.state.labelText = ''
+      this.state.labelColor = '#98A0A4'
+    } else {
+      const label = this.labelBeingEdited(props)
+      this.state.labelText = label.text
+      this.state.labelColor = label.color
     }
+
     this.deleteLabel = this.deleteLabel.bind(this)
     this.changeColor = this.changeColor.bind(this)
     this.createOrEditLabel = this.createOrEditLabel.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.goBack = this.goBack.bind(this)
   }
 
-  componentWillMount(){
-    if(this.props.state.editingLabel===null){
-      this.setState({
-        url: `/api/boards/${this.props.board.id}/labels`,
-        header:"Create Label",
-        deleteButton: false,
-        labelText: '',
-        labelColor: '#98A0A4'
-      })
-    } else {
-      const label = this.props.board.labels.find(label => label.id===this.props.state.editingLabel)
-      this.setState({
-        url: `/api/boards/${this.props.board.id}/labels/${this.props.state.editingLabel}`,
-        header:"Edit Label",
-        deleteButton: true,
-        labelText: label.text,
-        labelColor: label.color,
-      })
-    }
+  componentWillReceiveProps(newProps){
+    console.log(this.props.state.editingLabel, 'vs.', newProps.state.editingLabel)
+  }
+
+  labelBeingEdited(props=this.props){
+    return this.isEditing(props) &&
+      props.board.labels.find(label => label.id === props.state.editingLabel)
+  }
+
+  isEditing(props=this.props){
+    return typeof props.state.editingLabel === 'number'
+  }
+
+  goBack(){
+    this.props.goToPane('Main Label Pane')()
   }
 
   deleteLabel(event) {
-    event.preventDefault()
+    if (event) event.preventDefault()
     $.ajax({
       method: 'POST',
       url: `/api/boards/${this.props.board.id}/labels/${this.props.state.editingLabel}/delete`
     })
-    .then(() => {
+    .then(label => {
       boardStore.reload()
-      this.props.onClose(event)
+      this.goBack()
     })
   }
 
   changeColor(event) {
+    if (event) event.preventDefault()
     this.setState({labelColor: event.target.attributes.color.value})
   }
 
   createOrEditLabel(event){
-    event.preventDefault()
+    if (event) event.preventDefault()
+    this.isEditing() ? this.updateLabel() : this.createLabel()
+  }
+
+  updateLabel(){
     $.ajax({
       method: 'POST',
-      url: this.state.url,
+      url: `/api/boards/${this.props.board.id}/labels/${this.props.state.editingLabel}`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({
+        text: this.state.labelText,
+        color: this.state.labelColor,
+      })
+    })
+    .then(() => {
+      boardStore.reload()
+      this.goBack()
+    })
+  }
+
+  createLabel(){
+    $.ajax({
+      method: 'POST',
+      url: `/api/boards/${this.props.board.id}/labels`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       data:JSON.stringify({"text": this.state.labelText, "color": this.state.labelColor})
     })
-    .then(() => {
-      boardStore.reload()
-      this.props.onClose(event)
+    .then(label => {
+      $.ajax({
+        method: 'POST',
+        url:`/api/cards/${this.props.card.id}/labels/${label.id}`
+      })
+      .then(() => {
+        boardStore.reload()
+        this.goBack()
+      })
     })
   }
 
@@ -189,6 +218,9 @@ class CreateLabelPanel extends Component {
   }
 
   render() {
+    const labelBeingEdited = this.labelBeingEdited()
+    const header = this.isEditing() ? "Edit Label" : "Create Label"
+
     const colorBoxes = colors.map(color => {
       const checked = (this.state.labelColor===color) ? true : false
       return <div
@@ -199,24 +231,30 @@ class CreateLabelPanel extends Component {
           color={color}
           boardId={this.props.board.id}
           onClick={this.changeColor}
-          onClose={this.props.onClose} />
+          onClose={this.props.onClose}
+        />
       </div>
     })
 
-    const deleteButton = this.state.deleteButton ?
-      <Button
+    const deleteButton = this.isEditing() ?
+      <ConfirmationButton
         className="LabelMenu-CreateLabelPanel-button"
-        onClick={this.deleteLabel}
+        onConfirm={this.deleteLabel}
         type="danger"
         submit={false}
-        > DeleteButton </Button> : null
+        title={`Delete Label`}
+        message={`Are you sure you want to delete the "${labelBeingEdited.text}" label?`}
+        buttonName="Delete"
+      >
+        Delete
+      </ConfirmationButton> : null
 
     return <ActionsMenuPane
-      heading={this.state.header}
+      heading={header}
       board={this.props.board}
       card={this.props.card}
       onClose={this.props.onClose}
-      onBack={this.props.goToPane('Main Label Pane')}
+      onBack={this.goBack}
       className="LabelMenu-CreateLabelPanel"
     >
       <Form
@@ -232,7 +270,8 @@ class CreateLabelPanel extends Component {
             className="LabelMenu-CreateLabelPanel-button"
             type="primary"
             submit={true}
-            > {this.state.header}
+          >
+            Save
           </Button>
           {deleteButton}
         </div>

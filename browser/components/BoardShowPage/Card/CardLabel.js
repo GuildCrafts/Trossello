@@ -15,12 +15,12 @@ export default class CardLabel extends Component {
   render(){
     const {color, text, checked} = this.props
     const check = checked ?
-      <div className="Label-check">
+      <div className="CardLabel-check">
         <Icon type="check"/>
       </div> : null
 
-    return <div className="Label" style={{backgroundColor: color}}>
-      <div className="Label-text">
+    return <div className="CardLabel" style={{backgroundColor: color}}>
+      <div className="CardLabel-text">
         {text}
       </div>
       {check}
