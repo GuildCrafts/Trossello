@@ -6,7 +6,7 @@ import $ from 'jquery'
 import Form from './Form'
 import Link from './Link'
 import Icon from './Icon'
-import Loader from './Loader'
+import Spinner from './Spinner'
 import Card from './BoardShowPage/Card'
 
 export default class CardSearchForm extends Component {
@@ -18,7 +18,7 @@ export default class CardSearchForm extends Component {
       searchTerm: '',
       result: [],
       modalDisplayed: false,
-      loading: false
+      loading: false,
     }
     this.setSearchTerm = this.setSearchTerm.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
@@ -154,7 +154,10 @@ class SearchResultModal extends Component {
           <Link className="CardSearchForm-Modal-window-close" onClick={onClose}>
             <Icon type="times" />
           </Link>
-          <Loader />
+          <div className="CardSearchForm-Modal-Loader">
+            <h4 className="CardSearchForm-Modal-Loader-text">Searching...</h4>
+            <Spinner />
+          </div>
         </div>
       </div>
     }

@@ -5,6 +5,7 @@ import ToggleComponent from './ToggleComponent'
 import Link from './Link'
 import Button from './Button'
 import Icon from './Icon'
+import Spinner from './Spinner'
 import List from './BoardShowPage/List'
 import Card from './BoardShowPage/Card'
 
@@ -12,6 +13,7 @@ export default class StyleGuidePage extends Component {
   render(){
     return <div className="StyleGuidePage">
       <h1>Style Guide</h1>
+      <SpinnerSection />
       <ButtonsSection />
       <IconsSection />
       <LinksSection />
@@ -157,6 +159,16 @@ const CardsSection = (props) => {
     <h3>Cards</h3>
     <StyleExample sourceCode='<Card editable archivable card={{id: 2, board: 2, list_id: 4}}></Card>'>
       <Card editable archivable card={{id: 2, board_id: 2, list_id: 4, content: "Create Style Guide"}}/>
+    </StyleExample>
+  </div>
+}
+
+
+const SpinnerSection = (props) => {
+  return <div>
+    <h3>Spinner</h3>
+    <StyleExample sourceCode='<Spinner />'>
+      <Spinner />
     </StyleExample>
   </div>
 }
