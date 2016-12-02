@@ -19,6 +19,14 @@ export default class List extends Component {
   static propTypes = {
     board: React.PropTypes.object.isRequired,
     list:  React.PropTypes.object.isRequired,
+    cards: React.PropTypes.array.isRequired,
+    onDragStart: React.PropTypes.func.isRequired,
+    draggingCardId: React.PropTypes.number,
+    ghosted: React.PropTypes.bool,
+  }
+
+  static defaultProps = {
+    ghosted: false,
   }
 
   constructor(props) {
@@ -98,7 +106,6 @@ export default class List extends Component {
 
     let className = 'BoardShowPage-List'
     if (this.props.ghosted) className += ' BoardShowPage-Ghosted'
-    if (this.props.beingDragged) className += ' BoardShowPage-List-beingDragged'
 
     const listActionsMenu = <ListActionsMenu
       board={this.props.board}
@@ -106,7 +113,7 @@ export default class List extends Component {
       onCreateCard={this.creatingCardTop}
     />
 
-    return <div className="BoardShowPage-List" data-list-id={list.id}>
+    return <div className={className} data-list-id={list.id}>
       <div className="BoardShowPage-List-box">
         <div className="BoardShowPage-ListHeader"
           className="BoardShowPage-ListHeader"

@@ -409,7 +409,6 @@ class BoardShowPage extends React.Component {
         cards={cards}
         onDragStart={this.onDragStart}
         draggingCardId={this.state.draggingCardId}
-        beingDragged={false}
       />
     })
 
