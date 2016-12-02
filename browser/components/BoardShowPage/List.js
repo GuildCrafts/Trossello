@@ -104,8 +104,8 @@ export default class List extends Component {
 
     cardNodes.splice(this.state.newCardPosition, 0, newCardForm)
 
-    let className = 'BoardShowPage-List'
-    if (this.props.ghosted) className += ' BoardShowPage-Ghosted'
+    let className = "BoardShowPage-List-box"
+    if (this.props.ghosted) className += ' BoardShowPage-List-box-ghosted'
 
     const listActionsMenu = <ListActionsMenu
       board={this.props.board}
@@ -113,8 +113,8 @@ export default class List extends Component {
       onCreateCard={this.creatingCardTop}
     />
 
-    return <div className={className} data-list-id={list.id}>
-      <div className="BoardShowPage-List-box">
+    return <div className='BoardShowPage-List' data-list-id={list.id}>
+      <div className={className}>
         <div className="BoardShowPage-ListHeader"
           className="BoardShowPage-ListHeader"
           draggable
