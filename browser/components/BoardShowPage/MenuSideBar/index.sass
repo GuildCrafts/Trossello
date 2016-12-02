@@ -1,4 +1,4 @@
-@import "../../style.sass"
+@import "../../../style.sass"
 
 .BoardShowPage-MenuSideBar
   $button-height: 30px
@@ -6,12 +6,13 @@
   $top: $header-height
 
   display: flex
-  background-color: #edeff0
   flex-direction: column
   min-width: 300px
   color: black
   line-height: 20px
   padding: 0 5px
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .4)
+  background-color: #edeff0
 
   &-Header
     display: flex
@@ -47,7 +48,22 @@
     width: 100%
     height: 100%
     padding: 5px
-    overflow: auto
+
+  &-ActivityPane
+    overflow-y: scroll
+    &::-webkit-scrollbar
+      -webkit-appearance: none
+
+    &::-webkit-scrollbar:vertical
+      width: 9px
+
+    &::-webkit-scrollbar-thumb
+      border-radius: 4px
+      background-color: rgba(0, 0, 0, .1)
+
+    &::-webkit-scrollbar-track
+      border-radius: 4px
+      background-color: rgba(0, 0, 0, .1)
 
   .leftIn-enter
     left: -100%
@@ -63,9 +79,11 @@
     left: 0
     transition: left 200ms ease-in
 
-
   &-MainPane
     background: #edeff0
+    display: flex
+    flex-direction: column
+
   &-ChangeBackgroundPane
     background: #edeff0
     &-container

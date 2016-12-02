@@ -29,6 +29,32 @@ const deleteRecord = (table, id) =>
     .del()
 
 
+
+const ACTIVITY_TYPES = [
+  'JoinedBoard',
+  'InvitedToBoard',
+  'UpdatedBoard',
+  'AddedCard',
+  'MovedCard',
+  'ArchivedCard',
+  'UnarchivedCard',
+  'AddedList',
+  'CreatedBoard',
+  'ArchivedList',
+  'UnarchivedList',
+  'DeletedCard',
+]
+
+const recordActivity = (attributes) => {
+  if (!ACTIVITY_TYPES.includes(attributes.type))
+    throw new Error(`invalid activity type ${attributes.type}`)
+  attributes.metadata = JSON.stringify(attributes.metadata || {})
+  return createRecord('activity', attributes)
+}
+
+
+
+
 const removeUserFromBoard = (userId, boardId) =>
   knex
     .table('user_boards')
@@ -43,6 +69,8 @@ const archiveRecord = (table, id) =>
       archived: true,
       updated_at: new Date(),
     })
+    .returning('*')
+    .then(firstRecord)
 
 const unarchiveRecord = (table, id) =>
   knex
@@ -52,8 +80,10 @@ const unarchiveRecord = (table, id) =>
       archived: false,
       updated_at: new Date(),
     })
+    .returning('*')
+    .then(firstRecord)
 
-const archiveListItems = (id) =>
+const archiveListItems = (currentUserId, id) =>
   knex
     .table('cards')
     .where('list_id', id)
@@ -61,8 +91,23 @@ const archiveListItems = (id) =>
       archived: true,
       updated_at: new Date(),
     })
+    .returning('*')
+    .then(cards => Promise.all(
+      cards.map(card =>{
+        recordActivity({
+          type: 'ArchivedCard',
+          user_id: currentUserId,
+          board_id: card.board_id,
+          card_id: card.id,
+          metadata: {
+            content: card.content
+          }
+        })
+      })
+    ))
 
-const unarchiveListItems = (id) =>
+
+const unarchiveListItems = (currentUserId, id) =>
   knex
     .table('cards')
     .where('list_id', id)
@@ -70,6 +115,17 @@ const unarchiveListItems = (id) =>
       archived: false,
       updated_at: new Date(),
     })
+    .returning('*')
+    .then(cards => Promise.all(
+      cards.map(card =>{
+        recordActivity({
+          type: 'UnarchivedCard',
+          user_id: currentUserId,
+          board_id: card.board_id,
+          card_id: card.id,
+        })
+      })
+    ))
 
 const findOrCreateUserFromGithubProfile = (githubProfile) => {
   const github_id = githubProfile.id
@@ -114,14 +170,26 @@ const unlockDropdown = (id) =>
       boards_dropdown_lock: false,
     })
 
-const createList = (attributes) =>
-  knex
+const createList = (currentUserId, attributes) => {
+  return knex
     .table('lists')
     .where('board_id', attributes.board_id)
     .count()
     .then(results =>
       createRecord('lists', {...attributes, order: results[0].count})
     )
+    .then( list =>
+      recordActivity({
+        type: 'AddedList',
+        user_id: currentUserId,
+        board_id: list.board_id,
+        metadata: {
+          'list_id': list.id,
+          'list_name': list.name
+        }
+      }).then( () => list)
+    )
+}
 
 const updateList = (id, attributes) =>
   updateRecord('lists', id, attributes)
@@ -162,10 +230,10 @@ const copyCardsFromListToList = (oldListId, newListId) =>
     })
 
 
-const duplicateList = (boardId, listId, name) =>
+const duplicateList = (userId, boardId, listId, name) =>
   Promise.all([
     queries.getListById(listId),
-    createList({name: name, board_id: boardId}),
+    createList(userId, {name: name, board_id: boardId}),
   ])
   .then( ([oldList, newList]) =>
     copyCardsFromListToList(oldList.id, newList.id)
@@ -179,15 +247,13 @@ const duplicateList = (boardId, listId, name) =>
       .then( () => newList )
   )
 
-
-
 const deleteList = (id) =>
   Promise.all([
     deleteRecord('lists', id),
     knex.table('cards').where('list_id', id).del(),
   ])
 
-const createCard = (attributes) => {
+const createCard = (currentUserId, attributes) => {
   let order = null
   if (attributes.hasOwnProperty('order')) {
     order = attributes.order
@@ -206,16 +272,23 @@ const createCard = (attributes) => {
         .then(firstRecord)
     })
     .then( card => {
-      if (order !== null) {
-        moveCard({
-          boardId: card.board_id,
-          cardId: card.id,
-          listId: card.list_id,
-          order: order
-        })
-        card.order = order
-      }
-      return card
+      if (order === null) return card
+      card.order = order
+      return moveCard(currentUserId, {
+        boardId: card.board_id,
+        cardId: card.id,
+        listId: card.list_id,
+        order: order
+      }, true).then(_ => card)
+    })
+    .then( card => {
+      return recordActivity({
+        type: 'AddedCard',
+        user_id: currentUserId,
+        board_id: card.board_id,
+        card_id: card.id,
+        metadata: {content: card.content}
+      }).then( () => card)
     })
 }
 
@@ -248,14 +321,48 @@ const moveAllCards = (fromListId, toListId) =>
     })
 
 
-const deleteCard = (id) =>
+const deleteCard = (currentUserId, boardId, id) =>
   deleteRecord('cards', id)
+    .then( _ => deleteAllActivityByCardId(id))
+      .then( _ =>
+        recordActivity({
+          type: 'DeletedCard',
+          user_id: currentUserId,
+          board_id: boardId,
+          card_id: id
+        })
+      )
 
-const archiveCard = (id) =>
+const deleteAllActivityByCardId = (cardId) =>
+  knex.table('activity').select('*').where('card_id', cardId).del()
+
+const archiveCard = (currentUserId, id) =>
   archiveRecord('cards', id)
+    .then(card =>
+      recordActivity({
+        type: 'ArchivedCard',
+        user_id: currentUserId,
+        board_id: card.board_id,
+        card_id: card.id,
+        metadata: {
+          content: card.content
+        }
+      }).then( () => card)
+    )
 
-const unarchiveCard = (id) =>
+const unarchiveCard = (currentUserId, id) =>
   unarchiveRecord('cards', id)
+    .then( card =>
+      recordActivity({
+        type: 'UnarchivedCard',
+        user_id: currentUserId,
+        board_id: card.board_id,
+        card_id: card.id,
+        metadata: {
+          content: card.content
+        }
+      }).then( () => card)
+    )
 
 const sortBoardItems = (unsortedItems, itemId, sortBefore) => {
   const subSort = (a, b) => {
@@ -269,7 +376,7 @@ const sortBoardItems = (unsortedItems, itemId, sortBefore) => {
   unsortedItems.sort(subSort)
 }
 
-const moveCard = ({ boardId, cardId, listId, order }) => {
+const moveCard = (currentUserId, {boardId, cardId, listId, order }, dontRecordActivity) => {
   return knex
     .table('cards')
     .where({board_id: boardId})
@@ -322,6 +429,21 @@ const moveCard = ({ boardId, cardId, listId, order }) => {
       )
 
       return Promise.all(updates)
+        .then(updates => {
+          const card = updates.find( update => update.id === cardId )
+          if (dontRecordActivity || originListId === listId) return updates
+          return recordActivity({
+            type: 'MovedCard',
+            user_id: currentUserId,
+            board_id: boardId,
+            card_id: cardId,
+            metadata: {
+              prev_list_id: originListId,
+              new_list_id: listId,
+              content: card.content
+            }
+          }).then(() => updates)
+        })
     })
 }
 
@@ -362,20 +484,42 @@ const moveList = ({ boardId, listId, order }) => {
     })
 }
 
-const archiveList = (id) =>
+const archiveList = (currentUserId, id) =>
   Promise.all([
-    archiveListItems(id),
+    archiveListItems(currentUserId, id),
     archiveRecord('lists', id)
   ])
+  .then( results => {
+    recordActivity({
+      type: 'ArchivedList',
+      user_id: currentUserId,
+      board_id: results[1].board_id,
+      metadata: {
+        list_id: id,
+        list_name: results[1].name
+      }
+    }).then( () => results[1])
+  })
 
-const unarchiveList = (id) =>
+const unarchiveList = (currentUserId, id) =>
   Promise.all([
-    unarchiveRecord('lists', id),
-    unarchiveListItems(id)
+    unarchiveListItems(currentUserId, id),
+    unarchiveRecord('lists', id)
   ])
+  .then( results => {
+    recordActivity({
+      type: 'UnarchivedList',
+      user_id: currentUserId,
+      board_id: results[1].board_id,
+      metadata: {
+        list_id: id,
+        list_name: results[1].name
+      }
+    }).then( () => results[1])
+  })
 
-const archiveCardsInList = (id) =>
-  archiveListItems(id)
+const archiveCardsInList = (currentUserId, id) =>
+  archiveListItems(currentUserId, id)
 
 const archiveBoard = (id) =>
   archiveRecord('boards', id)
@@ -392,6 +536,14 @@ const createBoard = (userId, attributes) => {
     }
     return createRecord('user_boards', attrs).then(() => board)
   })
+  .then( board => {
+    return recordActivity({
+      type: 'CreatedBoard',
+      user_id: userId,
+      board_id: board.id,
+      metadata: {board_name: board.name}
+    }).then( () => board)
+  })
 }
 
 const addUserToBoard = (userId, boardId) => {
@@ -403,6 +555,13 @@ const addUserToBoard = (userId, boardId) => {
     })
 
   return knex.raw(`${insert} ON CONFLICT DO NOTHING RETURNING *`)
+    .then( data => {
+      return recordActivity( {
+        type: 'JoinedBoard',
+        user_id: userId,
+        board_id: boardId,
+      })
+    })
 }
 
 const starBoard = (id) =>
@@ -421,8 +580,46 @@ const unstarBoard = (id) =>
       starred: false
     })
 
-const updateBoard = (id, attributes) =>
-  updateRecord('boards', id, attributes)
+const updateBoard = (currentUserId, boardId, attributes) => {
+  let updatedBoardValue
+  return queries.getBoardById(boardId)
+    .then(prevBoard => {
+      return updateRecord('boards', boardId, attributes)
+        .then( board => {
+          const activityInserts = []
+
+          if (attributes.hasOwnProperty('name') && prevBoard.name !== attributes.name ){
+            activityInserts.push(
+              recordActivity({
+                type: 'UpdatedBoard',
+                board_id: boardId,
+                user_id: currentUserId,
+                metadata: {
+                  attribute_updated: 'name',
+                  prev_board_name: prevBoard.name,
+                  new_board_name: board.name
+                }
+              })
+            )
+          }
+
+          if (attributes.hasOwnProperty('background_color') && prevBoard.background_color !== attributes.background_color ){
+            activityInserts.push(
+              recordActivity({
+                type: 'UpdatedBoard',
+                board_id: boardId,
+                user_id: currentUserId,
+                metadata: {
+                  attribute_updated: 'background_color'
+                }
+              })
+            )
+          }
+
+          return Promise.all(activityInserts).then(() => board)
+        })
+    })
+}
 
 const deleteBoard = (boardId) =>
   Promise.all([
@@ -430,12 +627,21 @@ const deleteBoard = (boardId) =>
     knex.table('user_boards').where('board_id', boardId).del(),
   ]).then(results => results[0] + results[1])
 
-const createInvite = (attributes) => {
+const createInvite = (currentUserId, attributes) => {
   attributes.token = uuid.v1()
   return createRecord('invites', attributes)
     .then( invite =>
-      mailer.sendInviteEmail( invite )
-        .then(() => invite)
+      Promise.all([
+        recordActivity({
+          type: 'InvitedToBoard',
+          board_id: invite.boardId,
+          user_id: currentUserId,
+          metadata: {
+            invited_email: invite.email
+          }
+        }),
+        mailer.sendInviteEmail( invite )
+      ]).then( () => invite)
     )
 }
 
@@ -514,4 +720,5 @@ export default {
   createLabel,
   updateLabel,
   deleteLabel,
+  recordActivity,
 }

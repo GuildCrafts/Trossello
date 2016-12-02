@@ -68,7 +68,8 @@ const getBoardById = (id) =>
         return Promise.all([
           getListsAndCardsForBoard(board),
           getUsersForBoard(board),
-          getLabelsForBoard(board)
+          getLabelsForBoard(board),
+          getActivityForBoard(board),
         ]).then( () => board)
       }else{
         return Promise.resolve(board)
@@ -136,7 +137,22 @@ const getInviteByToken = (token) => {
   return knex.table('invites')
     .select('*')
     .where('token', token)
-    .first()
+    .first('*')
+}
+
+const getActivityForBoard = (board) => {
+  return getActivityByBoardId(board.id)
+    .then(activity => {
+      board.activity = activity
+      return board
+    })
+}
+
+const getActivityByBoardId = (boardId) => {
+  return knex.table('activity')
+    .select('*')
+    .where('board_id', boardId)
+    .orderBy('created_at', 'desc')
 }
 
 export default {
@@ -151,4 +167,5 @@ export default {
   getInviteByToken,
   getBoardMoveTargetsForUserId,
   getLabelById,
+  getActivityByBoardId,
 }

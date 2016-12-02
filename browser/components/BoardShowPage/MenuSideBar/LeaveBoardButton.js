@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Button from '../Button'
+import Button from '../../Button'
 import $ from 'jquery'
-import boardsStore from '../../stores/boardsStore'
-import ConfirmationButton from '../ConfirmationButton'
+import boardsStore from '../../../stores/boardsStore'
+import ConfirmationButton from '../../ConfirmationButton'
 
 export default class LeaveBoardButton extends Component {
 

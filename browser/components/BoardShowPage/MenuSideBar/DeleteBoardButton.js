@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
-import Button from '../Button'
-import boardsStore from '../../stores/boardsStore'
+import Button from '../../Button'
+import boardsStore from '../../../stores/boardsStore'
 
 export default class DeleteBoardButton extends Component {
 

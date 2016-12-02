@@ -197,13 +197,13 @@ describe('database.commands', () => {
   })
 
   describe('createCard', () => {
-    it('should insert a card into the cards table', () => {
+    it('should insert a card into the cards table and record the activity', () => {
       return knex.table('cards').count()
         .then((results) => {
           expect(results[0].count).to.eql('0')
         })
         .then(() =>
-          commands.createCard({
+          commands.createCard(1455, {
             board_id: 341,
             list_id: 88,
             content: 'wash your face'
@@ -218,7 +218,7 @@ describe('database.commands', () => {
           expect(card.order).to.eql(0)
         })
         .then(() =>
-          commands.createCard({
+          commands.createCard(1455, {
             board_id: 341,
             list_id: 88,
             content: 'wash your feet'
@@ -236,7 +236,30 @@ describe('database.commands', () => {
         .then((results) => {
           expect(results[0].count).to.eql('2')
         })
-
+        .then( () => queries.getActivityByBoardId(341)
+          .then( activities => {
+            expect(activities).to.eql([
+              {
+                id: 2,
+                created_at: activities[0].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 341,
+                card_id: 2,
+                metadata: '{"content":"wash your feet"}'
+              },
+              {
+                id: 1,
+                created_at: activities[1].created_at,
+                user_id: 1455,
+                type: 'AddedCard',
+                board_id: 341,
+                card_id: 1,
+                metadata: '{"content":"wash your face"}'
+              }
+            ])
+          })
+        )
     })
 
   })
@@ -276,7 +299,7 @@ describe('database.commands', () => {
 
     describe('when moving on the same list', () => {
       withBoardsListsAndCardsInTheDatabase(() => {
-        it('should update card orders in list', () => {
+        it('should update card orders in list and not record the activity', () => {
 
           const getOrderedCardsByListId = (board, listId) =>
             board.cards
@@ -291,7 +314,7 @@ describe('database.commands', () => {
               expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
             })
             .then( () =>
-              commands.moveCard({
+              commands.moveCard(1455, {
                 boardId: 101,
                 cardId: 81,
                 listId: 40,
@@ -306,7 +329,7 @@ describe('database.commands', () => {
               expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40,40])
             })
             .then( () =>
-              commands.moveCard({
+              commands.moveCard(1455, {
                 boardId: 101,
                 cardId: 81,
                 listId: 40,
@@ -322,13 +345,20 @@ describe('database.commands', () => {
               expect(list40Cards[1].updated_at ).to.be.at.most(new Date())
               expect(list40Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
             })
+            .then( () => queries.getActivityByBoardId(101)
+              .then( activities => {
+                const moveCardActivity = activities.find(activity =>
+                  activity.type === 'MovedCard')
+                expect(moveCardActivity).to.be.undefined
+              })
+            )
         })
       })
     })
 
     describe('when moving between two lists', () => {
       withBoardsListsAndCardsInTheDatabase(() => {
-        it('should update card orders', () => {
+        it('should update card orders and record the activity', () => {
           const getOrderedCardsByListId = (board, listId) =>
             board.cards
               .filter(card => card.list_id === listId)
@@ -352,7 +382,7 @@ describe('database.commands', () => {
               expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
             })
             .then( () =>
-              commands.moveCard({
+              commands.moveCard(1455, {
                 boardId: 101,
                 cardId: 81,
                 listId: 41,
@@ -375,7 +405,7 @@ describe('database.commands', () => {
               expect(list41Cards[2].updated_at ).to.be.at.least(new Date() - 5000)
             })
             .then( () =>
-              commands.moveCard({
+              commands.moveCard(1455, {
                 boardId: 101,
                 cardId: 81,
                 listId: 40,
@@ -395,6 +425,18 @@ describe('database.commands', () => {
               expect(list41Cards.map(card => card.id)     ).to.eql([83,84,85,86,87])
               expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41])
             })
+            .then( () => queries.getActivityByBoardId(101)
+              .then( activities => {
+                const moveCardActivity = activities.find(activity =>
+                  activity.type === 'MovedCard')
+                expect(moveCardActivity).to.be.an('object')
+                expect(moveCardActivity.user_id).to.eql(1455)
+                expect(moveCardActivity.type).to.eql('MovedCard')
+                expect(moveCardActivity.board_id).to.eql(101)
+                expect(moveCardActivity.card_id).to.eql(81)
+                expect(moveCardActivity.metadata).to.eql('{"prev_list_id":41,"new_list_id":40,"content":"Card2"}')
+              })
+            )
         })
       })
     })
@@ -423,7 +465,7 @@ describe('database.commands', () => {
             expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
           })
           .then( () =>
-            commands.moveCard({
+            commands.moveCard(1455, {
               boardId: 101,
               cardId: 81,
               listId: 40,
@@ -446,7 +488,7 @@ describe('database.commands', () => {
             expect(list41Cards[1].updated_at ).to.be.at.least(new Date() - 5000)
           })
           .then( () =>
-            commands.moveCard({
+            commands.moveCard(1455, {
               boardId: 101,
               cardId: 81,
               listId: 41,
@@ -461,7 +503,6 @@ describe('database.commands', () => {
             expect(list40Cards.map(card => card.order)  ).to.eql([0,1,2,3])
             expect(list40Cards.map(card => card.id)     ).to.eql([80,82,90,91])
             expect(list40Cards.map(card => card.list_id)).to.eql([40,40,40,40])
-
             expect(list41Cards.map(card => card.order)  ).to.eql([0,1,2,3,4,5])
             expect(list41Cards.map(card => card.id)     ).to.eql([81,83,84,85,86,87])
             expect(list41Cards.map(card => card.list_id)).to.eql([41,41,41,41,41,41])
@@ -478,23 +519,37 @@ describe('database.commands', () => {
         return queries.getCardById(83).then( card => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(83)
-          return commands.deleteCard(83).then( () => {
+          return commands.deleteCard(1455, 101, 83).then( () => {
             return queries.getCardById(83).then( card => {
               expect(card).to.be.undefined
             })
           })
         })
+        .then( () => queries.getActivityByBoardId(101)
+          .then( activities => {
+            const cardActivity = activities.filter(activity => activity.card_id===83)
+            const deleteCardActivity = activities.find(activity =>
+              activity.type === 'DeletedCard')
+            expect(cardActivity).length.to.be(1)
+            expect(deleteCardActivity).to.be.an('object')
+            expect(deleteCardActivity.user_id).to.eql(1455)
+            expect(deleteCardActivity.type).to.eql('DeletedCard')
+            expect(deleteCardActivity.board_id).to.eql(101)
+            expect(deleteCardActivity.card_id).to.eql(83)
+            expect(deleteCardActivity.metadata).to.eql('{}')
+          })
+        )
       })
     })
   })
 
   describe('archiveCard', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
-      it('should archive a card by card id', () => {
+      it('should archive a card by card id and record the activity', () => {
         return queries.getCardById(83).then( card => {
           expect(card).to.be.a('object')
           expect(card.id).to.eql(83)
-          return commands.archiveCard(83).then( () => {
+          return commands.archiveCard(1455, 83).then( () => {
             return queries.getCardById(83).then( card => {
               expect(card.archived).to.eql(true)
               expect(card.updated_at ).to.be.at.most(new Date())
@@ -502,23 +557,47 @@ describe('database.commands', () => {
             })
           })
         })
+        .then( () => queries.getActivityByBoardId(101)
+          .then( activities => {
+            const archiveCardActivity = activities.find(activity =>
+              activity.type === 'ArchivedCard')
+            expect(archiveCardActivity).to.be.an('object')
+            expect(archiveCardActivity.user_id).to.eql(1455)
+            expect(archiveCardActivity.type).to.eql('ArchivedCard')
+            expect(archiveCardActivity.board_id).to.eql(101)
+            expect(archiveCardActivity.card_id).to.eql(83)
+            expect(archiveCardActivity.metadata).to.eql('{"content":"card3"}')
+          })
+        )
       })
     })
   })
 
   describe('unarchiveCard', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
-      it('should unarchive a card by card id', () => {
-        return commands.archiveCard(83).then( () => {
+      it('should unarchive a card by card id and record the activity', () => {
+        return commands.archiveCard(1455, 83).then( () => {
           return queries.getCardById(83).then( card => {
             expect(card.archived).to.eql(true)
-            return commands.unarchiveCard(83).then( () => {
+            return commands.unarchiveCard(1455, 83).then( () => {
               return queries.getCardById(83).then( card => {
                 expect(card.archived).to.eql(false)
               })
             })
           })
         })
+        .then( () => queries.getActivityByBoardId(101)
+          .then( activities => {
+            const archiveCardActivity = activities.find(activity =>
+              activity.type === 'UnarchivedCard')
+            expect(archiveCardActivity).to.be.an('object')
+            expect(archiveCardActivity.user_id).to.eql(1455)
+            expect(archiveCardActivity.type).to.eql('UnarchivedCard')
+            expect(archiveCardActivity.board_id).to.eql(101)
+            expect(archiveCardActivity.card_id).to.eql(83)
+            expect(archiveCardActivity.metadata).to.eql('{"content":"card3"}')
+          })
+        )
       })
     })
   })
@@ -536,7 +615,7 @@ describe('database.commands', () => {
         board_id: 83,
         name: "Fried Foods"
       }
-      return commands.createList(attributes)
+      return commands.createList(1455, attributes)
         .then(list => {
           expect(list.name).to.eql("Fried Foods")
           expect(list.board_id).to.eql(83)
@@ -548,6 +627,18 @@ describe('database.commands', () => {
             expect(board.lists[0].archived).to.eql(false)
             expect(board.lists[0].order).to.eql(0)
           })
+          .then( () => queries.getActivityByBoardId(83)
+            .then( activities => {
+              const updateBoardActivity = activities.find(activity =>
+                activity.type === 'AddedList')
+              expect(updateBoardActivity).to.be.an('object')
+              expect(updateBoardActivity.user_id).to.eql(1455)
+              expect(updateBoardActivity.type).to.eql('AddedList')
+              expect(updateBoardActivity.board_id).to.eql(83)
+              expect(updateBoardActivity.card_id).to.eql(null)
+              expect(updateBoardActivity.metadata).to.eql(`{"list_id":${list.id},"list_name":"${list.name}"}`)
+            })
+          )
         })
     })
   })
@@ -650,10 +741,10 @@ describe('database.commands', () => {
   describe('unarchiveList', () => {
     withBoardsListsAndCardsInTheDatabase( () => {
       it('should unarchive a list by list id', () => {
-        return commands.archiveList(40).then( () => {
+        return commands.archiveList(1455, 40).then( () => {
           return queries.getListById(40).then( list => {
             expect(list.archived).to.eql(true)
-            return commands.unarchiveList(40).then( () => {
+            return commands.unarchiveList(1455, 40).then( () => {
               return queries.getListById(40).then( list => {
                 expect(list.archived).to.eql(false)
               })
@@ -715,15 +806,30 @@ describe('database.commands', () => {
   describe('archiveList', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should archive a board by board id', () => {
-        return queries.getListById(40).then( list => {
-          expect(list).to.be.a('object')
-          expect(list.id).to.eql(40)
-          return commands.archiveList(40).then( () => {
-            return queries.getListById(40).then( list => {
-              expect(list.archived).to.eql(true)
+        return queries.getListById(40)
+          .then( list => {
+            expect(list).to.be.a('object')
+            expect(list.id).to.eql(40)
+            return commands.archiveList(1455, 40).then( () => {
+              return queries.getListById(40).then( list => {
+                expect(list.archived).to.eql(true)
+                return list
+              })
             })
           })
-        })
+          .then( list => {
+            return queries.getActivityByBoardId(list.board_id)
+            .then( activities => {
+              const archiveListActivity = activities.find(activity =>
+                activity.type === 'ArchivedList')
+              expect(archiveListActivity).to.be.an('object')
+              expect(archiveListActivity.user_id).to.eql(1455)
+              expect(archiveListActivity.type).to.eql('ArchivedList')
+              expect(archiveListActivity.board_id).to.eql(list.board_id)
+              expect(archiveListActivity.card_id).to.eql(null)
+              expect(archiveListActivity.metadata).to.eql(`{"list_id":${list.id},"list_name":"${list.name}"}`)
+            })
+          })
       })
     })
   })
@@ -747,7 +853,7 @@ describe('database.commands', () => {
             expect(card81.list_id).to.eql(40)
             expect(card81.archived).to.eql(false)
           })
-          .then( () => commands.archiveCardsInList(40))
+          .then( () => commands.archiveCardsInList(1455, 40))
           .then(getCards)
           .then(([card80, card81]) => {
             expect(card80).to.be.a('object')
@@ -774,7 +880,7 @@ describe('database.commands', () => {
               "List2",
             ])
           })
-          .then(_ => commands.duplicateList(101, 40, "Bob's New List" ) )
+          .then(_ => commands.duplicateList(1455, 101, 40, "Bob's New List" ) )
           .then(newList => {
             expect(newList.board_id).to.eql(101)
             expect(newList.name).to.eql("Bob's New List")
@@ -818,22 +924,76 @@ describe('database.commands', () => {
             expect(boards[0].name).to.eql("My Board")
             expect(boards[0].background_color).to.eql("#0079bf")
             expect(boards[0].archived).to.eql(false)
+            return boards[0]
+          })
+        })
+        .then( board => {
+          return queries.getActivityByBoardId(board.id)
+          .then( activities => {
+            const createBoardActivity = activities.find(activity =>
+              activity.type === 'CreatedBoard')
+            expect(createBoardActivity).to.be.an('object')
+            expect(createBoardActivity.user_id).to.eql(15)
+            expect(createBoardActivity.type).to.eql('CreatedBoard')
+            expect(createBoardActivity.board_id).to.eql(board.id)
+            expect(createBoardActivity.card_id).to.eql(null)
+            expect(createBoardActivity.metadata).to.eql(`{"board_name":"${board.name}"}`)
           })
         })
     })
   })
 
   describe('updateBoard', () => {
-    withBoardsListsAndCardsInTheDatabase(() => {
-      it('should update a board with given attributes',() => {
-        const newAttributes = {
-          name: "NewBoardName"
-        }
-        return commands.updateBoard(101, newAttributes)
-          .then( board => {
-            expect(board.id).to.eql(101)
-            expect(board.name).to.eql('NewBoardName')
-          })
+    describe('when updating name', () => {
+      withBoardsListsAndCardsInTheDatabase(() => {
+        it('should update a board\'s name and record the activity',() => {
+          const newAttributes = {
+            name: "NewBoardName"
+          }
+          return commands.updateBoard(1455, 101, newAttributes)
+            .then( board => {
+              expect(board.id).to.eql(101)
+              expect(board.name).to.eql('NewBoardName')
+            })
+            .then( () => queries.getActivityByBoardId(101))
+              .then( activities => {
+                const updateBoardActivity = activities.find(activity =>
+                  activity.type === 'UpdatedBoard')
+                expect(updateBoardActivity).to.be.an('object')
+                expect(updateBoardActivity.user_id).to.eql(1455)
+                expect(updateBoardActivity.type).to.eql('UpdatedBoard')
+                expect(updateBoardActivity.board_id).to.eql(101)
+                expect(updateBoardActivity.card_id).to.eql(null)
+                expect(updateBoardActivity.metadata).to.eql('{"attribute_updated":"name","prev_board_name":"Board1","new_board_name":"NewBoardName"}')
+              })
+        })
+      })
+    })
+
+    describe('when updating background color', () => {
+      withBoardsListsAndCardsInTheDatabase(() => {
+        it('should update a board\'s background color and record the activity',() => {
+          const newAttributes = {
+            background_color: "#0079bf"
+          }
+          return commands.updateBoard(1455, 101, newAttributes)
+            .then( board => {
+              expect(board.id).to.eql(101)
+              expect(board.background_color).to.eql('#0079bf')
+            })
+            .then( () => queries.getActivityByBoardId(101)
+              .then( activities => {
+                const updateBoardActivity = activities.find(activity =>
+                  activity.type === 'UpdatedBoard')
+                expect(updateBoardActivity).to.be.an('object')
+                expect(updateBoardActivity.user_id).to.eql(1455)
+                expect(updateBoardActivity.type).to.eql('UpdatedBoard')
+                expect(updateBoardActivity.board_id).to.eql(101)
+                expect(updateBoardActivity.card_id).to.eql(null)
+                expect(updateBoardActivity.metadata).to.eql('{"attribute_updated":"background_color"}')
+              })
+            )
+        })
       })
     })
   })
@@ -868,13 +1028,20 @@ describe('database.commands', () => {
   })
 
   describe('createInvite', () => {
-    it('should create an invite record and send an invite email', () => {
-      return commands.createInvite({
+    it('should create an invite record and send an invite email and record the activity', () => {
+      return commands.createInvite(1455, {
         boardId: 123,
         email: 'larry@david.org',
       }).then(invite => {
         expect(invite.boardId).to.eql(123)
         expect(invite.email).to.eql('larry@david.org')
+        expect(invite).to.eql({
+          boardId: 123,
+          created_at: invite.created_at,
+          email: 'larry@david.org',
+          token: invite.token,
+          updated_at: invite.updated_at
+        })
         expect(mailer.transporter.sentEmails).to.eql([
           {
             "from": "\"Trossello\" no-reply@trossello.com",
@@ -885,19 +1052,42 @@ describe('database.commands', () => {
           }
         ])
       })
-
+      .then(() => queries.getActivityByBoardId(123))
+      .then(activities => {
+        const inviteActivity = activities.find(activity =>
+          activity.type === 'InvitedToBoard')
+        expect(inviteActivity).to.be.an('object')
+        expect(inviteActivity).to.eql({
+          id: 1,
+          created_at: inviteActivity.created_at,
+          user_id: 1455,
+          type: 'InvitedToBoard',
+          board_id: 123,
+          card_id: null,
+          metadata: '{"invited_email":"larry@david.org"}'
+        })
+      })
     });
   });
 
   describe('addUserToBoard', () => {
     withBoardsListsAndCardsInTheDatabase( () => {
-      it('should add a user to a board', () => {
+      it('should add a user to a board and record the activity', () => {
         return queries.getBoardsByUserId(10000).then( boards => {
           expect(boards).to.have.length(0)
           return commands.addUserToBoard(10000,101).then( () => {
             return queries.getBoardsByUserId(10000).then( boards => {
               expect(boards).to.have.length(1)
               expect(boards.map(board => board.id)).to.eql([101])
+            })
+          }).then( () => {
+            return queries.getActivityByBoardId(101).then( activities => {
+              const joinedBoardActivity = activities.find( activity => {
+                return activity.type === 'JoinedBoard' &&
+                       activity.user_id === 10000 &&
+                       activity.board_id === 101
+              })
+              expect(joinedBoardActivity).to.be.an('object')
             })
           })
         })
@@ -1014,6 +1204,32 @@ describe('database.commands', () => {
           .then(() => commands.addOrRemoveCardLabel(80, 301))
           .then(() => queries.getBoardById(101))
           .then(board => expect(labelIds(board)).to.eql([]))
+      })
+    })
+  })
+  describe('recordActivity', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+      it('should record the user action in the activity table', () => {
+        return commands.recordActivity({
+          type: 'AddedCard',
+          user_id: 1455,
+          board_id: 101,
+          card_id: 50,
+          metadata: {content: 'card test'}
+        })
+        .then(() => queries.getActivityByBoardId(101))
+        .then(activities => {
+          const addCardAct = activities.find(activity =>
+            activity.card_id === 50 && activity.type === 'AddedCard')
+          expect(addCardAct).to.be.a('object')
+          expect(addCardAct.type).to.eql('AddedCard')
+          expect(addCardAct.user_id).to.eql(1455)
+          expect(addCardAct.board_id).to.eql(101)
+          expect(addCardAct.card_id).to.eql(50)
+          expect(addCardAct.metadata).to.eql(
+            JSON.stringify({content: 'card test'})
+          )
+        })
       })
     })
   })

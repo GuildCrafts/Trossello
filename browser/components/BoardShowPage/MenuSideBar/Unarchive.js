@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import boardStore from '../../stores/boardStore'
+import boardStore from '../../../stores/boardStore'
 import $ from 'jquery'
-import Form from '../Form'
-import Card from './Card'
-import Link from '../Link'
-import ConfirmationLink from '../ConfirmationLink'
-import Icon from '../Icon'
-import Button from '../Button'
+import Form from '../../Form'
+import Card from '../Card'
+import Link from '../../Link'
+import ConfirmationLink from '../../ConfirmationLink'
+import Icon from '../../Icon'
+import Button from '../../Button'
 
 
 export default class Unarchive extends Component {

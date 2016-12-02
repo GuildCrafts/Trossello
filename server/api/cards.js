@@ -19,7 +19,7 @@ router.post('/:cardId', (request, response, next) => {
 
 // ARCHIVE
 router.post('/:cardId/archive', (request, response, next) => {
-  commands.archiveCard(request.params.cardId)
+  commands.archiveCard(request.session.userId, request.params.cardId)
     .then(() => {
       response.json(null)
     })
@@ -28,7 +28,7 @@ router.post('/:cardId/archive', (request, response, next) => {
 
 // UNARCHIVE
 router.post('/:cardId/unarchive', (request, response, next) => {
-  commands.unarchiveCard(request.params.cardId)
+  commands.unarchiveCard(request.session.userId, request.params.cardId)
     .then(() => {
       response.json(null)
     })
@@ -37,25 +37,30 @@ router.post('/:cardId/unarchive', (request, response, next) => {
 
 // DELETE
 router.post('/:cardId/delete', (request, response, next) => {
-  console.log("Delete API")
-  commands.deleteCard(request.params.cardId)
+  const { cardId } = request.params
+  queries.getCardById(cardId).then( card =>
+    commands.deleteCard(
+      request.session.userId,
+      card.board_id,
+      cardId
+    )
+  )
     .then(() => {
       response.json(null)
     })
     .catch(next)
 })
 
-
-
 // MOVE
 router.post('/:cardId/move', (request, response, next) => {
   let { boardId, listId, order } = request.body
   let { cardId } = request.params
+  let { userId } = request.session
   boardId = Number(boardId)
   cardId  = Number(cardId)
   listId  = Number(listId)
   order   = Number(order)
-  commands.moveCard({ boardId, cardId, listId, order })
+  commands.moveCard(userId, { boardId, cardId, listId, order })
     .then(() => {
       response.json(null)
     })

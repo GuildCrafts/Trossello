@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import boardStore from '../../stores/boardStore'
-import boardsStore from '../../stores/boardsStore'
-import ColorBox from './ColorBox'
+import boardStore from '../../../stores/boardStore'
+import boardsStore from '../../../stores/boardsStore'
+import ColorBox from '../ColorBox'
 import $ from 'jquery'
 
 export default class ChangeBackground extends Component {

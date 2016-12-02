@@ -1,18 +1,21 @@
+import './index.sass'
 import React, { Component } from 'react'
-import Icon from '../Icon'
-import Link from '../Link'
-import Button from '../Button'
-import ToggleComponent from '../ToggleComponent'
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
+import $ from 'jquery'
+import Icon from '../../Icon'
+import Link from '../../Link'
+import Button from '../../Button'
+import ToggleComponent from '../../ToggleComponent'
+import Card from '../Card'
+import List from '../List'
+import Unarchive from './Unarchive'
+import InviteByEmailPopover from '../../InviteByEmailPopover'
+
+// panes
+import { ActivityPanel, MainPaneActivity }  from './ActivityPanel'
+import ChangeBackground from './ChangeBackground'
 import DeleteBoardButton from './DeleteBoardButton'
 import LeaveBoardButton from './LeaveBoardButton'
-import ChangeBackground from './ChangeBackground'
-import './MenuSideBar.sass'
-import Card from './Card'
-import List from './List'
-import $ from 'jquery'
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
-import Unarchive from './Unarchive'
-import InviteByEmailPopover from '../InviteByEmailPopover'
 
 export default class MenuSideBar extends Component {
 
@@ -204,6 +207,7 @@ const MainPane = ({board, onClose, gotoPane}) => {
     >
       Activity
     </MenuPaneLink>
+    <MainPaneActivity board={board} openPanel={gotoPane('Activity')}/>
   </Pane>
 }
 
@@ -235,7 +239,7 @@ const StickersPane = ({board, onClose, gotoPane, goBack}) =>
 
 const ActivityPane = ({board, onClose, gotoPane, goBack}) =>
   <Pane name="Activity">
-    <div>Activity Panel</div>
+    <ActivityPanel board={board}/>
   </Pane>
 
 class MorePane extends Component {

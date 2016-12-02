@@ -17,7 +17,7 @@ router.post('/:listId', (request, response, next) => {
 
 // ARCHIVE
 router.post('/:listId/archive', (request, response, next) => {
-  commands.archiveList(request.params.listId)
+  commands.archiveList(request.session.userId, parseFloat(request.params.listId))
     .then(() => {
       response.json(null)
     })
@@ -40,7 +40,7 @@ router.post('/:listId/move', (request, response, next) => {
 
 // ARCHIVE ALL CARDS IN A LIST
 router.post('/:listId/archivecards', (request, response, next) => {
-  commands.archiveCardsInList(request.params.listId)
+  commands.archiveCardsInList(request.session.userId, request.params.listId)
     .then(() => {
       response.json(null)
     })
@@ -60,7 +60,7 @@ router.post('/:fromListId/cards/move-to/:toListId', (request, response, next) =>
 
 // UNARCHIVE
 router.post('/:listId/unarchive', (request, response, next) => {
-  commands.unarchiveList(request.params.listId)
+  commands.unarchiveList(request.session.userId, parseFloat(request.params.listId))
     .then(() => {
       response.json(null)
     })

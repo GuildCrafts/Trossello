@@ -1,0 +1,58 @@
+@import "../../../style.sass"
+
+.BoardShowPage-MenuSideBar-ActivityPanel
+  flex-grow: 1
+  flex-shrink: 1
+  display: flex
+  flex-direction: column
+  padding: 5px
+  border-bottom: 1px solid #d6dadc
+  overflow-x: hidden
+  overflow-y: auto
+  color: #4f4f4f
+  &::-webkit-scrollbar
+    -webkit-appearance: none
+
+  &::-webkit-scrollbar:vertical
+    width: 9px
+
+  &::-webkit-scrollbar-thumb
+    border-radius: 4px
+    background-color: rgba(0, 0, 0, .1)
+
+  &::-webkit-scrollbar-track
+    border-radius: 4px
+    background-color: rgba(0, 0, 0, .1)
+  &-viewLink
+    border-radius: 3px
+    clear: both
+    color: #8c8c8c
+    padding: 1pc 8px 1pc 38px
+    margin: 8px 0
+    &:hover
+      background: #D6DADC
+      text-decoration: underline
+  &-Activity
+    padding: 10px 0
+    font-family: Arial
+    font-size: 14px
+    &-string
+      margin: 0 4px
+      &-cardNameLink
+        color: #444
+        text-decoration: underline
+        margin: 0 3px
+    &-border
+      margin-left: 38px
+      border-bottom: 1px solid #E2E4E6
+    &-gravatar
+      width: 18px
+      height: 18px
+      border-radius: 0.3em
+      margin-right: 5px
+    &-username
+      font-weight: bold
+    &-time
+      font-size: 12px
+      color: #8c8c8c
+      margin-left: 3px
