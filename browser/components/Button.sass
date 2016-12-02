@@ -10,19 +10,19 @@
   outline: none
   cursor: pointer
   -webkit-appearance: none
+  background-color: transparent
 
-.Button:not(.Button-unstyled)
-  padding: 0 10px
-  border-radius: 3px
-  padding: 4px 1pc
-  min-height: 30px
-  white-space: nowrap
-  text-align: center
+  &-default, &-primary, &-danger, &-invisible
+    padding: 0 10px
+    border-radius: 3px
+    padding: 4px 1pc
+    min-height: 30px
+    white-space: nowrap
+    text-align: center
 
-  &:focus, &:active
-    outline: -webkit-focus-ring-color auto 5px
+    &:focus, &:active
+      outline: -webkit-focus-ring-color auto 5px
 
-.Button
   &-default
     background: -webkit-linear-gradient(top,#fff 0,#F8F9F9 100%)
     background: linear-gradient(to bottom,#fff 0,#F8F9F9 100%)
@@ -58,8 +58,7 @@
     background-color: transparent
     &:hover
       background-color: #D6DADC
-  > .Icon:first-child
-    color: #999999
-    margin-right: 0.5em
-    &:last-child
-      margin-right: 0
+
+  &-nofocus
+    &, &:focus
+      outline: none
