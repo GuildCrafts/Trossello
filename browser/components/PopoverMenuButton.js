@@ -21,7 +21,6 @@ export default class PopoverMenuButton extends ToggleComponent {
     const buttonProps = Object.assign({}, this.props)
     delete buttonProps.popover
     buttonProps.onClick = this.toggle
-    // buttonProps.type = buttonProps.buttonType
     buttonProps.className = buttonProps.buttonClassName
     delete buttonProps.buttonClassName
 

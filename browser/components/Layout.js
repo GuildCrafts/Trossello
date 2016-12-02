@@ -11,7 +11,7 @@ class Layout extends Component {
   render(){
     const className = `Page Layout ${this.props.className}`
     const boardsDropdown = this.context.session.user.boards_dropdown_lock ?
-      <BoardsDropdown ref="toggle" close={this.close} /> :
+      <BoardsDropdown ref="toggle" /> :
       null
     return <div {...this.props} className={className}>
       {boardsDropdown}

@@ -1,10 +1,10 @@
-import './LoggedInHomepage.sass'
 import React, { Component } from 'react'
 import createStoreProvider from './createStoreProvider'
 import boardsStore from '../stores/boardsStore'
 import Layout from './Layout'
 import Link from './Link'
-import StarIcon from './StarIcon'
+import BoardStar from './BoardStar'
+import './LoggedInHomepage.sass'
 
 const LoggedInHomepage = props => {
   const { boards } = props
@@ -50,7 +50,7 @@ const Board = ({board}) => {
 
   return <Link style={style} href={`/boards/${board.id}`} className="LoggedInHomepage-Board">
     {board.name}
-    <StarIcon board={board} onChange={() => boardsStore.reload()}/>
+    <BoardStar board={board} onChange={_ => boardsStore.reload() } />
   </Link>
 }
 

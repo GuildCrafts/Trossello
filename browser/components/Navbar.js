@@ -53,7 +53,7 @@ export default class Navbar extends Component {
 class BoardsDropdownButton extends ToggleComponent {
   render() {
     const boardsdropdown = this.state.open ?
-      <BoardsDropdown ref="toggle" boards={this.props.boards} close={this.close} /> :
+      <BoardsDropdown ref="toggle" boards={this.props.boards} onBoardClick={this.close} /> :
       null
     return <div className="BoardsDropdownButton" >
       <button ref="button" className={this.props.className} onClick={this.toggle}>Boards</button>

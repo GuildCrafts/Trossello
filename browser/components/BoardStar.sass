@@ -1,0 +1,23 @@
+@import "../style.sass"
+
+.BoardStar
+  display: flex
+  flex-direction: row
+  align-items: center
+  justify-content: space-around
+
+  > .Icon
+    cursor: pointer
+    transition: all 0.2s
+
+  &:hover > .Icon
+    transform: scale(1.2)
+    color: $black
+    opacity: 1
+
+  &-active > .Icon
+    color: $gold
+
+  &-inactive > .Icon
+    color: $black
+    opacity: 0
