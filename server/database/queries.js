@@ -17,7 +17,7 @@ const getBoardsByUserId = (userId) =>
   knex.table('boards')
     .select('boards.*')
     .join('user_boards', 'boards.id', '=', 'user_boards.board_id')
-    .whereIn('user_boards.user_id', userId)
+    .where('user_boards.user_id', userId)
     .where('archived', false)
 
 const getBoardMoveTargetsForUserId = (userId) =>
