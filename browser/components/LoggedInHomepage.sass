@@ -27,15 +27,30 @@
     border-radius: 4px
     opacity: .8
     > span
-    .StarIcon
+    .BoardStar
+      $width: 18px
       position: absolute
       top: 10px
       right: 10px
+      height: 18px
+      width: $width
+
+      > .Icon
+        position: relative
+
+      &-inactive > .Icon
+        left: $width
+        color: $white
+
+    &:hover > .BoardStar-inactive > .Icon
+      opacity: 1
+      left: 0
+
+
     &:hover
       opacity: 1
-      .StarIcon-inactive
-        opacity: .8
-        margin-right: 0
+      .BoardStar-inactive > .Icon
+        opacity: 1
 
   &-BoardListHeading
     color: #4d4d4d

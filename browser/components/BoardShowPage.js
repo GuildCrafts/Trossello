@@ -13,7 +13,7 @@ import List from './BoardShowPage/List'
 import Card from './BoardShowPage/Card'
 import NewListForm from './BoardShowPage/NewListForm'
 import LeaveBoardButton from './BoardShowPage/MenuSideBar/LeaveBoardButton'
-import StarIcon from './StarIcon'
+import BoardStar from './BoardStar'
 import MenuSideBar from './BoardShowPage/MenuSideBar'
 import RenameBoardDropdown from './BoardShowPage/RenameBoardDropdown'
 import PopoverMenuButton from './PopoverMenuButton'
@@ -450,9 +450,7 @@ const Header = ({board, sideBarOpen, toggleSideBar, renameBoardDropdown}) =>
     <PopoverMenuButton className="BoardShowPage-RenameBoardButton" type="invisible" popover={renameBoardDropdown}>
       <h1>{board.name}</h1>
     </PopoverMenuButton>
-    <span>
-      <StarIcon board={board} onChange={reloadBoardStores} />
-    </span>
+    <BoardStar board={board} onChange={reloadBoardStores} />
     <div className="flex-spacer" />
     <Link
       className="BoardShowPage-menuButton"
