@@ -13,7 +13,7 @@ const logout = () => {
 const LogoutButton = (props) => {
   return <ConfirmationButton
     {...props}
-    type={false}
+    type="invisible"
     buttonName="Log Out"
     title="Log Out?"
     message="Are you sure you want to log out?"
