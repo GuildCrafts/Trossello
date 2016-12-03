@@ -150,7 +150,7 @@ const Controls = ({board, list, card, closeModal, labelPanel}) => {
       <UnArchiveCardButton card={card} />
       <DeleteCardButton card={card} onDelete={closeModal} />
     </div> :
-    <ArchiveCardButton card={card} onArchive={closeModal}/>
+    <ArchiveCardButton card={card} />
 
   return <div className="CardModal-controls">
     <div className="CardModal-controls-title">Add</div>
@@ -225,7 +225,6 @@ class UnArchiveCardButton extends Component {
 class ArchiveCardButton extends Component {
   static propTypes = {
     card: React.PropTypes.object.isRequired,
-    onArchive: React.PropTypes.func.isRequired,
   }
   constructor(props){
     super(props)
@@ -235,10 +234,9 @@ class ArchiveCardButton extends Component {
     $.ajax({
       method: "POST",
       url: `/api/cards/${this.props.card.id}/archive`
-    }).then(() => {
+    }).then(() =>
       boardStore.reload()
-      this.props.onArchive()
-    })
+    )
   }
   render(){
     return <ConfirmationButton
