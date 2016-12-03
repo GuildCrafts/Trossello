@@ -117,8 +117,23 @@ const getListsAndCardsForBoard = (board) => {
         .orderBy('order', 'asc')
         .then(loadLabelIdsForCards)
         .then(cards => {
-          board.cards = cards
-          return board
+          const cardIds = cards.map(card => card.id)
+          return knex.table('labels')
+          .select('*')
+          .join('card_labels', 'labels.id', '=', 'card_labels.label_id')
+          .whereIn('card_labels.card_id', cardIds)
+          .then(labels => {
+            cards.forEach(card => {
+              card.labels = []
+              labels.filter(label => {
+                if(label.card_id === card.id){
+                  card.labels.push(label)
+                }
+              })
+            })
+            board.cards = cards
+            return board
+          })
         })
     })
 }

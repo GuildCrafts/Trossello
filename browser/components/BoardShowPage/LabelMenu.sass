@@ -1,6 +1,18 @@
-@import "../../../style.sass"
+@import "../../style.sass"
 
 .LabelMenu
+  position: fixed
+  right: 12.5%
+  background-color: #eff1f2
+  z-index: 100
+  padding: 10px
+  min-width: 250px
+  min-height: 150px
+  max-height: 250px
+  overflow-y: scroll
+  overflow-x: hidden
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .4)
+  border-radius: 3px
   &-header
     display: inline-block
     border-bottom: 1px solid #C4C9CC
@@ -22,18 +34,10 @@
   &-button
     margin-left: 2px
     padding-bottom: 6px
-  &-MainLabelPane
-    background-color: #eff1f2
-    z-index: 100
-    padding: 10px
-    min-width: 250px
-    min-height: 150px
-    max-height: 250px
-    overflow-y: auto
-    overflow-x: hidden
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .4)
-    border-radius: 3px
   &-CreateLabelPanel
+    top: 46px
+    left: 10px
+    position: fixed
     display: flex
     flex-direction: column
     background-color: #eff1f2
@@ -86,15 +90,22 @@
     margin: 6px 0
     display: flex
     flex-direction: column
-  &-LabelRow
-    display: flex
-    flex-direction: row
-    margin-bottom: 3px
+    &-block
+      margin: 0
+      padding-bottom: 0
+      height: 35px
+    &-Label
+      display: flex
+      flex-direction: row
+      margin: 0
     &-box
+      width: 85%
       margin: 1px 0
-      flex-grow: 1
-      flex-shrink: 1
     &-edit
-      margin-left: 0.25em
-      flex-grow: 0
-      flex-shrink: 0
+      display: inline-block
+      position: relative
+      top: -25px
+      left: 10px
+      width: 15%
+      flex-grow: 1
+      float: right
