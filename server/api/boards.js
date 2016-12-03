@@ -188,7 +188,6 @@ router.post('/:boardId/labels/:labelId/delete', (request, response, next) => {
     .catch(next)
 })
 
-
 //GET LABEL
 router.get('/:boardId/labels/:labelId', (request, response, next) => {
   const {boardId, labelId} = request.params

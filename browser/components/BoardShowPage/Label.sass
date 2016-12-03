@@ -1,0 +1,21 @@
+@import "../../style.sass"
+
+.Label
+  display: flex
+  flex-direction: row
+  width: 100%
+  height: inherit
+  line-height: 30px
+  border-radius: 3px
+  white-space: nowrap
+  color: white
+  text-shadow: 0 0 5px rgba(0,0,0,.2),0 0 2px #000
+  &:hover
+    cursor: pointer
+  &-text
+    width: 90%
+    text-overflow: ellipsis
+    overflow: hidden
+    text-align: center
+  &-check
+    width: 10%
