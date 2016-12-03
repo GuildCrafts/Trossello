@@ -29,118 +29,114 @@ export default class CardModal extends Component {
     this.state = {
       editingDescription: false,
       editingName: false,
+      showingLabelMenu: false,
     }
+    this.showLabelMenu = this.showLabelMenu.bind(this)
+    this.stopShowingLabelMenu = this.stopShowingLabelMenu.bind(this)
   }
 
-  descriptionOnBlur(event) {
-    const { card } = this.props
-    const description = {
-      description: this.refs.description.value,
-    }
+  showLabelMenu(event) {
     event.preventDefault()
-    this.updateDescription(description)
+    this.setState({showingLabelMenu: true})
+  }
+
+  stopShowingLabelMenu(event) {
+    event.preventDefault()
+    this.setState({showingLabelMenu: false})
   }
 
   render(){
     const { session } = this.context
     const { card, list, board } = this.props
-    const archivedBanner = card.archived?
-      <div className='CardModal-window-archivedBanner'>
+    const archivedBanner = card.archived ?
+      <div className='CardModal-archivedBanner'>
         <Icon type="archive" /> This card is archived
       </div> : null
-
 
     const labelPanel = <LabelMenu
       card={card}
       board={board}
     />
 
-    const cardLabels = card.label_ids
-      .map( labelId => board.labels.find(label => label.id === labelId))
-      .map(label =>
-        <PopoverMenuButton
-          key={label.id}
-          className="CardModal-content-label"
-          type="unstyled"
-          popover={labelPanel}
-        >
-          <CardLabel
-            color={label.color}
-            text={label.text}
-            checked={false}
-          />
-        </PopoverMenuButton>
-      )
-
     return <div className="CardModal">
-      <div onClick={this.props.onClose} className="CardModal-shroud">
-      </div>
-      <div className="CardModal-stage">
-        <div className="CardModal-window">
-          {archivedBanner}
-          <div className="CardModal-columns">
+      <CardModalShroud onClose={this.props.onClose}>
+        {archivedBanner}
+        <div className="CardModal-columns">
+          <div className="CardModal-content">
+            <CardHeader card={card} list={list}/>
             <div className="CardModal-body">
-              <div className="CardModal-content">
-                <div className="CardModal-content-icon">
-                  <Icon type="window-maximize" size='2'/>
-                </div>
-                <div className="CardModal-content-copy">
-                  <div className="CardModal-content-title">
-                    <CardName card={card} />
-                  </div>
-                  <div className="CardModal-content-list">
-                    <span className="CardModal-content-list-title">
-                      in list {list.name}
-                    </span>
-                    <span className="CardModal-content-list-eye">
-                      <Icon size="1" type="eye"  />
-                    </span>
-                  </div>
-                  <div className="CardModal-content-labels-header">Labels</div>
-                  <div className="CardModal-content-labels">
-                    {cardLabels}
-                  </div>
-                  <CardDescription card={card} />
-                </div>
-              </div>
-              <div className="CardModal-comments">
-                <div className="CardModal-comments-icon">
-                  <Icon size="2" type="comment-o"/>
-                </div>
-                <div className="CardModal-comments-content">
-                  <span className="CardModal-comments-title">
-                    Add Comment:
-                  </span>
-                </div>
-              </div>
-              <div className="CardModal-comments">
-                <div className="CardModal-comments-imgcontain">
-                  <img className="CardModal-comments-userimage" src={session.user.avatar_url}></img>
-                </div>
-                <Form className="CardModal-comments-Form">
-                  <div className="CardModal-comments-Form-content">
-                    <textarea
-                      className="CardModal-comments-Form-input"
-                      ref="comment"
-                      placeholder='Write a comment...'
-                    />
-                  </div>
-                <input type="submit" className="CardModal-comments-submit" value="Send"/>
-                </Form>
-              </div>
+              <CardLabels card={card} board={board} labelPanel={labelPanel}/>
+              <CardDescription card={card}/>
             </div>
-            <Controls
-              board={board}
-              list={this.props.list}
-              card={card}
-              closeModal={this.props.onClose}
-              labelPanel={labelPanel}
-            />
+            <CardComments session={session}/>
           </div>
+          <Controls
+            board={board}
+            list={this.props.list}
+            card={card}
+            closeModal={this.props.onClose}
+            labelPanel={labelPanel}
+          />
         </div>
-      </div>
+      </CardModalShroud>
     </div>
     }
+}
+
+const CardModalShroud = ({onClose, children}) => {
+  return <div className="CardModal-CardModalShroud-container">
+    <div onClick={onClose} className="CardModal-CardModalShroud-shroud"></div>
+    <div className="CardModal-CardModalShroud-stage">
+      <div className="CardModal-CardModalShroud-window">
+        {children}
+      </div>
+    </div>
+  </div>
+}
+
+const CardHeader = ({card, list}) => {
+  return <div className="CardModal-CardHeader">
+    <div className="CardModal-CardHeader-header">
+      <div className="CardModal-CardHeader-header-icon">
+        <Icon type="window-maximize" size='1'/>
+      </div>
+      <div className="CardModal-CardHeader-header-title">
+        <CardName card={card} />
+      </div>
+    </div>
+    <div className="CardModal-CardHeader-list">
+        in list {list.name}
+    </div>
+  </div>
+
+}
+
+const CardLabels =({card, board, labelPanel}) => {
+  const cardLabels = card.label_ids
+    .map( labelId => board.labels.find(label => label.id === labelId))
+    .map(label =>
+      <PopoverMenuButton
+        key={label.id}
+        className="CardModal-CardLabels-labels-Label"
+        type="unstyled"
+        popover={labelPanel}
+      >
+        <CardLabel
+          color={label.color}
+          text={label.text}
+          checked={false}
+        />
+      </PopoverMenuButton>
+    )
+  const labelHeader = cardLabels.length > 0 ?
+    <div className="CardModal-CardLabels-header">Labels</div> : null
+
+  return <div className="CardModal-CardLabels">
+    {labelHeader}
+    <div className="CardModal-CardLabels-labels">
+      {cardLabels}
+    </div>
+  </div>
 }
 
 const Controls = ({board, list, card, closeModal, labelPanel}) => {
@@ -152,15 +148,15 @@ const Controls = ({board, list, card, closeModal, labelPanel}) => {
     </div> :
     <ArchiveCardButton card={card} />
 
-  return <div className="CardModal-controls">
-    <div className="CardModal-controls-title">Add</div>
+  return <div className="CardModal-Controls">
+    <div className="CardModal-Controls-title">Add</div>
     <Button><Icon type="user" /> Members</Button>
-    <PopoverMenuButton className="CardModal-controls-label" type="default" popover={labelPanel}>
+    <PopoverMenuButton className="CardModal-Controls-label" type="default" popover={labelPanel}>
       <Icon type="tag" /> Labels
     </PopoverMenuButton>
-    <div className="CardModal-controls-title">Actions</div>
+    <div className="CardModal-Controls-title">Actions</div>
     {toggleOnArchived}
-    <PopoverMenuButton className="CardModal-controls-copy" type="default" popover={copyCard}>
+    <PopoverMenuButton className="CardModal-Controls-copy" type="default" popover={copyCard}>
       <Icon type="files-o" /> Copy
     </PopoverMenuButton>
   </div>
@@ -190,7 +186,7 @@ class DeleteCardButton extends Component {
       buttonName='Delete'
       title='Delete Card?'
       message='All actions will be removed from the activity feed and you won’t be able to re-open the card. There is no undo.'
-      className='CardModal-controls-delete'
+      className='CardModal-Controls-delete'
     >
       <Icon type="trash" /> Delete
     </ConfirmationButton>
@@ -287,6 +283,40 @@ class CardName extends Component {
   }
 }
 
+class CardComments extends Component {
+
+  render(){
+    const { session } = this.props
+
+    return <div className="CardModal-CardComments">
+      <div className="CardModal-CardComments-header">
+        <div className="CardModal-CardComments-header-icon">
+          <Icon size="2" type="comment-o"/>
+        </div>
+        <div className="CardModal-CardComments-header-title">
+          Add Comment
+        </div>
+      </div>
+      <div className="CardModal-CardComments-body">
+        <div className="CardModal-CardComments-image-container">
+          <img className="CardModal-CardComments-image" src={session.user.avatar_url}></img>
+        </div>
+        <Form className="CardModal-CardComments-Form">
+          <textarea
+            className="CardModal-CardComments-Form-input"
+            ref="comment"
+            placeholder='Write a comment...'
+          />
+          <Button type="primary" disabled="true" className="CardModal-CardComments-Form-submit">
+            Send
+          </Button>
+        </Form>
+        <div className="CardModal-CardComments-comments"></div>
+      </div>
+    </div>
+  }
+}
+
 class CardDescription extends ToggleComponent {
   constructor(props) {
     super(props)
@@ -306,7 +336,7 @@ class CardDescription extends ToggleComponent {
   }
 
   focusTextarea(){
-    if (this.state.open) this.refs.textarea.focus()
+    if (this.state.open) this.refs.description.focus()
   }
 
   setValue(event) {
@@ -314,7 +344,6 @@ class CardDescription extends ToggleComponent {
   }
 
   onKeyDown(event) {
-    const { card } = this.props
     if (event.metaKey && event.key === "Enter") {
       event.preventDefault()
       this.updateDescription()
@@ -327,13 +356,13 @@ class CardDescription extends ToggleComponent {
 
   updateDescription(event){
     if (event) event.preventDefault()
-    const card = this.props.card
+    const description = this.refs.description.value
     $.ajax({
       method: 'post',
-      url: `/api/cards/${card.id}`,
+      url: `/api/cards/${this.props.card.id}`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      data: JSON.stringify({description: this.state.value}),
+      data: JSON.stringify({description}),
     }).then(() => {
       boardStore.reload()
       this.close()
@@ -348,13 +377,13 @@ class CardDescription extends ToggleComponent {
   render() {
     if (this.state.open){
       return <Form onSubmit={this.updateDescription}>
-        <textarea className="CardModal-description-textarea"
-          ref="textarea"
+        <textarea className="CardModal-CardDescription-textarea"
+          ref="description"
           onKeyDown={this.onKeyDown}
           value={this.state.value}
           onChange={this.setValue}
         />
-        <div className="CardModal-description-controls">
+        <div className="CardModal-CardDescription-controls">
           <Button submit type="primary">Save</Button>
           <Button type="invisible" onClick={this.cancel}>
             <Icon type="times" />
@@ -363,13 +392,21 @@ class CardDescription extends ToggleComponent {
       </Form>
     }
     if (this.state.value === ""){
-      return <Link onClick={this.open} className="CardModal-description">
+      return <Link onClick={this.open} className="CardModal-CardDescription">
         <Icon type="align-justify" /> Edit the description
       </Link>
     }
     return <div>
-      <div className="CardModal-description-header">Description <Link className="CardModal-description-header-edit" onClick={this.open}>Edit</Link></div>
-      <pre className="CardModal-description-content">{this.props.card.description}</pre>
+      <div className="CardModal-CardDescription-header">
+        Description
+        <Link
+          className="CardModal-CardDescription-header-edit"
+          onClick={this.open}
+        >
+          Edit
+        </Link>
+      </div>
+      <pre className="CardModal-CardDescription-content">{this.props.card.description}</pre>
     </div>
   }
 }

@@ -5,106 +5,93 @@
     background-color: #FDFAE5
     background-image: linear-gradient(to bottom right,rgba(0,0,0,.05) 25%,transparent 25%,transparent 50%,rgba(0,0,0,.05) 50%,rgba(0,0,0,.05) 75%,transparent 75%,transparent)
     background-size: 14px 14px
-    min-height: 30px
+    height: 50px
     padding: 9pt 9pt 9pt 50px
-    display: block
-
-  .Button
-    margin-bottom: 7px
-
-  &-shroud, &-stage
-    position: fixed
-    top: 0
-    left: 0
-    bottom: 0
-    right: 0
-  &-shroud
-    z-index: 100
-    background-color: rgba(0, 0, 0, 0.5)
-  &-stage
-    pointer-events: none
-    z-index: 101
-    display: flex
-    justify-content: center
-    align-items: center
+    border-top-left-radius: 5px
+    border-top-right-radius: 5px
   &-columns
     flex-wrap: wrap
     display: flex
-    padding: 13px
-  &-window
-    pointer-events: auto
-    max-width: 700px
-    width: 100%
-    min-height: 300px
-    border-radius: 5px
-    background-color: #eff1f2
-    display: flex
-    flex-direction: column
-    margin: 5px
-    &-archivedBanner
-      background-color: #FDFAE5
-      background-image: linear-gradient(to bottom right,rgba(0,0,0,.05) 25%,transparent 25%,transparent 50%,rgba(0,0,0,.05) 50%,rgba(0,0,0,.05) 75%,transparent 75%,transparent)
-      background-size: 14px 14px
-      height: 50px
-      padding: 9pt 9pt 9pt 50px
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-  &-body
+    padding: 8px
+  &-content
     display: flex
     flex-direction: column
     flex: 1
     margin-right: 20px
-  &-content
-    padding-top: 7px
+  &-body
+    margin-left: 35px
     display: flex
-    flex-direction: row
-    &-labels
+    flex-direction: column
+
+  &-CardModalShroud
+    &-shroud, &-stage
+      position: fixed
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+    &-shroud
+      z-index: 100
+      background-color: rgba(0, 0, 0, 0.5)
+    &-stage
+      pointer-events: none
+      z-index: 101
+      display: flex
+      justify-content: center
+      align-items: center
+    &-window
+      pointer-events: auto
+      max-width: 700px
+      width: 100%
+      min-height: 300px
+      border-radius: 5px
+      background-color: #eff1f2
+      display: flex
+      flex-direction: column
+      margin: 5px
+
+  &-CardHeader
+    &-header
       display: flex
       flex-direction: row
-      flex-wrap: wrap
-      &-header
+      align-items: center
+      margin-bottom: 6px
+      &-title
+        font-size: 1.2em
+        font-weight: bold
+      &-icon
         color: #999999
-        margin: 10px 0 5px
-    &-label
-      margin-right: 0.25em
-    &-icon
-      font-size: .9em
-      color: grey
-      flex: 0 0 45px
-      margin-top: 5px
-    &-title
-      font-size: 1.2em
-      font-weight: bold
-    &-copy
-      flex: 1
-    & input
+        flex: 0 0 35px
+        display: flex
+        justify-content: center
+    &-list
+      margin-left: 35px
+      font-size: 0.9em
+      color: #999999
+    input
       background: none
       border: none
       color: inherit
       width: 100%
       &:focus
         background: #fff
-    & input:focus
+    input:focus
       outline: none
-    &-list, &-board, &-eye
-      color: #999999
-    &-board
-      margin-left: 20px
-    &-eye
-      padding-left: 8px
-      font-size: .7em
-  &-description
-    &-content
-      font-size: 0.9em
-      font-family: sans-serif
+
+  &-CardLabels
     &-header
       color: #999999
-      margin: 10px 0 5px
-      font-size: .8em
       font-weight: normal
-      &-edit
-        text-decoration: underline
-  &-controls
+      font-size: .8em
+      margin: 10px 0 5px
+    &-labels
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      &-Label
+        margin-right: 0.25em
+
+  &-Controls
     display: flex
     flex-direction: column
     flex: 0 0 115px
@@ -127,7 +114,47 @@
       &:hover
         background: darken(#CF513D, 10%)
         border: none
-  &-description
+
+  &-CardComments
+    display: flex
+    flex-direction: column
+    &-header
+      display: flex
+      flex-direction: row
+      margin: 10px 0
+      &-icon
+        color: #999999
+        flex: 0 0 35px
+        display: flex
+        justify-content: center
+      &-title
+        font-size: 1em
+        font-weight: bold
+    &-body
+      display: flex
+      flex-direction: row
+    &-image
+      max-width: 30px
+      max-height: 30px
+      border-radius: 4px
+      &-container
+          flex: 0 0 35px
+    &-Form
+      flex: 1
+      &-input
+        border-radius: 3px
+        border: 0px rgba(0, 0, 0, 0)
+        box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1)
+        resize: none
+        padding: 10px
+        flex: 1
+        width: 96%
+      &-input:focus
+        outline: none
+      &-submit
+        width: 80px
+
+  &-CardDescription
     display: block
     color: #8c8c8c
     width: 96%
@@ -139,17 +166,17 @@
       cursor: pointer
       background-color: #D6DADC
       text-decoration: underline
-    &-title
-      margin-bottom: 5px
-      color: grey
-      font-size: .85em
-    &-Edit
-      &-button, &-cancel
-        display: inline
-        color: black
-      &-button
-        margin-left: 5px
-        color: grey
+    &-content
+      font-size: 0.9em
+      font-family: sans-serif
+    &-header
+      color: #999999
+      margin: 10px 0 5px
+      font-size: .8em
+      font-weight: normal
+      &-edit
+        text-decoration: underline
+        margin-left: 4px
     &-textarea
       box-shadow: inset 0 1px 6px rgba(0,0,0,.1)
       resize: none
@@ -164,41 +191,6 @@
       display: flex
       flex-direction: row
       margin-bottom: 15px
-  &-comments
-    margin: 7px 0px 7px 0px
-    display: flex
-    flex-direction: row
-    &-Form-input
-      border-radius: 3px
-      border: 0px rgba(0, 0, 0, 0)
-      box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1)
-      resize: none
-      padding: 10px
-      flex: 1
-      width: 96%
-    &-Form-input:focus
-      outline: none
-    &-header
-      display: flex
-      flex-direction: row
-    &-title
-      font-size: 1.1em
-      font-weight: bold
-    &-icon
-      color: grey
-      flex: 0 0 45px
-    &-userimage
-      max-width: 30px
-      max-height: 30px
-      border-radius: 4px
-    &-content
-      flex: 1
-    &-imgcontain
-      flex: 0 0 45px
-    &-Form
-      flex: 1
-  &-name
-    max-width: 100%
 
   &-CopyCardDialog
     &-SelectContainer
@@ -264,7 +256,3 @@
           outline: none
           border-color: #298FCA
           box-shadow: 0 0 2px #298FCA
-
-input[type="submit"].CardModal-comments-submit
-  width: 100px
-  margin: 8px 0px 6px 0px
