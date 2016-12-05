@@ -63,6 +63,7 @@ class ToggleComponent extends Component {
 
   closeIfUserClickedOutside(event){
     if (!this.state.open) return
+    event.stopPropagation()
     const button = ReactDOM.findDOMNode(this.refs.button)
     const rootNode = ReactDOM.findDOMNode(this.refs.toggle || this)
     const targetNode = event.target
