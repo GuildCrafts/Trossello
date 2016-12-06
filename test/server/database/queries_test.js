@@ -84,7 +84,7 @@ describe('database.queries', () => {
         return queries.getBoardById(101).then( board => {
           board.activity.forEach( activity => {
             expect(activity.created_at).to.match(
-              ACTIVITY_REGEXP_TIMESTAMP
+              /^[A-Z][a-z]{2} [A-Z][a-z]{2} [0-9]{2} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT-[0-9]{4} \([A-Z]{3}\)$/
             )
           })
           expect(board.id).to.eql(101)
@@ -308,7 +308,7 @@ describe('database.queries', () => {
           .then( activities => {
             activities.forEach( activity => {
               expect(activity.created_at).to.match(
-                ACTIVITY_REGEXP_TIMESTAMP
+                /^[A-Z][a-z]{2} [A-Z][a-z]{2} [0-9]{2} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT-[0-9]{4} \([A-Z]{3}\)$/
               )
             })
             expect(activities).to.eql([
