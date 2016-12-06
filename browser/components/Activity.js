@@ -151,15 +151,20 @@ const Activity = props => {
   const { activity, users, board, cardActivity } = props
   const user = users.find(user => user.id === activity.user_id)
 
+  const cardModalStyle = cardActivity ?
+    'Activity-cardModal' : null
+
   return <div className='Activity'>
-    <img
-      className='Activity-gravatar'
-      src={user.avatar_url}
-    />
-    <span className='Activity-username'>
-      {user.name}
-    </span>
-    {activityString(activity, board, cardActivity)}
+    <div className={cardModalStyle}>
+      <img
+        className='Activity-gravatar'
+        src={user.avatar_url}
+      />
+      <span className='Activity-username'>
+        {user.name}
+      </span>
+      {activityString(activity, board, cardActivity)}
+    </div>
     <div className='Activity-border' />
   </div>
 }

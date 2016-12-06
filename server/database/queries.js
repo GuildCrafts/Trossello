@@ -100,6 +100,18 @@ const loadLabelIdsForCards = cards =>
       return cards
     })
 
+const getCommentsForCards = cards =>
+  knex.table('comments')
+    .select('*')
+    .whereIn('card_id', cards.map(card => card.id))
+    .then(cardComments => {
+      cards.forEach(card => {
+        card.comments = cardComments
+          .filter(cardComment => cardComment.card_id === card.id)
+      })
+      return cards
+    })
+
 const getListsAndCardsForBoard = (board) => {
   return knex.table('lists')
     .select('*')
@@ -116,6 +128,7 @@ const getListsAndCardsForBoard = (board) => {
         .orderBy('list_id', 'asc')
         .orderBy('order', 'asc')
         .then(loadLabelIdsForCards)
+        .then(getCommentsForCards)
         .then(cards => {
           board.cards = cards
           return board
