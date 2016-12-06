@@ -4,30 +4,25 @@ import moment from 'moment'
 import './Activity.sass'
 
 
-const activityString = (activity, board, cardActivity) => {
+const activityString = (activity, board, cardActivity=false) => {
 
   const openCardModal = `/boards/${activity.board_id}/cards/${activity.card_id}`
-
-  let card, list, cardName
   const metadata = JSON.parse(activity.metadata)
-  const cardNameSwitch = (cardActivity) => {
-    if (cardActivity){
-      cardName = ' this card '
-    } else {
-      cardName = <span> card <Link href={openCardModal}
-        className={cardNameLink}
-      >
-       {metadata.content.slice(0, 25)}
-      </Link></span>
-    }
-  }
+  const stringClass = "Activity-string"
+  const cardNameLink = 'Activity-string-cardNameLink'
+  const timeClass = 'Activity-time'
 
-  const stringClass =
-    "Activity-string"
-  const cardNameLink =
-    'Activity-string-cardNameLink'
-  const timeClass =
-    'Activity-time'
+  const cardName = () => {
+    return cardActivity ?
+      <span> this card </span>
+    :
+      <span>
+        <span> card </span>
+        <Link href={openCardModal} className={cardNameLink}>
+          <span> {metadata.content.slice(0, 25)} </span>
+        </Link>
+      </span>
+  }
 
   switch (activity.type) {
     case 'JoinedBoard':
@@ -61,10 +56,8 @@ const activityString = (activity, board, cardActivity) => {
         </span>
       }
     case 'AddedCard':
-      cardNameSwitch(cardActivity)
-
       return <span className={stringClass}>added
-        {cardName}
+        {cardName()}
         <Link href={openCardModal}
           className={timeClass}
         >
@@ -74,10 +67,8 @@ const activityString = (activity, board, cardActivity) => {
     case 'MovedCard':
       const prev_list = board.lists.find(list => list.id === metadata.prev_list_id)
       const new_list = board.lists.find(list => list.id === metadata.new_list_id)
-      cardNameSwitch(cardActivity)
-
       return <span className={stringClass}>moved
-        {cardName}
+        {cardName()}
         from list {prev_list.name} to list {new_list.name}
         <Link href={openCardModal}
           className={timeClass}
@@ -86,10 +77,8 @@ const activityString = (activity, board, cardActivity) => {
         </Link>
       </span>
     case 'ArchivedCard':
-      cardNameSwitch(cardActivity)
-
       return <span className={stringClass}>archived
-        {cardName}
+        {cardName()}
         <Link href={openCardModal}
           className={timeClass}
         >
@@ -97,10 +86,8 @@ const activityString = (activity, board, cardActivity) => {
         </Link>
       </span>
     case 'UnarchivedCard':
-      cardNameSwitch(cardActivity)
-
       return <span className={stringClass}>unarchived
-          {cardName}
+          {cardName()}
         <Link href={openCardModal}
           className={timeClass}
         >
@@ -150,16 +137,19 @@ const activityString = (activity, board, cardActivity) => {
 const Activity = props => {
   const { activity, users, board, cardActivity } = props
   const user = users.find(user => user.id === activity.user_id)
+  const className = `Activity ${props.className||''}`
 
-  return <div className='Activity'>
-    <img
-      className='Activity-gravatar'
-      src={user.avatar_url}
-    />
-    <span className='Activity-username'>
-      {user.name}
-    </span>
-    {activityString(activity, board, cardActivity)}
+  return <div className={className}>
+    <div className="Activity-content">
+      <img
+        className='Activity-gravatar'
+        src={user.avatar_url}
+      />
+      <span className='Activity-username'>
+        {user.name}
+      </span>
+      {activityString(activity, board, cardActivity)}
+    </div>
     <div className='Activity-border' />
   </div>
 }
