@@ -2,7 +2,7 @@ const { expect, knex, queries, commands } = require('../../setup')
 const {
   withTwoUsersInTheDatabase,
   withBoardsListsAndCardsInTheDatabase,
-  ACTIVITY_REGEXP_TIMESTAMP,
+  ACTIVITY_REGEXP_JSONTIMESTAMP,
 } = require('../../helpers')
 
 
@@ -83,9 +83,9 @@ describe('database.queries', () => {
       it('should return one board by boardId', () => {
         return queries.getBoardById(101).then( board => {
           board.activity.forEach( activity => {
-            expect(activity.created_at).to.match(
-              ACTIVITY_REGEXP_TIMESTAMP
-            )
+            const RegExpTestResult = 
+              ACTIVITY_REGEXP_JSONTIMESTAMP.test(activity.created_at.toJSON())
+            expect(RegExpTestResult).to.eql(true)
           })
           expect(board.id).to.eql(101)
           expect(board.name).to.eql('Board1')
@@ -307,9 +307,9 @@ describe('database.queries', () => {
         return queries.getActivityByBoardId(101)
           .then( activities => {
             activities.forEach( activity => {
-              expect(activity.created_at).to.match(
-                ACTIVITY_REGEXP_TIMESTAMP
-              )
+              const RegExpTestResult = 
+                ACTIVITY_REGEXP_JSONTIMESTAMP.test(activity.created_at.toJSON())
+              expect(RegExpTestResult).to.eql(true)
             })
             expect(activities).to.eql([
               {
