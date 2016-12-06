@@ -193,18 +193,16 @@ class CreateLabelPanel extends Component {
       url: `/api/boards/${this.props.board.id}/labels`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      data:JSON.stringify({"text": this.state.labelText, "color": this.state.labelColor})
-    })
-    .then(label => {
-      $.ajax({
-        method: 'POST',
-        url:`/api/cards/${this.props.card.id}/labels/${label.id}`
+      data: JSON.stringify({
+        text: this.state.labelText,
+        color: this.state.labelColor,
+        cardId: this.props.card.id,
       })
+    })
       .then(() => {
         boardStore.reload()
         this.goBack()
       })
-    })
   }
 
   handleChange(event) {
