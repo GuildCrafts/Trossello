@@ -681,7 +681,16 @@ const addOrRemoveCardLabel = (cardId, labelId) => {
         .del()
       }
     })
-}
+  }
+
+  const addComment = (cardId, userId, content) =>
+    createRecord('comments', { card_id: cardId, user_id: userId, content:  content })
+
+  const updateComment = (id, content) =>
+    updateRecord('comments', id, {updated_at: new Date(), content})
+
+  const deleteComment = (id) =>
+    deleteRecord('comments', id)
 
 export default {
   createUser,
@@ -721,4 +730,7 @@ export default {
   updateLabel,
   deleteLabel,
   recordActivity,
+  addComment,
+  updateComment,
+  deleteComment,
 }

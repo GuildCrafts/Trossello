@@ -183,6 +183,11 @@
       &-ghosted
         +ghosted
 
+    .NewCardForm
+      flex-grow: 0
+      flex-shrink: 0
+      padding-bottom: 10px
+
   &-ListHeader
     flex-grow: 0
     flex-shrink: 0
@@ -250,6 +255,7 @@
     flex-wrap: nowrap
     padding: 0 4px 0 10px
     min-height: 30%
+    max-height: 70vh
     margin-right: 3px
     &::-webkit-scrollbar
       -webkit-appearance: none
@@ -339,33 +345,6 @@
       cursor: pointer
       background-color: rgba(0,0,0,0.2)
       text-decoration: underline
-
-  &-EditCardForm
-    flex-grow: 0
-    flex-shrink: 0
-    padding-bottom: 10px
-    > textarea
-      // -webkit-touch-callout: auto
-      // -webkit-user-select: auto
-      // -khtml-user-select: auto
-      // -moz-user-select: auto
-      // -ms-user-select: auto
-      // user-select: auto
-      display: block
-      width: 100%
-      resize: none
-      border-radius: 3px
-      border: 0
-      padding: 6px 8px
-      font-size: 14px
-      font-weight: normal
-      &:focus
-        outline: none
-    &-controls
-      & button
-        margin-right: 0.25em
-      a
-        color: inherit
 
   &-EditCardModal
     &-shroud

@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import React, { Component } from 'react'
+import moment from 'moment'
 import './CardModal.sass'
 import LabelMenu from './LabelMenu'
 import CardLabel from './CardLabel'
@@ -8,6 +9,7 @@ import Link from '../../Link'
 import Icon from '../../Icon'
 import Form from '../../Form'
 import Button from '../../Button'
+import ContentForm from '../../ContentForm'
 import ToggleComponent from '../../ToggleComponent'
 import ConfirmationButton from '../../ConfirmationButton'
 import boardStore from '../../../stores/boardStore'
@@ -69,7 +71,7 @@ export default class CardModal extends Component {
               <CardLabels card={card} board={board} labelPanel={labelPanel}/>
               <CardDescription card={card}/>
             </div>
-            <CardComments session={session}/>
+            <CardCommentForm card={card} session={session}/>
             <CardActivity board={board} card={card}/>
           </div>
           <Controls
@@ -107,7 +109,9 @@ const CardHeader = ({card, list}) => {
       </div>
     </div>
     <div className="CardModal-CardHeader-list">
-        in list {list.name}
+        in list <span className="CardModal-CardHeader-list-name">
+          {list.name}
+        </span>
     </div>
   </div>
 
@@ -252,7 +256,7 @@ class CardName extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: this.props.card.content
+      value: this.props.card.content,
     }
     this.setValue = this.setValue.bind(this)
     this.updateName = this.updateName.bind(this)
@@ -285,36 +289,171 @@ class CardName extends Component {
   }
 }
 
-class CardComments extends Component {
+class CardCommentForm extends Component {
+
+  static PropTypes = {
+    card: React.PropTypes.object.isRequired
+  }
+
+  constructor(props){
+    super(props)
+    this.addComment = this.addComment.bind(this)
+  }
+
+  addComment(content, event){
+    if (event) event.preventDefault()
+    $.ajax({
+      method: "POST",
+      url: `/api/cards/${this.props.card.id}/comments`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data: JSON.stringify({
+        userId: this.props.session.user.id,
+        content: content,
+      })
+    })
+    .then(() => {
+      boardStore.reload()
+      this.refs.comment.setContent('')
+    })
+  }
 
   render(){
     const { session } = this.props
 
-    return <div className="CardModal-CardComments">
-      <div className="CardModal-CardComments-header">
-        <div className="CardModal-CardComments-header-icon">
+    return <div className="CardModal-CardCommentForm">
+      <div className="CardModal-CardCommentForm-header">
+        <div className="CardModal-CardCommentForm-header-icon">
           <Icon size="2" type="comment-o"/>
         </div>
-        <div className="CardModal-CardComments-header-title">
+        <div className="CardModal-CardCommentForm-header-title">
           Add Comment
         </div>
       </div>
-      <div className="CardModal-CardComments-body">
-        <div className="CardModal-CardComments-image-container">
-          <img className="CardModal-CardComments-image" src={session.user.avatar_url}></img>
+      <div className="CardModal-CardCommentForm-body">
+        <div className="CardModal-CardCommentForm-image-container">
+          <img className="CardModal-CardCommentForm-image" src={session.user.avatar_url}></img>
         </div>
-        <Form className="CardModal-CardComments-Form">
-          <textarea
-            className="CardModal-CardComments-Form-input"
-            ref="comment"
-            placeholder='Write a comment...'
-          />
-          <Button type="primary" disabled="true" className="CardModal-CardComments-Form-submit">
-            Send
-          </Button>
-        </Form>
-        <div className="CardModal-CardComments-comments"></div>
+        <ContentForm
+          ref="comment"
+          className="CardModal-CommentEditForm"
+          onSave={this.addComment}
+          submitButtonName="Send"
+          placeholder="Write a comment…"
+          defaultValue=""
+          hideCloseX
+        />
       </div>
+    </div>
+  }
+}
+
+class CardComment extends Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+      editing: false,
+      createdAt: moment(this.props.comment.created_at).fromNow(),
+      updatedAt: moment(this.props.comment.updated_at).fromNow(),
+    }
+    this.editComment = this.editComment.bind(this)
+    this.stopEditingComment = this.stopEditingComment.bind(this)
+    this.updateComment = this.updateComment.bind(this)
+    this.deleteComment = this.deleteComment.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.props!==nextProps) {
+      this.setState({updatedAt: this.state.nextProps})
+    }
+  }
+
+  editComment(event) {
+    if (event) event.preventDefault()
+    this.setState({editing: true})
+  }
+
+  stopEditingComment(event){
+    if (event) event.preventDefault()
+    this.setState({editing: false})
+  }
+
+  updateComment(content, event) {
+    if (event) event.preventDefault()
+    $.ajax({
+      method:'POST',
+      url:`/api/cards/${this.props.comment.card_id}/comments/${this.props.comment.id}`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      data:JSON.stringify({content})
+    }).then(() => {
+      boardStore.reload()
+      this.stopEditingComment()
+    })
+  }
+
+  deleteComment(event) {
+    if (event) event.preventDefault()
+    $.ajax({
+      method:'POST',
+      url: `/api/cards/${this.props.comment.card_id}/comments/${this.props.comment.id}/delete`
+    })
+      .then(() => boardStore.reload())
+  }
+
+  render(){
+    const {comment, users} = this.props
+    const user = users.find(user => user.id === comment.user_id)
+
+    const commentTimestamp = this.props.comment.created_at === this.props.comment.updated_at ?
+    <div className="CardModal-CardComment-comment-controls-time">
+      {this.state.createdAt}
+    </div> : <div className="CardModal-CardComment-comment-controls-time">
+      {this.state.createdAt} (edited)
+    </div>
+
+    const commentBox = this.state.editing ?
+      <div className="CardModal-CardComment-comment">
+        <ContentForm
+          ref="comment"
+          className="CardModal-CommentEditForm"
+          onSave={this.updateComment}
+          onCancel={this.stopEditingComment}
+          submitButtonName="Save"
+          defaultValue={comment.content}
+        />
+      </div>
+    :
+      <div className="CardModal-CardComment-comment">
+        <div className="CardModal-CardComment-comment-box">
+          {comment.content}
+        </div>
+        <div className="CardModal-CardComment-comment-controls">
+          {commentTimestamp}
+          <span className="CardModal-CardComment-comment-controls-margin">-</span>
+          <Link onClick={this.editComment} className="CardModal-CardComment-comment-controls-edit">
+            Edit
+          </Link>
+          <span className="CardModal-CardComment-comment-controls-margin">-</span>
+          <Link onClick={this.deleteComment} className="CardModal-CardComment-comment-controls-delete">
+            Delete
+          </Link>
+        </div>
+      </div>
+
+    return <div className="CardModal-CardComment">
+      <div className="CardModal-CardComment-user">
+        <img
+          className="CardModal-CardComment-user-image"
+          src={user.avatar_url}
+        />
+        <span className="CardModal-CardComment-user-name">
+          {user.name}
+        </span>
+      </div>
+      {commentBox}
+      <div className="CardModal-CardComment-border"/>
     </div>
   }
 }
@@ -328,7 +467,7 @@ class CardActivity extends Component {
   constructor(props){
     super(props)
     this.state = {
-      showingActivity: true
+      showingActivity: true,
     }
     this.activityToggle = this.activityToggle.bind(this)
   }
@@ -338,33 +477,55 @@ class CardActivity extends Component {
     this.setState({showingActivity: !this.state.showingActivity})
   }
 
-
   render(){
     const {board, card} = this.props
 
-    const cardActivity = board.activity
-      .filter(activity => activity.card_id === card.id)
-      .map( activity => {
-        return <Activity cardActivity key={activity.id} activity={activity}
-          users={board.users} board={board} />
+    let activity = [].concat(card.comments)
+    if (this.state.showingActivity)
+      activity = activity.concat(
+        board.activity.filter(activity => activity.card_id === card.id)
+      )
+
+    activity = activity
+      .sort((a, b) => {
+        a = moment(a.created_at).toDate()
+        b = moment(b.created_at).toDate()
+        return b - a
       })
-
-
-    const toggleButtonText = this.state.showingActivity ? 'Hide Details' : 'Show Details'
-    const activityLog = this.state.showingActivity ?
-      <div className="CardModal-CardActivity-activityLog">
-        {cardActivity}
-      </div> : null
+      .map(item =>
+        'metadata' in item ?
+          <Activity
+            key={item.id}
+            className="CardModal-Activity"
+            activity={item}
+            users={board.users}
+            board={board}
+            cardActivity
+          />
+        :
+          <CardComment
+            key={item.id}
+            users={board.users}
+            comment={item}
+          />
+      )
 
     return <div className="CardModal-CardActivity">
       <div className="CardModal-CardActivity-header">
         <div className="CardModal-CardActivity-header-icon">
-          <Icon type="list"/>
+          <Icon size="2" type="list"/>
         </div>
         <div className="CardModal-CardActivity-header-title">Activity</div>
-        <Button className="CardModal-CardActivity-header-toggle" onClick={this.activityToggle}>{toggleButtonText}</Button>
+        <Link
+          className="CardModal-CardActivity-header-toggle"
+          onClick={this.activityToggle}
+        >
+          {this.state.showingActivity ? 'Hide Details' : 'Show Details'}
+        </Link>
       </div>
-      {activityLog}
+      <div className="CardModal-CardActivity-activityLog">
+        {activity}
+      </div>
     </div>
   }
 
@@ -459,7 +620,7 @@ class CardDescription extends ToggleComponent {
           Edit
         </Link>
       </div>
-      <pre className="CardModal-CardDescription-content">{this.props.card.description}</pre>
+      <div className="CardModal-CardDescription-content">{this.props.card.description}</div>
     </div>
   }
 }

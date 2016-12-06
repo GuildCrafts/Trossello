@@ -5,7 +5,7 @@ import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
 import Card from './Card'
-import EditCardForm from './EditCardForm'
+import NewCardForm from './NewCardForm'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
 import ToggleComponent from '../ToggleComponent'
@@ -33,12 +33,12 @@ export default class List extends Component {
     super(props)
     this.state = {
       creatingCard: false,
-      newCardPosition: 0
+      newCardOrder: 0
     }
     this.creatingCard = this.creatingCard.bind(this)
     this.creatingCardTop = this.creatingCardTop.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
-    this.increaseNewCardPosition = this.increaseNewCardPosition.bind(this)
+    this.incNewCardFormOrder = this.incNewCardFormOrder.bind(this)
   }
 
   componentDidUpdate(){
@@ -50,22 +50,22 @@ export default class List extends Component {
 
   creatingCard() {
     const {cards, list} = this.props
-    const newCardPosition = cards.filter(card =>
+    const newCardOrder = cards.filter(card =>
       card.list_id === list.id && card.archived === false
     ).length
-    this.setState({creatingCard: true, newCardPosition: newCardPosition})
+    this.setState({creatingCard: true, newCardOrder: newCardOrder})
   }
 
   creatingCardTop() {
-    this.setState({creatingCard: true, newCardPosition: 0})
+    this.setState({creatingCard: true, newCardOrder: 0})
   }
 
   cancelCreatingCard() {
     this.setState({creatingCard: false})
   }
 
-  increaseNewCardPosition() {
-    this.setState({newCardPosition: this.state.newCardPosition + 1})
+  incNewCardFormOrder() {
+    this.setState({newCardOrder: this.state.newCardOrder + 1})
   }
 
   render(){
@@ -82,8 +82,8 @@ export default class List extends Component {
         board={board}
         list={list}
         onCancel={this.cancelCreatingCard}
-        newCardPosition={this.state.newCardPosition}
-        increaseNewCardPosition={this.increaseNewCardPosition}
+        order={this.state.newCardOrder}
+        onSave={this.incNewCardFormOrder}
       />
     } else {
       newCardLink = <Link onClick={this.creatingCard} className="BoardShowPage-create-card-link" >Add a card...</Link>
@@ -102,7 +102,7 @@ export default class List extends Component {
       />
     )
 
-    cardNodes.splice(this.state.newCardPosition, 0, newCardForm)
+    cardNodes.splice(this.state.newCardOrder, 0, newCardForm)
 
     let className = "BoardShowPage-List-box"
     if (this.props.ghosted) className += ' BoardShowPage-List-box-ghosted'
@@ -197,59 +197,6 @@ class ListName extends Component {
   }
 }
 
-class NewCardForm extends Component {
-
-  static propTypes = {
-    board: React.PropTypes.object.isRequired,
-    list: React.PropTypes.object.isRequired,
-    onCancel: React.PropTypes.func.isRequired,
-  }
-
-  constructor(props) {
-    super(props)
-    this.createCard = this.createCard.bind(this)
-    this.closeIfUserClickedOutside = this.closeIfUserClickedOutside.bind(this)
-    document.body.addEventListener('click', this.closeIfUserClickedOutside, false)
-  }
-
-  componentWillUnmount(){
-    document.body.removeEventListener('click', this.closeIfUserClickedOutside)
-  }
-
-  closeIfUserClickedOutside(event) {
-    const container = ReactDOM.findDOMNode(this.refs.container)
-    if (!container.contains(event.target) && container !== event.target) {
-      this.props.onCancel(event)
-    }
-  }
-
-  createCard(card) {
-    const { board, list } = this.props
-    if (card.content.replace(/\s+/g,'') === '') return
-    card.order = this.props.newCardPosition
-
-    this.props.increaseNewCardPosition()
-
-    $.ajax({
-      method: 'post',
-      url: `/api/boards/${board.id}/lists/${list.id}/cards`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify(card),
-    }).then(() => {
-      boardStore.reload()
-    })
-  }
-
-  render() {
-    return <EditCardForm
-      onCancel={this.props.onCancel}
-      submitButtonName="Add"
-      onSave={this.createCard}
-      ref="container"
-    />
-  }
-}
 
 const archiveRecord = (resource, id) => {
   $.ajax({
