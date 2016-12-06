@@ -360,7 +360,7 @@ describe('/api/boards', () => {
       })
 
       //CREATE LABEL
-      describe('POST /api/boards/:boardId/labels', () => {
+      describe.only('POST /api/boards/:boardId/labels', () => {
         it('should add a label to the board', () => {
           return request('post', '/api/boards/101/labels', {color: 'blue', text: 'blue label'})
             .then(response => {

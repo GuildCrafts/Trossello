@@ -37,18 +37,14 @@ export default class CopyCard extends Component {
       url: `/api/boards/${this.state.boardId}/lists/${this.state.listId}/cards`,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      data: JSON.stringify({content: this.state.title}),
-    }).then( card => {
-      $.ajax({
-        method: 'post',
-        url: `/api/cards/${card.id}/move`,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        data: JSON.stringify({boardId: card.board_id, listId: card.list_id, order: this.state.order}),
-      }).then( () => {
-        boardStore.reload()
-        this.props.onClose()
+      data: JSON.stringify({
+        content: this.state.title,
+        order: this.state.order
       })
+    })
+    .then( () => {
+      boardStore.reload()
+      this.props.onClose()
     })
   }
 
