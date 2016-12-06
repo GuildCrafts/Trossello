@@ -170,12 +170,12 @@ const loginAs = (userId) => {
   return request('get', `/__login/${userId}`) // back door hack
 }
 
-const ACTIVITY_REGEXP_TIMESTAMP =
-  /^[A-Z][a-z]{2} [A-Z][a-z]{2} [0-9]{2} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT-[0-9]{4} \([A-Z]{3}\)$/
+const ACTIVITY_REGEXP_JSONTIMESTAMP =
+  /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z$/
 
 module.exports = {
   withTwoUsersInTheDatabase,
   withBoardsListsAndCardsInTheDatabase,
   loginAs,
-  ACTIVITY_REGEXP_TIMESTAMP,
+  ACTIVITY_REGEXP_JSONTIMESTAMP,
 }
