@@ -13,6 +13,7 @@ import ConfirmationButton from '../../ConfirmationButton'
 import boardStore from '../../../stores/boardStore'
 import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
+import Activity from '../../Activity'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -69,6 +70,7 @@ export default class CardModal extends Component {
               <CardDescription card={card}/>
             </div>
             <CardComments session={session}/>
+            <CardActivity board={board} card={card}/>
           </div>
           <Controls
             board={board}
@@ -315,6 +317,57 @@ class CardComments extends Component {
       </div>
     </div>
   }
+}
+
+class CardActivity extends Component {
+  static PropTypes = {
+    board: React.PropTypes.object.isRequired,
+    card: React.PropTypes.object.isRequired,
+  }
+
+  constructor(props){
+    super(props)
+    this.state = {
+      showingActivity: true
+    }
+    this.activityToggle = this.activityToggle.bind(this)
+  }
+
+  activityToggle(event){
+    if (event) event.preventDefault()
+    this.setState({showingActivity: !this.state.showingActivity})
+  }
+
+
+  render(){
+    const {board, card} = this.props
+
+    const cardActivity = board.activity
+      .filter(activity => activity.card_id === card.id)
+      .map( activity => {
+        return <Activity cardActivity key={activity.id} activity={activity}
+          users={board.users} board={board} />
+      })
+
+
+    const toggleButtonText = this.state.showingActivity ? 'Hide Details' : 'Show Details'
+    const activityLog = this.state.showingActivity ?
+      <div className="CardModal-CardActivity-activityLog">
+        {cardActivity}
+      </div> : null
+
+    return <div className="CardModal-CardActivity">
+      <div className="CardModal-CardActivity-header">
+        <div className="CardModal-CardActivity-header-icon">
+          <Icon type="list"/>
+        </div>
+        <div className="CardModal-CardActivity-header-title">Activity</div>
+        <Button className="CardModal-CardActivity-header-toggle" onClick={this.activityToggle}>{toggleButtonText}</Button>
+      </div>
+      {activityLog}
+    </div>
+  }
+
 }
 
 class CardDescription extends ToggleComponent {
