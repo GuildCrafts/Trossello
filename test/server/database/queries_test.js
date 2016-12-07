@@ -83,9 +83,7 @@ describe('database.queries', () => {
       it('should return one board by boardId', () => {
         return queries.getBoardById(101).then( board => {
           board.activity.forEach( activity => {
-            const RegExpTestResult = 
-              ACTIVITY_REGEXP_JSONTIMESTAMP.test(activity.created_at.toJSON())
-            expect(RegExpTestResult).to.eql(true)
+            expect(activity.created_at.toJSON()).to.match(ACTIVITY_REGEXP_JSONTIMESTAMP)
           })
           expect(board.id).to.eql(101)
           expect(board.name).to.eql('Board1')
@@ -307,9 +305,7 @@ describe('database.queries', () => {
         return queries.getActivityByBoardId(101)
           .then( activities => {
             activities.forEach( activity => {
-              const RegExpTestResult = 
-                ACTIVITY_REGEXP_JSONTIMESTAMP.test(activity.created_at.toJSON())
-              expect(RegExpTestResult).to.eql(true)
+              expect(activity.created_at.toJSON()).to.match(ACTIVITY_REGEXP_JSONTIMESTAMP)
             })
             expect(activities).to.eql([
               {
