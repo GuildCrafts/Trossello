@@ -10,6 +10,11 @@
   border-radius: 3px
   box-shadow: 2px 2px 10px black
 
+  &-locked
+    border-radius: 0
+    box-shadow: 0 3px 6px rgba(0,0,0,.4)
+    max-width: 20vw
+
   &-header
     padding: 11px
     background-color: $grey
@@ -61,38 +66,41 @@
     color: inherit
     overflow: hidden
 
-    > .Link
-      display: flex
-      flex-direction: row
-      flex-grow: 1
-      flex-shrink: 1
-
     &-thumbnail
+      flex-grow: 0
+      flex-shrink: 0
       width: 30px
 
     &-name
       flex-grow: 1
       flex-shrink: 1
-      color: black
-      font-weight: bold
-      font-size: 95%
-      padding: 10px 10px
       background-color: rgba(255,255,255,0.5)
+      overflow: hidden
+      > div
+        overflow: hidden
+        padding: 10px 10px
+        color: black
+        font-weight: bold
+        font-size: 95%
+        white-space: nowrap
+        text-overflow: ellipsis
 
-    .BoardStar
+    > .BoardStar
+      flex-grow: 0
+      flex-shrink: 0
       $width: 36px
       width: $width
+      transition: margin-right 0.2s
       background-color: rgba(255,255,255,0.5)
 
       > .Icon
         position: relative
 
-      &-inactive > .Icon
-        left: $width
+      &-inactive
+        margin-right: -$width
 
-    &:hover > .BoardStar-inactive > .Icon
-      opacity: 1
-      left: 0
+    &:hover > .BoardStar-inactive
+      margin-right: 0
 
   &-background
     background-size: cover
@@ -107,10 +115,6 @@
     position: absolute
     top: 0
     left: 0
-
-  &-locked
-    border-radius: 0
-    box-shadow: 0 3px 6px rgba(0,0,0,.4)
 
   &-Button
     width: 100%

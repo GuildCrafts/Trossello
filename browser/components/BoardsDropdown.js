@@ -145,9 +145,9 @@ const Board = ({ board, onClick }) =>
     className="BoardsDropdown-board"
     style={{backgroundColor: board.background_color}}
   >
-    <Link to={`/boards/${board.id}`} onClick={onClick}>
-      <div className="BoardsDropdown-board-thumbnail"></div>
-      <div className="BoardsDropdown-board-name">{board.name}</div>
+    <Link to={`/boards/${board.id}`} onClick={onClick} className="BoardsDropdown-board-thumbnail"></Link>
+    <Link to={`/boards/${board.id}`} onClick={onClick} className="BoardsDropdown-board-name">
+      <div>{board.name}</div>
     </Link>
     <BoardStar board={board} onChange={reloadBoardStores}/>
   </div>
