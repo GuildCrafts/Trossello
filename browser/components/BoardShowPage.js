@@ -274,8 +274,10 @@ class BoardShowPage extends React.Component {
       }
     }
 
-    this.dragGhost.remove()
-    delete this.dragGhost
+    if (this.dragGhost){
+      this.dragGhost.remove()
+      delete this.dragGhost
+    }
 
     this.setState({
       dragging: null,
