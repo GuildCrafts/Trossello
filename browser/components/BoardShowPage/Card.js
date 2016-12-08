@@ -9,6 +9,7 @@ import ArchiveButton from './ArchiveButton'
 import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
 import CardLabel from './Card/CardLabel'
+import Avatar from '../Avatar'
 
 export default class Card extends Component {
   static contextTypes = {
@@ -109,6 +110,12 @@ export default class Card extends Component {
         </div>
       )
 
+    const cardUsers = (card.user_ids.length > 0) ? card.user_ids
+      .map( userId => board.users.find( user => user.id === userId ))
+      .map( user => 
+        <Avatar src={user.avatar_url} key={user.id} />
+      ) : null
+
     const editCardButton = this.props.editable ?
       <EditCardButton onClick={this.editCard} /> : null
 
@@ -151,6 +158,7 @@ export default class Card extends Component {
         {cardLabels}
       </div>
       <pre>{card.content}</pre>
+      {cardUsers}
       {archivedFooter}
       </Link>
       <div className="BoardShowPage-Card-controls">
