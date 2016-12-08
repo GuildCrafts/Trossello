@@ -69,7 +69,7 @@ export default class CardModal extends Component {
             <CardHeader card={card} list={list}/>
             <div className="CardModal-body">
               <CardLabels card={card} board={board} labelPanel={labelPanel}/>
-              <CardDescription card={card}/>
+              <CardDescription card={card} />
             </div>
             <CardCommentForm card={card} session={session}/>
             <CardActivity board={board} card={card}/>
@@ -354,8 +354,6 @@ class CardComment extends Component {
     super(props)
     this.state = {
       editing: false,
-      createdAt: moment(this.props.comment.created_at).fromNow(),
-      updatedAt: moment(this.props.comment.updated_at).fromNow(),
     }
     this.editComment = this.editComment.bind(this)
     this.stopEditingComment = this.stopEditingComment.bind(this)
@@ -406,11 +404,9 @@ class CardComment extends Component {
     const {comment, users} = this.props
     const user = users.find(user => user.id === comment.user_id)
 
-    const commentTimestamp = this.props.comment.created_at === this.props.comment.updated_at ?
-    <div className="CardModal-CardComment-comment-controls-time">
-      {this.state.createdAt}
-    </div> : <div className="CardModal-CardComment-comment-controls-time">
-      {this.state.createdAt} (edited)
+    const commentTimestamp = <div className="CardModal-CardComment-comment-controls-time">
+      {moment(comment.created_at).fromNow()}
+      {comment.created_at === comment.updated_at ? '' : ' (edited)'}
     </div>
 
     const commentBox = this.state.editing ?
@@ -532,45 +528,17 @@ class CardActivity extends Component {
 }
 
 class CardDescription extends ToggleComponent {
+
+  static propTypes = {
+    card: React.PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props)
-    this.state.value = this.props.card.description || ''
-    this.setValue = this.setValue.bind(this)
     this.updateDescription = this.updateDescription.bind(this)
-    this.cancel = this.cancel.bind(this)
-    this.onKeyDown = this.onKeyDown.bind(this)
   }
 
-  componentDidMount(){
-    this.focusTextarea()
-  }
-
-  componentDidUpdate(prevProps, prevState){
-    if (!prevState.open) this.focusTextarea()
-  }
-
-  focusTextarea(){
-    if (this.state.open) this.refs.description.focus()
-  }
-
-  setValue(event) {
-    this.setState({value: event.target.value})
-  }
-
-  onKeyDown(event) {
-    if (event.metaKey && event.key === "Enter") {
-      event.preventDefault()
-      this.updateDescription()
-    }
-    if (event.key === "Escape") {
-      event.preventDefault()
-      this.close()
-    }
-  }
-
-  updateDescription(event){
-    if (event) event.preventDefault()
-    const description = this.refs.description.value
+  updateDescription(description){
     $.ajax({
       method: 'post',
       url: `/api/cards/${this.props.card.id}`,
@@ -583,34 +551,28 @@ class CardDescription extends ToggleComponent {
     })
   }
 
-  cancel(event){
-    event.preventDefault()
-    this.close()
-  }
-
   render() {
+    const { card } = this.props
+
     if (this.state.open){
-      return <Form onSubmit={this.updateDescription}>
-        <textarea className="CardModal-CardDescription-textarea"
-          ref="description"
-          onKeyDown={this.onKeyDown}
-          value={this.state.value}
-          onChange={this.setValue}
-        />
-        <div className="CardModal-CardDescription-controls">
-          <Button submit type="primary">Save</Button>
-          <Button type="invisible" onClick={this.cancel}>
-            <Icon type="times" />
-          </Button>
-        </div>
-      </Form>
+      return <ContentForm
+        ref="description"
+        className="CardModal-CommentEditForm CardModal-CardDescription"
+        onSave={this.updateDescription}
+        onCancel={this.close}
+        submitButtonName="Save"
+        defaultValue={card.description}
+      />
     }
-    if (this.state.value === ""){
+
+    if (card.description === ""){
       return <Link onClick={this.open} className="CardModal-CardDescription">
-        <Icon type="align-justify" /> Edit the description
+        <Icon type="align-justify" />&nbsp;
+        <span>Edit the description</span>
       </Link>
     }
-    return <div>
+
+    return <div className="CardModal-CardDescription">
       <div className="CardModal-CardDescription-header">
         Description
         <Link
@@ -620,7 +582,7 @@ class CardDescription extends ToggleComponent {
           Edit
         </Link>
       </div>
-      <div className="CardModal-CardDescription-content">{this.props.card.description}</div>
+      <div className="CardModal-CardDescription-content">{card.description}</div>
     </div>
   }
 }
