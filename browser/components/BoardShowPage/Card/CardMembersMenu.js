@@ -3,6 +3,7 @@ import $ from 'jquery'
 import DialogBox from '../../DialogBox'
 import Link from '../../Link'
 import Avatar from '../../Avatar'
+import Icon from '../../Icon'
 
 export default class CardMembersMenu extends Component {
 
@@ -57,19 +58,17 @@ export default class CardMembersMenu extends Component {
   render() {
     const { card, board } = this.props
     const boardUserImages = board.users.map( user => {
-      if(card.user_ids.includes(user.id)) {
-       return <UserAvatar user={user}
-          onClick={this.removeCardUser.bind(this, user.id)}
-          key={user.id}
-        />
-      } else {
-        return <UserAvatar user={user}
-          onClick={this.addCardUser.bind(this, user.id)}
-          key={user.id}
-        />
-      }
-    }
-    )
+      const isMember = card.user_ids.includes(user.id)
+      const onClick = isMember ?
+        this.removeCardUser.bind(this, user.id) :
+        this.addCardUser.bind(this, user.id)
+      return <UserAvatar
+        key={user.id}
+        user={user}
+        onClick={onClick}
+        isMember={isMember}
+      />
+    })
     return <DialogBox onClose={this.props.onClose}
       heading={'Members'}
       className='CardModal-CardMembersMenu'
@@ -84,17 +83,20 @@ export default class CardMembersMenu extends Component {
         </div>
         <div className='CardModal-CardMembersMenu-boardUsers'>
           {boardUserImages}
-        </div>        
+        </div>
       </div>
     </DialogBox>
   }
 }
 
 const UserAvatar = (props) => {
-  const { user, onClick } = props
-  return <Link onClick={onClick}>
-    <Avatar src={user.avatar_url}
-      className='CardModal-CardMembersMenu-UserAvatar'
-    />
+  const { user, onClick, isMember } = props
+  const checkmark = isMember ?
+    <Icon type="check-square" className="CardModal-CardMembersMenu-checkmark" />
+  :
+    null
+  return <Link onClick={onClick} className='CardModal-CardMembersMenu-UserAvatar'>
+    <Avatar src={user.avatar_url} />
+    {checkmark}
   </Link>
 }
