@@ -9,6 +9,7 @@ import './ContentForm.sass'
 export default class ContentForm extends Component {
 
   static propTypes = {
+    onChange: React.PropTypes.func,
     onCancel: React.PropTypes.func.isRequired,
     onSave: React.PropTypes.func.isRequired,
     submitButtonName: React.PropTypes.string,
@@ -60,6 +61,10 @@ export default class ContentForm extends Component {
     if (event.key === 'Escape') {
       return this.cancel(event)
     }
+
+    if (this.props.onChange)
+      this.props.onChange(event)
+
     this.autosize()
   }
 
@@ -94,15 +99,15 @@ export default class ContentForm extends Component {
         <Icon type="times" />
       </Link>
 
-    return <Form className="BoardShowPage-EditCardForm" onSubmit={this.save}>
+    return <Form className="ContentForm" onSubmit={this.save}>
       <textarea
-        className="BoardShowPage-Card"
+        className="ContentForm-textarea"
         onKeyDown={this.onKeyDown}
         ref="content"
         value={this.state.content}
         onChange={this.onContentChange}
       />
-      <div className="BoardShowPage-EditCardForm-controls">
+      <div className="ContentForm-controls">
         <Button type="primary" submit>{this.props.submitButtonName}</Button>
         {closeX}
       </div>
