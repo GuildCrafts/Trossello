@@ -10,12 +10,14 @@ import Icon from '../../Icon'
 import Form from '../../Form'
 import Button from '../../Button'
 import ContentForm from '../../ContentForm'
+import Avatar from '../../Avatar'
 import ToggleComponent from '../../ToggleComponent'
 import ConfirmationButton from '../../ConfirmationButton'
 import boardStore from '../../../stores/boardStore'
 import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import Activity from '../../Activity'
+import CardMembersMenu from './CardMembersMenu'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -69,6 +71,7 @@ export default class CardModal extends Component {
             <CardHeader card={card} list={list}/>
             <div className="CardModal-body">
               <CardLabels card={card} board={board} labelPanel={labelPanel}/>
+              <CardMembers card={card} board={board} />
               <CardDescription card={card} />
             </div>
             <CardCommentForm card={card} session={session}/>
@@ -145,6 +148,27 @@ const CardLabels =({card, board, labelPanel}) => {
   </div>
 }
 
+const CardMembers = ({card, board}) => {
+  const cardMembers = board.users
+    .filter(user => card.user_ids.includes(user.id) )
+    .map( user =>
+      <Avatar key={user.id} src={user.avatar_url}
+        className='CardModal-MemberAvatar'
+      />
+    )
+
+  const membersHeader = cardMembers.length > 0 ?
+    <div className="CardModal-CardLabels-header">Members</div>
+    : null
+
+  return <div className='CardModal-CardMembers'>
+    {membersHeader}
+    <div className='CardModal-CardMembers-gravatars'>
+      {cardMembers}
+    </div>
+  </div>
+}
+
 const Controls = ({board, list, card, closeModal, labelPanel}) => {
   const copyCard = <CopyCard card={card} board={board} list={list}/>
   const toggleOnArchived = card.archived ?
@@ -153,10 +177,16 @@ const Controls = ({board, list, card, closeModal, labelPanel}) => {
       <DeleteCardButton card={card} onDelete={closeModal} />
     </div> :
     <ArchiveCardButton card={card} />
+  const cardMembersMenu = <CardMembersMenu board={board} card={card} />
 
   return <div className="CardModal-Controls">
     <div className="CardModal-Controls-title">Add</div>
-    <Button><Icon type="user" /> Members</Button>
+    <PopoverMenuButton
+      className="CardModal-Controls-members"
+      popover={cardMembersMenu}
+    >
+      <Icon type="user" /> Members
+    </PopoverMenuButton>
     <PopoverMenuButton className="CardModal-Controls-label" type="default" popover={labelPanel}>
       <Icon type="tag" /> Labels
     </PopoverMenuButton>
