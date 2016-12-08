@@ -135,10 +135,6 @@ class CreateLabelPanel extends Component {
     this.goBack = this.goBack.bind(this)
   }
 
-  componentWillReceiveProps(newProps){
-    console.log(this.props.state.editingLabel, 'vs.', newProps.state.editingLabel)
-  }
-
   labelBeingEdited(props=this.props){
     return this.isEditing(props) &&
       props.board.labels.find(label => label.id === props.state.editingLabel)
