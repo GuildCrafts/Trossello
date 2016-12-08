@@ -498,9 +498,15 @@ class CardActivity extends Component {
         return firstDate-secondDate
       })
       .map(item => {
-        if('metadata' in item){
-          return <Activity cardActivity key={item.id} activity={item}
-            users={board.users} board={board}/>
+        if ('metadata' in item) {
+          return <Activity
+            key={item.id}
+            className="CardModal-Activity"
+            activity={item}
+            users={board.users}
+            board={board}
+            cardActivity
+          />
         } else {
           return <CardComment key={item.id} users={board.users} comment={item}/>
         }
