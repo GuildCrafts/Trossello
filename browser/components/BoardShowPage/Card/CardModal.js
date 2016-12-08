@@ -434,7 +434,8 @@ class CardComment extends Component {
           </Link>
           </div>
         </Form>
-      </div> :
+      </div>
+    :
       <div className="CardModal-CardComment-comment">
         <div className="CardModal-CardComment-comment-box">
           {comment.content}

@@ -6,6 +6,7 @@ import Link from './Link'
 import Button from './Button'
 import Icon from './Icon'
 import Spinner from './Spinner'
+import ContentForm from './ContentForm'
 import List from './BoardShowPage/List'
 import Card from './BoardShowPage/Card'
 
@@ -19,6 +20,7 @@ export default class StyleGuidePage extends Component {
       <LinksSection />
       <BrandColorsSection />
       <CardsSection />
+      <ContentFormSection />
     </div>
   }
 }
@@ -169,6 +171,32 @@ const SpinnerSection = (props) => {
     <h3>Spinner</h3>
     <StyleExample sourceCode='<Spinner />'>
       <Spinner />
+    </StyleExample>
+  </div>
+}
+
+const ContentFormSection = (props) => {
+  return <div>
+    <h3>ContentForm</h3>
+    <StyleExample sourceCode='<ContentForm />'>
+      <div style={{backgroundColor: 'lightblue', padding: '10px'}}>
+        <ContentForm
+          onCancel={_ => alert('canceled') }
+          onSave={_ => alert('saved') }
+          submitButtonName="Save it!"
+          defaultValue="this form submits on enter"
+          hideCloseX
+          submitOnEnter
+        />
+      </div>
+      <div style={{backgroundColor: 'lightblue', padding: '10px'}}>
+        <ContentForm
+          onCancel={_ => alert('canceled') }
+          onSave={_ => alert('saved') }
+          submitButtonName="Save it!"
+          defaultValue="this form submits on cmd-enter"
+        />
+      </div>
     </StyleExample>
   </div>
 }
