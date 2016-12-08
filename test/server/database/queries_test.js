@@ -82,6 +82,7 @@ describe('database.queries', () => {
     withBoardsListsAndCardsInTheDatabase(()=>{
       it('should return one board by boardId', () => {
         return queries.getBoardById(101).then( board => {
+          const card87 = board.cards.find( card => card.id === 87)
           board.activity.forEach( activity => {
             expect(activity.created_at.toJSON()).to.match(ACTIVITY_REGEXP_JSONTIMESTAMP)
           })
