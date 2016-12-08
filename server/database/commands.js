@@ -43,6 +43,8 @@ const ACTIVITY_TYPES = [
   'ArchivedList',
   'UnarchivedList',
   'DeletedCard',
+  'AddedUserToCard',
+  'RemovedUserFromCard',
 ]
 
 const recordActivity = (attributes) => {
@@ -683,6 +685,53 @@ const addOrRemoveCardLabel = (cardId, labelId) => {
     })
 }
 
+const addUserToCard = (currentUserId, boardId, cardId, targetUserId) => {
+  const attributes = {board_id: boardId, card_id: cardId, user_id: targetUserId}
+
+  return knex.table('card_users')
+    .select('*')
+    .where(attributes)
+    .returning('*')
+    .then( result => {
+      if(result.length === 0) {
+        return createRecord('card_users', attributes)
+          .then( cardUser =>
+            recordActivity({
+              type: 'AddedUserToCard',
+              board_id: boardId,
+              card_id: cardId,
+              user_id: currentUserId,
+              metadata: {
+                added_card_user: targetUserId
+              }
+            }).then( _ => cardUser)
+          )
+      } else {
+        return result
+      }
+    })
+}
+
+const removeUserFromCard = (currentUserId, boardId, cardId, targetUserId) => {
+  const attributes = {board_id: boardId, card_id: cardId, user_id: targetUserId}
+
+  return knex.table('card_users')
+    .select('*')
+    .where(attributes)
+    .del()
+      .then( deletion =>
+        recordActivity({
+          type: 'RemovedUserFromCard',
+          board_id: boardId,
+          card_id: cardId,
+          user_id: currentUserId,
+          metadata: {
+            removed_card_user: targetUserId
+          }
+        }).then( _ => deletion)
+      )
+}
+
 export default {
   createUser,
   updateUser,
@@ -721,4 +770,6 @@ export default {
   updateLabel,
   deleteLabel,
   recordActivity,
+  addUserToCard,
+  removeUserFromCard,
 }
