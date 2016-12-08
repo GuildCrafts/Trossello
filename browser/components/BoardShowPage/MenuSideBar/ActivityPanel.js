@@ -174,6 +174,63 @@ const activityString = (activity, user, board) => {
           {moment(activity.created_at).fromNow()}
         </span>
       </span>
+    case 'AddedUserToCard':
+      card = board.cards.find( card => card.id === activity.card_id)
+      const addedCardUser = board.users.find( user => 
+        user.id === metadata.added_card_user)
+
+      if( metadata.added_card_user === user.id) {
+        return <span className={stringClass}>
+          joined
+          <Link className={cardNameLink}
+            href={openCardModal}
+          >
+            {card.content.slice(0, 25)}
+          </Link>
+          <Link href={openCardModal} className={timeClass}>
+            {moment(activity.created_at).fromNow()}
+          </Link>
+        </span>
+      } else {
+        return <span className={stringClass}>
+          added {addedCardUser.name} to
+          <Link className={cardNameLink}
+            href={openCardModal}
+          >
+            {card.content.slice(0, 25)}
+          </Link>
+          <Link href={openCardModal} className={timeClass}>
+            {moment(activity.created_at).fromNow()}
+          </Link>
+        </span>
+      }
+    case 'RemovedUserFromCard':
+      card = board.cards.find( card => card.id === activity.card_id)
+      const removedCardUser = board.users.find( user =>
+        user.id === metadata.removed_card_user)
+
+      if( metadata.removed_card_user === user.id) {
+        return <span className={stringClass}>
+          left
+          <Link className={cardNameLink} href={openCardModal}>
+            {card.content.slice(0, 25)}
+          </Link>
+          <Link href={openCardModal} className={timeClass}>
+            {moment(activity.create_at).fromNow()}
+          </Link>
+        </span>
+      } else {
+        return <span className={stringClass}>
+          removed {removedCardUser.name} from
+          <Link className={cardNameLink} href={openCardModal}>
+            {card.content.slice(0, 25)}
+          </Link>
+          <Link href={openCardModal} className={timeClass}>
+            {moment(activity.created_at).fromNow()}
+          </Link>
+        </span>
+      }
+
     default:
       return null
   }
