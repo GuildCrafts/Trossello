@@ -17,6 +17,7 @@ import BoardStar from './BoardStar'
 import MenuSideBar from './BoardShowPage/MenuSideBar'
 import RenameBoardDropdown from './BoardShowPage/RenameBoardDropdown'
 import PopoverMenuButton from './PopoverMenuButton'
+import commands from '../commands'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -299,43 +300,12 @@ class BoardShowPage extends React.Component {
   }
 
 
-  moveList({ list, order}){
-    const { board } = this.props
-    list.order = order
-
-    $.ajax({
-      method: 'post',
-      url: `/api/lists/${list.id}/move`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({
-        boardId: list.board_id,
-        order: order,
-      })
-    }).then(() => {
-      boardStore.reload()
-    })
+  moveList({ list, order }){
+    commands.moveList(list.id, list.board_id, order)
   }
 
   moveCard({ card, listId, order }){
-    const { board } = this.props
-
-    card.list_id = listId
-    card.order = order
-
-    $.ajax({
-      method: 'post',
-      url: `/api/cards/${card.id}/move`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({
-        boardId: card.board_id,
-        listId: listId,
-        order: order,
-      }),
-    }).then(() => {
-      boardStore.reload()
-    })
+    commands.moveCard(card.id, card.board_id, listId, order)
   }
 
 

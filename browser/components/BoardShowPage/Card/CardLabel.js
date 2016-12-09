@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import $ from 'jquery'
 import Link from '../../Link'
 import Icon from '../../Icon'
 import './CardLabel.sass'

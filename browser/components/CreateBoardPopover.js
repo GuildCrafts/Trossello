@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
 import './CreateBoardPopover.sass'
 import Link from './Link'
 import Icon from './Icon'
@@ -8,7 +7,7 @@ import Button from './Button'
 import boardsStore from '../stores/boardsStore'
 import DialogBox from './DialogBox'
 import ColorBox from './BoardShowPage/ColorBox'
-
+import commands from '../commands'
 
 class CreateBoardPopover extends Component {
 
@@ -41,18 +40,13 @@ class CreateBoardPopover extends Component {
       archived: false
     }
     if (board.name.replace(/\s+/g,'') === '') return
-    $.ajax({
-      method: "POST",
-      url: '/api/boards',
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify(board),
-    }).then((board) => {
-      if (this.props.onClose) this.props.onClose()
-      boardsStore.reload()
-      this.context.redirectTo('/boards/'+board.id)
-      this.reset()
-    })
+    return commands.createBoard(board)
+      .then((board) => {
+        if (this.props.onClose) this.props.onClose()
+        boardsStore.reload()
+        this.context.redirectTo('/boards/'+board.id)
+        this.reset()
+      })
   }
 
   reset(){

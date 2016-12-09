@@ -3,6 +3,7 @@ import $ from 'jquery'
 import Button from './Button'
 import Icon from './Icon'
 import './BoardStar.sass'
+import commands from '../commands'
 
 export default class BoardStar extends Component {
   static propTypes = {
@@ -18,13 +19,8 @@ export default class BoardStar extends Component {
   toggleStar(event) {
     event.stopPropagation()
     event.preventDefault()
-    const starred = this.props.board.starred
-    $.ajax({
-      method: "POST",
-      url: `/api/boards/${this.props.board.id}/${ starred ? 'unstar' : 'star'}`,
-    }).then(() => {
-      if (this.props.onChange) this.props.onChange()
-    })
+    const {board} = this.props
+    commands.toggleStar(board.id, board.starred, this.props.onChange)
   }
 
   render(){
