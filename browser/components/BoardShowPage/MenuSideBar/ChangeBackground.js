@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import boardStore from '../../../stores/boardStore'
-import boardsStore from '../../../stores/boardsStore'
 import ColorBox from '../ColorBox'
-import $ from 'jquery'
+import commands from '../../../commands'
 
 export default class ChangeBackground extends Component {
   static PropTypes = {
@@ -17,15 +15,7 @@ export default class ChangeBackground extends Component {
   updateColor(event){
     const { board } = this.props
     if (event.target.attributes.color.value != board.background_color) {
-      $.ajax({
-        method: 'post',
-        url: `/api/boards/${board.id}`,
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({background_color: event.target.attributes.color.value}),
-      }).then(() => {
-        boardStore.reload()
-        boardsStore.reload()
-      })
+      commands.updateBoardColor(board.id, event.target.attributes.color.value)
     }
   }
 

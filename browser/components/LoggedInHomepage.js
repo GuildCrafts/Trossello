@@ -50,7 +50,7 @@ const Board = ({board}) => {
 
   return <Link style={style} href={`/boards/${board.id}`} className="LoggedInHomepage-Board">
     {board.name}
-    <BoardStar board={board} onChange={_ => boardsStore.reload() } />
+    <BoardStar board={board} />
   </Link>
 }
 
