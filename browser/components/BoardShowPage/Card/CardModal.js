@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import React, { Component } from 'react'
-import moment from 'moment'
 import './CardModal.sass'
+import moment from 'moment'
 import LabelMenu from './LabelMenu'
 import CardLabel from './CardLabel'
 import Card from '../Card'
@@ -13,6 +13,7 @@ import ContentForm from '../../ContentForm'
 import ToggleComponent from '../../ToggleComponent'
 import ConfirmationButton from '../../ConfirmationButton'
 import boardStore from '../../../stores/boardStore'
+import TimeFromNow from '../../TimeFromNow'
 import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import Activity from '../../Activity'
@@ -405,7 +406,7 @@ class CardComment extends Component {
     const user = users.find(user => user.id === comment.user_id)
 
     const commentTimestamp = <div className="CardModal-CardComment-comment-controls-time">
-      {moment(comment.created_at).fromNow()}
+      <TimeFromNow time={comment.created_at}/>
       {comment.created_at === comment.updated_at ? '' : ' (edited)'}
     </div>
 
