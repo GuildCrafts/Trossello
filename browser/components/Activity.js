@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Link from './Link'
-import moment from 'moment'
+import TimeFromNow from './TimeFromNow'
 import './Activity.sass'
 
 
@@ -29,14 +29,14 @@ const activityString = (activity, board, cardActivity=false) => {
       return <span className={stringClass}>
         joined this board
         <span className={timeClass}>
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </span>
       </span>
     case 'InvitedToBoard':
       return <span className={stringClass}>
         invited {metadata.invited_email} to this board
         <span className={timeClass}>
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </span>
       </span>
     case 'UpdatedBoard':
@@ -44,14 +44,14 @@ const activityString = (activity, board, cardActivity=false) => {
         return <span className={stringClass}>
           changed board name to {metadata.new_board_name} from {metadata.prev_board_name}
           <span className={timeClass}>
-            {moment(activity.created_at).fromNow()}
+            <TimeFromNow time={activity.created_at}/>
           </span>
         </span>
       } else if (metadata.attribute_updated === 'background_color') {
         return <span className={stringClass}>
           changed background color
           <span className={timeClass}>
-            {moment(activity.created_at).fromNow()}
+            <TimeFromNow time={activity.created_at}/>
           </span>
         </span>
       }
@@ -61,7 +61,7 @@ const activityString = (activity, board, cardActivity=false) => {
         <Link href={openCardModal}
           className={timeClass}
         >
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </Link>
       </span>
     case 'MovedCard':
@@ -73,7 +73,7 @@ const activityString = (activity, board, cardActivity=false) => {
         <Link href={openCardModal}
           className={timeClass}
         >
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </Link>
       </span>
     case 'ArchivedCard':
@@ -82,7 +82,7 @@ const activityString = (activity, board, cardActivity=false) => {
         <Link href={openCardModal}
           className={timeClass}
         >
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </Link>
       </span>
     case 'UnarchivedCard':
@@ -91,42 +91,42 @@ const activityString = (activity, board, cardActivity=false) => {
         <Link href={openCardModal}
           className={timeClass}
         >
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </Link>
       </span>
     case 'AddedList':
       return <span className={stringClass}>
         added list {metadata.list_name}
         <span className={timeClass}>
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </span>
       </span>
     case 'CreatedBoard':
       return <span className={stringClass}>
         created board {board.name}
         <span className={timeClass}>
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </span>
       </span>
     case 'ArchivedList':
       return <span className={stringClass}>
         archived list {metadata.list_name}
         <span className={timeClass}>
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </span>
       </span>
     case 'UnarchivedList':
       return <span className={stringClass}>
         unarchived list {metadata.list_name}
         <span className={timeClass}>
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </span>
       </span>
     case 'DeletedCard':
       return <span className={stringClass}>
         deleted card #{activity.card_id}
         <span className={timeClass}>
-          {moment(activity.created_at).fromNow()}
+          <TimeFromNow time={activity.created_at}/>
         </span>
       </span>
     default:

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Link from '../../Link'
-import moment from 'moment'
 import Activity from '../../Activity'
 import './ActivityPanel.sass'
 
