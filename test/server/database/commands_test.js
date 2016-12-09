@@ -1207,6 +1207,7 @@ describe('database.commands', () => {
       })
     })
   })
+
   describe('recordActivity', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should record the user action in the activity table', () => {
@@ -1230,6 +1231,72 @@ describe('database.commands', () => {
             JSON.stringify({content: 'card test'})
           )
         })
+      })
+    })
+  })
+
+  describe('addUserToCard', () => {
+    withBoardsListsAndCardsInTheDatabase( () => {
+      it('should add a user association to a card', () => {
+        return commands.addUserToCard(10000, 101, 85, 1455)
+          .then( () => queries.getUsersForCard(85))
+          .then( cardUsers => {
+            expect(cardUsers).to.be.an('array')
+            expect(cardUsers.length).to.eql(1)
+            expect(cardUsers[0].board_id).to.eql(101)
+            expect(cardUsers[0].card_id).to.eql(85)
+            expect(cardUsers[0].user_id).to.eql(1455)
+          })
+          .then( () => queries.getActivityByBoardId(101))
+            .then( activities => {
+              const cardUserActivity = activities.find( activity =>
+                activity.card_id === 85 && activity.type === 'AddedUserToCard')
+              expect(cardUserActivity).to.be.an('object')
+              expect(cardUserActivity.type).to.eql('AddedUserToCard')
+              expect(cardUserActivity.user_id).to.eql(10000)
+              expect(cardUserActivity.board_id).to.eql(101)
+              expect(cardUserActivity.card_id).to.eql(85)
+              expect(cardUserActivity.metadata).to.eql('{"added_card_user":1455}')
+            })
+      })
+    })
+  })
+
+  describe('removeUserFromCard', () => {
+    withBoardsListsAndCardsInTheDatabase( () => {
+      it('should remove a user association from a card', () => {
+        return queries.getUsersForCard(87)
+          .then( cardUsers => {
+            expect(cardUsers).to.be.an('array')
+            expect(cardUsers.length).to.eql(1)
+            expect(cardUsers[0].board_id).to.eql(101)
+            expect(cardUsers[0].card_id).to.eql(87)
+            expect(cardUsers[0].user_id).to.eql(1455)
+          })
+          .then( () => commands.removeUserFromCard(10000, 101, 87, 1455))
+          .then( () => queries.getUsersForCard(87))
+              .then( result => {
+                expect(result).to.be.an('array')
+                expect(result.length).to.eql(0)
+              })
+              .then( () => queries.getActivityByBoardId(101))
+                .then( activities => {
+                  const cardUserActivity =
+                    activities.find( activity =>
+                      activity.card_id === 87 &&
+                      activity.type === 'RemovedUserFromCard'
+                    )
+                    expect(activities.slice(-1)[0]).to.be.an('object')
+                    expect(cardUserActivity).to.eql({
+                      id: 20,
+                      created_at: activities[0].created_at,
+                      type: 'RemovedUserFromCard',
+                      board_id: 101,
+                      card_id: 87,
+                      user_id: 10000,
+                      metadata: `{"removed_card_user":1455}`
+                    })
+                })
       })
     })
   })
