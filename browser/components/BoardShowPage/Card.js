@@ -146,23 +146,25 @@ export default class Card extends Component {
       style={style}
     >
       {editCardModal}
-      <Link
-        href={`/boards/${card.board_id}/cards/${card.id}`}
-        className="BoardShowPage-Card-box"
-        data-card-id={card.id}
-        data-list-id={card.list_id}
-        data-order={card.order}
-        onClick={this.openShowCardModal}
-        draggable
-        onDragStart={this.props.onDragStart}
-      >
-      <div className="BoardShowPage-Card-labels">
-        {cardLabels}
+      <div className="BoardShowPage-Card-box">
+        <Link
+          href={`/boards/${card.board_id}/cards/${card.id}`}
+          className="BoardShowPage-Card-box-Link"
+          data-card-id={card.id}
+          data-list-id={card.list_id}
+          data-order={card.order}
+          onClick={this.openShowCardModal}
+          draggable
+          onDragStart={this.props.onDragStart}
+        >
+          <div className="BoardShowPage-Card-labels">
+            {cardLabels}
+          </div>
+          <pre>{card.content}</pre>
+          {archivedFooter}
+        </Link>
+        {cardUsers}
       </div>
-      <pre>{card.content}</pre>
-      {cardUsers}
-      {archivedFooter}
-      </Link>
       <div className="BoardShowPage-Card-controls">
         {editCardButton}
       </div>
