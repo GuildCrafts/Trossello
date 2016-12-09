@@ -25,7 +25,5 @@ export default class Label extends Component {
       </div>
       {check}
     </div>
-
   }
-
 }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import $ from 'jquery'
-import './LabelMenu.sass'
+import './CardLabel.sass'
 import Label from '../Label'
 import ColorBox from '../ColorBox'
 import Link from '../../Link'
@@ -12,7 +12,7 @@ import ActionsMenu from '../../ActionsMenu'
 import ActionsMenuPane from '../../ActionsMenuPane'
 import boardStore from '../../../stores/boardStore'
 
-export default class LabelMenu extends Component {
+export default class CardLabel extends Component {
 
   static propTypes = {
     card: React.PropTypes.object.isRequired,
@@ -35,7 +35,7 @@ export default class LabelMenu extends Component {
   render(){
     const { card, board, onClose } = this.props
     return <ActionsMenu
-      className="LabelMenu"
+      className="CardLabel"
       defaultPane="Main Label Pane"
       paneProps={{
         state: this.state,
@@ -87,13 +87,13 @@ class MainLabelPanel extends Component {
     return <ActionsMenuPane
       heading="Labels"
       onClose={this.props.onClose}
-      className="LabelMenu-MainLabelPane"
+      className="CardLabel-MainLabelPane"
     >
-      <div className="LabelMenu-labels">
+      <div className="CardLabel-labels">
         {boardLabels}
       </div>
-      <div className="LabelMenu-controls">
-        <Link className="LabelMenu-button" onClick={this.props.goToPane('Create Label Pane')}>
+      <div className="CardLabel-controls">
+        <Link className="CardLabel-button" onClick={this.props.goToPane('Create Label Pane')}>
           Create Label
         </Link>
       </div>
@@ -105,11 +105,11 @@ class MainLabelPanel extends Component {
 const LabelRow = (props) => {
   const {label, onClick, onEdit, checked} = props
 
-  return <div className="LabelMenu-LabelRow">
-    <div className="LabelMenu-LabelRow-box" onClick={onClick}>
+  return <div className="CardLabel-LabelRow">
+    <div className="CardLabel-LabelRow-box" onClick={onClick}>
       <Label key={label.id} color={label.color} text={label.text} checked={checked}/>
     </div>
-    <Link onClick={onEdit} className="LabelMenu-LabelRow-edit"><Icon type="pencil" /></Link>
+    <Link onClick={onEdit} className="CardLabel-LabelRow-edit"><Icon type="pencil" /></Link>
   </div>
 }
 
@@ -223,7 +223,7 @@ class CreateLabelPanel extends Component {
       const checked = (this.state.labelColor===color) ? true : false
       return <div
         key={color}
-        className="LabelMenu-CreateLabelPanel-colorbox">
+        className="CardLabel-CreateLabelPanel-colorbox">
         <ColorBox
           checked={checked}
           color={color}
@@ -236,7 +236,7 @@ class CreateLabelPanel extends Component {
 
     const deleteButton = this.isEditing() ?
       <ConfirmationButton
-        className="LabelMenu-CreateLabelPanel-button"
+        className="CardLabel-CreateLabelPanel-button"
         onConfirm={this.deleteLabel}
         type="danger"
         submit={false}
@@ -253,19 +253,19 @@ class CreateLabelPanel extends Component {
       card={this.props.card}
       onClose={this.props.onClose}
       onBack={this.goBack}
-      className="LabelMenu-CreateLabelPanel"
+      className="CardLabel-CreateLabelPanel"
     >
       <Form
         method="post"
         onSubmit={this.createOrEditLabel}
-        className="LabelMenu-CreateLabelPanel-Form"
+        className="CardLabel-CreateLabelPanel-Form"
       >
         <input type="text" placeholder="Card Text" value={this.state.labelText} onChange={this.handleChange}/>
-        <div className="LabelMenu-CreateLabelPanel-colors">{colorBoxes}</div>
+        <div className="CardLabel-CreateLabelPanel-colors">{colorBoxes}</div>
         <br/>
-        <div className="LabelMenu-CreateLabelPanel-controls">
+        <div className="CardLabel-CreateLabelPanel-controls">
           <Button
-            className="LabelMenu-CreateLabelPanel-button"
+            className="CardLabel-CreateLabelPanel-button"
             type="primary"
             submit={true}
           >
