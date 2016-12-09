@@ -1207,6 +1207,7 @@ describe('database.commands', () => {
       })
     })
   })
+
   describe('recordActivity', () => {
     withBoardsListsAndCardsInTheDatabase(() => {
       it('should record the user action in the activity table', () => {
@@ -1234,4 +1235,53 @@ describe('database.commands', () => {
     })
   })
 
+  describe('comment commands', () => {
+    withBoardsListsAndCardsInTheDatabase(() => {
+
+      describe('addComment', () => {
+        it('should add a comment to the card', () => {
+          const cardComments = board => board.cards.find(card => card.id === 81).comments
+
+          return commands.addComment(81, 1455, 'addComment command works!')
+            .then(() => queries.getBoardById(101))
+            .then(board =>
+              expect(cardComments(board)[0]).to.eql(
+                {
+                  id:2,
+                  user_id:1455,
+                  card_id:81,
+                  content:'addComment command works!',
+                  created_at:cardComments(board)[0].created_at,
+                  updated_at:cardComments(board)[0].updated_at,
+                }
+              )
+            )
+        })
+      })
+
+      describe('updateComment', () => {
+        it('should update the content of a comment', () => {
+          const cardComments = board => board.cards.find(card => card.id === 80).comments
+
+          return queries.getBoardById(101)
+            .then(board => expect(cardComments(board)[0].content).to.eql('old comment'))
+            .then(() => commands.updateComment(1, 'updated comment!'))
+            .then(() => queries.getBoardById(101))
+            .then(board => expect(cardComments(board)[0].content).to.eql('updated comment!'))
+        })
+      })
+
+      describe('deleteComment', () => {
+        it('should delete a comment', () => {
+          const cardComments = board => board.cards.find(card => card.id === 80).comments
+
+          return queries.getBoardById(101)
+            .then(board => expect(cardComments(board).length).to.eql(1))
+            .then(() => commands.deleteComment(1))
+            .then(() => queries.getBoardById(101))
+            .then(board => expect(cardComments(board).length).to.eql(0))
+        })
+      })
+    })
+  })
 })
