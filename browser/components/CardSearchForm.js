@@ -1,13 +1,14 @@
 import './CardSearchForm.sass'
+import $ from 'jquery'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import debounce from 'throttle-debounce/debounce'
-import $ from 'jquery'
 import Form from './Form'
 import Link from './Link'
 import Icon from './Icon'
 import Spinner from './Spinner'
 import Card from './BoardShowPage/Card'
+import commands from '../commands'
 
 export default class CardSearchForm extends Component {
 
@@ -76,15 +77,10 @@ export default class CardSearchForm extends Component {
     this.setState({loading: true})
     if (this.searchRequest) this.searchRequest.abort()
 
-    this.searchRequest = $.ajax({
-      method: "POST",
-      url: "/api/boards/search",
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({searchTerm: this.state.searchTerm}),
-    })
+    this.searchRequest = commands.searchRequest(this.state.searchTerm)
 
-    this.searchRequest.then(result => {
+    return this.searchRequest
+      .then(result => {
       this.setState({result, loading: false})
     })
   }

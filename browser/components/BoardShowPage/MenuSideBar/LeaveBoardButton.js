@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Button from '../../Button'
-import $ from 'jquery'
 import boardsStore from '../../../stores/boardsStore'
 import ConfirmationButton from '../../ConfirmationButton'
+import commands from '../../../commands'
 
 export default class LeaveBoardButton extends Component {
 
@@ -16,13 +16,7 @@ export default class LeaveBoardButton extends Component {
   }
 
   leaveBoard(event){
-    $.ajax({
-      method: "POST",
-      url: `/api/boards/${this.props.boardId}/leave`,
-    }).then( () => {
-      this.context.redirectTo('/')
-      boardsStore.reload()
-    })
+    return commands.leaveBoard(this.props.boardId, this.context.redirectTo('/'))
   }
 
   render(){

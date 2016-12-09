@@ -11,6 +11,7 @@ import ConfirmationButton from '../../ConfirmationButton'
 import ActionsMenu from '../../ActionsMenu'
 import ActionsMenuPane from '../../ActionsMenuPane'
 import boardStore from '../../../stores/boardStore'
+import commands from '../../../commands'
 
 export default class LabelMenu extends Component {
 
@@ -64,11 +65,7 @@ class MainLabelPanel extends Component {
 
   addOrRemoveLabel(labelId, event) {
     event.preventDefault()
-    $.ajax({
-      method: 'POST',
-      url:`/api/cards/${this.props.card.id}/labels/${labelId}`
-    })
-    .then(() => boardStore.reload())
+    return commands.addOrRemoveLabel(this.props.card.id, labelId)
   }
 
   render() {
@@ -135,10 +132,6 @@ class CreateLabelPanel extends Component {
     this.goBack = this.goBack.bind(this)
   }
 
-  componentWillReceiveProps(newProps){
-    console.log(this.props.state.editingLabel, 'vs.', newProps.state.editingLabel)
-  }
-
   labelBeingEdited(props=this.props){
     return this.isEditing(props) &&
       props.board.labels.find(label => label.id === props.state.editingLabel)
@@ -154,14 +147,7 @@ class CreateLabelPanel extends Component {
 
   deleteLabel(event) {
     if (event) event.preventDefault()
-    $.ajax({
-      method: 'POST',
-      url: `/api/boards/${this.props.board.id}/labels/${this.props.state.editingLabel}/delete`
-    })
-    .then(label => {
-      boardStore.reload()
-      this.goBack()
-    })
+    return commands.deleteLabel(this.props.board.id, this.props.state.editingLabel, this.goBack)
   }
 
   changeColor(event) {
@@ -175,40 +161,18 @@ class CreateLabelPanel extends Component {
   }
 
   updateLabel(){
-    $.ajax({
-      method: 'POST',
-      url: `/api/boards/${this.props.board.id}/labels/${this.props.state.editingLabel}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({
-        text: this.state.labelText,
-        color: this.state.labelColor,
-      })
-    })
-    .then(() => {
-      boardStore.reload()
-      this.goBack()
-    })
+    const data= {text: this.state.labelText, color: this.state.labelColor}
+    return commands.updateLabel(this.props.board.id, this.props.state.editingLabel, data, this.goBack )
   }
 
   createLabel(){
-    $.ajax({
-      method: 'POST',
-      url: `/api/boards/${this.props.board.id}/labels`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data:JSON.stringify({"text": this.state.labelText, "color": this.state.labelColor})
-    })
-    .then(label => {
-      $.ajax({
-        method: 'POST',
-        url:`/api/cards/${this.props.card.id}/labels/${label.id}`
-      })
-      .then(() => {
-        boardStore.reload()
-        this.goBack()
-      })
-    })
+    const data = {
+      text: this.state.labelText,
+      color:this.state.labelColor,
+      cardId: this.props.card.id,
+    }
+
+    return commands.createLabel(this.props.board.id, data, this.goBack)
   }
 
   handleChange(event) {

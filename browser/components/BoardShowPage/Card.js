@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
-import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
 import ArchiveButton from './ArchiveButton'
 import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
 import CardLabel from './Card/CardLabel'
+import commands from '../../commands'
 
 export default class Card extends Component {
   static contextTypes = {
@@ -69,19 +69,14 @@ export default class Card extends Component {
     const { card } = this.props
     const cardClone = Object.assign({}, card)
     Object.assign(card, updates)
-    $.ajax({
-      method: 'post',
-      url: `/api/cards/${card.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify(updates),
-    }).then(() => {
-      this.cancelEditingCard()
-      boardStore.reload()
-    }).catch(error => {
-      Object.assign(card, cardClone)
-      throw error
-    })
+    return commands.updateCard(card.id, updates)
+      .then(() => {
+        this.cancelEditingCard()
+        boardStore.reload()
+      }).catch(error => {
+        Object.assign(card, cardClone)
+        throw error
+      })
   }
 
   openShowCardModal(event){
