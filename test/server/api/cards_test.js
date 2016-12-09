@@ -126,6 +126,55 @@ describe('/api/cards', () => {
         })
       })
 
+      //CREATE COMMENT
+      describe('POST /api/cards/:cardId/comments', () => {
+        it('should add a comment to the card', () => {
+          const cardComments = board => board.cards.find(card => card.id === 81).comments
+
+          return request('post', '/api/cards/81/comments', { userId: 1455, content:'hello comment 2' })
+            .then(response => expect(response).to.have.status(200) )
+            .then(() => queries.getBoardById(101))
+            .then(board =>
+              expect(cardComments(board)[0]).to.eql(
+                {
+                  id:2,
+                  user_id:1455,
+                  card_id:81,
+                  content:'hello comment 2',
+                  created_at:cardComments(board)[0].created_at,
+                  updated_at:cardComments(board)[0].updated_at,
+                }
+              )
+            )
+        })
+      })
+
+      //UPDATE COMMENT
+      describe('POST /api/cards/:cardId/comments/:commentId', () => {
+        it('should update the content of a comment', () => {
+          const cardComments = board => board.cards.find(card => card.id === 80).comments
+
+          return queries.getBoardById(101)
+            .then(board => expect(cardComments(board)[0].content).to.eql('old comment'))
+            .then(() => request('post', '/api/cards/80/comments/1', {content: 'new comment'}))
+            .then(response => expect(response).to.have.status(200))
+            .then(() => queries.getBoardById(101))
+            .then(board => expect(cardComments(board)[0].content).to.eql('new comment'))
+        })
+      })
+
+      //DELETE COMMENT
+      describe('POST /api/cards/:cardId/comments/:commentId/delete', () => {
+        it('should delete a comment', () => {
+          const cardComments = board => board.cards.find(card => card.id === 80).comments
+
+          return queries.getBoardById(101)
+            .then(board => expect(cardComments(board).length).to.eql(1))
+            .then(() => request('post','/api/cards/80/comments/1/delete'))
+            .then(() => queries.getBoardById(101))
+            .then(board => expect(cardComments(board).length).to.eql(0))
+        })
+      })
     })
   })
 })

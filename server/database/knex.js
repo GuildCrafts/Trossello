@@ -17,6 +17,7 @@ knex.truncateAllTables = function(){
     TRUNCATE invites     RESTART IDENTITY CASCADE;
     TRUNCATE labels      RESTART IDENTITY CASCADE;
     TRUNCATE card_labels RESTART IDENTITY CASCADE;
+    TRUNCATE comments    RESTART IDENTITY CASCADE;
     COMMIT;
   `)
 }

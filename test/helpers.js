@@ -128,6 +128,8 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
         ).then( () =>
           commands.addOrRemoveCardLabel(90, 301)
         ).then( () =>
+          commands.addComment(80, 1455, 'old comment')
+        ).then( () =>
           commands.createBoard(1455, {
             id: 102,
             name: 'Board2',
