@@ -1,8 +1,8 @@
 import $ from 'jquery'
 import React, { Component } from 'react'
 import './CardModal.sass'
-import LabelMenu from './LabelMenu'
 import CardLabel from './CardLabel'
+import Label from '../Label'
 import Card from '../Card'
 import Link from '../../Link'
 import Icon from '../../Icon'
@@ -29,20 +29,20 @@ export default class CardModal extends Component {
     this.state = {
       editingDescription: false,
       editingName: false,
-      showingLabelMenu: false,
+      showingCardLabel: false,
     }
-    this.showLabelMenu = this.showLabelMenu.bind(this)
-    this.stopShowingLabelMenu = this.stopShowingLabelMenu.bind(this)
+    this.showCardLabel = this.showCardLabel.bind(this)
+    this.stopShowingCardLabel = this.stopShowingCardLabel.bind(this)
   }
 
-  showLabelMenu(event) {
+  showCardLabel(event) {
     event.preventDefault()
-    this.setState({showingLabelMenu: true})
+    this.setState({showingCardLabel: true})
   }
 
-  stopShowingLabelMenu(event) {
+  stopShowingCardLabel(event) {
     event.preventDefault()
-    this.setState({showingLabelMenu: false})
+    this.setState({showingCardLabel: false})
   }
 
   render(){
@@ -53,7 +53,7 @@ export default class CardModal extends Component {
         <Icon type="archive" /> This card is archived
       </div> : null
 
-    const labelPanel = <LabelMenu
+    const labelPanel = <CardLabel
       card={card}
       board={board}
     />
@@ -121,7 +121,7 @@ const CardLabels =({card, board, labelPanel}) => {
         type="unstyled"
         popover={labelPanel}
       >
-        <CardLabel
+        <Label
           color={label.color}
           text={label.text}
           checked={false}
