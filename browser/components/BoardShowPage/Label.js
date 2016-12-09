@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import $ from 'jquery'
-import Link from '../../Link'
-import Icon from '../../Icon'
-import './CardLabel.sass'
+import Link from '../Link'
+import Icon from '../Icon'
+import './Label.sass'
 
-export default class CardLabel extends Component {
+export default class Label extends Component {
 
   static propTypes = {
     color: React.PropTypes.string.isRequired,
@@ -15,12 +15,12 @@ export default class CardLabel extends Component {
   render(){
     const {color, text, checked} = this.props
     const check = checked ?
-      <div className="CardLabel-check">
+      <div className="Label-check">
         <Icon type="check"/>
       </div> : null
 
-    return <div className="CardLabel" style={{backgroundColor: color}}>
-      <div className="CardLabel-text">
+    return <div className="Label" style={{backgroundColor: color}}>
+      <div className="Label-text">
         {text}
       </div>
       {check}

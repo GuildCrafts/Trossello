@@ -21,7 +21,7 @@ export default class MenuSideBar extends Component {
 
   static PropTypes = {
     board: React.PropTypes.object.isRequired,
-    onClose: React.PropTypes.func.isRequired,
+    onClose: React.PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -295,11 +295,11 @@ const SettingsPane = ({board, onClose, gotoPane, goBack}) =>
   </Pane>
 
 
-const LabelsPane = ({board, onClose, gotoPane, goBack}) =>
-  <Pane name="Labels">
-    <div>Labels Panel</div>
-  </Pane>
+const LabelsPane = ({board, card, onClose, gotoPane, goBack}) =>
 
+  <Pane name="Labels">
+    <div> Label Panel 2 </div>
+  </Pane>
 
 const DownloadBoardButton = (props) => {
   return <a

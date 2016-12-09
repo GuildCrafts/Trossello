@@ -2,7 +2,7 @@ import $ from 'jquery'
 import React, { Component } from 'react'
 import './CardModal.sass'
 import LabelMenu from './LabelMenu'
-import CardLabel from './CardLabel'
+import Label from '../Label'
 import Card from '../Card'
 import Link from '../../Link'
 import Icon from '../../Icon'
@@ -121,7 +121,7 @@ const CardLabels =({card, board, labelPanel}) => {
         type="unstyled"
         popover={labelPanel}
       >
-        <CardLabel
+        <Label
           color={label.color}
           text={label.text}
           checked={false}

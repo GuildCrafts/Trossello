@@ -8,7 +8,7 @@ import autosize from 'autosize'
 import ArchiveButton from './ArchiveButton'
 import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
-import CardLabel from './Card/CardLabel'
+import Label from './Label'
 
 export default class Card extends Component {
   static contextTypes = {
@@ -105,7 +105,7 @@ export default class Card extends Component {
       .map( labelId => board.labels.find(label => label.id === labelId))
       .map( label =>
         <div key={label.id} className="BoardShowPage-Card-label">
-          <CardLabel color={label.color} text={''} checked={false} />
+          <Label color={label.color} text={''} checked={false} />
         </div>
       )
 

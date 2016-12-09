@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import $ from 'jquery'
 import './LabelMenu.sass'
-import CardLabel from './CardLabel'
+import Label from '../Label'
 import ColorBox from '../ColorBox'
 import Link from '../../Link'
 import Form from '../../Form'
@@ -107,7 +107,7 @@ const LabelRow = (props) => {
 
   return <div className="LabelMenu-LabelRow">
     <div className="LabelMenu-LabelRow-box" onClick={onClick}>
-      <CardLabel key={label.id} color={label.color} text={label.text} checked={checked}/>
+      <Label key={label.id} color={label.color} text={label.text} checked={checked}/>
     </div>
     <Link onClick={onEdit} className="LabelMenu-LabelRow-edit"><Icon type="pencil" /></Link>
   </div>
