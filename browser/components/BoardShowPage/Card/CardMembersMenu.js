@@ -8,8 +8,8 @@ import Icon from '../../Icon'
 export default class CardMembersMenu extends Component {
 
   static PropTypes = {
+    board: React.PropTypes.object.isRequired,
     card: React.PropTypes.object.isRequired,
-    board: React.PropTypes.object.isRequired
   }
 
   constructor(props) {

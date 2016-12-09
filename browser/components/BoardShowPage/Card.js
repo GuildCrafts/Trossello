@@ -10,6 +10,7 @@ import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
 import CardLabel from './Card/CardLabel'
 import Avatar from '../Avatar'
+import CardMember from './Card/CardMember'
 
 export default class Card extends Component {
   static contextTypes = {
@@ -113,7 +114,8 @@ export default class Card extends Component {
     const cardUsers = (card.user_ids.length > 0) ? card.user_ids
       .map( userId => board.users.find( user => user.id === userId ))
       .map( user => 
-        <Avatar src={user.avatar_url} key={user.id} />
+        <CardMember key={user.id} board={board}
+          card={card} user={user} />
       ) : null
 
     const editCardButton = this.props.editable ?

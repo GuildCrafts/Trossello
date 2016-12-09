@@ -15,6 +15,7 @@ import boardStore from '../../../stores/boardStore'
 import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import CardMembersMenu from './CardMembersMenu'
+import CardMember from './CardMember'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -146,8 +147,8 @@ const CardMembers = ({card, board}) => {
   const cardMembers = board.users
     .filter(user => card.user_ids.includes(user.id) )
     .map( user =>
-      <Avatar key={user.id} src={user.avatar_url}
-        className='CardModal-MemberAvatar'
+      <CardMember key={user.id} className='CardModal-MemberAvatar'
+        board={board} card={card} user={user}
       />
     )
 
