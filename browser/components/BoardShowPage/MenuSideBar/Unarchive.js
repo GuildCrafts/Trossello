@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import boardStore from '../../../stores/boardStore'
-import $ from 'jquery'
 import Form from '../../Form'
 import Card from '../Card'
 import Link from '../../Link'
 import ConfirmationLink from '../../ConfirmationLink'
 import Icon from '../../Icon'
 import Button from '../../Button'
+import commands from '../../../commands'
 
 
 export default class Unarchive extends Component {
@@ -68,26 +68,16 @@ class ArchivedCards extends Component {
 
   constructor(props){
     super(props)
-    this.unArchiveCard = this.unArchiveCard.bind(this)
+    this.unarchiveCard = this.unarchiveCard.bind(this)
     this.deleteCard = this.deleteCard.bind(this)
   }
 
-  unArchiveCard(id){
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${id}/unarchive`
-    }).then(() => {
-      boardStore.reload()
-    })
+  unarchiveCard(id){
+    commands.unarchiveCard(id)
   }
 
   deleteCard(id){
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${id}/delete`
-    }).then(() => {
-      boardStore.reload()
-    })
+    commands.deleteCard(id)
   }
 
   render(){
@@ -103,7 +93,7 @@ class ArchivedCards extends Component {
           card={card}
           index={index}
         />
-        <Link onClick={()=> this.unArchiveCard(card.id)} className="BoardShowPage-MenuSideBar-ArchivedItems-UnarchiveButton">Send to Board</Link>-
+        <Link onClick={()=> this.unarchiveCard(card.id)} className="BoardShowPage-MenuSideBar-ArchivedItems-UnarchiveButton">Send to Board</Link>-
         <ConfirmationLink
           onConfirm={()=> this.deleteCard(card.id)}
           buttonName="Delete"
@@ -130,16 +120,11 @@ class ArchivedLists extends Component {
 
   constructor(props){
     super(props)
-    this.unArchiveList = this.unArchiveList.bind(this)
+    this.unarchiveList = this.unarchiveList.bind(this)
   }
 
-  unArchiveList(id){
-    $.ajax({
-      method: "POST",
-      url: `/api/lists/${id}/unarchive`
-    }).then(() => {
-      boardStore.reload()
-    })
+  unarchiveList(id){
+    commands.unarchiveList(id)
   }
 
   render(){

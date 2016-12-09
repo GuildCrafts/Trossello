@@ -1,6 +1,15 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
 import ContentForm from '../ContentForm'
+import Form from '../Form'
+import Link from '../Link'
+import Icon from '../Icon'
+import Card from './Card'
+import Button from '../Button'
+import ArchiveButton from './ArchiveButton'
+import boardStore from '../../stores/boardStore'
+import autosize from 'autosize'
+import sessionStorage from '../../sessionStorage'
+const KEY = "EditCardFormContent"
 
 export default class EditCardForm extends Component {
 
