@@ -8,8 +8,8 @@ import Icon from '../../Icon'
 export default class CardMembersMenu extends Component {
 
   static PropTypes = {
+    board: React.PropTypes.object.isRequired,
     card: React.PropTypes.object.isRequired,
-    board: React.PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -73,16 +73,20 @@ export default class CardMembersMenu extends Component {
       heading={'Members'}
       className='CardModal-CardMembersMenu'
     >
-      <div className='CardModal-CardMembersMenu-membersWrapper'>
+      <div className='CardModal-CardMembersMenu-content'>
         <input ref='searchMembers'
           name='searchMembers'
           placeholder='Search Member'
+          className='CardModal-CardMembersMenu-search'
         />
-        <div className='CardModal-CardMembersMenu-boardUsersHeader'>
-          Board Members
-        </div>
-        <div className='CardModal-CardMembersMenu-boardUsers'>
-          {boardUserImages}
+        <div className='CardModal-CardMembersMenu-Users'>
+          <div className='CardModal-CardMembersMenu-Users-header'>
+            Board Members
+          </div>
+          <DialogBox.Divider />
+          <div className='CardModal-CardMembersMenu-Users-images'>
+            {boardUserImages}
+          </div>
         </div>
       </div>
     </DialogBox>
@@ -92,10 +96,10 @@ export default class CardMembersMenu extends Component {
 const UserAvatar = (props) => {
   const { user, onClick, isMember } = props
   const checkmark = isMember ?
-    <Icon type="check-square" className="CardModal-CardMembersMenu-checkmark" />
+    <Icon type="check-square" className="CardModal-CardMembersMenu-Users-images-User-checkmark" />
   :
     null
-  return <Link onClick={onClick} className='CardModal-CardMembersMenu-UserAvatar'>
+  return <Link onClick={onClick} className='CardModal-CardMembersMenu-Users-images-User-avatar'>
     <Avatar src={user.avatar_url} />
     {checkmark}
   </Link>

@@ -15,6 +15,7 @@ import boardStore from '../../../stores/boardStore'
 import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import CardMembersMenu from './CardMembersMenu'
+import CardMember from './CardMember'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -67,8 +68,10 @@ export default class CardModal extends Component {
           <div className="CardModal-content">
             <CardHeader card={card} list={list}/>
             <div className="CardModal-body">
-              <CardLabels card={card} board={board} labelPanel={labelPanel}/>
-              <CardMembers card={card} board={board} />
+              <div className="CardModal-body-toprow">
+                <CardMembers card={card} board={board}/>
+                <CardLabels card={card} board={board} labelPanel={labelPanel}/>
+              </div>
               <CardDescription card={card}/>
             </div>
             <CardComments session={session}/>
@@ -146,20 +149,22 @@ const CardMembers = ({card, board}) => {
   const cardMembers = board.users
     .filter(user => card.user_ids.includes(user.id) )
     .map( user =>
-      <Avatar key={user.id} src={user.avatar_url}
-        className='CardModal-MemberAvatar'
+      <CardMember key={user.id} className='CardModal-MemberAvatar'
+        board={board} card={card} user={user}
       />
     )
 
-  const membersHeader = cardMembers.length > 0 ?
-    <div className="CardModal-CardLabels-header">Members</div>
+  const membersDisplay = cardMembers.length > 0 ?
+    <div className='CardModal-CardMembers-content'>
+      <div className="CardModal-CardLabels-header">Members</div>
+      <div className='CardModal-CardMembers-avatars'>
+        {cardMembers}
+      </div>
+    </div>
     : null
 
   return <div className='CardModal-CardMembers'>
-    {membersHeader}
-    <div className='CardModal-CardMembers-gravatars'>
-      {cardMembers}
-    </div>
+      {membersDisplay}
   </div>
 }
 

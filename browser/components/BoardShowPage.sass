@@ -308,15 +308,16 @@
       background-color: white
       font-weight: 400
       font-size: 14px
-      > pre
-        margin: 0
-        font-size: 14px
-        font-family: inherit
-        white-space: pre-wrap
-        white-space: -moz-pre-wrap
-        white-space: -pre-wrap
-        white-space: -o-pre-wrap
-        word-wrap: break-word
+      &-Link
+        > pre
+          margin: 0
+          font-size: 14px
+          font-family: inherit
+          white-space: pre-wrap
+          white-space: -moz-pre-wrap
+          white-space: -pre-wrap
+          white-space: -o-pre-wrap
+          word-wrap: break-word
     &-controls
       position: absolute
       top: 5px
@@ -328,6 +329,12 @@
     &-label
       width: 45px
       margin: 0 3px 3px 0
+    &-members
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      justify-content: flex-end
+      padding-top: 4px
 
   &-create-card-link
     padding: 8px 10px
