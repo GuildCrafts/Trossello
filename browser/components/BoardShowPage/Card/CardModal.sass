@@ -22,6 +22,9 @@
     margin-left: 35px
     display: flex
     flex-direction: column
+    &-toprow
+      display: flex
+      flex-direction: row
 
   &-CardModalShroud
     &-shroud, &-stage
@@ -256,3 +259,66 @@
           outline: none
           border-color: #298FCA
           box-shadow: 0 0 2px #298FCA
+
+  &-CardMembers
+    display: flex
+    flex-direction: column
+    flex-shrink: 1
+    &-content
+      padding-right: 30px
+      height: auto
+
+  &-CardMembersMenu
+    &-content
+      display: flex
+      flex-direction: column
+      flex-wrap: wrap
+    &-search
+      margin: 0 10px
+      height: 30px
+    &-Users
+      display: flex
+      flex-direction: column
+      &-header
+        margin-left: 12px
+        padding-top: 6px
+        font-size: 16px
+        font-weight: bold
+      &-images
+        margin: 0 10px 0
+        display: flex
+        flex-direction: row
+        justify-content: flex-start
+        &-User
+          &-avatar
+            display: block
+          &-checkmark
+            position: relative
+            bottom: 4px
+            right: 14px
+            color: #298FCA
+            background-color: white
+            line-height: 12px
+            border-radius: 5px
+
+  &-CardMemberPopover
+    position: fixed
+    box-shadow: 0 1px 6px rgba(0,0,0,.15)
+    z-index: 201
+    background-color: #FFFFFF
+    width: 200px
+    padding: 5px
+    border-radius: 3px
+    &-User
+      font-size: 18px
+      font-weight: bold
+      display: flex
+      flex-direction: row
+      &-details
+        margin-left: 10px
+        align-items: baseline
+    &-controls
+      padding: 10px 0
+      margin-left: 2px
+      font-size: 14px
+      font-weight: bold

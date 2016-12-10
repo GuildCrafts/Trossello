@@ -126,6 +126,32 @@ describe('/api/cards', () => {
         })
       })
 
+      describe('POST /api/cards/:cardId/users/add', () => {
+        it('should add a user to a card', () => {
+          const dataOptions = { boardId: 101, userId: 1455, targetId: 1455 }
+          const cardUsers = board =>
+            board.cards.find( card => card.id === 81).user_ids
+          return queries.getBoardById(101)
+            .then( board => expect(cardUsers(board)).to.eql([]))
+            .then( () => request('post', '/api/cards/81/users/add', dataOptions))
+            .then( () => queries.getBoardById(101))
+            .then( board => expect(cardUsers(board)).to.eql([1455]))
+        })
+      })
+
+      describe('POST /api/cards/:cardId/users/remove', () => {
+        it('should remove a user from a card', () => {
+          const dataOptions = { boardId: 101, userId: 1455, targetId: 1455, cardId: 87}
+          const cardUsers = board =>
+            board.cards.find( card => card.id === 87).user_ids
+          return queries.getBoardById(101)
+            .then( board => expect(cardUsers(board)).to.eql([1455]))
+            .then( () => request('post', '/api/cards/87/users/remove', dataOptions))
+            .then( () => queries.getBoardById(101))
+            .then( board => expect(cardUsers(board)).to.eql([]))
+        })
+      })
+
     })
   })
 })
