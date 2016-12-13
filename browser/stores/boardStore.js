@@ -10,6 +10,7 @@ boardStore.setBoardId = function (boardId) {
   if (this.boardId !== boardId) {
     this.value = null
     this.boardId = boardId
+    this.reload()
   }
 }
 
