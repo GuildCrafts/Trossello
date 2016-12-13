@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import $ from 'jquery'
 import Button from './Button'
 import Icon from './Icon'
 import './BoardStar.sass'
@@ -20,7 +19,7 @@ export default class BoardStar extends Component {
     event.stopPropagation()
     event.preventDefault()
     const {board} = this.props
-    commands.toggleStar(board.id, board.starred, this.props.onChange)
+    commands.toggleStar(board.id, board.starred).then(this.props.onChange)
   }
 
   render(){

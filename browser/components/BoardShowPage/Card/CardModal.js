@@ -174,7 +174,7 @@ class DeleteCardButton extends Component {
   }
 
   delete(){
-    return commands.deleteCard(id, onDelete)
+    return commands.deleteCard(id).then(this.props.onDelete)
   }
 
   render(){
@@ -338,7 +338,8 @@ class CardDescription extends ToggleComponent {
   updateDescription(event){
     if (event) event.preventDefault()
     const description = this.refs.description.value
-    return commands.updateCardDescription(this.props.card.id, description, this.close)
+    return commands.updateCardDescription(this.props.card.id, description)
+      .then(this.close)
   }
 
   cancel(event){

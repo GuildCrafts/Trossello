@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import $ from 'jquery'
 import './LabelMenu.sass'
 import CardLabel from './CardLabel'
 import ColorBox from '../ColorBox'
@@ -147,7 +146,7 @@ class CreateLabelPanel extends Component {
 
   deleteLabel(event) {
     if (event) event.preventDefault()
-    return commands.deleteLabel(this.props.board.id, this.props.state.editingLabel, this.goBack)
+    return commands.deleteLabel(this.props.board.id, this.props.state.editingLabel).then(this.goBack)
   }
 
   changeColor(event) {
@@ -162,7 +161,8 @@ class CreateLabelPanel extends Component {
 
   updateLabel(){
     const data= {text: this.state.labelText, color: this.state.labelColor}
-    return commands.updateLabel(this.props.board.id, this.props.state.editingLabel, data, this.goBack )
+    return commands.updateLabel(this.props.board.id, this.props.state.editingLabel, data)
+      .then(this.goBack)
   }
 
   createLabel(){
@@ -172,7 +172,7 @@ class CreateLabelPanel extends Component {
       cardId: this.props.card.id,
     }
 
-    return commands.createLabel(this.props.board.id, data, this.goBack)
+    return commands.createLabel(this.props.board.id, data).then(this.goBack)
   }
 
   handleChange(event) {

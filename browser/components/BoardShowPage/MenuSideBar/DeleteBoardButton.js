@@ -15,7 +15,8 @@ export default class DeleteBoardButton extends Component {
   }
 
   onClick(event){
-    return commands.archiveBoard(this.props.boardId, this.context.redirectTo('/'))
+    return commands.archiveBoard(this.props.boardId)
+      .then(_ => this.context.redirectTo('/') )
   }
 
   render(){

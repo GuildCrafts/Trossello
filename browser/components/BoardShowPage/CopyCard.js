@@ -34,7 +34,8 @@ export default class CopyCard extends Component {
     event.preventDefault()
     if (this.state.title.replace(/\s+/g,'') === '') { return }
     const data = { content: this.state.title, order: this.state.order }
-    return commands.copyCard(this.state.boardId, this.state.listId, data, this.props.onClose)
+    return commands.createCard(this.state.boardId, this.state.listId, data)
+      .then(this.props.onClose)
   }
 
   selectBoardHandler(event){

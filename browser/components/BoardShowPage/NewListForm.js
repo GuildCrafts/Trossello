@@ -54,7 +54,7 @@ class Open extends Component {
     if (newList.name.replace(/\s+/g,'') === '') return
     this.refs.name.value = ''
 
-    return commands.createList(board.id, newList, this.props.afterCreate)
+    return commands.createList(board.id, newList).then(this.props.afterCreate)
   }
 
   render(){

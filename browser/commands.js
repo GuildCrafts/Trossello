@@ -1,333 +1,176 @@
 import $ from 'jquery'
 import boardsStore from './stores/boardsStore'
+import boardStore from './stores/boardStore'
 import sessionStore from './stores/sessionStore'
 import createStoreProvider from './components/createStoreProvider'
 
-const boardsDropdownToggle = user => {
-  const locked = user.boards_dropdown_lock
-  return $.ajax({
-    method: 'post',
-    url: `/api/users/${user.id}/${locked ? 'unlock' : 'lock'}dropdown`,
-  }).then(() => {
-    sessionStore.reload()
-  })
+// helpers:
+
+const reloadSessionStore = result => {
+  sessionStore.reload()
+  return result
 }
 
-const moveList = (listId, boardId, order) =>
+const reloadBoardsStore = result => {
+  boardsStore.reload()
+  return result
+}
+
+const reloadBoardStore = result => {
+  boardStore.reload()
+  return result
+}
+
+const post = (path, data) =>
   $.ajax({
     method: 'post',
-    url: `/api/lists/${listId}/move`,
+    url: path,
     contentType: "application/json; charset=utf-8",
     dataType: "json",
-    data: JSON.stringify({
-      boardId: boardId,
-      order: order,
-    })
-  }).then(() => {
-    boardStore.reload()
+    data: JSON.stringify(data)
+  }).promise()
+
+
+// commands:
+
+const logout = () =>
+  post('/logout').then(() => {
+    // reload to the homepage
+    location.assign('/')
   })
+
+const boardsDropdownToggle = user =>
+  post(`/api/users/${user.id}/${user.boards_dropdown_lock ? 'unlock' : 'lock'}dropdown`)
+    .then(reloadSessionStore)
+
+const moveList = (listId, boardId, order) =>
+  post(`/api/lists/${listId}/move`, {
+    boardId: boardId,
+    order: order,
+  })
+    .then(reloadBoardStore)
 
 const moveCard = (cardId, boardId, listId, order) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/cards/${cardId}/move`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({
-      boardId: boardId,
-      listId: listId,
-      order: order,
-    }),
-  }).then(() => {
-    boardStore.reload()
+  post(`/api/cards/${cardId}/move`, {
+    boardId: boardId,
+    listId: listId,
+    order: order,
   })
+    .then(reloadBoardStore)
 
-const toggleStar = (boardId, starred, onChange) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/boards/${boardId}/${ starred ? 'unstar' : 'star'}`,
-  }).then(() => {
-    if (onChange) onChange()
-  })
+const toggleStar = (boardId, starred) =>
+  post(`/api/boards/${boardId}/${ starred ? 'unstar' : 'star'}`)
+    .then(reloadBoardsStore)
 
 const searchRequest = (searchTerm) =>
-  $.ajax({
-    method: "POST",
-    url: "/api/boards/search",
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({searchTerm}),
-  })
+  post("/api/boards/search", {searchTerm})
 
 const createBoard = (board) =>
-  $.ajax({
-    method: "POST",
-    url: '/api/boards',
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify(board),
-  })
-
+  post('/api/boards', board)
+    .then(reloadBoardsStore)
 
 const createEmailInvite = (boardId, email) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/invites/${boardId}`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({email}),
-  })
+  post(`/api/invites/${boardId}`, {email})
 
-const duplicateList = (boardId, listId, name, onClose) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/boards/${boardId}/lists/${listId}/duplicate`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({name}),
-  }).then(() => {
-    boardStore.reload()
-    onClose()
-  })
+const duplicateList = (boardId, listId, name) =>
+  post(`/api/boards/${boardId}/lists/${listId}/duplicate`, {name})
+    .then(reloadBoardStore)
 
-const moveCardsToList = (oldListId, newListId, onClose) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/lists/${oldListId}/cards/move-to/${newListId}`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-  }).then(() => {
-    boardStore.reload()
-    onClose()
-  })
+const moveCardsToList = (oldListId, newListId) =>
+  post(`/api/lists/${oldListId}/cards/move-to/${newListId}`)
+    .then(reloadBoardStore)
 
 const archiveCardsInList = (listId) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/lists/${listId}/archivecards`
-  }).then(() => {
-    boardStore.reload()
-  })
+  post(`/api/lists/${listId}/archivecards`)
+    .then(reloadBoardStore)
 
 const archiveList = (listId) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/lists/${listId}/archive`
-  }).then(() => {
-    boardStore.reload()
-  })
+  post(`/api/lists/${listId}/archive`)
+    .then(reloadBoardStore)
 
 const updateCard = (cardId, updates) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/cards/${card.id}`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify(updates),
-  })
+  post(`/api/cards/${card.id}`, updates)
+    .then(reloadBoardStore)
 
 const updateListName = (listId, name) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/lists/${listId}`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({name})
-  })
+  post(`/api/lists/${listId}`, {name})
+    .then(reloadBoardStore)
 
 const createCard = (boardId, listId, card) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/boards/${boardId}/lists/${listId}/cards`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify(card),
-  }).then(() => {
-    boardStore.reload()
-  })
+  post(`/api/boards/${boardId}/lists/${listId}/cards`, card)
+    .then(reloadBoardStore)
 
 const archiveRecord = (resource, id) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/${resource}/${id}/archive`
-  }).then(() => {
-    boardStore.reload()
-  })
+  post(`/api/${resource}/${id}/archive`)
+    .then(reloadBoardStore)
 
 const unarchiveRecord = (resource, id) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/${resource}/${id}/unarchive`
-  }).then(() => {
-    boardStore.reload()
-  })
+  post(`/api/${resource}/${id}/unarchive`)
+    .then(reloadBoardStore)
 
-const createList = (boardId, newList, afterCreate) =>
-  $.ajax({
-    method: "post",
-    url: `/api/boards/${boardId}/lists`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify(newList),
-  }).then(() => {
-    boardStore.reload()
-    afterCreate()
-  })
+const createList = (boardId, newList) =>
+  post(`/api/boards/${boardId}/lists`, newList)
+    .then(reloadBoardStore)
 
-const updateBoardName = (boardId, name, onClose) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/boards/${boardId}`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({name}),
-  }).then(() => {
-    boardStore.reload()
-    onClose()
-  })
+const updateBoardName = (boardId, name) =>
+  post(`/api/boards/${boardId}`, {name})
+    .then(reloadBoardStore)
 
 const updateBoardColor = (boardId, background_color) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/boards/${boardId}`,
-    contentType: "application/json; charset=utf-8",
-    data: JSON.stringify({background_color}),
-  }).then(() => {
-    boardStore.reload()
-    boardsStore.reload()
-  })
+  post(`/api/boards/${boardId}`, {background_color})
+    .then(reloadBoardStore)
+    .then(reloadBoardsStore)
 
-const archiveBoard = (boardId, redirect) =>
-$.ajax({
-  method: "POST",
-  url: `/api/boards/${boardId}/archive`,
-}).then( () => {
-  redirect
-  boardsStore.reload()
-})
+const archiveBoard = (boardId) =>
+  post(`/api/boards/${boardId}/archive`)
+    .then(reloadBoardsStore)
 
-const leaveBoard = (boardId, redirect) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/boards/${boardId}/leave`,
-  }).then( () => {
-    redirect
-    boardsStore.reload()
-  })
+const leaveBoard = (boardId) =>
+  post(`/api/boards/${boardId}/leave`,)
+    .then(reloadBoardsStore)
 
 const unarchiveCard = (id) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/cards/${id}/unarchive`
-  }).then(() => {
-    boardStore.reload()
-  })
+  post(`/api/cards/${id}/unarchive`)
+    .then(reloadBoardStore)
 
-const deleteCard = (id, onDelete) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/cards/${id}/delete`
-  }).then(() => {
-    if(onDelete) onDelete()
-    boardStore.reload()
-  })
+const deleteCard = (id) =>
+  post(`/api/cards/${id}/delete`)
+    .then(reloadBoardStore)
 
 const unarchiveList = (id) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/lists/${id}/unarchive`
-  }).then(() => {
-    boardStore.reload()
-  })
+  post(`/api/lists/${id}/unarchive`)
+    .then(reloadBoardStore)
 
 const archiveCard = (id) =>
-  $.ajax({
-    method: "POST",
-    url: `/api/cards/${this.props.card.id}/archive`
-  }).then(() =>
-    boardStore.reload()
-  )
+  post(`/api/cards/${this.props.card.id}/archive`)
+    .then(reloadBoardStore)
 
 const updateCardName = (cardId, content) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/cards/${cardId}`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({content}),
-  }).then(() => {
-    boardStore.reload()
-  })
+  post(`/api/cards/${cardId}`, {content})
+    .then(reloadBoardStore)
 
-const updateCardDescription = (cardId, description, onClose) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/cards/${cardId}`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({description}),
-  }).then(() => {
-    boardStore.reload()
-    if(onClose) onClose()
-  })
+const updateCardDescription = (cardId, description) =>
+  post(`/api/cards/${cardId}`, {description})
+    .then(reloadBoardStore)
 
 const addOrRemoveLabel = (cardId, labelId) =>
-  $.ajax({
-    method: 'POST',
-    url:`/api/cards/${cardId}/labels/${labelId}`
-  })
-  .then(() => boardStore.reload())
+  post(`/api/cards/${cardId}/labels/${labelId}`)
+    .then(reloadBoardStore)
 
-const deleteLabel = (boardId, labelId, goBack) =>
-  $.ajax({
-    method: 'POST',
-    url: `/api/boards/${boardId}/labels/${labelId}/delete`
-  })
-  .then(label => {
-    boardStore.reload()
-    if(goBack) goBack()
-  })
+const deleteLabel = (boardId, labelId) =>
+  post(`/api/boards/${boardId}/labels/${labelId}/delete`)
+    .then(reloadBoardStore)
 
-const updateLabel = (boardId, labelId, data, goBack) =>
-  $.ajax({
-    method: 'POST',
-    url: `/api/boards/${boardId}/labels/${labelId}`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify(data)
-  })
-  .then(() => {
-    boardStore.reload()
-    if (goBack) goBack()
-  })
+const updateLabel = (boardId, labelId, data) =>
+  post(`/api/boards/${boardId}/labels/${labelId}`, data)
+    .then(reloadBoardStore)
 
-const createLabel = (boardId, data, goBack) =>
-  $.ajax({
-    method: 'POST',
-    url: `/api/boards/${boardId}/labels`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify(data)
-  })
-    .then(() => {
-      boardStore.reload()
-      goBack()
-    })
-
-const copyCard = (boardId, listId, data, onClose) =>
-  $.ajax({
-    method: 'post',
-    url: `/api/boards/${boardId}/lists/${listId}/cards`,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify(data)
-  })
-  .then( () => {
-    boardStore.reload()
-    onClose()
-  })
+const createLabel = (boardId, data) =>
+  post(`/api/boards/${boardId}/labels`, data)
+    .then(reloadBoardStore)
 
 export default {
+  logout,
   boardsDropdownToggle,
   moveList,
   moveCard,
@@ -359,5 +202,4 @@ export default {
   deleteLabel,
   updateLabel,
   createLabel,
-  copyCard,
 }

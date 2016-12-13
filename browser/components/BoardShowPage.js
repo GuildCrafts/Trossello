@@ -308,7 +308,6 @@ class BoardShowPage extends React.Component {
     commands.moveCard(card.id, card.board_id, listId, order)
   }
 
-
   closeCardModal(){
     this.context.redirectTo(`/boards/${this.props.board.id}`)
   }

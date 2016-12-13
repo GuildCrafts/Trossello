@@ -660,7 +660,7 @@ const createLabel = (attributes) =>
     id: attributes.id,
   })
     .then(label => {
-      if(attributes.card_id!==undefined){
+      if (attributes.card_id !== undefined){
         return addOrRemoveCardLabel(attributes.card_id, label.id)
           .then(() => label)
       } else {

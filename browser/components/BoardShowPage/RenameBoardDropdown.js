@@ -22,7 +22,8 @@ export default class RenameBoardDropdown extends Component {
       return
     }
     const { board } = this.props
-    return commands.updateBoardName(board.id, this.state.value, this.props.onClose)
+    return commands.updateBoardName(board.id, this.state.value)
+      .then(this.props.onClose)
   }
 
   onChangeHandler(event) {

@@ -88,7 +88,8 @@ class CopyListPane extends Component {
       return
     }
     const { list } = this.props
-    return commands.duplicateList(list.board_id, list.id, this.state.value, this.props.onClose)
+    return commands.duplicateList(list.board_id, list.id, this.state.value)
+      .then(this.props.onClose)
   }
 
   onChangeHandler(event) {
@@ -134,7 +135,8 @@ class MoveAllCardsPane extends Component {
 
   moveCards(destinationList){
     const { list: fromList, board } = this.props
-    return commands.moveCardsToList(fromList.id, destinationList.id, this.props.onClose)
+    return commands.moveCardsToList(fromList.id, destinationList.id)
+      .then(this.props.onClose)
   }
 
   moveCardsTo(list){
