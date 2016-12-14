@@ -146,21 +146,21 @@ export default class CopyCard extends Component {
     const positionList = this.buildPositionOptions(selectedList)
 
     const boardSelector =
-      <div className='CardModal-CopyCardDialog-SelectContainer'>
+      <div className='CardModal-CopyCardDialog-SelectContainer CardModal-CopyCardDialog-boardSelector'>
         <label className='CardModal-CopyCardDialog-SelectContainer-Label'> Board </label>
         <span>{selectedBoard.name}</span>
         <select onChange={this.selectBoardHandler} value={selectedBoard.id}>{boardsList}</select>
       </div>
 
     const listSelector =
-      <div className='CardModal-CopyCardDialog-SelectContainer'>
+      <div className='CardModal-CopyCardDialog-SelectContainer CardModal-CopyCardDialog-listSelector'>
         <label className='CardModal-CopyCardDialog-SelectContainer-Label'> List </label>
         <span>{selectedList.name}</span>
         <select onChange={this.selectListHandler} value={selectedList.id}>{listsList}</select>
       </div>
 
     const positionSelector =
-      <div className='CardModal-CopyCardDialog-SelectContainer'>
+      <div className='CardModal-CopyCardDialog-SelectContainer CardModal-CopyCardDialog-positionSelector'>
         <label className='CardModal-CopyCardDialog-SelectContainer-Label'> Position </label>
         <span>{this.state.order + 1}</span>
         <select onChange={this.selectPositionHandler} value={this.state.order}>{positionList}</select>

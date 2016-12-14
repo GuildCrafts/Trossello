@@ -42,7 +42,7 @@ export default class Navbar extends Component {
         <img src={user.avatar_url} />
         <span>{user.name}</span>
       </button>
-      <LogoutButton className="Navbar-button">Logout</LogoutButton>
+      <LogoutButton className="Navbar-button" ref="name">Logout</LogoutButton>
       <button className="Navbar-button AlertButton">
         <Icon type="bell" />
       </button>

@@ -18,7 +18,7 @@ const activityString = (activity, board, cardActivity=false) => {
     :
       <span>
         <span> card </span>
-        <Link href={openCardModal} className={cardNameLink}>
+        <Link data-card-name={metadata.content.slice(0, 25)} href={openCardModal} className={cardNameLink}>
           <span> {metadata.content.slice(0, 25)} </span>
         </Link>
       </span>
