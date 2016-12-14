@@ -1,6 +1,22 @@
 machine:
   pre:
     - mkdir ~/.yarn-cache
+
+    # whats this for?
+    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+
+    #  upgrade chrome
+    - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    - sudo apt-get update
+    - sudo apt-get install google-chrome-stable
+
+    # upgrade chromedriver
+    - wget -N https://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
+    - unzip chromedriver_linux64.zip
+    - chmod +x chromedriver
+    - sudo mv -f chromedriver /usr/local/share/chromedriver
+    - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+    - sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
   node:
     version: 7.2.1
   environment:
@@ -20,11 +36,9 @@ dependencies:
     - yarn install
 
 test:
-  pre:
-    - wget -N https://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
-    - unzip chromedriver_linux64.zip
-    - ./chromedriver --port=4444 --url-base=wd/hub:
-        background: true
+  # pre:
+  #   - ./chromedriver --port=4444 --url-base=wd/hub:
+  #       background: true
   override:
     - yarn test
 
