@@ -17,23 +17,23 @@ const LoggedInHomepage = props => {
 
   let starredBoards = boards.filter(board => board.starred)
   if (starredBoards.length > 0) {
-    starredBoards = <Boards title="Starred Boards" boards={starredBoards} />
+    starredBoards = <Boards className="LoggedInHomepage-StarredBoards" title="Starred Boards" boards={starredBoards} />
   }
 
   return <Layout className="LoggedInHomepage">
     {starredBoards}
-    <Boards title="All boards" boards={boards} />
+    <Boards className="LoggedInHomepage-AllBoards" title="All Boards" boards={boards} />
   </Layout>
 }
 
-const Boards = ({title, boards}) => {
+const Boards = ({title, boards, className}) => {
   if (!boards) return null
 
   const elements = boards.map(board =>
     <Board key={board.id} board={board} />
   )
 
-  return <div>
+  return <div className={className}>
     <div className="LoggedInHomepage-BoardListHeading">
       {title}
     </div>

@@ -18,7 +18,7 @@ import ConfirmationButton from '../../ConfirmationButton'
 import boardStore from '../../../stores/boardStore'
 import TimeFromNow from '../../TimeFromNow'
 import PopoverMenuButton from '../../PopoverMenuButton'
-import CopyCard from '../CopyCard'
+import CopyCardDialog from './CopyCardDialog'
 import Activity from '../../Activity'
 import commands from '../../../commands'
 import './CardModal.sass'
@@ -151,7 +151,7 @@ const CardHeader = ({card, list}) => {
 
 const Controls = ({board, list, card, closeModal, labelPanel}) => {
   const dueDate = <DueDatePopover card={card}/>
-  const copyCard = <CopyCard card={card} board={board} list={list}/>
+  const copyCard = <CopyCardDialog card={card} board={board} list={list}/>
   const toggleOnArchived = card.archived ?
     <div>
       <UnArchiveCardButton card={card} />

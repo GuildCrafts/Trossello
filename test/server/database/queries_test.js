@@ -93,7 +93,7 @@ describe('database.queries', () => {
           expect(board.background_color).to.eql('orange')
           expect(board.users[0].id).to.eql(1455)
           expect(board.users[0].github_id).to.eql(22312)
-          expect(board.users[0].avatar_url).to.eql(null)
+          expect(board.users[0].avatar_url).to.eql('https://thumbs.dreamstime.com/t/android-robot-thumb-up-22927887.jpg')
           expect(board.users[0].email).to.eql("mark@zuckerburg.io")
           expect(board.users[0].name).to.eql("Mark Zuckerburg")
           expect(board.users[0].created_at).to.eql(null)
@@ -117,7 +117,7 @@ describe('database.queries', () => {
             {
               id: 19,
               created_at: board.activity[0].created_at,
-              user_id: 10000,
+              user_id: 1455,
               type: 'AddedUserToCard',
               board_id: 101,
               card_id: 87,
@@ -323,7 +323,7 @@ describe('database.queries', () => {
               {
                 id: 19,
                 created_at: activities[0].created_at,
-                user_id: 10000,
+                user_id: 1455,
                 type: 'AddedUserToCard',
                 board_id: 101,
                 card_id: 87,
