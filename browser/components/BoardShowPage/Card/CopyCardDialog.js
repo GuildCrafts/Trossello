@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import $ from 'jquery'
-import Form from '../Form'
-import Button from '../Button'
-import DialogBox from '../DialogBox'
-import BigSelect from '../BigSelect'
-import commands from '../../commands'
-import './CopyCard.sass'
+import Form from '../../Form'
+import Button from '../../Button'
+import DialogBox from '../../DialogBox'
+import BigSelect from '../../BigSelect'
+import commands from '../../../commands'
+import './CopyCardDialog.sass'
 
-export default class CopyCard extends Component {
+export default class CopyCardDialog extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -137,6 +137,7 @@ export default class CopyCard extends Component {
 
     const boardSelector =
       <BigSelect labelText='Board'
+        className="CopyCardDialog-boardSelector"
         spanText={selectedBoard.name}
         onChange={this.selectBoardHandler}
         optionValue={selectedBoard.id}
@@ -144,6 +145,7 @@ export default class CopyCard extends Component {
 
     const listSelector =
       <BigSelect labelText='List'
+        className="CopyCardDialog-listSelector"
         spanText={selectedList.name}
         onChange={this.selectListHandler}
         optionValue={selectedList.id}
@@ -151,12 +153,13 @@ export default class CopyCard extends Component {
 
     const positionSelector =
       <BigSelect labelText='Position'
+        className="CopyCardDialog-positionSelector"
         spanText={this.state.order + 1}
         onChange={this.selectPositionHandler}
         optionValue={this.state.order}
         selectOptions={positionList}/>
 
-    return <DialogBox heading='Copy Card' onClose={this.props.onClose}>
+      return <DialogBox className='CopyCardDialog' heading='Copy Card' onClose={this.props.onClose}>
       <Form onSubmit={this.copyCardHandler}>
         <label>Title</label>
         <textarea
@@ -166,7 +169,7 @@ export default class CopyCard extends Component {
         />
         <p> Copy to ...</p>
         {boardSelector}
-        <div className='CopyCard-dropdownWrapper'>
+        <div className='CopyCardDialog-dropdownWrapper'>
         {listSelector}
         {positionSelector}
         </div>
