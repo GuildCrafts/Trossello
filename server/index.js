@@ -16,8 +16,7 @@ module.exports = server
 
 
 server.set('env', process.env.NODE_ENV)
-// if (process.env.NODE_ENV !== 'test')
-server.use(logger('dev'))
+if (process.env.NODE_ENV !== 'test') server.use(logger('dev'))
 server.use(cookieSession({
   name: 'session',
   keys: [process.env.SESSION_KEY]
@@ -43,7 +42,8 @@ server.get('/*', (request, response) => {
 server.use(errorHandlers)
 
 server.start = (port, callback) => {
-  console.log(`Started server at http://localhost:${port}`)
+  if (process.env.NODE_ENV !== 'test')
+    console.log(`Started server at http://localhost:${port}`)
   server.set('port', port)
   // server.listen(port, callback)
   const httpServer = HTTP.createServer(server)

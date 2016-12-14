@@ -2,7 +2,7 @@
   "name": "trossello",
   "version": "0.0.1",
   "engines": {
-    "node": "7.1.0",
+    "node": "7.2.1",
     "npm": "3.10.9",
     "yarn": "0.17.10"
   },
