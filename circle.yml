@@ -23,7 +23,7 @@ test:
   pre:
     - wget -N https://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
     - unzip chromedriver_linux64.zip
-    - ./chromedriver --port=4444 --url-base=we/hub:
+    - ./chromedriver --port=4444 --url-base=wd/hub:
         background: true
   override:
     - yarn test
