@@ -20,5 +20,11 @@ dependencies:
     - yarn install
 
 test:
+  pre:
+    - wget -N http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux64.zip
+    - unzip chromedriver_linux64.zip
+    - ./chromedriver --port=4444 --url-base=we/hub:
+        background: true
   override:
     - yarn test
+
