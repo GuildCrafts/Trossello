@@ -65,7 +65,7 @@ class CreateBoardPopover extends Component {
       <Form onSubmit={this.onSubmit}>
         <label>
           <div>Name</div>
-          <input type="text" ref="name"/>
+          <input type="text" ref="name" className="CreateBoardPopover-boardName-input"/>
         </label>
         <div className="CreateBoardPopover-createBackgroundColor">
           {colorBoxes}
@@ -79,7 +79,7 @@ class CreateBoardPopover extends Component {
             onChange={this.updateColor}
           />
         </label>
-        <Button type="primary" action="submit">Create</Button>
+        <Button type="primary" action="submit" className="CreateBoardPopover-submit-button">Create</Button>
       </Form>
     </DialogBox>
   }

@@ -2,7 +2,7 @@ machine:
   pre:
     - mkdir ~/.yarn-cache
   node:
-    version: 6.3.0
+    version: 7.0.0
   environment:
     NODE_ENV: test
     GITHUB_CLIENT_ID: TEST_GITHUB_CLIENT_ID
@@ -10,15 +10,16 @@ machine:
     SESSION_KEY: TEST_SESSION_KEY
     DATABASE_URL: postgres://ubuntu:@127.0.0.1:5432/circle_test
 
-
 dependencies:
   pre:
     - curl -o- -L https://yarnpkg.com/install.sh | bash
   cache_directories:
     - ~/.yarn-cache
-  override:
-    - yarn install
 
 test:
   override:
     - yarn test
+
+general:
+  artifacts:
+    - "tmp/artifacts"
