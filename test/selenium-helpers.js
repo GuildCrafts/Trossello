@@ -3,9 +3,9 @@ import { server } from './setup'
 const { spawn, exec } = require('child-process-promise')
 import webdriver from 'selenium-webdriver'
 import chromedriver from 'chromedriver'
-const { By, until } = webdriver
+const { By, until, Key } = webdriver
 
-export { By, until }
+export { By, until, Key }
 
 export const usingSelenium = (callback) => {
   context('when running Selenium tests', () => {
@@ -14,7 +14,6 @@ export const usingSelenium = (callback) => {
     callback()
   })
 }
-
 
 export const setupSelenium = function(done){
   this.serverInstance = server.start(3781, () => {
