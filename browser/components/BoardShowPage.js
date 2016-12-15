@@ -17,6 +17,7 @@ import MenuSideBar from './BoardShowPage/MenuSideBar'
 import RenameBoardDropdown from './BoardShowPage/RenameBoardDropdown'
 import PopoverMenuButton from './PopoverMenuButton'
 import commands from '../commands'
+import setFaviconColor from '../setFaviconColor'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -72,6 +73,7 @@ class BoardShowPage extends React.Component {
       draggingCardNewListId: null,
       draggingCardNewOrder: null,
     }
+
     this.toggleSideBar = this.toggleSideBar.bind(this)
     this.closeSideBar = this.closeSideBar.bind(this)
     this.scrollToTheRight = this.scrollToTheRight.bind(this)
@@ -357,7 +359,6 @@ class BoardShowPage extends React.Component {
     let lists = this.getLists()
     let cards = this.getCards()
 
-
     let cardModal
     if (viewingCard) {
       let card = board.cards.find(card => card.id === viewingCard)
@@ -391,8 +392,9 @@ class BoardShowPage extends React.Component {
         board={this.props.board}
       />
 
+    let faviconColor = board.background_color
     const className = `BoardShowPage ${this.state.sideBarOpen ? 'BoardShowPage-sideBarOpen' : ''}`
-    return <Layout className={className} style={style}>
+    return <Layout className={className} style={style} faviconColor={faviconColor} >
       {cardModal}
       <div className="BoardShowPage-container">
         <Header board={board} toggleSideBar={this.toggleSideBar} sideBarOpen={this.state.sideBarOpen} renameBoardDropdown={renameBoardDropdown}/>
