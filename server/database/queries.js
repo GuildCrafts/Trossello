@@ -112,6 +112,20 @@ const getCommentsForCards = cards =>
       return cards
     })
 
+const loadUserIdsForCards = (cards) => {
+  return knex.table('card_users')
+    .select('*')
+    .whereIn('card_id', cards.map(card => card.id))
+    .then(cardUsers => {
+      cards.forEach(card => {
+        card.user_ids = cardUsers
+          .filter(cardUser => cardUser.card_id === card.id)
+          .map(cardUser => cardUser.user_id)
+      })
+      return cards
+    })
+}
+
 const getListsAndCardsForBoard = (board) => {
   return knex.table('lists')
     .select('*')
@@ -127,8 +141,17 @@ const getListsAndCardsForBoard = (board) => {
         .whereIn('list_id', listIds)
         .orderBy('list_id', 'asc')
         .orderBy('order', 'asc')
-        .then(loadLabelIdsForCards)
-        .then(getCommentsForCards)
+        .then( cards => {
+          if (cards) {
+            return Promise.all([
+              loadLabelIdsForCards(cards),
+              loadUserIdsForCards(cards),
+              getCommentsForCards(cards),
+            ]).then( () => cards)
+          } else {
+            return Promise.resolve(cards)
+          }
+        })
         .then(cards => {
           board.cards = cards
           return board
@@ -168,6 +191,13 @@ const getActivityByBoardId = (boardId) => {
     .orderBy('created_at', 'desc')
 }
 
+const getUsersForCard = (cardId) => {
+  return knex.table('card_users')
+    .select('*')
+    .where('card_id', cardId)
+    .returning('*')
+}
+
 export default {
   getUsers,
   getUserById,
@@ -181,4 +211,5 @@ export default {
   getBoardMoveTargetsForUserId,
   getLabelById,
   getActivityByBoardId,
+  getUsersForCard
 }
