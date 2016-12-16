@@ -9,6 +9,8 @@ import ArchiveButton from './ArchiveButton'
 import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
 import CardLabel from './Card/CardLabel'
+import Avatar from '../Avatar'
+import CardMember from './Card/CardMember'
 
 export default class Card extends Component {
   static contextTypes = {
@@ -89,6 +91,13 @@ export default class Card extends Component {
         </div>
       )
 
+    const cardUsers = (card.user_ids.length > 0) ? card.user_ids
+      .map( userId => board.users.find( user => user.id === userId ))
+      .map( user =>
+        <CardMember key={user.id} board={board}
+          card={card} user={user} />
+      ) : null
+
     const editCardButton = this.props.editable ?
       <EditCardButton onClick={this.editCard} /> : null
 
@@ -117,9 +126,7 @@ export default class Card extends Component {
       style={style}
     >
       {editCardModal}
-      <Link
-        href={`/boards/${card.board_id}/cards/${card.id}`}
-        className="BoardShowPage-Card-box"
+      <div className="BoardShowPage-Card-box"
         data-card-id={card.id}
         data-list-id={card.list_id}
         data-order={card.order}
@@ -127,12 +134,15 @@ export default class Card extends Component {
         draggable
         onDragStart={this.props.onDragStart}
       >
-      <div className="BoardShowPage-Card-labels">
-        {cardLabels}
+        <div className="BoardShowPage-Card-labels">
+          {cardLabels}
+        </div>
+        <pre>{card.content}</pre>
+        {archivedFooter}
+        <div className="BoardShowPage-Card-members">
+          {cardUsers}
+        </div>
       </div>
-      <pre>{card.content}</pre>
-      {archivedFooter}
-      </Link>
       <div className="BoardShowPage-Card-controls">
         {editCardButton}
       </div>

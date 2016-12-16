@@ -36,7 +36,9 @@ class ToggleComponent extends Component {
       document.body.removeEventListener('keydown', this.closeIfUserHitsEscape)
   }
 
-  toggle(){
+  toggle(event){
+    event.preventDefault()
+    event.stopPropagation()
     this.setState({
       open: !this.state.open
     })

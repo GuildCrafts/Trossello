@@ -4,7 +4,7 @@ import TimeFromNow from './TimeFromNow'
 import './Activity.sass'
 
 
-const activityString = (activity, board, cardActivity=false) => {
+const activityString = (activity, board, cardActivity=false, users) => {
 
   const openCardModal = `/boards/${activity.board_id}/cards/${activity.card_id}`
   const metadata = JSON.parse(activity.metadata)
@@ -13,15 +13,22 @@ const activityString = (activity, board, cardActivity=false) => {
   const timeClass = 'Activity-time'
 
   const cardName = () => {
+    const card = board.cards.find(card => card.id===activity.card_id)
+
     return cardActivity ?
       <span> this card </span>
     :
       <span>
         <span> card </span>
         <Link href={openCardModal} className={cardNameLink}>
-          <span> {metadata.content.slice(0, 25)} </span>
+          <span> {card.content.slice(0, 25)} </span>
         </Link>
       </span>
+  }
+
+  const userName = (id) => {
+    const user = users.find(user => user.id === id)
+    return <span>{user.name}</span>
   }
 
   switch (activity.type) {
@@ -94,6 +101,24 @@ const activityString = (activity, board, cardActivity=false) => {
           <TimeFromNow time={activity.created_at}/>
         </Link>
       </span>
+    case 'AddedUserToCard':
+      return <span className={stringClass}>added {userName(metadata.added_card_user)} to
+        {cardName()}
+        <Link href={openCardModal}
+          className={timeClass}
+        >
+          <TimeFromNow time={activity.created_at}/>
+        </Link>
+      </span>
+    case 'RemovedUserFromCard':
+      return <span className={stringClass}>removed {userName(metadata.removed_card_user)} from
+        {cardName()}
+        <Link href={openCardModal}
+          className={timeClass}
+        >
+          <TimeFromNow time={activity.created_at}/>
+        </Link>
+      </span>
     case 'AddedList':
       return <span className={stringClass}>
         added list {metadata.list_name}
@@ -148,7 +173,7 @@ const Activity = props => {
       <span className='Activity-username'>
         {user.name}
       </span>
-      {activityString(activity, board, cardActivity)}
+      {activityString(activity, board, cardActivity, users)}
     </div>
     <div className='Activity-border' />
   </div>
