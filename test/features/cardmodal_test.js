@@ -13,7 +13,7 @@ describe('Card modal tests', () => {
       describe('Label tests', () => {
         describe('Clicking the label button in controls should open the Label Menu', () => {
           it('Should open the CreateLabelMenu and create a label', function(done){
-            this.timeout(10 * (1000 * 60));
+            this.timeout((1000 * 60));
             this.browser.visit('/boards/101/cards/90');
             this.browser.wait(until.elementLocated(By.css('.CardModal-Controls-label > button'), 2000)).click();
             this.browser.wait(until.elementLocated(By.className('LabelMenu-button')), 2000).click();
@@ -28,7 +28,7 @@ describe('Card modal tests', () => {
 
         describe('Clicking on a card label should open the Label Menu', () => {
           it('Should remove a label from the card when the label is clicked from the Menu', function(done){
-            this.timeout(10 * (1000 * 60));
+            this.timeout((1000 * 60));
             this.browser.visit('/boards/101/cards/90');
             this.browser.wait(until.elementLocated(By.className('CardModal-CardLabels-labels-Label', 5000)));
             let cardLabel = this.browser.findElement(By.className('CardModal-CardLabels-labels-Label'), 5000);

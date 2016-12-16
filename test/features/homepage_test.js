@@ -8,7 +8,7 @@ describe('Homepage tests', () => {
     usingSelenium(() => {
       describe('when a user is logged out', () => {
         it('Should go to the github login', function(done){
-          this.timeout(10 * (1000 * 60));
+          this.timeout((1000 * 60));
           this.browser.visit('/');
           this.browser.wait(until.titleIs('Trossello'), 1000);
           this.browser.findElement(By.linkText('Login Via Github')).click();
@@ -22,7 +22,7 @@ describe('Homepage tests', () => {
           return this.loginAs(10000)
         })
         it('Should go to the list of boards', function(done){
-          this.timeout(10 * (1000 * 60));
+          this.timeout((1000 * 60));
           this.browser.visit('/');
           this.browser.wait(until.elementLocated(By.className('LoggedInHomepage-BoardListHeading')), 1000);
           this.browser.findElement(By.className('LoggedInHomepage-BoardListHeading')).getText()
@@ -31,7 +31,7 @@ describe('Homepage tests', () => {
         })
 
         it('Should create a new board and select that board when you use the boards dropdown', function(done){
-          this.timeout(10 * (1000 * 60))
+          this.timeout((1000 * 60))
           this.browser.visit('/')
           this.browser.findElement(By.className('BoardButton')).click()
           this.browser.wait(until.elementLocated(By.className('BoardsDropdown-Button')), 2000).click();
@@ -43,7 +43,7 @@ describe('Homepage tests', () => {
         })
 
         it('Should logout', function(done){
-          this.timeout(10 * (1000 *  60))
+          this.timeout((1000 *  60))
           this.browser.visit('/')
           this.browser.findElement(By.className('LogoutButton')).click()
           this.browser.findElement(By.className('Button-danger')).click()
