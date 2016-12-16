@@ -15,6 +15,7 @@ exports.seed = (knex) => {
       knex.truncate('labels'),
       knex.truncate('card_labels'),
       knex.truncate('comments'),
+      knex.truncate('card_users'),
     ])
   }
 
