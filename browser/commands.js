@@ -90,7 +90,7 @@ const archiveList = (listId) =>
     .then(reloadBoardStore)
 
 const updateCard = (cardId, updates) =>
-  post(`/api/cards/${card.id}`, updates)
+  post(`/api/cards/${cardId}`, updates)
     .then(reloadBoardStore)
 
 const updateListName = (listId, name) =>
@@ -146,12 +146,8 @@ const archiveCard = (id) =>
   post(`/api/cards/${this.props.card.id}/archive`)
     .then(reloadBoardStore)
 
-const updateCardName = (cardId, content) =>
+const updateCardAttribute = (cardId, content) =>
   post(`/api/cards/${cardId}`, {content})
-    .then(reloadBoardStore)
-
-const updateCardDescription = (cardId, description) =>
-  post(`/api/cards/${cardId}`, {description})
     .then(reloadBoardStore)
 
 const addOrRemoveLabel = (cardId, labelId) =>
@@ -197,8 +193,7 @@ export default {
   deleteCard,
   unarchiveList,
   archiveCard,
-  updateCardName,
-  updateCardDescription,
+  updateCardAttribute,
   addOrRemoveLabel,
   deleteLabel,
   updateLabel,

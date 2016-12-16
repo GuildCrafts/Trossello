@@ -256,8 +256,7 @@ class CardName extends Component {
   }
 
   updateName(){
-    const card = this.props.card
-    commands.updateCardName(card.id, this.state.value)
+    commands.updateCardAttribute(this.props.card.id, this.state.value)
   }
 
   render() {
@@ -520,11 +519,8 @@ class CardDescription extends ToggleComponent {
   }
 
   updateDescription(){
-    commands.updateCardDescription(
-      this.props.card.id,
-      this.refs.description.value,
-    )
-      .then(this.close)
+    console.log('desc: ' + this.props.card.description), commands.updateCardAttribute(this.props.card.id, 'test')
+    .then(this.close)
   }
 
   render() {
