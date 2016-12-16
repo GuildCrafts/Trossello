@@ -2,7 +2,7 @@ machine:
   pre:
     - mkdir ~/.yarn-cache
   node:
-    version: 6.3.0
+    version: 7.2.1
   environment:
     NODE_ENV: test
     GITHUB_CLIENT_ID: TEST_GITHUB_CLIENT_ID
