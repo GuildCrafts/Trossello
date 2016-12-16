@@ -142,15 +142,12 @@ const getListsAndCardsForBoard = (board) => {
         .orderBy('list_id', 'asc')
         .orderBy('order', 'asc')
         .then( cards => {
-          if (cards) {
-            return Promise.all([
-              loadLabelIdsForCards(cards),
-              loadUserIdsForCards(cards),
-              getCommentsForCards(cards),
-            ]).then( () => cards)
-          } else {
-            return Promise.resolve(cards)
-          }
+          if (!cards) return Promise.resolve(cards)
+          return Promise.all([
+            loadLabelIdsForCards(cards),
+            loadUserIdsForCards(cards),
+            getCommentsForCards(cards),
+          ]).then( () => cards)
         })
         .then(cards => {
           board.cards = cards

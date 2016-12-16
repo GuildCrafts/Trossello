@@ -706,29 +706,28 @@ const addOrRemoveCardLabel = (cardId, labelId) => {
     deleteRecord('comments', id)
 
 const addUserToCard = (currentUserId, boardId, cardId, targetUserId) => {
-  const attributes = {board_id: boardId, card_id: cardId, user_id: targetUserId}
+  const attributes = {
+    board_id: boardId,
+    card_id: cardId,
+    user_id: targetUserId
+  }
 
-  return knex.table('card_users')
-    .select('*')
-    .where(attributes)
-    .returning('*')
-    .then( result => {
-      if(result.length === 0) {
-        return createRecord('card_users', attributes)
-          .then( cardUser =>
-            recordActivity({
-              type: 'AddedUserToCard',
-              board_id: boardId,
-              card_id: cardId,
-              user_id: currentUserId,
-              metadata: {
-                added_card_user: targetUserId
-              }
-            }).then( _ => cardUser)
-          )
-      } else {
-        return result
-      }
+  const insert = knex
+    .table('card_users' )
+    .insert(attributes)
+
+
+  return knex.raw(`${insert} ON CONFLICT DO NOTHING RETURNING *`)
+    .then( cardUser => {
+      return recordActivity({
+        type: 'AddedUserToCard',
+        board_id: boardId,
+        card_id: cardId,
+        user_id: currentUserId,
+        metadata: {
+          added_card_user: targetUserId
+        }
+      })
     })
 }
 

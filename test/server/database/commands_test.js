@@ -1326,28 +1326,28 @@ describe('database.commands', () => {
           })
           .then( () => commands.removeUserFromCard(10000, 101, 87, 1455))
           .then( () => queries.getUsersForCard(87))
-              .then( result => {
-                expect(result).to.be.an('array')
-                expect(result.length).to.eql(0)
-              })
-              .then( () => queries.getActivityByBoardId(101))
-                .then( activities => {
-                  const cardUserActivity =
-                    activities.find( activity =>
-                      activity.card_id === 87 &&
-                      activity.type === 'RemovedUserFromCard'
-                    )
-                    expect(activities.slice(-1)[0]).to.be.an('object')
-                    expect(cardUserActivity).to.eql({
-                      id: 20,
-                      created_at: activities[0].created_at,
-                      type: 'RemovedUserFromCard',
-                      board_id: 101,
-                      card_id: 87,
-                      user_id: 10000,
-                      metadata: `{"removed_card_user":1455}`
-                    })
+            .then( result => {
+              expect(result).to.be.an('array')
+              expect(result.length).to.eql(0)
+            })
+            .then( () => queries.getActivityByBoardId(101))
+              .then( activities => {
+                const cardUserActivity =
+                  activities.find( activity =>
+                    activity.card_id === 87 &&
+                    activity.type === 'RemovedUserFromCard'
+                  )
+                expect(activities.slice(-1)[0]).to.be.an('object')
+                expect(cardUserActivity).to.eql({
+                  id: 20,
+                  created_at: activities[0].created_at,
+                  type: 'RemovedUserFromCard',
+                  board_id: 101,
+                  card_id: 87,
+                  user_id: 10000,
+                  metadata: `{"removed_card_user":1455}`
                 })
+              })
       })
     })
   })

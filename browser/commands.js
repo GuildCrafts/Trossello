@@ -193,6 +193,20 @@ const editCardForm = (cardId, content) =>
   })
     .then(reloadBoardStore)
 
+const removeUserFromCard = (userId, cardId, boardId) =>
+  post(`/api/cards/${cardId}/users/remove`, {
+    boardId,
+    targetId: userId
+  })
+    .then(reloadBoardStore)
+
+const addCardUser = (userId, cardId, boardId) =>
+  post(`/api/cards/${cardId}/users/add`, {
+    boardId,
+    targetId: userId
+  })
+    .then(reloadBoardStore)
+
 export default {
   logout,
   boardsDropdownToggle,
@@ -230,4 +244,6 @@ export default {
   updateComment,
   deleteComment,
   editCardForm,
+  removeUserFromCard,
+  addCardUser,
 }
