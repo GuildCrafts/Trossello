@@ -10,6 +10,7 @@ import Icon from '../../Icon'
 import Form from '../../Form'
 import Button from '../../Button'
 import ContentForm from '../../ContentForm'
+import Avatar from '../../Avatar'
 import ToggleComponent from '../../ToggleComponent'
 import ConfirmationButton from '../../ConfirmationButton'
 import boardStore from '../../../stores/boardStore'
@@ -19,6 +20,8 @@ import CopyCard from '../CopyCard'
 import Activity from '../../Activity'
 import commands from '../../../commands'
 import Badge from './Badge'
+import CardMembersMenu from './CardMembersMenu'
+import CardMember from './CardMember'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -73,6 +76,12 @@ export default class CardModal extends Component {
     />
 
     let dueDateBadge = card.due_date ? <Badge card={card} shownOn='back'/>: null
+    const cardMembers =
+      board.users.filter(user => card.user_ids.includes(user.id)).length > 0
+        ? <CardMembers card={card} board={board}/> : null
+    const cardLabels =
+      board.labels.filter(label => card.label_ids.includes(label.id)).length > 0
+        ? <CardLabels card={card} board={board} labelPanel={labelPanel}/> : null
 
     return <div className="CardModal">
       <CardModalShroud onClose={this.props.onClose}>
@@ -81,8 +90,9 @@ export default class CardModal extends Component {
           <div className="CardModal-content">
             <CardHeader card={card} list={list}/>
             <div className="CardModal-body">
-              <div className="CardModal-badges">
-                <CardLabels card={card} board={board} labelPanel={labelPanel}/>
+              <div className="CardModal-body-badges">
+                {cardMembers}
+                {cardLabels}
                 {dueDateBadge}
               </div>
               <CardDescription card={card}/>
@@ -161,6 +171,33 @@ const CardLabels =({card, board, labelPanel}) => {
   </div>
 }
 
+const CardMembers = ({card, board}) => {
+  const cardMembers = board.users
+    .filter(user => card.user_ids.includes(user.id) )
+    .map( user =>
+      <CardMember
+        key={user.id}
+        className='CardModal-MemberAvatar'
+        board={board}
+        card={card}
+        user={user}
+      />
+    )
+
+  const membersDisplay = cardMembers.length > 0
+    ? <div className='CardModal-CardMembers-content'>
+        <div className="CardModal-CardMembers-header">Members</div>
+        <div className='CardModal-CardMembers-avatars'>
+          {cardMembers}
+        </div>
+      </div>
+    : null
+
+  return <div className='CardModal-CardMembers'>
+    {membersDisplay}
+  </div>
+}
+
 const Controls = ({board, list, card, closeModal, labelPanel}) => {
   const dueDate = <DueDatePopover card={card}/>
   const copyCard = <CopyCard card={card} board={board} list={list}/>
@@ -170,10 +207,16 @@ const Controls = ({board, list, card, closeModal, labelPanel}) => {
       <DeleteCardButton card={card} onDelete={closeModal} />
     </div> :
     <ArchiveCardButton card={card} />
+  const cardMembersMenu = <CardMembersMenu board={board} card={card} />
 
   return <div className="CardModal-Controls">
     <div className="CardModal-Controls-title">Add</div>
-    <Button><Icon type="user" /> Members</Button>
+    <PopoverMenuButton
+      className="CardModal-Controls-members"
+      popover={cardMembersMenu}
+    >
+      <Icon type="user" /> Members
+    </PopoverMenuButton>
     <PopoverMenuButton className="CardModal-Controls-label" type="default" popover={labelPanel}>
       <Icon type="tag" /> Labels
     </PopoverMenuButton>

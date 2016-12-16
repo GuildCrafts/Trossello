@@ -283,6 +283,7 @@
     flex-grow: 0
     flex-shrink: 0
     &:hover
+      cursor: pointer
       .BoardShowPage-Card-box
         background-color: $hover-grey
       .BoardShowPage-EditButton
@@ -334,6 +335,15 @@
     &-label
       width: 45px
       margin: 0 3px 3px 0
+    &-bottom
+      display: flex
+      justify-content: space-between
+      &-members
+        display: flex
+        flex-direction: row
+        flex-wrap: wrap
+        justify-content: flex-end
+        padding-top: 4px
 
   &-create-card-link
     padding: 8px 10px
