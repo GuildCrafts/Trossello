@@ -256,8 +256,7 @@ class CardName extends Component {
   }
 
   updateName(){
-    const card = this.props.card
-    commands.updateCardName(card.id, this.state.value)
+    commands.updateCardAttribute(this.props.card.id, {content: this.state.value})
   }
 
   render() {
@@ -520,11 +519,10 @@ class CardDescription extends ToggleComponent {
   }
 
   updateDescription(){
-    commands.updateCardDescription(
-      this.props.card.id,
-      this.refs.description.value,
-    )
-      .then(this.close)
+    let newDescription = this.refs.descriptionForm.state.content
+
+    commands.updateCardAttribute(this.props.card.id, {description: newDescription})
+    .then(this.close)
   }
 
   render() {
@@ -532,7 +530,7 @@ class CardDescription extends ToggleComponent {
 
     if (this.state.open){
       return <ContentForm
-        ref="description"
+        ref="descriptionForm"
         className="CardModal-CommentEditForm CardModal-CardDescription"
         onSave={this.updateDescription}
         onCancel={this.close}
