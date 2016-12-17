@@ -1134,7 +1134,7 @@ chokidar@^1.0.0, chokidar@^1.4.3:
   optionalDependencies:
     fsevents "^1.0.0"
 
-chromedriver@^2.25.3:
+chromedriver@^2.24.0:
   version "2.25.3"
   resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.25.3.tgz#1abe235c2fff91100ef122db59843f2c618ad8e9"
   dependencies:
