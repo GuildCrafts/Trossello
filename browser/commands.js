@@ -147,7 +147,7 @@ const archiveCard = (id) =>
     .then(reloadBoardStore)
 
 const updateCardAttribute = (cardId, content) =>
-  post(`/api/cards/${cardId}`, {content})
+  post(`/api/cards/${cardId}`, Object.assign({}, content))
     .then(reloadBoardStore)
 
 const addOrRemoveLabel = (cardId, labelId) =>
