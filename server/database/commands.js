@@ -653,7 +653,20 @@ const searchQuery = ( userId, searchTerm ) => {
 }
 
 const createLabel = (attributes) =>
-  createRecord('labels',attributes)
+  createRecord('labels', {
+    board_id: attributes.board_id,
+    color: attributes.color,
+    text: attributes.text,
+    id: attributes.id,
+  })
+    .then(label => {
+      if(attributes.card_id!==undefined){
+        return addOrRemoveCardLabel(attributes.card_id, label.id)
+          .then(() => label)
+      } else {
+        return label
+      }
+    })
 
 const updateLabel = (labelId, attributes) =>
   updateRecord('labels', labelId, attributes)
