@@ -5,8 +5,8 @@ import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
 import Button from '../Button'
-import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
+import commands from '../../commands'
 
 export default class NewListForm extends ToggleComponent {
 
@@ -53,16 +53,8 @@ class Open extends Component {
     }
     if (newList.name.replace(/\s+/g,'') === '') return
     this.refs.name.value = ''
-    $.ajax({
-      method: "post",
-      url: `/api/boards/${board.id}/lists`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify(newList),
-    }).then(() => {
-      boardStore.reload()
-      this.props.afterCreate()
-    })
+
+    commands.createList(board.id, newList).then(this.props.afterCreate)
   }
 
   render(){

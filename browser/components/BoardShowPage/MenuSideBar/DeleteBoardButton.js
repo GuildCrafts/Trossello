@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
 import Button from '../../Button'
-import boardsStore from '../../../stores/boardsStore'
+import commands from '../../../commands'
 
 export default class DeleteBoardButton extends Component {
 
@@ -15,13 +14,8 @@ export default class DeleteBoardButton extends Component {
   }
 
   onClick(event){
-    $.ajax({
-      method: "POST",
-      url: `/api/boards/${this.props.boardId}/archive`,
-    }).then( () => {
-      this.context.redirectTo('/')
-      boardsStore.reload()
-    })
+    commands.archiveBoard(this.props.boardId)
+      .then(_ => this.context.redirectTo('/') )
   }
 
   render(){
