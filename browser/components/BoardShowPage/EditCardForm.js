@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
 import ContentForm from '../ContentForm'
+import Form from '../Form'
+import Link from '../Link'
+import Icon from '../Icon'
+import Card from './Card'
+import Button from '../Button'
+import ArchiveButton from './ArchiveButton'
+import boardStore from '../../stores/boardStore'
+import autosize from 'autosize'
+import sessionStorage from '../../sessionStorage'
+import commands from '../../commands'
+const KEY = "EditCardFormContent"
 
 export default class EditCardForm extends Component {
 
@@ -25,17 +35,12 @@ export default class EditCardForm extends Component {
 
   onSave(content){
     const { card } = this.props
-    $.ajax({
-      method: 'post',
-      url: `/api/cards/${card.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({content}),
-    }).then(updatedCard => {
-      boardStore.reload().then(_ => {
-        if (this.props.onSave) this.props.onSave(card)
+    commands.editCardForm(card.id, content)
+      .then(updatedCard => {
+        boardStore.reload().then(_ => {
+          if (this.props.onSave) this.props.onSave(card)
+        })
       })
-    })
   }
 
   render() {

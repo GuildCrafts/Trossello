@@ -14,12 +14,7 @@ class ArchiveListButton extends Component {
   }
 
   archiveList(){
-    $.ajax({
-      method: "POST",
-      url: `/api/lists/${this.props.list.id}/archive`
-    }).then(() => {
-      boardStore.reload()
-    })
+    commands.archiveList(list.id)
   }
 
   render(){
