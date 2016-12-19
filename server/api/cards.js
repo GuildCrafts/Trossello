@@ -115,4 +115,26 @@ router.post('/:cardId/labels/:labelId', (request, response, next) => {
 
 })
 
+router.post('/:cardId/users/add', (request, response, next) => {
+  const { boardId, targetId } = request.body
+  const { cardId } = request.params
+  const { userId } = request.session
+  commands.addUserToCard(userId, boardId, cardId, targetId)
+    .then( _ => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
+router.post('/:cardId/users/remove', (request, response, next) => {
+  const { boardId, targetId } = request.body
+  const { cardId } = request.params
+  const { userId } = request.session
+  commands.removeUserFromCard(userId, boardId, cardId, targetId)
+    .then( _ => {
+      response.json(null)
+    })
+    .catch(next)
+})
+
 export default router

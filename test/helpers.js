@@ -161,6 +161,8 @@ const withBoardsListsAndCardsInTheDatabase = (callback) => {
             board_id: 104,
             content: 'Not happy on board 2'
           })
+        ).then( () =>
+          commands.addUserToCard(10000, 101, 87, 1455)
         )
       })
       callback()

@@ -10,6 +10,7 @@ import Icon from '../../Icon'
 import Form from '../../Form'
 import Button from '../../Button'
 import ContentForm from '../../ContentForm'
+import Avatar from '../../Avatar'
 import ToggleComponent from '../../ToggleComponent'
 import ConfirmationButton from '../../ConfirmationButton'
 import boardStore from '../../../stores/boardStore'
@@ -17,6 +18,8 @@ import TimeFromNow from '../../TimeFromNow'
 import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import Activity from '../../Activity'
+import CardMembersMenu from './CardMembersMenu'
+import CardMember from './CardMember'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -69,7 +72,10 @@ export default class CardModal extends Component {
           <div className="CardModal-content">
             <CardHeader card={card} list={list}/>
             <div className="CardModal-body">
-              <CardLabels card={card} board={board} labelPanel={labelPanel}/>
+              <div className="CardModal-body-toprow">
+                <CardMembers card={card} board={board}/>
+                <CardLabels card={card} board={board} labelPanel={labelPanel}/>
+              </div>
               <CardDescription card={card} />
             </div>
             <CardCommentForm card={card} session={session}/>
@@ -146,6 +152,29 @@ const CardLabels =({card, board, labelPanel}) => {
   </div>
 }
 
+const CardMembers = ({card, board}) => {
+  const cardMembers = board.users
+    .filter(user => card.user_ids.includes(user.id) )
+    .map( user =>
+      <CardMember key={user.id} className='CardModal-MemberAvatar'
+        board={board} card={card} user={user}
+      />
+    )
+
+  const membersDisplay = cardMembers.length > 0 ?
+    <div className='CardModal-CardMembers-content'>
+      <div className="CardModal-CardLabels-header">Members</div>
+      <div className='CardModal-CardMembers-avatars'>
+        {cardMembers}
+      </div>
+    </div>
+    : null
+
+  return <div className='CardModal-CardMembers'>
+      {membersDisplay}
+  </div>
+}
+
 const Controls = ({board, list, card, closeModal, labelPanel}) => {
   const copyCard = <CopyCard card={card} board={board} list={list}/>
   const toggleOnArchived = card.archived ?
@@ -154,10 +183,16 @@ const Controls = ({board, list, card, closeModal, labelPanel}) => {
       <DeleteCardButton card={card} onDelete={closeModal} />
     </div> :
     <ArchiveCardButton card={card} />
+  const cardMembersMenu = <CardMembersMenu board={board} card={card} />
 
   return <div className="CardModal-Controls">
     <div className="CardModal-Controls-title">Add</div>
-    <Button><Icon type="user" /> Members</Button>
+    <PopoverMenuButton
+      className="CardModal-Controls-members"
+      popover={cardMembersMenu}
+    >
+      <Icon type="user" /> Members
+    </PopoverMenuButton>
     <PopoverMenuButton className="CardModal-Controls-label" type="default" popover={labelPanel}>
       <Icon type="tag" /> Labels
     </PopoverMenuButton>
