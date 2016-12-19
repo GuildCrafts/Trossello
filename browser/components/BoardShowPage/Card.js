@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
-import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import autosize from 'autosize'
 import ArchiveButton from './ArchiveButton'
 import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
 import CardLabel from './Card/CardLabel'
+import commands from '../../commands'
 
 export default class Card extends Component {
   static contextTypes = {

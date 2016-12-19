@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import $ from 'jquery'
 import './ListActionsMenu.sass'
 import Link from './Link'
 import ActionsMenu from './ActionsMenu'
@@ -10,6 +9,7 @@ import Button from './Button'
 import DialogBox from './DialogBox'
 import ConfirmationLink from './ConfirmationLink'
 import boardStore from '../stores/boardStore'
+import commands from '../commands'
 
 
 class ListActionsMenu extends Component {
@@ -88,16 +88,8 @@ class CopyListPane extends Component {
       return
     }
     const { list } = this.props
-    $.ajax({
-      method: 'post',
-      url: `/api/boards/${list.board_id}/lists/${list.id}/duplicate`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({name: this.state.value}),
-    }).then(() => {
-      boardStore.reload()
-      this.props.onClose()
-    })
+    commands.duplicateList(list.board_id, list.id, this.state.value)
+      .then(this.props.onClose)
   }
 
   onChangeHandler(event) {
@@ -143,16 +135,8 @@ class MoveAllCardsPane extends Component {
 
   moveCards(destinationList){
     const { list: fromList, board } = this.props
-
-    $.ajax({
-      method: 'post',
-      url: `/api/lists/${fromList.id}/cards/move-to/${destinationList.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-    }).then(() => {
-      this.props.onClose()
-      boardStore.reload()
-    })
+    commands.moveCardsToList(fromList.id, destinationList.id)
+      .then(this.props.onClose)
   }
 
   moveCardsTo(list){
@@ -207,12 +191,7 @@ class ArchiveAllCardsPane extends Component {
   }
 
   archiveCardsInList(){
-    $.ajax({
-      method: "POST",
-      url: `/api/lists/${this.props.list.id}/archivecards`
-    }).then(() => {
-      boardStore.reload()
-    })
+    commands.archiveCardsInList(this.props.list.id)
   }
 
   render(){
@@ -244,12 +223,7 @@ class ArchiveListLink extends Component {
   }
 
   archiveList(){
-    $.ajax({
-      method: "POST",
-      url: `/api/lists/${this.props.list.id}/archive`
-    }).then(() => {
-      boardStore.reload()
-    })
+    commands.archiveList(this.props.list.id)
   }
 
   render(){

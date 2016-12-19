@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Link from './Link'
 import Icon from './Icon'
-import $ from 'jquery'
 import ConfirmationDialog from './ConfirmationDialog'
 
 
