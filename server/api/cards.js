@@ -17,6 +17,18 @@ router.post('/:cardId', (request, response, next) => {
     .catch(next)
 })
 
+router.put('/:cardId', (request, response, next) => {
+  commands.updateCard(request.params.cardId, request.body)
+    .then(card => {
+      if (card){
+        response.json(card)
+      }else{
+        response.status(404).json(null)
+      }
+    })
+    .catch(next)
+})
+
 // ARCHIVE
 router.post('/:cardId/archive', (request, response, next) => {
   commands.archiveCard(request.session.userId, request.params.cardId)
