@@ -22,7 +22,7 @@ const LoggedInHomepage = props => {
 
   return <Layout className="LoggedInHomepage">
     {starredBoards}
-    <Boards title="All boards" boards={boards} />
+    <Boards title="All Boards" boards={boards} />
   </Layout>
 }
 
