@@ -11,13 +11,15 @@ const logout = () => {
 }
 
 const LogoutButton = (props) => {
+  const className = `LogoutButton ${props.className}`
   return <ConfirmationButton
     {...props}
     type="invisible"
     buttonName="Log Out"
     title="Log Out?"
     message="Are you sure you want to log out?"
-    onConfirm={logout}>
+    onConfirm={logout}
+    className={className}>
     {props.children}
   </ConfirmationButton>
 }
