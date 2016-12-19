@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import Icon from '../Icon'
 import './ColorBox.sass'

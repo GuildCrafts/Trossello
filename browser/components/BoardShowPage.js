@@ -6,7 +6,6 @@ import Button from './Button'
 import Icon from './Icon'
 import $ from 'jquery'
 import boardStore from '../stores/boardStore'
-import boardsStore from '../stores/boardsStore'
 import DeleteBoardButton from './BoardShowPage/MenuSideBar/DeleteBoardButton'
 import CardModal from './BoardShowPage/Card/CardModal'
 import List from './BoardShowPage/List'
@@ -17,6 +16,7 @@ import BoardStar from './BoardStar'
 import MenuSideBar from './BoardShowPage/MenuSideBar'
 import RenameBoardDropdown from './BoardShowPage/RenameBoardDropdown'
 import PopoverMenuButton from './PopoverMenuButton'
+import commands from '../commands'
 
 class BoardProvider extends Component {
   constructor(props){
@@ -299,45 +299,13 @@ class BoardShowPage extends React.Component {
   }
 
 
-  moveList({ list, order}){
-    const { board } = this.props
-    list.order = order
-
-    $.ajax({
-      method: 'post',
-      url: `/api/lists/${list.id}/move`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({
-        boardId: list.board_id,
-        order: order,
-      })
-    }).then(() => {
-      boardStore.reload()
-    })
+  moveList({ list, order }){
+    commands.moveList(list.id, list.board_id, order)
   }
 
   moveCard({ card, listId, order }){
-    const { board } = this.props
-
-    card.list_id = listId
-    card.order = order
-
-    $.ajax({
-      method: 'post',
-      url: `/api/cards/${card.id}/move`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({
-        boardId: card.board_id,
-        listId: listId,
-        order: order,
-      }),
-    }).then(() => {
-      boardStore.reload()
-    })
+    commands.moveCard(card.id, card.board_id, listId, order)
   }
-
 
   closeCardModal(){
     this.context.redirectTo(`/boards/${this.props.board.id}`)
@@ -452,7 +420,7 @@ const Header = ({board, sideBarOpen, toggleSideBar, renameBoardDropdown}) =>
     <PopoverMenuButton className="BoardShowPage-RenameBoardButton" type="invisible" popover={renameBoardDropdown}>
       <h1>{board.name}</h1>
     </PopoverMenuButton>
-    <BoardStar board={board} onChange={reloadBoardStores} />
+    <BoardStar board={board}/>
     <div className="flex-spacer" />
     <Link
       className="BoardShowPage-menuButton"
@@ -469,9 +437,4 @@ const clearTextSelection = () => {
     document.selection;
   if (sel && sel.removeAllRanges) sel.removeAllRanges();
   if (sel && sel.empty) sel.empty();
-}
-
-const reloadBoardStores = () => {
-  boardStore.reload()
-  boardsStore.reload()
 }

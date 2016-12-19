@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import $ from 'jquery'
 import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
@@ -12,6 +11,7 @@ import ToggleComponent from '../ToggleComponent'
 import Button from '../Button'
 import PopoverMenuButton from '../PopoverMenuButton'
 import ListActionsMenu from '../ListActionsMenu'
+import commands from '../../commands'
 
 
 export default class List extends Component {
@@ -162,16 +162,10 @@ class ListName extends Component {
 
   updateName(){
     const list = this.props.list
-    $.ajax({
-      method: 'post',
-      url: `/api/lists/${list.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({name: this.state.value})
-    }).then(() => {
-      this.setState({editing: false})
-      boardStore.reload()
-    })
+    commands.updateListName(list.id, this.state.value)
+      .then(() => {
+        this.setState({editing: false})
+      })
   }
 
   selectText(){
@@ -195,14 +189,4 @@ class ListName extends Component {
         {this.state.value}
       </div>
   }
-}
-
-
-const archiveRecord = (resource, id) => {
-  $.ajax({
-    method: "POST",
-    url: `/api/${resource}/${id}/archive`
-  }).then(() => {
-    boardStore.reload()
-  })
 }

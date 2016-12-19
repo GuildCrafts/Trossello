@@ -168,25 +168,30 @@ const createLabel = (boardId, data) =>
 
 const newCardForm = (boardId, listId, card) =>
   post(`/api/boards/${boardId}/lists/${listId}/cards`, card)
+    .then(reloadBoardStore)
 
 const addComment = (cardId, userId, content) =>
   post(`/api/cards/${cardId}/comments`, {
     userId: userId,
     content: content,
   })
+    .then(reloadBoardStore)
 
 const updateComment = (cardId, commentId, content) =>
   post(`/api/cards/${cardId}/comments/${commentId}`, {
     content: content
   })
+    .then(reloadBoardStore)
 
 const deleteComment = (cardId, commentId) =>
   post(`/api/cards/${cardId}/comments/${commentId}/delete`)
+    .then(reloadBoardStore)
 
 const editCardForm = (cardId, content) =>
   post(`/api/cards/${cardId}`, {
     content: content
   })
+    .then(reloadBoardStore)
 
 export default {
   logout,
