@@ -4,6 +4,7 @@ import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
 import ContentForm from '../ContentForm'
 const KEY = "EditCardFormContent"
+import commands from '../../commands'
 
 export default class NewCardForm extends Component {
 
@@ -65,18 +66,13 @@ export default class NewCardForm extends Component {
       order: this.props.order
     }
 
-    $.ajax({
-      method: 'post',
-      url: `/api/boards/${board.id}/lists/${list.id}/cards`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify(card),
-    }).then(card => {
-      if (this.props.onSave) this.props.onSave(card)
-      boardStore.reload()
-      this.setLastValue('')
-      this.refs.container.setContent('')
-    })
+    commands.newCardForm(board.id, list.id, card)
+      .then(card => {
+        if (this.props.onSave) this.props.onSave(card)
+        boardStore.reload()
+        this.setLastValue('')
+        this.refs.container.setContent('')
+      })
   }
 
   render() {

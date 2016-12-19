@@ -1,8 +1,6 @@
 import './BoardsDropdown.sass'
 import React, { Component } from 'react'
-import $ from 'jquery'
 import boardsStore from '../stores/boardsStore'
-import sessionStore from '../stores/sessionStore'
 import createStoreProvider from './createStoreProvider'
 import PopoverMenuButton from './PopoverMenuButton'
 import Link from './Link'
@@ -11,6 +9,7 @@ import Icon from './Icon'
 import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
 import BoardStar from './BoardStar'
+import commands from '../commands'
 
 class BoardsDropdown extends Component {
 
@@ -80,13 +79,7 @@ class ToggleBoardsDropdownLock extends Component {
 
   toggle(){
     const { user } = this.props
-    const locked = user.boards_dropdown_lock
-    $.ajax({
-      method: 'post',
-      url: `/api/users/${user.id}/${locked ? 'unlock' : 'lock'}dropdown`,
-    }).then(() => {
-      sessionStore.reload()
-    })
+    commands.boardsDropdownToggle(user)
   }
 
   render(){
@@ -149,7 +142,7 @@ const Board = ({ board, onClick }) =>
     <Link to={`/boards/${board.id}`} onClick={onClick} className="BoardsDropdown-board-name">
       <div>{board.name}</div>
     </Link>
-    <BoardStar board={board} onChange={reloadBoardStores}/>
+    <BoardStar board={board} />
   </div>
 
 export default createStoreProvider({
@@ -157,8 +150,3 @@ export default createStoreProvider({
   store: boardsStore,
   render: BoardsDropdown,
 })
-
-const reloadBoardStores = () => {
-  boardStore.reload()
-  boardsStore.reload()
-}
