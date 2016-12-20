@@ -109,7 +109,9 @@ export default class ContentForm extends Component {
         placeholder={this.props.placeholder}
       />
       <div className="ContentForm-controls">
-        <Button type="primary" submit>{this.props.submitButtonName}</Button>
+        <Button type="primary" submit noFocus='true' >
+          {this.props.submitButtonName}
+        </Button>
         {closeX}
       </div>
     </Form>
