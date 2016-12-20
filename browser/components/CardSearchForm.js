@@ -29,6 +29,7 @@ export default class CardSearchForm extends Component {
     this.focus = this.focus.bind(this)
     this.focusOnSlash = this.focusOnSlash.bind(this)
     this.onClick = this.onClick.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentDidMount(){
@@ -88,6 +89,10 @@ export default class CardSearchForm extends Component {
     this.setState({modalDisplayed: true})
   }
 
+  onSubmit(event) {
+    event.preventDefault()
+  }
+
   render(){
     const searchResultModal = this.state.modalDisplayed ?
       <SearchResultModal
@@ -102,7 +107,7 @@ export default class CardSearchForm extends Component {
       <Icon type="times"  className="CardSearchForm-cancel-icon" /> :
       <Icon type="search" className="CardSearchForm-search-icon" />
 
-    return <Form className="CardSearchForm" onSubmit={this.search} >
+    return <Form className="CardSearchForm" onSubmit={this.onSubmit} >
       <input
         type="text"
         onKeyDown={this.onKeyDown}
