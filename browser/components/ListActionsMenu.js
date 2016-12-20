@@ -28,6 +28,7 @@ class ListActionsMenu extends Component {
   createCard(event){
     this.props.onCreateCard()
     this.props.onClose()
+    //This looks like a good place to start
   }
 
   render(){
