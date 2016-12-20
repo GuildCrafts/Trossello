@@ -83,12 +83,18 @@ router.post('/:boardId/lists', (request, response, next) => {
 
 // CREATE CARD
 router.post('/:boardId/lists/:listId/cards', (request, response, next) => {
-  const card = request.body
-  const { boardId, listId } = request.params
-  const { userId } = request.session
-  card.board_id = boardId
-  card.list_id = listId
-  commands.createCard(userId, card)
+  let { content, order } = request.body
+  let { boardId, listId } = request.params
+  let { userId } = request.session
+
+  const newCard = {
+    content: content,
+    board_id: Number(boardId),
+    list_id: Number(listId),
+    order: Number(order),
+  }
+
+  commands.createCard(Number(userId), newCard)
     .then( card => {
       response.json(card)
     })
@@ -156,8 +162,13 @@ router.post('/:boardId/lists/:listId/duplicate', (request, response, next) => {
 //CREATE LABEL
 router.post('/:boardId/labels', (request, response, next) => {
   const { boardId } = request.params
-  const { color, text } = request.body
-  const attributes = {board_id: boardId, text: text, color: color}
+  const { color, text, cardId } = request.body
+  const attributes = {
+    board_id: boardId,
+    text: text,
+    color: color,
+    card_id: cardId
+  }
 
   commands.createLabel(attributes)
     .then(label => {

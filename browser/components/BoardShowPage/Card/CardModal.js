@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import React, { Component } from 'react'
 import './CardModal.sass'
 import moment from 'moment'
@@ -17,6 +16,7 @@ import TimeFromNow from '../../TimeFromNow'
 import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import Activity from '../../Activity'
+import commands from '../../../commands'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -174,19 +174,16 @@ class DeleteCardButton extends Component {
     card: React.PropTypes.object.isRequired,
     onDelete: React.PropTypes.func.isRequired,
   }
+
   constructor(props){
     super(props)
     this.delete = this.delete.bind(this)
   }
+
   delete(){
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${this.props.card.id}/delete`
-    }).then(() => {
-      boardStore.reload()
-      this.props.onDelete()
-    })
+    commands.deleteCard(id).then(this.props.onDelete)
   }
+
   render(){
     return <ConfirmationButton
       onConfirm={this.delete}
@@ -206,19 +203,16 @@ class UnArchiveCardButton extends Component {
   }
   constructor(props){
     super(props)
-    this.unArchive = this.unArchive.bind(this)
+    this.unarchive = this.unarchive.bind(this)
   }
-  unArchive(){
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${this.props.card.id}/unarchive`
-    }).then(() => {
-      boardStore.reload()
-    })
+
+  unarchive(){
+    commands.unarchiveCard(card.id)
   }
+
   render(){
     return <Button
-      onClick={this.unArchive}
+      onClick={this.unarchive}
     >
       <Icon type="refresh" /> Return to Board
     </Button>
@@ -234,12 +228,7 @@ class ArchiveCardButton extends Component {
     this.archiveCard = this.archiveCard.bind(this)
   }
   archiveCard(){
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${this.props.card.id}/archive`
-    }).then(() =>
-      boardStore.reload()
-    )
+    commands.archiveCard(card.id)
   }
   render(){
     return <ConfirmationButton
@@ -268,16 +257,7 @@ class CardName extends Component {
   }
 
   updateName(){
-    const card = this.props.card
-    $.ajax({
-      method: 'post',
-      url: `/api/cards/${card.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({content: this.state.value}),
-    }).then(() => {
-      boardStore.reload()
-    })
+    commands.updateCardAttribute(this.props.card.id, {content: this.state.value})
   }
 
   render() {
@@ -302,21 +282,13 @@ class CardCommentForm extends Component {
   }
 
   addComment(content, event){
+    const { card } = this.props
+    const { user } = this.props.session
     if (event) event.preventDefault()
-    $.ajax({
-      method: "POST",
-      url: `/api/cards/${this.props.card.id}/comments`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({
-        userId: this.props.session.user.id,
-        content: content,
+    commands.addComment(card.id, user.id, content)
+      .then(() => {
+        this.refs.comment.setContent('')
       })
-    })
-    .then(() => {
-      boardStore.reload()
-      this.refs.comment.setContent('')
-    })
   }
 
   render(){
@@ -379,26 +351,16 @@ class CardComment extends Component {
   }
 
   updateComment(content, event) {
+    const { comment } = this.props
     if (event) event.preventDefault()
-    $.ajax({
-      method:'POST',
-      url:`/api/cards/${this.props.comment.card_id}/comments/${this.props.comment.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data:JSON.stringify({content})
-    }).then(() => {
-      boardStore.reload()
-      this.stopEditingComment()
-    })
+    commands.updateComment(comment.card_id, comment.id, content)
+      .then(() => this.stopEditingComment())
   }
 
   deleteComment(event) {
+    const { comment } = this.props
     if (event) event.preventDefault()
-    $.ajax({
-      method:'POST',
-      url: `/api/cards/${this.props.comment.card_id}/comments/${this.props.comment.id}/delete`
-    })
-      .then(() => boardStore.reload())
+    commands.deleteComment(comment.card_id, comment.id)
   }
 
   render(){
@@ -539,17 +501,11 @@ class CardDescription extends ToggleComponent {
     this.updateDescription = this.updateDescription.bind(this)
   }
 
-  updateDescription(description){
-    $.ajax({
-      method: 'post',
-      url: `/api/cards/${this.props.card.id}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({description}),
-    }).then(() => {
-      boardStore.reload()
-      this.close()
-    })
+  updateDescription(){
+    let newDescription = this.refs.descriptionForm.state.content
+
+    commands.updateCardAttribute(this.props.card.id, {description: newDescription})
+    .then(this.close)
   }
 
   render() {
@@ -557,7 +513,7 @@ class CardDescription extends ToggleComponent {
 
     if (this.state.open){
       return <ContentForm
-        ref="description"
+        ref="descriptionForm"
         className="CardModal-CommentEditForm CardModal-CardDescription"
         onSave={this.updateDescription}
         onCancel={this.close}

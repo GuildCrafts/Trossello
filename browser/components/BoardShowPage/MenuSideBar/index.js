@@ -1,7 +1,7 @@
 import './index.sass'
 import React, { Component } from 'react'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
-import $ from 'jquery'
+import commands from '../../../commands'
 import Icon from '../../Icon'
 import Link from '../../Link'
 import Button from '../../Button'
@@ -319,12 +319,7 @@ const UnarchivePane = ({board, onClose, gotoPane, goBack}) =>
 
 const unarchiveRecord = (event, resource, id) => {
   event.preventDefault()
-  $.ajax({
-    method: "POST",
-    url: `/api/${resource}/${id}/unarchive`
-  }).then(() => {
-    boardStore.reload()
-  })
+  commands.unarchiveRecord(resource, id)
 }
 
 const UnarchiveListButton = (props) => {

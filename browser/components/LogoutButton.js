@@ -1,14 +1,6 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
 import ConfirmationButton from './ConfirmationButton'
-
-const logout = () => {
-  // actions.logout()
-  // still kind of hacky, but functional
-  $.post('/logout', () => {
-    location.assign('/')
-  })
-}
+import commands from '../commands'
 
 const LogoutButton = (props) => {
   const className = `LogoutButton ${props.className}`
@@ -20,6 +12,7 @@ const LogoutButton = (props) => {
     message="Are you sure you want to log out?"
     onConfirm={logout}
     className={className}>
+
     {props.children}
   </ConfirmationButton>
 }

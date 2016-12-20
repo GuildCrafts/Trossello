@@ -3,6 +3,7 @@ import $ from 'jquery'
 import Form from '../Form'
 import Button from '../Button'
 import DialogBox from '../DialogBox'
+import commands from '../../commands'
 
 export default class CopyCard extends Component {
   constructor(props){
@@ -31,25 +32,12 @@ export default class CopyCard extends Component {
 
   copyCardHandler(event){
     event.preventDefault()
-    if (this.state.title.replace(/\s+/g,'') === '') { return }
-    $.ajax({
-      method: 'post',
-      url: `/api/boards/${this.state.boardId}/lists/${this.state.listId}/cards`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({content: this.state.title}),
-    }).then( card => {
-      $.ajax({
-        method: 'post',
-        url: `/api/cards/${card.id}/move`,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        data: JSON.stringify({boardId: card.board_id, listId: card.list_id, order: this.state.order}),
-      }).then( () => {
-        boardStore.reload()
-        this.props.onClose()
-      })
+    if (this.state.title.replace(/\s+/g,'') === '') return
+    commands.createCard(this.state.boardId, this.state.listId, {
+      content: this.state.title,
+      order: this.state.order
     })
+      .then(this.props.onClose)
   }
 
   selectBoardHandler(event){

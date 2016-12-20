@@ -5,9 +5,9 @@ import './InviteByEmailPopover.sass'
 import Link from './Link'
 import Icon from './Icon'
 import Button from './Button'
-import $ from 'jquery'
 import boardStore from '../stores/boardStore'
 import DialogBox from './DialogBox'
+import commands from '../commands'
 
 class InviteByEmailPopover extends Component {
   constructor(props) {
@@ -25,17 +25,13 @@ class InviteByEmailPopover extends Component {
   onSubmit(event){
     event.preventDefault()
     const email = this.refs.email.value
+
     this.setState({creatingInvite: true})
-    $.ajax({
-      method: "POST",
-      url: `/api/invites/${this.props.boardId}`,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      data: JSON.stringify({email}),
-    }).then(_ => {
-      this.setState({creatingInvite: false})
-      this.props.onClose()
-    })
+    commands.createEmailInvite(this.props.boardId, email)
+      .then(_ => {
+        this.setState({creatingInvite: false})
+        this.props.onClose()
+      })
   }
 
   render() {
