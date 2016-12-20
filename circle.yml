@@ -11,6 +11,7 @@ machine:
     DATABASE_URL: postgres://ubuntu:@127.0.0.1:5432/circle_test
     SAUCE_USERNAME: paradoxp
     SAUCE_ACCESS_KEY: 4f303d57-8952-46d7-9d23-a922064ce3f8
+    DBUS_SESSION_BUS_ADDRESS: /dev/null
 
 
 dependencies:
@@ -31,6 +32,6 @@ test:
     # Wait for tunnel to be ready
     - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
     - yarn test
-    
+
   post:
     - killall --wait sc  # wait for Sauce Connect to close the tunnel
