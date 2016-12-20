@@ -630,18 +630,18 @@ const deleteBoard = (boardId) =>
 const createInvite = (currentUserId, attributes) => {
   attributes.token = uuid.v1()
   return createRecord('invites', attributes)
-    .then( invite =>
-      Promise.all([
-        recordActivity({
-          type: 'InvitedToBoard',
-          board_id: invite.boardId,
-          user_id: currentUserId,
-          metadata: {
-            invited_email: invite.email
-          }
-        }),
-        mailer.sendInviteEmail( invite )
-      ]).then( () => invite)
+  .then( invite =>
+    Promise.all([
+     recordActivity({
+        type: 'InvitedToBoard',
+        board_id: invite.boardId,
+        user_id: currentUserId,
+        metadata: {
+          invited_email: invite.email
+        }
+      }),
+      mailer.sendInviteEmail( invite )
+    ]).then(() => invite )
     )
 }
 

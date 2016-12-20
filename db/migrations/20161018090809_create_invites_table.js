@@ -5,6 +5,7 @@ exports.up = function(knex, Promise) {
       table.integer('boardId')
       table.string('email')
       table.string('token')
+      table.unique(['boardId','email'])
     })
   ])
 };

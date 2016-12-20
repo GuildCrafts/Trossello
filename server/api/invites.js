@@ -9,10 +9,15 @@ router.post('/:boardId', (request, response, next) => {
   const { userId } = request.session
   const attributes = {boardId: boardId, email: email}
   commands.createInvite(userId, attributes)
-    .then( () => {
-      response.json(null)
+    .then( result => {
+      return response.json(result)
     })
-    .catch(next)
+    .catch( error => {
+      if( error.message.includes('duplicate key value violates unique constraint')){
+        error.status = 409
+      }
+      next(error)
+    })
 })
 
 router.get('/verify/:token', (request, response, next) => {
