@@ -30,10 +30,7 @@ test:
         background: true
     # Wait for tunnel to be ready
     - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-    - yarn test 
-    # Wait for app to be ready
-    - curl --retry 10 --retry-delay 2 -v http://localhost:5000
-    # Run selenium tests
-    - nosetests
+    - yarn test
+    
   post:
     - killall --wait sc  # wait for Sauce Connect to close the tunnel
