@@ -16,17 +16,17 @@ describe('POST /api/invites/:boardId', () => {
         return loginAs(1455)
       })
 
-      it('should have a null response.json', () => {
+      it('should have invite data in its response.json', () => {
         const inviteAttributes = {
-          boardId: 101,
           email:'mark@zuckerburg.io',
-          token: '12'
         }
 
         return request('post', '/api/invites/101', inviteAttributes )
           .then(response => {
             expect(response).to.have.status(200)
-            expect(response.body).to.eql(null)
+            expect(response.body.email).to.eql('mark@zuckerburg.io')
+            expect(response.body.boardId).to.eql(101)
+            expect(response.body.token).to.have.length(36)
         })
       })
 
@@ -43,6 +43,24 @@ describe('POST /api/invites/:boardId', () => {
             expect(invitedEmails).to.include('larry@harvey.to')
           })
 
+      })
+
+      it('should refrain from adding a duplicate email and return a 409 error', () => {
+        const inviteAttributes = {
+          email:'marriagecounseling@learnersguild.org',
+        }
+
+        return request('post', '/api/invites/101', inviteAttributes)
+          .then( () => getInvites())
+          .then( response => {
+            const invitedEmails = response.map(invitee => invitee.email)
+            expect(invitedEmails).to.include('marriagecounseling@learnersguild.org')
+          })
+          .then( () => request('post', '/api/invites/101', { email: 'marriagecounseling@learnersguild.org' }))
+          .then( response => {
+            expect(response.status).to.eql(409)
+            expect(response).to.have.property('error')
+          })
       })
 
       // get board, check if user is added, then check again

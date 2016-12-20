@@ -14,8 +14,10 @@ class InviteByEmailPopover extends Component {
     super(props);
     this.state = {
       creatingInvite: false,
+      alreadyInvited: false,
     }
     this.onSubmit = this.onSubmit.bind(this)
+    this.changeInputHandler = this.changeInputHandler.bind(this)
   }
 
   componentDidMount(){
@@ -28,10 +30,25 @@ class InviteByEmailPopover extends Component {
 
     this.setState({creatingInvite: true})
     commands.createEmailInvite(this.props.boardId, email)
-      .then(_ => {
+      .then( result => {
         this.setState({creatingInvite: false})
         this.props.onClose()
       })
+      .catch( error => {
+        const errorMessage = error.statusText
+        if (errorMessage === "Conflict" && error.status === 409) {
+          this.setState({
+            alreadyInvited: true,
+            creatingInvite: false
+          })
+        } else {
+          throw error
+        }
+      })
+  }
+
+  changeInputHandler(){
+    this.setState({alreadyInvited: false})
   }
 
   render() {
@@ -41,6 +58,14 @@ class InviteByEmailPopover extends Component {
       </Link> :
       null
 
+    const text = this.state.alreadyInvited
+      ? <p className="InviteByEmailPopover-text InviteByEmailPopover-text-error">
+          User has already been invited.  Please try again.
+        </p>
+      : <p className="InviteByEmailPopover-text">
+        Enter an email address to invite someone new to this board.
+        </p>
+
     return <DialogBox className="InviteByEmailPopover" onClose={this.props.onClose} heading="Add Members">
       <Form onSubmit={this.onSubmit}>
         <input
@@ -48,17 +73,17 @@ class InviteByEmailPopover extends Component {
           type="email"
           ref="email"
           name='email'
+          onChange={this.changeInputHandler}
           placeholder="e.g. burritos@trossello.com"
           disabled={this.state.creatingInvite}
         />
-        <p className='InviteByEmailPopover-text'>
-          Enter an email address to invite someone new to this board.
-        </p>
+        {text}
         <Button
           type="primary"
           action="submit"
-          disabled={this.state.creatingInvite}
-        >{this.state.creatingInvite ? 'Saving…' : 'Invite'}</Button>
+          disabled={this.state.creatingInvite}>
+            {this.state.creatingInvite ? 'Saving…' : 'Invite'}
+        </Button>
       </Form>
     </DialogBox>
   }
