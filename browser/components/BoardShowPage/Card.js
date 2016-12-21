@@ -160,14 +160,16 @@ class EditCardModal extends Component {
     super(props)
     this.cancel = this.cancel.bind(this)
   }
+
   stopPropagation(event){
     event.preventDefault()
     event.stopPropagation()
   }
-  cancel(event){
-    event.stopPropagation()
-    this.props.onCancel(event)
+
+  cancel(){
+    this.props.onCancel()
   }
+
   render(){
     const style = {
       top: this.props.top,
