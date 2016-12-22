@@ -19,7 +19,7 @@ const activityString = (activity, board, cardActivity=false) => {
       <span>
         <span> card </span>
         <Link href={openCardModal} className={cardNameLink}>
-          <span> {metadata.content.slice(0, 25)} </span>
+          <span> {metadata.content && metadata.content.slice(0, 25)} </span>
         </Link>
       </span>
   }
