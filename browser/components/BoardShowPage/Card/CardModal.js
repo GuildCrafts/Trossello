@@ -37,6 +37,8 @@ export default class CardModal extends Component {
     }
     this.showLabelMenu = this.showLabelMenu.bind(this)
     this.stopShowingLabelMenu = this.stopShowingLabelMenu.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
+    document.addEventListener('keydown', this.onKeyDown, false)
   }
 
   showLabelMenu(event) {
@@ -47,6 +49,12 @@ export default class CardModal extends Component {
   stopShowingLabelMenu(event) {
     event.preventDefault()
     this.setState({showingLabelMenu: false})
+  }
+
+  onKeyDown(event) {
+    if (event.key === 'Escape') {
+      this.props.onClose()
+    }
   }
 
   render(){
