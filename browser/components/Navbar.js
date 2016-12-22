@@ -23,6 +23,11 @@ export default class Navbar extends Component {
     const boardsDropdownButton = user.boards_dropdown_lock ?
       null :
       <BoardsDropdownButton className="Navbar-button BoardButton" />
+    const styleguide = ( process.env.NODE_ENV === 'development' ) ?
+      <button className="Navbar-button">
+        <Icon type="paint-brush" />
+      </button> :
+      null
     return <div className="Navbar">
       {boardsDropdownButton}
       <CardSearchForm className="Navbar-Search" />
@@ -42,6 +47,7 @@ export default class Navbar extends Component {
         <span>{user.name}</span>
       </button>
       <LogoutButton className="Navbar-button">Logout</LogoutButton>
+      {styleguide}
       <button className="Navbar-button AlertButton">
         <Icon type="bell" />
       </button>
