@@ -42,6 +42,7 @@ export default class CardSearchForm extends Component {
 
   focusOnSlash(event){
     if (event.key === '/' && event.target !== this.refs.content){
+      event.preventDefault()
       this.refs.content.focus()
     }
   }
