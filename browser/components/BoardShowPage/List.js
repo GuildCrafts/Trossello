@@ -13,7 +13,6 @@ import PopoverMenuButton from '../PopoverMenuButton'
 import ListActionsMenu from '../ListActionsMenu'
 import commands from '../../commands'
 
-
 export default class List extends Component {
 
   static propTypes = {

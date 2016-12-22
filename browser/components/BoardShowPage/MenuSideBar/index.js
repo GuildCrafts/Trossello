@@ -10,6 +10,7 @@ import Card from '../Card'
 import List from '../List'
 import Unarchive from './Unarchive'
 import InviteByEmailPopover from '../../InviteByEmailPopover'
+import Avatar from '../../Avatar'
 
 // panes
 import { ActivityPanel, MainPaneActivity }  from './ActivityPanel'
@@ -140,9 +141,7 @@ const boardMembers = board => board.users.map( user =>
 
 const BoardMember = (props) => {
   const { user } = props
-  return <span className='BoardShowPage-MenuSideBar-member'>
-    <img src={user.avatar_url} className='BoardShowPage-MenuSideBar-member-img' />
-  </span>
+  return <Avatar src={user.avatar_url} />
 }
 
 const BoardMembersArea = (props) => {
