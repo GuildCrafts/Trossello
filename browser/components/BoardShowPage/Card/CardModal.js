@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './CardModal.sass'
 import moment from 'moment'
 import LabelMenu from './LabelMenu'
+import DueDatePopover from './DueDatePopover'
 import CardLabel from './CardLabel'
 import Card from '../Card'
 import Link from '../../Link'
@@ -17,6 +18,7 @@ import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import Activity from '../../Activity'
 import commands from '../../../commands'
+import Badge from './Badge'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -70,6 +72,11 @@ export default class CardModal extends Component {
       board={board}
     />
 
+    let dueDateBadge
+    if (card.due_date) {
+      dueDateBadge = <Badge card={card} shownOn={'back'}/>
+    }
+
     return <div className="CardModal">
       <CardModalShroud onClose={this.props.onClose}>
         {archivedBanner}
@@ -77,8 +84,11 @@ export default class CardModal extends Component {
           <div className="CardModal-content">
             <CardHeader card={card} list={list}/>
             <div className="CardModal-body">
-              <CardLabels card={card} board={board} labelPanel={labelPanel}/>
-              <CardDescription card={card} />
+              <div className="CardModal-badges">
+                <CardLabels card={card} board={board} labelPanel={labelPanel}/>
+                {dueDateBadge}
+              </div>
+              <CardDescription card={card}/>
             </div>
             <CardCommentForm card={card} session={session}/>
             <CardActivity board={board} card={card}/>
@@ -132,7 +142,7 @@ const CardLabels =({card, board, labelPanel}) => {
     .map(label =>
       <PopoverMenuButton
         key={label.id}
-        className="CardModal-CardLabels-labels-Label"
+        className="CardModal-CardBadges-labels-Label"
         type="unstyled"
         popover={labelPanel}
       >
@@ -144,17 +154,18 @@ const CardLabels =({card, board, labelPanel}) => {
       </PopoverMenuButton>
     )
   const labelHeader = cardLabels.length > 0 ?
-    <div className="CardModal-CardLabels-header">Labels</div> : null
+    <div className="CardModal-CardBadges-header">Labels</div> : null
 
-  return <div className="CardModal-CardLabels">
+  return <div className="CardModal-CardBadges">
     {labelHeader}
-    <div className="CardModal-CardLabels-labels">
+    <div className="CardModal-CardBadges-labels">
       {cardLabels}
     </div>
   </div>
 }
 
 const Controls = ({board, list, card, closeModal, labelPanel}) => {
+  const dueDate = <DueDatePopover card={card}/>
   const copyCard = <CopyCard card={card} board={board} list={list}/>
   const toggleOnArchived = card.archived ?
     <div>
@@ -168,6 +179,9 @@ const Controls = ({board, list, card, closeModal, labelPanel}) => {
     <Button><Icon type="user" /> Members</Button>
     <PopoverMenuButton className="CardModal-Controls-label" type="default" popover={labelPanel}>
       <Icon type="tag" /> Labels
+    </PopoverMenuButton>
+    <PopoverMenuButton className="CardModal-Controls-label" type="default" popover={dueDate}>
+      <Icon type="clock-o" /> Due Date
     </PopoverMenuButton>
     <div className="CardModal-Controls-title">Actions</div>
     {toggleOnArchived}

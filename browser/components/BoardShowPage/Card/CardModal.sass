@@ -22,6 +22,8 @@
     margin-left: 35px
     display: flex
     flex-direction: column
+  &-badges
+    display: flex
 
   &-CardModalShroud
     &-shroud, &-stage
@@ -83,7 +85,8 @@
     input:focus
       outline: none
 
-  &-CardLabels
+  &-CardBadges
+    margin: 4px 28px 16px 0
     &-header
       color: #999999
       font-weight: normal
@@ -303,7 +306,32 @@
         font-size: 14px
 
 
+  &-CopyCardDialog, dueDate
+    form
+      font-weight: bold
+      &:last-child
+        position: absolute
+        bottom: 0
+        right: 0
+        padding: 0
+        margin: 0 10px 20px 0
   &-CopyCardDialog
+    &-FlexRow
+      display: flex
+      flex-direction: row
+      justify-content: space-between
+      width: 100%
+      &:first-child
+        label
+          flex-grow: 1
+          &:first-child
+            margin-right: 12px
+          input
+            font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif
+            &:focus
+              background-color: white
+              border-color: $blue
+              box-shadow: 0 0 2px $blue
     &-SelectContainer
       position: relative
       height: auto

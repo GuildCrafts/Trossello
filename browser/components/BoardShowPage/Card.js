@@ -9,6 +9,9 @@ import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
 import CardLabel from './Card/CardLabel'
 import commands from '../../commands'
+import Badge from './Card/Badge'
+import moment from 'moment'
+import './Card/Badge.sass'
 
 export default class Card extends Component {
   static contextTypes = {
@@ -81,6 +84,10 @@ export default class Card extends Component {
       style
     } = this.props
 
+    const dueDateBadge = card.due_date
+      ? <Badge card={card} shownOn={'front'}/>
+      : null
+
     let cardLabels = !board ? null : card.label_ids
       .map( labelId => board.labels.find(label => label.id === labelId))
       .map( label =>
@@ -131,6 +138,7 @@ export default class Card extends Component {
         {cardLabels}
       </div>
       <pre>{card.content}</pre>
+      {dueDateBadge}
       {archivedFooter}
       </Link>
       <div className="BoardShowPage-Card-controls">
