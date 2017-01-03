@@ -246,14 +246,14 @@ class BoardShowPage extends React.Component {
     const targetList = this.getListById(newListId)
     const rect = dropTarget[0].children[0].getBoundingClientRect()
     const belowTarget = rect.bottom - 40
-    let newOrder = null
-    if(event.clientY > belowTarget){
-      newOrder = 10000
-    } else {
-      return
-    }
+
+    if( event.clientY < belowTarget ||
+       newListId === this.state.draggingCardNewListId ){
+        return
+      }
+
     this.setState({
-      draggingCardNewOrder: newOrder,
+      draggingCardNewOrder: 10000,
       draggingCardNewListId: newListId,
     })
   }
