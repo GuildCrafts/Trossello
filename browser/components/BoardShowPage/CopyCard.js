@@ -3,6 +3,8 @@ import $ from 'jquery'
 import Form from '../Form'
 import Button from '../Button'
 import DialogBox from '../DialogBox'
+import BigSelect from '../BigSelect'
+import './CopyCard.sass'
 import commands from '../../commands'
 
 export default class CopyCard extends Component {
@@ -121,7 +123,7 @@ export default class CopyCard extends Component {
 
   render(){
     if (this.state.boards === null){
-      return <DialogBox className="CardModal-CopyCardDialog" heading='Copy Card' onClose={this.props.onClose}>
+      return <DialogBox heading='Copy Card' onClose={this.props.onClose}>
         Loading…
       </DialogBox>
     }
@@ -134,36 +136,37 @@ export default class CopyCard extends Component {
     const positionList = this.buildPositionOptions(selectedList)
 
     const boardSelector =
-      <div className='CardModal-CopyCardDialog-SelectContainer'>
-        <label className='CardModal-CopyCardDialog-SelectContainer-Label'> Board </label>
-        <span>{selectedBoard.name}</span>
-        <select onChange={this.selectBoardHandler} value={selectedBoard.id}>{boardsList}</select>
-      </div>
+      <BigSelect labelText='Board'
+        spanText={selectedBoard.name}
+        onChange={this.selectBoardHandler}
+        optionValue={selectedBoard.id}
+        selectOptions={boardsList}/>
 
     const listSelector =
-      <div className='CardModal-CopyCardDialog-SelectContainer'>
-        <label className='CardModal-CopyCardDialog-SelectContainer-Label'> List </label>
-        <span>{selectedList.name}</span>
-        <select onChange={this.selectListHandler} value={selectedList.id}>{listsList}</select>
-      </div>
+      <BigSelect labelText='List'
+        spanText={selectedList.name}
+        onChange={this.selectListHandler}
+        optionValue={selectedList.id}
+        selectOptions={listsList}/>
 
     const positionSelector =
-      <div className='CardModal-CopyCardDialog-SelectContainer'>
-        <label className='CardModal-CopyCardDialog-SelectContainer-Label'> Position </label>
-        <span>{this.state.order + 1}</span>
-        <select onChange={this.selectPositionHandler} value={this.state.order}>{positionList}</select>
-      </div>
+      <BigSelect labelText='Position'
+        spanText={this.state.order + 1}
+        onChange={this.selectPositionHandler}
+        optionValue={this.state.order}
+        selectOptions={positionList}/>
 
-    return <DialogBox className="CardModal-CopyCardDialog" heading='Copy Card' onClose={this.props.onClose}>
+    return <DialogBox heading='Copy Card' onClose={this.props.onClose}>
       <Form onSubmit={this.copyCardHandler}>
         <label>Title</label>
         <textarea
+          className='DialogBox-dialogForm-dialogTextarea'
           value={this.state.title}
           onChange={this.textAreaHandler}
         />
         <p> Copy to ...</p>
         {boardSelector}
-        <div className='CardModal-CopyCardDialog-Wrapper'>
+        <div className='CopyCard-dropdownWrapper'>
         {listSelector}
         {positionSelector}
         </div>

@@ -1,3 +1,5 @@
+@import "../style.sass"
+
 .Form
 
   display: flex
@@ -21,6 +23,13 @@
     border-radius: 3px
     min-height: 34px
     padding: 7px
+    transition: background .15s
+    font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif
+    &:focus
+      background-color: $white
+      outline: none
+      border-color: $blue
+      box-shadow: 0 0 2px $blue
 
 
   input[type="submit"]
@@ -37,9 +46,25 @@
     padding: 7px 20px
     text-align: center
     // primary
-    background: -webkit-linear-gradient(top,#61BD4F 0,#5AAC44 100%)
-    background: linear-gradient(to bottom,#61BD4F 0,#5AAC44 100%)
+    background: -webkit-linear-gradient(top,$green 0,$green2 100%)
+    background: linear-gradient(to bottom,$green 0,$green2 100%)
     box-shadow: 0 1px 0 #3F6F21
-    color: #fff
+    color: $white
 
-
+  textarea
+    margin: 10px 0
+    border-radius: 3px
+    height: 72px
+    width: 100%
+    border: 1px solid #CDD2D4
+    background: #E2E4E6
+    padding: 7px
+    color: $black
+    font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif
+    line-height: 18px
+    transition: background .15s
+    &:focus
+      background-color: $white
+      outline: none
+      border-color: $blue
+      box-shadow: 0 0 2px $blue

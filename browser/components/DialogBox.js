@@ -26,4 +26,4 @@ export default class DialogBox extends Component {
 }
 
 DialogBox.Divider = (props) =>
-  <div className="DialogBox-dividier" />
+  <div className="DialogBox-divider" />
