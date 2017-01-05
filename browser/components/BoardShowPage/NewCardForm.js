@@ -56,7 +56,6 @@ export default class NewCardForm extends Component {
     if (this.props.onCancel) this.props.onCancel(event)
   }
 
-
   onSave(content){
     if (content.replace(/\s+/g,'') === '') return
 
@@ -81,7 +80,7 @@ export default class NewCardForm extends Component {
       onChange={this.onChange}
       onCancel={this.onCancel}
       onSave={this.onSave}
-      submitButtonName="Save"
+      submitButtonName="Add"
       defaultValue={sessionStorage[KEY] || ''}
       hideCloseX={this.props.hideCloseX}
       submitOnEnter={this.props.submitOnEnter}

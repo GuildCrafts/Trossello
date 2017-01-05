@@ -16,6 +16,7 @@ export default class ContentForm extends Component {
     defaultValue: React.PropTypes.string,
     hideCloseX: React.PropTypes.bool,
     submitOnEnter: React.PropTypes.bool,
+    autoFocus: React.PropTypes.bool,
   };
 
   static defaultProps = {
@@ -23,6 +24,7 @@ export default class ContentForm extends Component {
     defaultValue: '',
     hideCloseX: false,
     submitOnEnter: false,
+    autoFocus: true,
   }
 
   constructor(props) {
@@ -42,7 +44,8 @@ export default class ContentForm extends Component {
   }
 
   componentDidMount(){
-    this.refs.content.focus()
+    if (this.props.autoFocus)
+      this.refs.content.focus()
     this.autosize()
   }
 
@@ -81,6 +84,7 @@ export default class ContentForm extends Component {
 
   save(event){
     if (event) event.preventDefault()
+    this.refs.content.focus()
     this.props.onSave(this.refs.content.value)
   }
 
@@ -109,7 +113,11 @@ export default class ContentForm extends Component {
         placeholder={this.props.placeholder}
       />
       <div className="ContentForm-controls">
-        <Button type="primary" submit>{this.props.submitButtonName}</Button>
+        <Button
+          type="primary"
+          submit
+          noFocus={true}
+          >{this.props.submitButtonName}</Button>
         {closeX}
       </div>
     </Form>

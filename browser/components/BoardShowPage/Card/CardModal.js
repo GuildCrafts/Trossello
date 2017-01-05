@@ -323,6 +323,7 @@ class CardCommentForm extends Component {
           placeholder="Write a comment…"
           defaultValue=""
           hideCloseX
+          autoFocus={false}
         />
       </div>
     </div>
