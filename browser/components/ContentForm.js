@@ -81,6 +81,7 @@ export default class ContentForm extends Component {
 
   save(event){
     if (event) event.preventDefault()
+    this.refs.content.focus()
     this.props.onSave(this.refs.content.value)
   }
 
@@ -109,7 +110,9 @@ export default class ContentForm extends Component {
         placeholder={this.props.placeholder}
       />
       <div className="ContentForm-controls">
-        <Button type="primary" submit>{this.props.submitButtonName}</Button>
+        <Button type="primary" submit>
+          {this.props.submitButtonName}
+        </Button>
         {closeX}
       </div>
     </Form>
