@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
-import './Dialog.sass'
 import Form from '../../Form'
 import Button from '../../Button'
 import DialogBox from '../../DialogBox'
+import FlexRowContainer from '../../FlexRowContainer'
+import './DueDatePopover.sass'
 import commands from '../../../commands'
 import moment from 'moment'
 
@@ -16,7 +17,6 @@ export default class DueDatePopover extends Component {
     this.timeOnChange = this.timeOnChange.bind(this)
     this.timeOnBlur = this.timeOnBlur.bind(this)
     this.addDueDate = this.addDueDate.bind(this)
-    this.removeDueDate = this.removeDueDate.bind(this)
 
     this.state = this.initialState()
   }
@@ -87,18 +87,18 @@ export default class DueDatePopover extends Component {
   }
 
   render (){
-    return <DialogBox className="Dialog" heading='Change Due Date' onClose={this.props.onClose}>
-      <Form className='Dialog-dueDateForm' onSubmit={this.addDueDate} name='add'>
-        <div className="Dialog-inputRow">
-          <label className="Dialog-inputLabel">Date<input type='text' className="Dialog-inputText" value={this.state.date} onChange={this.dateOnChange} onBlur={this.dateOnBlur}></input></label>
-          <label className="Dialog-inputLabel">Time<input type='text' className="Dialog-inputText" value={this.state.time} onChange={this.timeOnChange} onBlur={this.timeOnBlur}></input></label>
-        </div>
+    return <DialogBox heading='Change Due Date' onClose={this.props.onClose}>
+      <Form onSubmit={this.addDueDate} name='add'>
+        <FlexRowContainer>
+          <label className="DueDatePopover-labelSpacer">Date<input type='text' className="DialogBox-inputText" value={this.state.date} onChange={this.dateOnChange} onBlur={this.dateOnBlur}></input></label>
+          <label className="DueDatePopover-labelSpacer">Time<input type='text' className="DialogBox-inputText" value={this.state.time} onChange={this.timeOnChange} onBlur={this.timeOnBlur}></input></label>
+        </FlexRowContainer>
         <p>There will be a calendar and such here.  Perhaps its own component?</p>
-        <div className="Dialog-inputRow">
+        <FlexRowContainer>
           <Button type='primary' submit>Save</Button>
-        </div>
+        </FlexRowContainer>
       </Form>
-      <Form className='Dialog-dueDateForm' onSubmit={this.removeDueDate} name='delete'>
+      <Form className='DueDatePopover-relocateButton' onSubmit={this.removeDueDate} name='delete'>
         <Button submit type='danger'>Remove</Button>
       </Form>
     </DialogBox>
