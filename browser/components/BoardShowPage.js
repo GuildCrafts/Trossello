@@ -119,6 +119,7 @@ class BoardShowPage extends React.Component {
     const dragImage = new Image()
     dragImage.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D'
     event.dataTransfer.setDragImage(dragImage, 0, 0);
+    event.dataTransfer.setData('text/html', event.target)
 
     const dragTarget = $(event.target).closest('.BoardShowPage-Card-box, .BoardShowPage-List')
 
