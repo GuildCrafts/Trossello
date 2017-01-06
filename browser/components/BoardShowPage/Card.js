@@ -7,11 +7,11 @@ import autosize from 'autosize'
 import ArchiveButton from './ArchiveButton'
 import ConfirmationLink from '../ConfirmationLink'
 import EditCardForm from './EditCardForm'
-import CardLabel from './Card/CardLabel'
+import CardLabel from './Card/CardBadges/CardLabel'
 import commands from '../../commands'
-import Badge from './Card/Badge'
+import CardDueDate from './Card/CardBadges/CardDueDate'
 import moment from 'moment'
-import CardMember from './Card/CardMember'
+import CardMember from './Card/CardBadges/CardMember'
 
 export default class Card extends Component {
   static contextTypes = {
@@ -91,7 +91,7 @@ export default class Card extends Component {
     } = this.props
 
     const dueDateBadge = card.due_date
-      ? <Badge card={card} shownOn='front'/>
+      ? <CardDueDate card={card} shownOn='front'/>
       : null
 
     let cardLabels = !board ? null : card.label_ids

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Avatar from '../../Avatar'
-import Link from '../../Link'
+import Avatar from '../../../Avatar'
+import Link from '../../../Link'
 import CardMemberPopover from './CardMemberPopover'
-import ToggleComponent from '../../ToggleComponent'
+import ToggleComponent from '../../../ToggleComponent'
 
 export default class CardMember extends ToggleComponent {
 
