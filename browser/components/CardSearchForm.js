@@ -26,10 +26,11 @@ export default class CardSearchForm extends Component {
     this.onKeyUp = this.onKeyUp.bind(this)
     this.search = debounce(200, this.search.bind(this))
     this.close = this.close.bind(this)
-    this.focus = this.focus.bind(this)
+    this.onFocus = this.onFocus.bind(this)
     this.focusOnSlash = this.focusOnSlash.bind(this)
-    this.onClick = this.onClick.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+    this.onClickOutsideModal = this.onClickOutsideModal.bind(this)
+    this.onResultClick = this.onResultClick.bind(this)
   }
 
   componentDidMount(){
@@ -48,11 +49,15 @@ export default class CardSearchForm extends Component {
     ){
       event.preventDefault()
       this.refs.content.focus()
+      this.setState({modalDisplayed: true})
     }
   }
 
-  focus(){
-    this.setState({ focused: true })
+  onFocus(){
+    this.setState({
+      focused: true,
+      modalDisplayed: true,
+    })
   }
 
   setSearchTerm(event){
@@ -90,8 +95,13 @@ export default class CardSearchForm extends Component {
     })
   }
 
-  onClick(){
-    this.setState({modalDisplayed: true})
+  onClickOutsideModal(event){
+    if (event && event.target === ReactDOM.findDOMNode(this.refs.content)) return
+    this.close()
+  }
+
+  onResultClick(){
+    this.close()
   }
 
   onSubmit(event) {
@@ -99,18 +109,21 @@ export default class CardSearchForm extends Component {
   }
 
   render(){
-    const searchResultModal = this.state.modalDisplayed ?
-      <SearchResultModal
+    const searchResultModal = this.state.modalDisplayed
+      ? <SearchResultModal
         className="CardSearchForm-Result"
         onClose={this.close}
+        onClickOutside={this.onClickOutsideModal}
+        onResultClick={this.onResultClick}
         searchTerm={this.state.searchTerm}
         result={this.state.result}
         loading={this.state.loading}
-      /> :
-      null
-    const icon = this.state.focused ?
-      <Icon type="times"  className="CardSearchForm-cancel-icon" /> :
-      <Icon type="search" className="CardSearchForm-search-icon" />
+      />
+      : null
+
+    const icon = this.state.focused
+      ? <Icon type="times"  className="CardSearchForm-cancel-icon" />
+      : <Icon type="search" className="CardSearchForm-search-icon" />
 
     return <Form className="CardSearchForm" onSubmit={this.onSubmit} >
       <input
@@ -120,9 +133,8 @@ export default class CardSearchForm extends Component {
         ref="content"
         value={this.state.searchTerm}
         onChange={this.setSearchTerm}
-        onFocus={this.focus}
+        onFocus={this.onFocus}
         onKeyUp={this.search.bind(this)}
-        onClick={this.onClick}
       />
       {icon}
       {searchResultModal}
@@ -136,23 +148,23 @@ class SearchResultModal extends Component {
 
   constructor(props) {
     super(props)
-    this.closeIfUserClickedElsewhere = this.closeIfUserClickedElsewhere.bind(this)
-    document.body.addEventListener("click", this.closeIfUserClickedElsewhere)
+    this.onClickOutside = this.onClickOutside.bind(this)
+    document.body.addEventListener("click", this.onClickOutside)
   }
 
   componentWillUnmount(){
-    document.body.removeEventListener("click", this.closeIfUserClickedElsewhere)
+    document.body.removeEventListener("click", this.onClickOutside)
   }
 
-  closeIfUserClickedElsewhere(event){
+  onClickOutside(event){
     const container = ReactDOM.findDOMNode(this.refs.window)
     if (!container.contains(event.target) && container !== event.target) {
-      this.props.onClose()
+      this.props.onClickOutside(event)
     }
   }
 
   render() {
-    const { result, searchTerm, onClose } = this.props
+    const { result, searchTerm, onResultClick, onClose } = this.props
     if (this.props.loading) {
       return <div className="CardSearchForm-Modal" >
         <div ref="window" className="CardSearchForm-Modal-window">
@@ -172,7 +184,7 @@ class SearchResultModal extends Component {
         key={card.id}
         card={card}
         editable={false}
-        onClick={onClose}
+        onClick={onResultClick}
       />
     )
 
