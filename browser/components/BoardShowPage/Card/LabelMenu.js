@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './LabelMenu.sass'
-import CardLabel from './CardLabel'
+import CardLabel from './CardBadges/CardLabel'
 import ColorBox from '../ColorBox'
 import Link from '../../Link'
 import Form from '../../Form'

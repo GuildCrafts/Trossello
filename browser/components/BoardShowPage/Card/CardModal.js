@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import './CardModal.sass'
 import moment from 'moment'
 import LabelMenu from './LabelMenu'
+import CardMembersMenu from './CardMembersMenu'
+import LabelsContainer from './CardBadges/LabelsContainer'
+import MembersContainer from './CardBadges/MembersContainer'
+import CardDueDate from './CardBadges/CardDueDate'
 import DueDatePopover from './DueDatePopover'
-import CardLabel from './CardLabel'
 import Card from '../Card'
 import Link from '../../Link'
 import Icon from '../../Icon'
@@ -19,9 +22,6 @@ import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import Activity from '../../Activity'
 import commands from '../../../commands'
-import Badge from './Badge'
-import CardMembersMenu from './CardMembersMenu'
-import CardMember from './CardMember'
 
 export default class CardModal extends Component {
   static propTypes = {
@@ -75,13 +75,19 @@ export default class CardModal extends Component {
       board={board}
     />
 
-    let dueDateBadge = card.due_date ? <Badge card={card} shownOn='back'/>: null
+    const dueDateBadge = card.due_date
+      ? <CardDueDate card={card} shownOn='back'/>
+      : null
+
     const cardMembers =
-      board.users.filter(user => card.user_ids.includes(user.id)).length > 0
-        ? <CardMembers card={card} board={board}/> : null
+     board.users.filter(user => card.user_ids.includes(user.id)).length > 0
+        ? <MembersContainer card={card} board={board}/>
+        : null
+
     const cardLabels =
       board.labels.filter(label => card.label_ids.includes(label.id)).length > 0
-        ? <CardLabels card={card} board={board} labelPanel={labelPanel}/> : null
+        ? <LabelsContainer card={card} board={board} labelPanel={labelPanel}/>
+        : null
 
     return <div className="CardModal">
       <CardModalShroud onClose={this.props.onClose}>
@@ -141,61 +147,6 @@ const CardHeader = ({card, list}) => {
     </div>
   </div>
 
-}
-
-const CardLabels =({card, board, labelPanel}) => {
-  const cardLabels = card.label_ids
-    .map( labelId => board.labels.find(label => label.id === labelId))
-    .map(label =>
-      <PopoverMenuButton
-        key={label.id}
-        className="CardModal-CardBadges-labels-Label"
-        type="unstyled"
-        popover={labelPanel}
-      >
-        <CardLabel
-          color={label.color}
-          text={label.text}
-          checked={false}
-        />
-      </PopoverMenuButton>
-    )
-  const labelHeader = cardLabels.length > 0 ?
-    <div className="CardModal-CardBadges-header">Labels</div> : null
-
-  return <div className="CardModal-CardBadges">
-    {labelHeader}
-    <div className="CardModal-CardBadges-labels">
-      {cardLabels}
-    </div>
-  </div>
-}
-
-const CardMembers = ({card, board}) => {
-  const cardMembers = board.users
-    .filter(user => card.user_ids.includes(user.id) )
-    .map( user =>
-      <CardMember
-        key={user.id}
-        className='CardModal-MemberAvatar'
-        board={board}
-        card={card}
-        user={user}
-      />
-    )
-
-  const membersDisplay = cardMembers.length > 0
-    ? <div className='CardModal-CardMembers-content'>
-        <div className="CardModal-CardMembers-header">Members</div>
-        <div className='CardModal-CardMembers-avatars'>
-          {cardMembers}
-        </div>
-      </div>
-    : null
-
-  return <div className='CardModal-CardMembers'>
-    {membersDisplay}
-  </div>
 }
 
 const Controls = ({board, list, card, closeModal, labelPanel}) => {

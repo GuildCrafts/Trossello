@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import Link from '../../Link'
-import Icon from '../../Icon'
+import Link from '../../../Link'
+import Icon from '../../../Icon'
 import './CardLabel.sass'
 
 export default class CardLabel extends Component {
