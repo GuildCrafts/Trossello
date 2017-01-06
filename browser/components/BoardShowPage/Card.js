@@ -78,6 +78,7 @@ export default class Card extends Component {
       event.ctrlKey || event.metaKey || event.shiftKey) return
     event.preventDefault()
     this.context.redirectTo(`/boards/${card.board_id}/cards/${card.id}`)
+    if (this.props.onClick) this.props.onClick(event)
   }
 
   render() {
