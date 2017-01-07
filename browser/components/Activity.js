@@ -162,6 +162,7 @@ const Activity = props => {
   const { activity, users, board, cardActivity } = props
   const user = users.find(user => user.id === activity.user_id)
   const className = `Activity ${props.className||''}`
+  if (user === undefined) return <div></div>
 
   return <div className={className}>
     <div className="Activity-content">
