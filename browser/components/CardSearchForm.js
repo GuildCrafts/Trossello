@@ -146,7 +146,11 @@ class SearchResultModal extends Component {
 
   closeIfUserClickedElsewhere(event){
     const container = ReactDOM.findDOMNode(this.refs.window)
-    if (!container.contains(event.target) && container !== event.target) {
+    if (
+      !container.contains(event.target) &&
+      container !== event.target &&
+      event.target.className !== "CardSearchForm-Input"
+    ) {
       this.props.onClose()
     }
   }
