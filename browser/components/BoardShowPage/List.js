@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import $ from 'jquery'
 import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
@@ -32,12 +33,21 @@ export default class List extends Component {
     super(props)
     this.state = {
       creatingCard: false,
-      newCardOrder: 0
+      newCardOrder: 0,
+      listActionsMenuTop: '-9999em',
+      listActionsMenuLeft: '-9999em',
     }
+
     this.creatingCard = this.creatingCard.bind(this)
     this.creatingCardTop = this.creatingCardTop.bind(this)
     this.cancelCreatingCard = this.cancelCreatingCard.bind(this)
     this.incNewCardFormOrder = this.incNewCardFormOrder.bind(this)
+    this.openListOptionsMenu = this.openListOptionsMenu.bind(this)
+    this.closeListOptionsMenu = this.closeListOptionsMenu.bind(this)
+    this.moveIfUserClickedOutside = this.moveIfUserClickedOutside.bind(this)
+    this.upDateListOptionsMenuPosition = this.upDateListOptionsMenuPosition.bind(this)
+
+    document.body.addEventListener('click', this.moveIfUserClickedOutside, false)
   }
 
   componentDidUpdate(){
@@ -45,6 +55,14 @@ export default class List extends Component {
       const { cards } = this.refs
       cards.scrollTop = cards.scrollHeight
     }
+  }
+
+  componentDidMount() {
+    addEventListener('resize', this.upDateListOptionsMenuPosition)
+  }
+
+  componentWillUnmount() {
+    removeEventListener('resize', this.upDateListOptionsMenuPosition)
   }
 
   creatingCard() {
@@ -65,6 +83,63 @@ export default class List extends Component {
 
   incNewCardFormOrder() {
     this.setState({newCardOrder: this.state.newCardOrder + 1})
+  }
+
+  openListOptionsMenu(event){
+    event.preventDefault()
+    const button = ReactDOM.findDOMNode(this.refs.openListOptionsMenu)
+    const dialog = $(ReactDOM.findDOMNode(this.refs.listActionsMenu)).find('.DialogBox')[0]
+    const buttonRect = button.getBoundingClientRect()
+    const dialogRect = dialog.getBoundingClientRect()
+    let top = buttonRect.top
+    let left = buttonRect.left
+
+    let widthOverlap = left + dialogRect.width - window.innerWidth
+    if (widthOverlap > 0) left -= widthOverlap
+
+    let heightOverlap = top + dialogRect.height - window.innerHeight
+    if (heightOverlap > 0 && window.innerHeight < dialogRect.height) top = 45
+    else if (heightOverlap > 0) top -= heightOverlap
+
+    this.setState({
+      listActionsMenuTop: top+'px',
+      listActionsMenuLeft: left+'px',
+    })
+  }
+
+  upDateListOptionsMenuPosition(event){
+    event.preventDefault()
+    const dialog = $(ReactDOM.findDOMNode(this.refs.listActionsMenu)).find('.DialogBox')[0]
+    const dialogRect = dialog.getBoundingClientRect()
+    let top = dialogRect.top
+    let left = dialogRect.left
+
+    let widthOverlap = left + dialogRect.width - window.innerWidth
+    if (widthOverlap > 0) left -= widthOverlap
+
+    let heightOverlap = top + dialogRect.height - window.innerHeight
+    if (heightOverlap > 0 && window.innerHeight < dialogRect.height) top = 45
+    else if (heightOverlap > 0) top -= heightOverlap
+
+    this.setState({
+      listActionsMenuTop: top+'px',
+      listActionsMenuLeft: left+'px',
+    })
+  }
+
+  closeListOptionsMenu(event) {
+    event.preventDefault()
+    this.setState({
+      listActionsMenuTop: '-9999em',
+      listActionsMenuLeft: '-9999em',
+    })
+  }
+
+  moveIfUserClickedOutside(event) {
+    const container = $(ReactDOM.findDOMNode(this.refs.listActionsMenu)).find('.DialogBox')[0]
+    if (!container.contains(event.target) && container !== event.target) {
+      this.closeListOptionsMenu(event)
+    }
   }
 
   render(){
@@ -106,13 +181,28 @@ export default class List extends Component {
     let className = "BoardShowPage-List-box"
     if (this.props.ghosted) className += ' BoardShowPage-List-box-ghosted'
 
-    const listActionsMenu = <ListActionsMenu
-      board={this.props.board}
-      list={this.props.list}
-      onCreateCard={this.creatingCardTop}
-    />
+    const listActionsMenuStyle = {
+      position: 'fixed',
+      top: this.state.listActionsMenuTop,
+      left: this.state.listActionsMenuLeft,
+      zIndex: 200,
+    }
 
     return <div className='BoardShowPage-List' data-list-id={list.id}>
+      <div
+          className="BoardShowPage-listActionsMenu" style={listActionsMenuStyle}
+        >
+        <ListActionsMenu
+          ref="listActionsMenu"
+          board={this.props.board}
+          list={this.props.list}
+          onCreateCard={this.creatingCardTop}
+          onClose={this.closeListOptionsMenu}
+          onClick={this.moveIfUserClickedOutside}
+          resize={this.upDateListOptionsMenuPosition}
+        />
+      </div>
+
       <div className={className}>
         <div className="BoardShowPage-ListHeader"
           className="BoardShowPage-ListHeader"
@@ -121,9 +211,14 @@ export default class List extends Component {
         >
           <ListName list={list}/>
         </div>
-        <PopoverMenuButton className="BoardShowPage-ListOptions" type="invisible" popover={listActionsMenu}>
+        <Button
+          ref="openListOptionsMenu"
+          className="BoardShowPage-ListOptions"
+          type={false}
+          onClick={this.openListOptionsMenu}
+        >
           <Icon type="ellipsis-h" />
-        </PopoverMenuButton>
+        </Button>
         <div ref="cards"className="BoardShowPage-cards">
           {cardNodes}
         </div>

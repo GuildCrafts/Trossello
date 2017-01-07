@@ -2,8 +2,23 @@
 
 .ListActionsMenu
   padding: 0 0 5px 0
+
   > .DialogBox
-    position: absolute
+    position: fixed
+    overflow: auto
+    &::-webkit-scrollbar
+      -webkit-appearance: none
+
+    &::-webkit-scrollbar:vertical
+      width: 9px
+
+    &::-webkit-scrollbar-thumb
+      border-radius: 4px
+      background-color: rgba(0, 0, 0, .1)
+
+    &::-webkit-scrollbar-track
+      border-radius: 4px
+      background-color: rgba(0, 0, 0, .1)
 
   &-GoBackArrow
     position: absolute
@@ -18,6 +33,7 @@
         color: #4d4d4d
   &-DialogBox-content
     padding: 0 10px 0 10px
+
   &-ArchiveAllCardsPane
     p
       margin: 0 0 10px 0
@@ -28,7 +44,6 @@
     .Button
       display: block
       width: 100%
-
   &-CopyListPane
     > .Form
       padding: 10px
