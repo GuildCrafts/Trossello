@@ -143,7 +143,7 @@ const unarchiveList = (id) =>
     .then(reloadBoardStore)
 
 const archiveCard = (id) =>
-  post(`/api/cards/${this.props.card.id}/archive`)
+  post(`/api/cards/${id}/archive`)
     .then(reloadBoardStore)
 
 const updateCardAttribute = (cardId, content) =>

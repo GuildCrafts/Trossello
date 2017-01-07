@@ -220,7 +220,7 @@ class UnArchiveCardButton extends Component {
   }
 
   unarchive(){
-    commands.unarchiveCard(card.id)
+    commands.unarchiveCard(this.props.card.id)
   }
 
   render(){
@@ -241,7 +241,7 @@ class ArchiveCardButton extends Component {
     this.archiveCard = this.archiveCard.bind(this)
   }
   archiveCard(){
-    commands.archiveCard(card.id)
+    commands.archiveCard(this.props.card.id)
   }
   render(){
     return <ConfirmationButton
