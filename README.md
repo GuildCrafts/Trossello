@@ -52,7 +52,7 @@ $ git remote add upstream https://github.com/GuildCrafts/Trossello.git
 #### Install Postgres
 
 ```sh
-brew install postgress
+brew install postgresql
 brew tap homebrew/services
 brew services start postgresql
 ```
