@@ -1,4 +1,3 @@
-import './index.sass'
 import React, { Component } from 'react'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import commands from '../../../commands'
@@ -11,6 +10,7 @@ import List from '../List'
 import Unarchive from './Unarchive'
 import InviteByEmailPopover from '../../InviteByEmailPopover'
 import Avatar from '../../Avatar'
+import './index.sass'
 
 // panes
 import { ActivityPanel, MainPaneActivity }  from './ActivityPanel'

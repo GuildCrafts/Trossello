@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import Button from './Button'
 import Icon from './Icon'
-import './BoardStar.sass'
 import commands from '../commands'
+import './BoardStar.sass'
 
 export default class BoardStar extends Component {
   static propTypes = {

@@ -1,10 +1,10 @@
-import './ConfirmationDialog.sass'
 import React, { Component } from 'react'
 import Link from './Link'
 import Icon from './Icon'
 import ModalView from './ModalView'
 import DialogBox from './DialogBox'
 import Button from './Button'
+import './ConfirmationDialog.sass'
 
 export default class ConfirmationDialog extends Component {
   static propTypes = {

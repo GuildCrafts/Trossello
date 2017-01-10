@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './CardModal.sass'
 import moment from 'moment'
 import LabelMenu from './LabelMenu'
 import CardMembersMenu from './CardMembersMenu'
@@ -22,6 +21,7 @@ import PopoverMenuButton from '../../PopoverMenuButton'
 import CopyCard from '../CopyCard'
 import Activity from '../../Activity'
 import commands from '../../../commands'
+import './CardModal.sass'
 
 export default class CardModal extends Component {
   static propTypes = {

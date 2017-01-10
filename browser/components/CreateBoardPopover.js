@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './CreateBoardPopover.sass'
 import Link from './Link'
 import Icon from './Icon'
 import Form from './Form'
@@ -7,6 +6,7 @@ import Button from './Button'
 import DialogBox from './DialogBox'
 import ColorBox from './BoardShowPage/ColorBox'
 import commands from '../commands'
+import './CreateBoardPopover.sass'
 
 class CreateBoardPopover extends Component {
 

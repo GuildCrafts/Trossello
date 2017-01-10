@@ -1,4 +1,3 @@
-import './BoardsDropdown.sass'
 import React, { Component } from 'react'
 import boardsStore from '../stores/boardsStore'
 import createStoreProvider from './createStoreProvider'
@@ -10,6 +9,7 @@ import CreateBoardPopover from './CreateBoardPopover'
 import ToggleComponent from './ToggleComponent'
 import BoardStar from './BoardStar'
 import commands from '../commands'
+import './BoardsDropdown.sass'
 
 class BoardsDropdown extends Component {
 

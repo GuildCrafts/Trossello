@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import Form from './Form'
 import Layout from './Layout'
-import './InviteByEmailPopover.sass'
 import Link from './Link'
 import Icon from './Icon'
 import Button from './Button'
 import boardStore from '../stores/boardStore'
 import DialogBox from './DialogBox'
 import commands from '../commands'
+import './InviteByEmailPopover.sass'
 
 class InviteByEmailPopover extends Component {
   constructor(props) {

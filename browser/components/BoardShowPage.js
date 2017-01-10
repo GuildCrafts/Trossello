@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './BoardShowPage.sass'
 import Layout from './Layout'
 import Link from './Link'
 import Button from './Button'
@@ -18,6 +17,7 @@ import RenameBoardDropdown from './BoardShowPage/RenameBoardDropdown'
 import PopoverMenuButton from './PopoverMenuButton'
 import commands from '../commands'
 import setFaviconColor from '../setFaviconColor'
+import './BoardShowPage.sass'
 
 class BoardProvider extends Component {
   constructor(props){

@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import './LabelMenu.sass'
 import CardLabel from './CardBadges/CardLabel'
 import ColorBox from '../ColorBox'
 import Link from '../../Link'
@@ -11,6 +10,7 @@ import ActionsMenu from '../../ActionsMenu'
 import ActionsMenuPane from '../../ActionsMenuPane'
 import boardStore from '../../../stores/boardStore'
 import commands from '../../../commands'
+import './LabelMenu.sass'
 
 export default class LabelMenu extends Component {
 

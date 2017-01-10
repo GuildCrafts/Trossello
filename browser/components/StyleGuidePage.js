@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './StyleGuidePage.sass'
 import Layout from './Layout'
 import ToggleComponent from './ToggleComponent'
 import Link from './Link'
@@ -9,6 +8,7 @@ import Spinner from './Spinner'
 import ContentForm from './ContentForm'
 import List from './BoardShowPage/List'
 import Card from './BoardShowPage/Card'
+import './StyleGuidePage.sass'
 
 export default class StyleGuidePage extends Component {
   render(){

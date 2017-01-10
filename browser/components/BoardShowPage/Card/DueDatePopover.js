@@ -3,9 +3,9 @@ import Form from '../../Form'
 import Button from '../../Button'
 import DialogBox from '../../DialogBox'
 import FlexRowContainer from '../../FlexRowContainer'
-import './DueDatePopover.sass'
 import commands from '../../../commands'
 import moment from 'moment'
+import './DueDatePopover.sass'
 
 
 
