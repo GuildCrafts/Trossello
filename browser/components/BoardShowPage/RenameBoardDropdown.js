@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import DialogBox from '../DialogBox'
 import Button from '../Button'
 import Form from '../Form'
-import './RenameBoardDropdown.sass'
 import commands from '../../commands'
+import './RenameBoardDropdown.sass'
 
 export default class RenameBoardDropdown extends Component {
   constructor(props) {

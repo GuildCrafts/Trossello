@@ -1,4 +1,3 @@
-import './CardSearchForm.sass'
 import $ from 'jquery'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
@@ -9,6 +8,7 @@ import Icon from './Icon'
 import Spinner from './Spinner'
 import Card from './BoardShowPage/Card'
 import commands from '../commands'
+import './CardSearchForm.sass'
 
 export default class CardSearchForm extends Component {
 

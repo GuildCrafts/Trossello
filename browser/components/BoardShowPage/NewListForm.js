@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './NewListForm.sass'
 import ToggleComponent from '../ToggleComponent'
 import Form from '../Form'
 import Link from '../Link'
@@ -7,6 +6,7 @@ import Icon from '../Icon'
 import Button from '../Button'
 import boardStore from '../../stores/boardStore'
 import commands from '../../commands'
+import './NewListForm.sass'
 
 export default class NewListForm extends ToggleComponent {
 

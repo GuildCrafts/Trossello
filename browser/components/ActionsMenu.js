@@ -1,5 +1,5 @@
-import './ActionsMenu.sass'
 import React, {Component} from 'react'
+import './ActionsMenu.sass'
 
 export default class ActionsMenu extends Component {
 

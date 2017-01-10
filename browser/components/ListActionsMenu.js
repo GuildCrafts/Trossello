@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import './ListActionsMenu.sass'
 import Link from './Link'
 import ActionsMenu from './ActionsMenu'
 import ActionsMenuPane from './ActionsMenuPane'
@@ -10,6 +9,7 @@ import DialogBox from './DialogBox'
 import ConfirmationLink from './ConfirmationLink'
 import boardStore from '../stores/boardStore'
 import commands from '../commands'
+import './ListActionsMenu.sass'
 
 
 class ListActionsMenu extends Component {

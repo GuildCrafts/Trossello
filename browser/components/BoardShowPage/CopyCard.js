@@ -4,8 +4,8 @@ import Form from '../Form'
 import Button from '../Button'
 import DialogBox from '../DialogBox'
 import BigSelect from '../BigSelect'
-import './CopyCard.sass'
 import commands from '../../commands'
+import './CopyCard.sass'
 
 export default class CopyCard extends Component {
   constructor(props){
