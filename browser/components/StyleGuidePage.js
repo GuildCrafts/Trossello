@@ -157,10 +157,17 @@ const BrandColorsSection = (props) => {
 }
 
 const CardsSection = (props) => {
+  const card = {
+    id: 2,
+    user_ids: [1,2],
+    board_id: 2,
+    list_id: 4,
+    content: "Create Style Guide"
+  }
   return <div>
     <h3>Cards</h3>
     <StyleExample sourceCode='<Card editable archivable card={{id: 2, board: 2, list_id: 4}}></Card>'>
-      <Card editable archivable card={{id: 2, board_id: 2, list_id: 4, content: "Create Style Guide"}}/>
+      <Card editable archivable card={card}/>
     </StyleExample>
   </div>
 }
@@ -217,9 +224,6 @@ class StyleExample extends ToggleComponent {
     </div>
   }
 }
-
-// const ColorCircle = (props) =>
-//   return
 
 const SourceCode = (props) =>
   <code className="StyleGuidePage-SourceCode">{props.code}</code>
