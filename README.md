@@ -165,3 +165,4 @@ We're using `knex` to generate our SQL
 - [ASantos3026](https://github.com/ASantos3026)
 - [salmonax](https://github.com/salmonax)
 - [nodatall](https://github.com/nodatall)
+- [ameliavoncat](https://github.com/ameliavoncat)
