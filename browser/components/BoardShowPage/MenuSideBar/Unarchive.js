@@ -20,15 +20,15 @@ export default class Unarchive extends Component {
     super(props)
     this.state = {
       display: 'Cards',
-      value: ''
+      searchTerm: ''
     }
     this.setSearchTerm = this.setSearchTerm.bind(this)
     this.toggleDisplay = this.toggleDisplay.bind(this)
   }
 
   setSearchTerm(event){
-    const value = event.target.value
-    this.setState({value: value})
+    const searchTerm = event.target.value
+    this.setState({searchTerm})
   }
 
   toggleDisplay(){
@@ -64,7 +64,7 @@ export default class Unarchive extends Component {
         type="text"
         className="BoardShowPage-MenuSideBar-ArchivedItems-SearchBox"
         placeholder="Placeholder for searching unarchive."
-        value={this.state.value}
+        value={this.state.searchTerm}
         onChange={this.setSearchTerm}
       />
       <Link

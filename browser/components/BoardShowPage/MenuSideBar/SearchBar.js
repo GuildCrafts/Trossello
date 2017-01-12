@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-// take search bar contents from unarchive
-// make a component in this file
-// check that the content rendered is correct
-// set props to the state
-// export
-// replace search contents with search bar
-// test
+// Xtake search bar contents from unarchive
+// Xmake a component in this file
+// Xcheck that the content rendered is correct
+// XXset props to the state
+// Xexport
+// Xreplace search contents with search bar
+// Xtest
 
 
 const SearchBar = ( props ) => {
