@@ -58,14 +58,14 @@ const ListActionsPane = ({onClose, createCard, list, goToPane}) => {
       heading="List Actions"
       onClose={onClose}
     >
-    <Link onClick={createCard}>Add a Card…</Link>
+    <Link className="ListActionsMenu-ListActionsPane-AddCard" onClick={createCard}>Add a Card…</Link>
     <DialogBox.Divider />
-    <Link onClick={goToPane('Copy List')}>Copy List…</Link>
-    <Link onClick={goToPane('Move List')}>Move List…</Link>
+    <Link className="ListActionsMenu-ListActionsPane-CopyList" onClick={goToPane('Copy List')}>Copy List…</Link>
+    <Link className="ListActionsMenu-ListActionsPane-MoveList" onClick={goToPane('Move List')}>Move List…</Link>
     <Link>Subscribe</Link>
     <DialogBox.Divider />
-    <Link onClick={goToPane('Move All Cards')}>Move All Cards In This List…</Link>
-    <Link onClick={goToPane('Archive All Cards')}>Archive All Cards In This List…</Link>
+    <Link className="ListActionsMenu-ListActionsPane-MoveAllCards" onClick={goToPane('Move All Cards')}>Move All Cards In This List…</Link>
+    <Link className="ListActionsMenu-ListActionsPane-ArchiveAllCards" onClick={goToPane('Archive All Cards')}>Archive All Cards In This List…</Link>
     <DialogBox.Divider />
     <ArchiveListLink list={list} />
   </ActionsMenuPane>

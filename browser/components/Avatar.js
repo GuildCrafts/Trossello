@@ -4,7 +4,7 @@ import './Avatar.sass'
 export default class Avatar extends Component {
 
   static propTypes = {
-    src: React.PropTypes.string.isRequired,
+    src: React.PropTypes.string,
     size: React.PropTypes.oneOf(['small', 'default', 'large']),
   };
 
