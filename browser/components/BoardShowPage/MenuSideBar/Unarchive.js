@@ -7,6 +7,7 @@ import ConfirmationLink from '../../ConfirmationLink'
 import Icon from '../../Icon'
 import Button from '../../Button'
 import commands from '../../../commands'
+import SearchBar from './SearchBar'
 
 
 export default class Unarchive extends Component {
@@ -18,16 +19,16 @@ export default class Unarchive extends Component {
   constructor(props){
     super(props)
     this.state = {
-      searchTerm: '',
-      display: 'Cards'
+      display: 'Cards',
+      value: 'hi'
     }
     this.setSearchTerm = this.setSearchTerm.bind(this)
     this.toggleDisplay = this.toggleDisplay.bind(this)
   }
 
   setSearchTerm(event){
-    const searchTerm = event.target.value
-    this.setState({searchTerm: searchTerm})
+    const value = event.target.value
+    this.setState({value: value})
   }
 
   toggleDisplay(){
@@ -35,6 +36,11 @@ export default class Unarchive extends Component {
     this.setState( {
       display: display
     })
+// TODO: check whether this should be a function declaration
+  // handleInput( event ){
+  //   const value
+  //   this.setState({ value: event.target.value })
+  // }
   }
 
   render(){
@@ -44,7 +50,8 @@ export default class Unarchive extends Component {
       <ArchivedCards board={board} searchTerm={this.state.searchTerm} className="BoardShowPage-MenuSideBar-ArchivedItems-List" /> :
       <ArchivedLists board={board} searchTerm={this.state.searchTerm} className="BoardShowPage-MenuSideBar-ArchivedItems-List"/>
     return (<div className="BoardShowPage-MenuSideBar-ArchivedItems">
-        <span className="BoardShowPage-MenuSideBar-ArchivedItems-Header" > <input
+      {/* insert searchbar function */}
+        {/* <span className="BoardShowPage-MenuSideBar-ArchivedItems-Header" > <input
           type="text"
           className="BoardShowPage-MenuSideBar-ArchivedItems-SearchBox"
           placeholder="Search archive..."
@@ -52,7 +59,18 @@ export default class Unarchive extends Component {
           onChange={this.setSearchTerm}
         />
       <Link onClick={this.toggleDisplay} className="BoardShowPage-MenuSideBar-ArchivedItems-ToggleDisplay">{toggleButtonText}</Link>
-      </span>
+      </span> */}
+      <SearchBar
+        type="text"
+        className="BoardShowPage-MenuSideBar-ArchivedItems-SearchBox"
+        placeholder="Placeholder for searching unarchive."
+        value={this.state.value}
+        onChange={this.setSearchTerm}
+      />
+      <Link
+        onClick={this.toggleDisplay}
+        className="BoardShowPage-MenuSideBar-ArchivedItems-ToggleDisplay">{toggleButtonText}
+      </Link>
       {toggleDisplayStatus}
     </div>
   )
