@@ -2,13 +2,15 @@ machine:
   pre:
     - mkdir ~/.yarn-cache
   node:
-    version: 6.3.0
+    version: 7.1.0
   environment:
     NODE_ENV: test
     GITHUB_CLIENT_ID: TEST_GITHUB_CLIENT_ID
     GITHUB_CLIENT_SECRET: TEST_GITHUB_CLIENT_SECRET
     SESSION_KEY: TEST_SESSION_KEY
     DATABASE_URL: postgres://ubuntu:@127.0.0.1:5432/circle_test
+    SAUCE_USERNAME: paradoxp
+    SAUCE_ACCESS_KEY: 4f303d57-8952-46d7-9d23-a922064ce3f8
 
 
 dependencies:
@@ -18,7 +20,17 @@ dependencies:
     - ~/.yarn-cache
   override:
     - yarn install
+  post:
+    - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
+    - tar -xzf sc-latest-linux.tar.gz
 
 test:
   override:
+    - cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
+        background: true
+    # Wait for tunnel to be ready
+    - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
     - yarn test
+    
+  post:
+    - killall --wait sc  # wait for Sauce Connect to close the tunnel
