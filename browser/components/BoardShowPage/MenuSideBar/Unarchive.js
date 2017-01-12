@@ -20,7 +20,7 @@ export default class Unarchive extends Component {
     super(props)
     this.state = {
       display: 'Cards',
-      value: 'hi'
+      value: ''
     }
     this.setSearchTerm = this.setSearchTerm.bind(this)
     this.toggleDisplay = this.toggleDisplay.bind(this)
