@@ -14,7 +14,7 @@ export default class LabelsPane extends Component {
 
   constructor(props){
     super(props)
-    
+
     // states for this component
     this.state = {
       searchTerm: '',
@@ -33,11 +33,11 @@ export default class LabelsPane extends Component {
     const { board } = this.props
 
     const labels = board.labels.map( label => {
-      return <CardLabel 
+      return <CardLabel
         key={label.id}
-        className="BoardShowPage-MenuSideBar-LabelsPane-Label"
-        color={label.color} 
-        text={label.text} 
+        className="CardLabel"
+        color={label.color}
+        text={label.text}
         checked={false}
       />
     })
@@ -47,17 +47,17 @@ export default class LabelsPane extends Component {
         type="text"
         className="BoardShowPage-MenuSideBar-LabelsPane-SearchBox"
         placeholder="Placeholder for searching unarchive."
-        value={this.state.searchTerm} 
+        value={this.state.searchTerm}
         onChange={this.setSearchTerm}
       />
 
       {labels}
 
-   <PopoverMenuButton 
-    className="BoardShowPage-RenameBoardButton" 
-    type="invisible" 
+   <PopoverMenuButton
+    className="BoardShowPage-RenameBoardButton"
+    type="invisible"
     popover={labels} />
-      
+
     </div>
   }
 
