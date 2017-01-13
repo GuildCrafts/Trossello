@@ -1,16 +1,15 @@
 import React, {Component} from 'react'
-// import CardLabel from './CardBadges/CardLabel'
-// import ColorBox from '../ColorBox'
-// import Link from '../../Link'
-// import Form from '../../Form'
-// import Icon from '../../Icon'
-// import Button from '../../Button'
-// import ConfirmationButton from '../../ConfirmationButton'
+import CardLabel from './CardBadges/CardLabel'
+import ColorBox from '../ColorBox'
+import Link from '../../Link'
+import Form from '../../Form'
+import Icon from '../../Icon'
+import Button from '../../Button'
+import ConfirmationButton from '../../ConfirmationButton'
 import ActionsMenu from '../../ActionsMenu'
-// import ActionsMenuPane from '../../ActionsMenuPane'
+import ActionsMenuPane from '../../ActionsMenuPane'
 import boardStore from '../../../stores/boardStore'
-// import commands from '../../../commands'
-import { MainLabelPanel, CreateLabelPanel } from '../LabelMain'
+import commands from '../../../commands'
 import './LabelMenu.sass'
 
 export default class LabelMenu extends Component {
@@ -18,7 +17,7 @@ export default class LabelMenu extends Component {
   static propTypes = {
     card: React.PropTypes.object.isRequired,
     board: React.PropTypes.object.isRequired,
-    // TODO: onClose: React.PropTypes.func.isRequired
+    // onClose: React.PropTypes.func.isRequired
   }
 
   constructor(props){
