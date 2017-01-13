@@ -10,6 +10,7 @@ import List from '../List'
 import Unarchive from './Unarchive'
 import InviteByEmailPopover from '../../InviteByEmailPopover'
 import Avatar from '../../Avatar'
+import LabelsPane from './LabelsPane'
 import './index.sass'
 
 // panes
@@ -293,11 +294,11 @@ const SettingsPane = ({board, onClose, gotoPane, goBack}) =>
     <div>Settings Label TBD</div>
   </Pane>
 
-
-const LabelsPane = ({board, onClose, gotoPane, goBack}) =>
-  <Pane name="Labels">
-    <div>Labels Panel</div>
-  </Pane>
+// TODO: how to use the labelspane component
+// const LabelsPane = ({board, onClose, gotoPane, goBack}) =>
+  // <Pane name="Labels">
+  //   <div>Labels Panel</div>
+  // </Pane>
 
 
 const DownloadBoardButton = (props) => {
