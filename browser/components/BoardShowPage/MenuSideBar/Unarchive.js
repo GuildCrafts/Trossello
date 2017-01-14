@@ -7,6 +7,8 @@ import ConfirmationLink from '../../ConfirmationLink'
 import Icon from '../../Icon'
 import Button from '../../Button'
 import commands from '../../../commands'
+import SearchBar from './SearchBar'
+import './SearchBar.sass'
 
 
 export default class Unarchive extends Component {
@@ -18,8 +20,8 @@ export default class Unarchive extends Component {
   constructor(props){
     super(props)
     this.state = {
-      searchTerm: '',
-      display: 'Cards'
+      display: 'Cards',
+      searchTerm: ''
     }
     this.setSearchTerm = this.setSearchTerm.bind(this)
     this.toggleDisplay = this.toggleDisplay.bind(this)
@@ -27,7 +29,7 @@ export default class Unarchive extends Component {
 
   setSearchTerm(event){
     const searchTerm = event.target.value
-    this.setState({searchTerm: searchTerm})
+    this.setState({searchTerm})
   }
 
   toggleDisplay(){
@@ -44,15 +46,17 @@ export default class Unarchive extends Component {
       <ArchivedCards board={board} searchTerm={this.state.searchTerm} className="BoardShowPage-MenuSideBar-ArchivedItems-List" /> :
       <ArchivedLists board={board} searchTerm={this.state.searchTerm} className="BoardShowPage-MenuSideBar-ArchivedItems-List"/>
     return (<div className="BoardShowPage-MenuSideBar-ArchivedItems">
-        <span className="BoardShowPage-MenuSideBar-ArchivedItems-Header" > <input
-          type="text"
-          className="BoardShowPage-MenuSideBar-ArchivedItems-SearchBox"
-          placeholder="Search archive..."
-          value={this.state.searchTerm}
-          onChange={this.setSearchTerm}
-        />
-      <Link onClick={this.toggleDisplay} className="BoardShowPage-MenuSideBar-ArchivedItems-ToggleDisplay">{toggleButtonText}</Link>
-      </span>
+      <SearchBar
+        type="text"
+        // className="BoardShowPage-MenuSideBar-ArchivedItems-SearchBox"
+        placeholder="Placeholder for searching unarchive."
+        value={this.state.searchTerm}
+        onChange={this.setSearchTerm}
+      />
+      <Link
+        onClick={this.toggleDisplay}
+        className="ToggleDisplay">{toggleButtonText}
+      </Link>
       {toggleDisplayStatus}
     </div>
   )
