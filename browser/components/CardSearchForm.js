@@ -78,6 +78,9 @@ export default class CardSearchForm extends Component {
     if (event.key === "Escape") {
       this.close()
     }
+    if (event.key === "Enter") {
+      event.preventDefault()
+    }
   }
 
   onKeyUp(event){
