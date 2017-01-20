@@ -16,9 +16,8 @@ const IconsSection = (props) => {
     <Icon type='ellipsis-h' />
     <Icon type='arrow-left' />
     <Icon type='user-plus' />`
-  return <div>
-    <h3>Icons</h3>
-    <StyleExample sourceCode={sourceCode}>
+  return <div> 
+    <StyleExample header="Icons" sourceCode={sourceCode}>
       <ul className="StyleGuidePage-StyleExample-Elements">
         <li><Icon type='pencil' /><p>Edit</p></li>
         <li><Icon type='archive' /><p>Archive</p></li>
@@ -38,7 +37,7 @@ const IconsSection = (props) => {
         <li><Link className="Link Secondary-Hover" ><Icon type='archive' /></Link><p>Icon with 'Secondary-Hover' class</p></li>
       </ul>
     </StyleExample>
-    <p>****Trosello is using Font Awesome icons and the Icon component is confgured so type attribute is name of any Font Awesome icon without the fa</p>
+    <p>****Trossello is using Font Awesome icons and the Icon component is confgured so type attribute is name of any Font Awesome icon without the fa</p>
   </div>
 }
 

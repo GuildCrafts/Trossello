@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Avatar from '../../Avatar'
 import Link from '../../Link'
 import commands from '../../../commands'
+import './MemberLabelPopover.sass'
 
 export default class MemberLabelPopover extends Component {
 

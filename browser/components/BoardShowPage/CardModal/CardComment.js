@@ -60,7 +60,7 @@ export default class CardComment extends Component {
       <div className="BoardShowPage-CardModal-CardComment-comment">
         <ContentForm
           ref="comment"
-          className="BoardShowPage-CardModal-CommentEditForm"
+          className="BoardShowPage-CardModal-CommentForm"
           onSave={this.updateComment}
           onCancel={this.stopEditingComment}
           submitButtonName="Save"

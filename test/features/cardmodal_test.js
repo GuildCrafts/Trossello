@@ -54,7 +54,7 @@ describe('Card modal tests', () => {
             this.browser.wait(until.elementLocated(By.css('.BoardShowPage-CardModal-CommentForm .BoardShowPage-ContentForm-textarea')), 2000).sendKeys('New Comment')
             this.browser.findElement(By.css('.BoardShowPage-CardModal-CommentForm .BoardShowPage-ContentForm-controls > .Button-primary'), 2000).click()
             this.browser.wait(until.elementLocated(By.className('BoardShowPage-CardModal-CardComment-comment-controls-edit')), 2000).click()
-            this.browser.wait(until.elementLocated(By.css('.BoardShowPage-CardModal-CardComment-comment > .BoardShowPage-CardModal-CommentEditForm > textarea')), 2000).sendKeys(' Edited')
+            this.browser.wait(until.elementLocated(By.css('.BoardShowPage-CardModal-CardComment-comment > .BoardShowPage-CardModal-CommentForm > textarea')), 2000).sendKeys(' Edited')
             this.browser.findElement(By.css('.BoardShowPage-CardModal-CardComment-comment button')).click()
             this.browser.wait(until.elementLocated(By.css('.BoardShowPage-CardModal-CardComment-comment-box')), 2000)
             .then(element => this.browser.wait(until.elementTextContains(element, ' Edited')), 2000)

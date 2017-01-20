@@ -6,7 +6,6 @@ const ConfirmationLink = (props) => {
   const clickable = <Link
     className={props.className}
     href={props.href}
-    href={props.href}
   >
     {props.children}
   </Link>

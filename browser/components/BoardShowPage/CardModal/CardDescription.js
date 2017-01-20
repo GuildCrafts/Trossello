@@ -29,7 +29,7 @@ export default class CardDescription extends ToggleComponent {
     if (this.state.open){
       return <ContentForm
         ref="descriptionForm"
-        className="BoardShowPage-CardModal-CommentEditForm BoardShowPage-CardModal-CardDescription"
+        className="BoardShowPage-CardModal-CommentForm BoardShowPage-CardModal-CardDescription"
         onSave={this.updateDescription}
         onCancel={this.close}
         submitButtonName="Save"

@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import BrandColorsSection from './BrandColorsSection'
 import ButtonsSection from './ButtonsSection'
-import CardsSection from './CardsSection'
+import CardSection from './CardSection'
 import ContentFormSection from './ContentFormSection'
 import IconsSection from './IconsSection'
 import LinksSection from './LinksSection'
 import SpinnerSection from './SpinnerSection'
+import ConfirmationClickablesSection from './ConfirmationClickablesSection'
+import TimeFromNowSection from './TimeFromNowSection'
+import PopoverMenuButtonSection from './PopoverMenuButtonSection'
+import ActionsMenuSection from './ActionsMenuSection'
 import './index.sass'
 
 export default class StyleGuidePage extends Component {
@@ -17,8 +21,12 @@ export default class StyleGuidePage extends Component {
       <IconsSection />
       <LinksSection />
       <BrandColorsSection />
-      <CardsSection />
+      <CardSection />
       <ContentFormSection />
+      <TimeFromNowSection />
+      <ConfirmationClickablesSection />
+      <ActionsMenuSection />
+      <PopoverMenuButtonSection />
     </div>
   }
 }

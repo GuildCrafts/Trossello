@@ -8,7 +8,7 @@ import CardModalControls from './CardModalControls'
 import CardHeader from './CardHeader'
 import LabelMenu from './LabelMenu'
 import CardDescription from './CardDescription'
-import CardCommentForm from './CardCommentForm'
+import CommentForm from './CommentForm'
 import CardActivity from './CardActivity'
 import Icon from '../../Icon'
 import './index.sass'
@@ -93,7 +93,7 @@ export default class CardModal extends Component {
               </div>
               <CardDescription card={card}/>
             </div>
-            <CardCommentForm card={card} session={session}/>
+            <CommentForm card={card} session={session}/>
             <CardActivity board={board} card={card}/>
           </div>
           <CardModalControls
