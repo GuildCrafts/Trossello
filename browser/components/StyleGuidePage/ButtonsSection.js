@@ -14,17 +14,14 @@ const ButtonsSection = (props) => {
     alert('clicked!')
   }
 
-  return <div>
-    <h3>Buttons</h3>
-    <StyleExample sourceCode={sourceCode}>
-      <ul className="StyleGuidePage-StyleExample-Elements">
-        <li><Button>A Default Button</Button></li>
-        <li><Button type="primary">A Primary Button</Button></li>
-        <li><Button type="danger">A Danger Button</Button></li>
-        <li><Button type="invisible" onClick={alertClicked}>An Invisible Button</Button></li>
-      </ul>
-    </StyleExample>
-  </div>
+  return <StyleExample header="Buttons" sourceCode={sourceCode}>
+    <ul className="StyleGuidePage-StyleExample-Elements">
+      <li><Button>A Default Button</Button></li>
+      <li><Button type="primary">A Primary Button</Button></li>
+      <li><Button type="danger">A Danger Button</Button></li>
+      <li><Button type="invisible" onClick={alertClicked}>An Invisible Button</Button></li>
+    </ul>
+  </StyleExample>
 }
 
 export default ButtonsSection

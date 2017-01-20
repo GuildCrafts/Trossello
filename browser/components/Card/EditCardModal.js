@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import EditCardForm from '../BoardShowPage/EditCardForm'
+import './EditCardModal.sass'
 
 export default class EditCardModal extends Component {
   static propTypes = {

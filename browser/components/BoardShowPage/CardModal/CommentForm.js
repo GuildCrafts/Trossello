@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Icon from '../../Icon'
 import ContentForm from '../ContentForm'
 import commands from '../../../commands'
-import './CardCommentForm.sass'
+import './CommentForm.sass'
 
 export default class CardCommentForm extends Component {
   static PropTypes = {
@@ -27,22 +27,22 @@ export default class CardCommentForm extends Component {
   render(){
     const { session } = this.props
 
-    return <div className="BoardShowPage-CardModal-CardCommentForm">
-      <div className="BoardShowPage-CardModal-CardCommentForm-header">
-        <div className="BoardShowPage-CardModal-CardCommentForm-header-icon">
+    return <div className="BoardShowPage-CardModal-CommentForm">
+      <div className="BoardShowPage-CardModal-CommentForm-header">
+        <div className="BoardShowPage-CardModal-CommentForm-header-icon">
           <Icon size="2" type="comment-o"/>
         </div>
-        <div className="BoardShowPage-CardModal-CardCommentForm-header-title">
+        <div className="BoardShowPage-CardModal-CommentForm-header-title">
           Add Comment
         </div>
       </div>
-      <div className="BoardShowPage-CardModal-CardCommentForm-body">
-        <div className="BoardShowPage-CardModal-CardCommentForm-image-container">
-          <img className="BoardShowPage-CardModal-CardCommentForm-image" src={session.user.avatar_url}></img>
+      <div className="BoardShowPage-CardModal-CommentForm-body">
+        <div className="BoardShowPage-CardModal-CommentForm-image-container">
+          <img className="BoardShowPage-CardModal-CommentForm-image" src={session.user.avatar_url}></img>
         </div>
         <ContentForm
           ref="comment"
-          className="BoardShowPage-CardModal-CommentEditForm"
+          className="BoardShowPage-CardModal-CommentForm"
           onSave={this.addComment}
           submitButtonName="Send"
           placeholder="Write a comment…"

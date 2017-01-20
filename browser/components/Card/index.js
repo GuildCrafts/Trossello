@@ -122,7 +122,7 @@ export default class Card extends Component {
       : null
 
     const editCardButton = this.props.editable ?
-      <EditCardButton onClick={this.editCard} /> : null
+      <EditButton onClick={this.editCard} /> : null
 
     const editCardModal = this.state.editingCard ?
       <EditCardModal
@@ -177,7 +177,7 @@ export default class Card extends Component {
 
 }
 
-const EditCardButton = (props) => {
+const EditButton = (props) => {
   return <Link className="Card-EditButton" onClick={props.onClick}>
     <Icon size='0' type="pencil" />
   </Link>
