@@ -3,8 +3,8 @@ import SimpleReactRouter from 'simple-react-router'
 
 // Pages
 import NotFound from './components/NotFound'
-import LoggedInHomepage from './components/LoggedInHomepage'
-import LoggedOutHomepage from './components/LoggedOutHomepage'
+import LoggedInHomepage from './components/HomePage/LoggedInHomepage'
+import LoggedOutHomepage from './components/HomePage/LoggedOutHomepage'
 import BoardShowPage from './components/BoardShowPage'
 import StyleGuidePage from './components/StyleGuidePage'
 

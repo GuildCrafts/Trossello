@@ -24,8 +24,12 @@ export default class BoardStar extends Component {
 
   render(){
     const { board } = this.props
+    const className = this.props.className
+    ? `BoardStar ${this.props.className}`
+    : `BoardStar BoardStar-${board.starred ? 'active' : 'inactive'}`
+
     return <Button
-      className={`BoardStar BoardStar-${board.starred ? 'active' : 'inactive'}`}
+      className={className}
       type="unstyled"
       title="Click to star this board. It will show up at the top of your boards list."
       onClick={this.toggleStar}

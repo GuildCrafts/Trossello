@@ -4,6 +4,7 @@
   $button-height: 30px
   $button-margin: 4px
   $top: $header-height
+  $MenuSideBar-width: 300px
 
   display: flex
   flex-direction: column
@@ -13,8 +14,15 @@
   padding: 0 5px
   box-shadow: 0 3px 6px rgba(0, 0, 0, .4)
   background-color: #edeff0
+  flex-grow: 0
+  flex-shrink: 0
+  flex-basis: $MenuSideBar-width
+  position: relative
+  left: $MenuSideBar-width
+  width: $MenuSideBar-width
+  transition: left 200ms
 
-  &-Header
+  &-MenuSideBarHeader
     display: flex
     color: #4d4d4d
     font-weight: bold
@@ -148,7 +156,7 @@
     color: inherit
     cursor: pointer
     margin-bottom: 5px
-  &-options
+  &-PaneButton
     font-weight: bold
     display: block
     padding: 4px 5px

@@ -1,0 +1,103 @@
+@import "../../style.sass"
+
+.Card
+  position: relative
+  margin-bottom: 6px
+  flex-grow: 0
+  flex-shrink: 0
+  &:hover
+    cursor: pointer
+    .BoardShowPage-Card-box
+      background-color: $hover-grey
+    .BoardShowPage-EditButton
+      visibility: visible
+  &-ghosted
+    +ghosted
+  &-beingDragged
+    z-index: 100
+    position: fixed
+    top: 0
+    left: 0
+    transform: rotate(4deg)
+    pointer-events: none
+    cursor: grabbing
+  &-box
+    display: block
+    -webkit-touch-callout: none
+    -webkit-user-select: none
+    -khtml-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+    padding: 6px 8px
+    border-top: none
+    border-left: none
+    border-bottom: 2px solid #ccc
+    border-right: 1px solid #ccc
+    border-radius: 3px
+    background-color: white
+    font-weight: 400
+    font-size: 14px
+    > pre
+      margin: 0 0 4px
+      font-size: 14px
+      font-family: inherit
+      white-space: pre-wrap
+      white-space: -moz-pre-wrap
+      white-space: -pre-wrap
+      white-space: -o-pre-wrap
+      word-wrap: break-word
+  &-controls
+    position: absolute
+    top: 5px
+    right: 5px
+  &-labels
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+  &-label
+    width: 45px
+    margin: 0 3px 3px 0
+  &-bottom
+    display: flex
+    justify-content: space-between
+    align-items: center
+    &-members
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      justify-content: flex-end
+      padding-top: 4px
+
+  &-EditCardModal
+    &-shroud
+      z-index: 100
+      position: fixed
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+      background-color: rgba(0, 0, 0, 0.5)
+    &-window
+      z-index: 101
+      position: fixed
+    .BoardShowPage-EditCardForm
+      textarea, input[type="submit"]
+        // pointer-events: auto
+
+  &-EditButton
+    text-decoration: none
+    opacity: 0.7
+    color: inherit
+    background-color: white
+    margin: 0 -2px 0 0
+    border-radius: 3px
+    padding: 3px 5px
+    visibility: hidden
+    background-color: $hover-grey
+    > .fa-pencil
+      visibility: visible
+      transform: scale(.7)
+    &:hover
+      opacity: 1
+      background-color: #d6dadc

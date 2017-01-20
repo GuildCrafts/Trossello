@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar'
-import BoardsDropdown from './BoardsDropdown'
+import BoardsDropdown from './Navbar/BoardsDropdown'
 import setFaviconColor from '../setFaviconColor'
 import './Layout.sass'
 const DEFAULT_BACKGROUND_COLOR = '#0079BF'

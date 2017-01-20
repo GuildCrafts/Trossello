@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import ContentForm from '../ContentForm'
+import ContentForm from './ContentForm'
 import Form from '../Form'
 import Link from '../Link'
 import Icon from '../Icon'
-import Card from './Card'
+import Card from '../Card'
 import Button from '../Button'
 import ArchiveButton from './ArchiveButton'
 import boardStore from '../../stores/boardStore'
@@ -43,7 +43,7 @@ export default class EditCardForm extends Component {
 
   render() {
     return <ContentForm
-      className="EditCardForm"
+      className="BoardShowPage-EditCardForm"
       onChange={this.props.onChange}
       onCancel={this.props.onCancel}
       onSave={this.onSave}

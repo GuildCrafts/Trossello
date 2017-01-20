@@ -22,7 +22,7 @@ export default class LeaveBoardButton extends Component {
   render(){
     return <ConfirmationButton
       type="invisible"
-      className="BoardShowPage-MenuSideBar-options"
+      className="BoardShowPage-MenuSideBar-PaneButton BoardShowPage-MenuSideBar-LeaveBoardButton"
       onConfirm={this.leaveBoard}
       buttonName="Leave Board"
       title='Leave Board?'

@@ -40,7 +40,7 @@ export default class RenameBoardDropdown extends Component {
   }
 
   render() {
-    return <DialogBox className="RenameBoardDropdown" heading="Rename Board" onClose={this.props.onClose}>
+    return <DialogBox className="BoardShowPage-RenameBoardDropdown" heading="Rename Board" onClose={this.props.onClose}>
       <Form onSubmit={this.updateNameHandler}>
         <div>Name</div>
         <input

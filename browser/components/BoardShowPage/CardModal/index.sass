@@ -1,0 +1,106 @@
+@import "../../../style.sass"
+
+.BoardShowPage-CardModal
+  &-archivedBanner
+    background-color: #FDFAE5
+    background-image: linear-gradient(to bottom right,rgba(0,0,0,.05) 25%,transparent 25%,transparent 50%,rgba(0,0,0,.05) 50%,rgba(0,0,0,.05) 75%,transparent 75%,transparent)
+    background-size: 14px 14px
+    height: 50px
+    padding: 9pt 9pt 9pt 50px
+    border-top-left-radius: 5px
+    border-top-right-radius: 5px
+  &-columns
+    flex-wrap: wrap
+    display: flex
+    padding: 8px
+  &-content
+    display: flex
+    flex-direction: column
+    flex: 1
+    margin-right: 20px
+  &-body
+    margin-left: 35px
+    display: flex
+    flex-direction: column
+    &-badges
+      display: flex
+      flex-direction: row
+  &-labels-labelButton
+    margin-right: 3px
+    height: 24px
+    min-width: 30px
+
+  &-Controls
+    display: flex
+    flex-direction: column
+    flex: 0 0 115px
+    margin-top: 10px
+    > .Button,  > span > .Button, > div > .Button
+      display: block
+      margin-bottom: 5px
+      width: 100%
+      text-align: left
+      > .Icon
+        margin-right: 0.2em
+    &-title
+      margin: 25px 0 5px 0
+      font-weight: bold
+    &-delete
+      background: #CF513D
+      color: white
+      border: none
+      width: 100%
+      &:hover
+        background: darken(#CF513D, 10%)
+        border: none
+
+  &-CommentEditForm
+    flex-grow: 1
+    flex-shrink: 1
+    align-self: stretch
+    textarea
+      width: 100%
+      border: 0px rgba(0, 0, 0, 0)
+      border-radius: 3px
+      box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1)
+      font-size: 14px
+      &::-webkit-input-placeholder,
+      &:-moz-placeholder,
+      &:placeholder,
+      &::placeholder
+        font-weight: 500
+        color: #8c8c8c
+
+  &-Activity > .Activity-content
+    display: flex
+    flex-direction: row
+    align-items: center
+
+  &-CardMembers
+    display: flex
+    flex-direction: column
+    flex-shrink: 1
+    &-content
+      height: auto
+
+  &-CardMemberPopover
+    position: fixed
+    box-shadow: 0 1px 6px rgba(0,0,0,.15)
+    z-index: 201
+    background-color: #FFFFFF
+    width: 200px
+    padding: 5px
+    border-radius: 3px
+    &-User
+      font-size: 18px
+      font-weight: bold
+      display: flex
+      flex-direction: row
+      &-details
+        margin-left: 10px
+        align-items: baseline
+    &-controls
+      padding: 10px 0
+      margin-left: 2px
+      font-size: 14px
+      font-weight: bold

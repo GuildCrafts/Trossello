@@ -1,0 +1,89 @@
+@import "../../style.sass"
+
+.BoardShowPage
+  $button-height: 30px
+  $button-margin: 4px
+  $MenuSideBar-width: 300px
+  overflow: hidden
+  .Layout-content
+    display: flex
+    flex-direction: row
+  &-container
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+    flex-shrink: 1
+    overflow: hidden
+    margin-right: -$MenuSideBar-width
+    transition: margin-right 200ms
+  &-sideBarOpen
+    .BoardShowPage-container
+      margin-right: 0
+    .BoardShowPage-MenuSideBar
+      left: 0
+  &-lists
+    display: flex
+    flex-shrink: 1
+    flex-grow: 1
+    align-items: stretch
+    overflow-x: auto
+    overflow-y: hidden
+    padding: 10px 10px 0 10px
+    margin-bottom: 10px
+    -webkit-overflow-scrolling: initial
+    &::-webkit-scrollbar
+      -webkit-appearance: none
+      height: 13px
+      width: 13px
+    &::-webkit-scrollbar-button:end:increment,
+    &::-webkit-scrollbar-button:start:decrement
+      background: 0 0
+      display: none
+    &::-webkit-scrollbar-track-piece
+      background-color: rgba(0, 0, 0, .13)
+    &::-webkit-scrollbar-track-piece:vertical:start
+      border-radius: 5px 5px 0 0
+    &::-webkit-scrollbar-track-piece:vertical:end
+      border-radius: 0 0 5px 5px
+    &::-webkit-scrollbar-track-piece:horizontal
+      margin-bottom: 10px
+    &::-webkit-scrollbar-track-piece:horizontal:start
+      margin-left: 10px
+      border-radius: 5px 0 0 5px
+    &::-webkit-scrollbar-track-piece:horizontal:end
+      margin-right: 10px
+      border-radius: 0 5px 5px 0
+    &::-webkit-scrollbar-thumb:horizontal,
+    &::-webkit-scrollbar-thumb:vertical
+      background-color: rgba(255, 255, 255, .5)
+      border-radius: 5px
+      display: block
+      // height: 50px
+  &-blue
+    background-color: #0079bf
+  &-orange
+    background-color: #d8a359
+  &-green
+    background-color: #70a95d
+  &-red
+    background-color: #bc6858
+  &-purple
+    background-color: #9d7cae
+  &-pink
+    background-color: #d478a4
+  &-mint
+    background-color: #6cc885
+  &-sky
+    background-color: #30bbd3
+  &-grey
+    background-color: #98a0a4
+
+  &-NewCardForm
+    flex-grow: 0
+    flex-shrink: 0
+    padding-bottom: 10px
+
+  &-ActionsMenuPane-backarrow
+    position: absolute
+    top: 10px
+    left: 10px

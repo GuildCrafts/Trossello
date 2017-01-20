@@ -26,6 +26,8 @@ $blue2: rgb(0, 121, 191)
 $blue1: rgb(0,0,255)
 
 $header-height: 44px
+$list-width: 270px
+
 $default-text-color: $black
 
 // Mixin for keyframe animation
@@ -34,3 +36,10 @@ $default-text-color: $black
     @content
   @keyframes #{$name}
     @content
+
+// Mixin for dragged element ghosting
+=ghosted
+  background-color: rgba(0,0,0,0.15)
+  border-radius: 3px
+  > *
+    opacity: 0
