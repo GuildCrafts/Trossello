@@ -1,0 +1,83 @@
+@import "../../../style.sass"
+
+.BoardShowPage-List
+  position: relative
+  flex-grow: 0
+  flex-shrink: 0
+  width: $list-width
+  margin-right: 10px
+  margin-bottom: 10px
+  &-header
+    flex-grow: 0
+    flex-shrink: 0
+    padding: 5px 25px 5px 11px
+    font-size: 14px
+    font-weight: 500
+    position: relative
+    input
+      border: none
+      border-radius: 3px
+      background: none
+      padding: 3px 5px
+      &:focus
+        background-color: white
+        outline: none
+  &-box
+    max-height: 100%
+    width: 100%
+    display: inline-flex
+    flex-direction: column
+    border-radius: 5px
+    background-color: #e2e4e6
+    font-family: "Helvetica Neue"
+    &-ghosted
+      +ghosted
+  &-options
+    position: absolute
+    right: 4px
+    top: -2px
+    > .Button
+      outline: none
+      text-decoration: none
+      color: #999
+      position: absolute
+      right: 0px
+      top: 2px
+      min-height: 2px
+      padding: 4px 8px 4px 8px
+      &:hover
+        background-color: #CDD2D4
+        color: #444
+      &-text
+        margin-left: 5px
+  &-createCardLink
+    padding: 8px 10px
+    border-bottom-left-radius: 5px
+    border-bottom-right-radius: 5px
+    color: #8c8c8c
+    text-decoration: none
+    &:hover
+      cursor: pointer
+      background-color: rgba(0,0,0,0.2)
+      text-decoration: underline
+  &-cards
+    flex-grow: 1
+    flex-shrink: 1
+    display: flex
+    overflow-y: auto
+    flex-direction: column
+    flex-wrap: nowrap
+    padding: 0 4px 0 10px
+    min-height: 30%
+    max-height: 70vh
+    margin-right: 3px
+    &::-webkit-scrollbar
+      -webkit-appearance: none
+    &::-webkit-scrollbar:vertical
+      width: 9px
+    &::-webkit-scrollbar-thumb
+      border-radius: 4px
+      background-color: rgba(0, 0, 0, .1)
+    &::-webkit-scrollbar-track
+      border-radius: 4px
+      background-color: rgba(0, 0, 0, .1)

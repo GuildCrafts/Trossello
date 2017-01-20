@@ -1,0 +1,67 @@
+@import "../../../../style.sass"
+
+.BoardShowPage-List-ListActionsMenu
+  padding: 0 0 5px 0
+  > .DialogBox
+    position: absolute
+
+  &-GoBackArrow
+    position: absolute
+    z-index: 2147483647
+    top: 0
+    left: 0
+    padding: 17px 12px
+    transform: scale(.9)
+    .Icon
+      color: #999
+      &:hover
+        color: #4d4d4d
+  &-DialogBox-content
+    padding: 0 10px 0 10px
+  &-ArchiveAllCardsPane
+    p
+      margin: 0 0 10px 0
+    .Button
+      width: 100%
+      font-weight: bold
+  &-MoveAllCardsPane
+    .Button
+      display: block
+      width: 100%
+
+  &-CopyListPane
+    > .Form
+      padding: 10px
+      align-items: flex-start
+      > textarea
+        margin: 10px 0
+        border-radius: 3px
+        height: 72px
+        width: 100%
+        border: 1px solid #CDD2D4
+        background: #E2E4E6
+        padding: 7px
+        color: #4d4d4d
+        font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif
+        line-height: 18px
+        transition: background .15s
+        &:focus
+          background: #fff
+          outline: none
+          border-color: #298FCA
+          box-shadow: 0 0 2px #298FCA
+
+  > .DialogBox-header
+    padding: 10px 10px 0 10px
+
+  &-ListActionsPane
+    > .Link,
+    > .ConfirmationLink > .Link
+      display: block
+      padding: 5px 10px
+      font-weight: bold
+      &:hover
+        color: white
+        background: $blue
+  &-MoveAllCards
+    text-align: center

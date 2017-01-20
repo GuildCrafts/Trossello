@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import boardStore from '../../stores/boardStore'
-import ContentForm from '../ContentForm'
+import ContentForm from './ContentForm'
 const KEY = "EditCardFormContent"
 import commands from '../../commands'
 
@@ -76,7 +76,7 @@ export default class NewCardForm extends Component {
   render() {
     return <ContentForm
       ref="container"
-      className="NewCardForm"
+      className="BoardShowPage-NewCardForm"
       onChange={this.onChange}
       onCancel={this.onCancel}
       onSave={this.onSave}

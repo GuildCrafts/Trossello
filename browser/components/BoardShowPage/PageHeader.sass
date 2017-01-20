@@ -1,0 +1,56 @@
+@import "../../style.sass"
+
+.BoardShowPage-PageHeader
+  flex-shrink: 0
+  flex-grow: 0
+  padding: 10px 10px 0 10px
+  display: flex
+  flex-direction: row
+  justify-content: flex-start
+  align-items: center
+  &-RenameBoardButton
+    > .Button
+      padding: 0 6px
+      &:hover
+        background-color: rgba(0,0,0,0.12)
+      > h1
+        font-family: "Helvetica Neue"
+        font-weight: 500
+        margin: 0
+        color: #fff
+        font-size: 18px
+  &-BoardStar
+    > .Icon
+      opacity: 1
+      transform: none
+    padding: 9px
+    border-radius: 3px
+    &-active
+      &:hover
+        background-color: rgba(0,0,0,.12)
+      & > .Icon
+        &, &:hover
+          color: $gold
+    &-inactive
+      color: $white
+      &:hover
+        background-color: rgba(0,0,0,.12)
+      & > .Icon
+        &, &:hover
+          color: $white
+  &-menuButton
+    color: #fff
+    text-decoration: underline
+    font-size: 0.8em
+    display: inline-block
+    border: none
+    border-radius: 3px
+    padding: 8px 1pc
+    min-height: 30px
+    cursor: pointer
+    text-align: center
+    -webkit-appearance: none
+    &:hover
+      background-color: rgba(0, 0, 0, 0.2)
+    &-icon
+      padding-right: 4px

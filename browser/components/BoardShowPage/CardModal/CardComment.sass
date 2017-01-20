@@ -1,0 +1,71 @@
+@import "../../../style.sass"
+
+.BoardShowPage-CardModal-CardComment
+  display: flex
+  flex-direction: column
+  margin-bottom: 4px
+
+  &-content
+  &-user
+    display: flex
+    flex-direction: row
+    align-items: center
+    font-weight: bold
+    margin-bottom: 5px
+    &-image
+      width: 30px
+      border-radius: 4px
+    &-name
+      margin-left: 5px
+      font-size: 14px
+  &-comment
+    font-size: 14px
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    &-box
+      background-color: #fff
+      box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1)
+      border-radius: 3px
+      display: block
+      min-width: 50px
+      margin: 6px 10px 0
+      padding: 8px
+      white-space: normal
+      font-weight: normal
+    &-controls
+      display: flex
+      flex-direction: row
+      font-size: 12px
+      color: #8c8c8c
+      font-weight: bolder
+      margin: 6px 0 0 14px
+      &-time
+      &-edit, &-delete
+        text-decoration: underline
+      &-margin
+        margin: 0 3px
+    &-editing
+      &-input
+        margin: 10px 10px 0
+        border-radius: 3px
+        border: 0px rgba(0, 0, 0, 0)
+        box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1)
+        resize: none
+        padding: 10px
+        flex: 1
+        width: 96%
+      &-input:focus
+        outline: none
+      &-controls
+        margin-left: 10px
+        display: flex
+        flex-direction: row
+        align-items: center
+        &-cancel
+          margin-left: 10px
+          color: #8c8c8c
+  &-border
+    margin-left: 38px
+    border-bottom: 1px solid #E2E4E6
+    margin-top: 8px

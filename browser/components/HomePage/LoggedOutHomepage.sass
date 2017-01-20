@@ -1,0 +1,140 @@
+@import "../../style.sass"
+
+body
+  > main
+    background-color: white
+
+.LoggedOutHomepage
+  padding: 0
+
+  &-Navbar
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    z-index: 10
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    width: 100%
+    height: 90px
+    background-color: rgba(70,160,173, 0)
+    transition: background-color 200ms
+    &-logo
+      color: white
+      font-family: 'Pacifico', cursive;
+      font-size: 3em
+      padding-left: 20px
+      margin-top: 12px
+    &-opaque
+      background-color: rgba(70,160,173, 0.95)
+    &-links
+      display: flex
+      flex-direction: row
+      align-self: flex-start
+      margin-right: 40px
+      > .SignUpButton
+        background: linear-gradient(to bottom, #61bd4f 0, #5aac44 100%)
+        box-shadow: 0 2px 0 #3f6f21
+        border-radius: .3em
+        display: inline-block
+        font-weight: bold
+        margin-bottom: .8em
+        padding: .6em 1.3em
+        position: relative
+        border: 0
+        text-decoration: none
+        color: #fff
+        background: #61bd4f
+        margin-top: 23px
+
+  .LoginButton
+    background: linear-gradient(to bottom, #61bd4f 0, #5aac44 100%)
+    // background: linear-gradient(to bottom, #61bd4f 0, #5aac44 100%)
+    box-shadow: 0 2px 0 #3f6f21
+    border-radius: .3em
+    display: inline-block
+    font-weight: bold
+    margin-bottom: .8em
+    padding: .6em 1.3em
+    position: relative
+    border: 0
+    text-decoration: none
+    color: #fff
+    background: #61bd4f
+    // background: rgba(70, 150, 195, 0.6)
+    margin-right: 15px
+    margin-top: 23px
+  &-header
+    margin-bottom: 20px
+    font-weight: 700
+    font-size: 2.5em
+    text-align: center
+    line-height: 1
+
+  &-subheader
+    margin: 0 0 20px 0
+    font-size: 1.5em
+    text-align: center
+    line-height: 1.2
+  &-login-link
+    text-align: center
+    a
+      color: inherit
+  &-sample
+    img
+      width: 100%
+
+  &-SectionOne
+    padding: 150px 10vw 100px 10vw
+    background: url('../../images/trossello-background.png') top center
+    background-size: cover
+    color: white
+    overflow: hidden
+
+    > .SignUpButtonContainer
+      text-align: center
+      > .SignUpButton
+        background: #61bd4f
+        background: linear-gradient(to bottom, #61bd4f 0, #5aac44 100%)
+        box-shadow: 0 2px 0 #3f6f21
+        color: #fff
+        border-radius: .3em
+        display: inline-block
+        font-weight: bold
+        margin-bottom: .8em
+        padding: .6em 1.3em
+        position: relative
+        text-decoration: none
+        border: 0
+
+  &-SectionTwo
+    background-color: #105DBB
+    height: 730px
+    margin-top: -50px
+    > h2
+      padding-top: 80px
+      padding-bottom: 60px
+      text-align: center
+      color: white
+      font-size: 2em
+      margin-left: 100px
+      margin-right: 100px
+    > .TrelloSample
+      padding-top: 15px
+      position: relative
+      text-align: center
+
+    @media (min-width: 1200px)
+      &-SectionOne
+        > h1
+          padding-left: 450px
+          padding-right: 450px
+          padding-bottom: 10px
+        > h2
+          padding-right: 450px
+          padding-left: 450px
+        > h3
+          padding-bottom: 50px
+      &-SectionTwo
+        margin-top: -200px
