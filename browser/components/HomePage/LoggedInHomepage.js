@@ -44,11 +44,7 @@ const Boards = ({title, boards, className}) => {
 }
 
 const Board = ({board}) => {
-  const style = {
-    backgroundColor: board.background_color
-  }
-
-  return <Link style={style} href={`/boards/${board.id}`} className="LoggedInHomepage-Board">
+  return <Link href={`/boards/${board.id}`} className={`LoggedInHomepage-Board LoggedInHomepage-Board-${board.background_color}`}>
     {board.name}
     <BoardStar board={board} />
   </Link>
