@@ -1,6 +1,4 @@
 machine:
-  pre:
-    - mkdir ~/.yarn-cache
   node:
     version: 7.0.0
   environment:
@@ -12,12 +10,10 @@ machine:
 
 dependencies:
   pre:
-    - curl -o- -L https://yarnpkg.com/install.sh | bash
     - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     - sudo dpkg -i google-chrome-stable_current_amd64.deb
-    - mkdir tmp; mkdir tmp/artifacts; touch tmp/artifacts/server.log;
-  cache_directories:
-    - ~/.yarn-cache
+    - mkdir -p tmp/artifacts
+    - touch tmp/artifacts/server.log
 
 general:
   artifacts:

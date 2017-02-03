@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "engines": {
     "node": "7.1.0",
-    "npm": "3.10.9",
-    "yarn": "0.17.10"
+    "npm": "3.10.9"
   },
   "description": "Open Source Trello Clone",
   "main": "dist/server.js",
