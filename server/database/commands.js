@@ -143,10 +143,14 @@ const findOrCreateUserFromGithubProfile = (githubProfile) => {
 
 const createUser = (attributes) =>
   createRecord('users', attributes)
-    .then(user =>
-      mailer.sendWelcomeEmail(user)
-        .then(() => user )
-    )
+    .then(user => {
+      if( user.email ){
+        mailer.sendWelcomeEmail(user)
+          .then(() => user )
+      } else {
+        return user
+      }
+    })
 
 const updateUser = (id, attributes) =>{
   attributes.updated_at = new Date()
